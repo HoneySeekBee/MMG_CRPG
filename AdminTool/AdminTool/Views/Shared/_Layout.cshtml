@@ -1,49 +1,68 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var ctrl = (string)ViewContext.RouteData.Values["controller"];
+    var act = (string)ViewContext.RouteData.Values["action"];
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - AdminTool</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/AdminTool.styles.css" asp-append-version="true" />
+    <title>@ViewData["Title"] - Admin</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <style>
+        /* 최소 스타일 */
+        .layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background: #0f172a;
+            color: #cbd5e1;
+            padding: 16px 12px;
+        }
+
+            .sidebar .section {
+                font-size: 12px;
+                letter-spacing: .08em;
+                text-transform: uppercase;
+                opacity: .7;
+                margin: 18px 8px 8px;
+            }
+
+            .sidebar a {
+                display: block;
+                color: #cbd5e1;
+                padding: 8px 10px;
+                border-radius: 8px;
+                text-decoration: none;
+            }
+
+                .sidebar a:hover {
+                    background: #1e293b;
+                }
+
+                .sidebar a.active {
+                    background: #334155;
+                    color: #fff;
+                    font-weight: 600;
+                }
+
+        .content {
+            padding: 24px;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">AdminTool</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div class="layout">
+        <aside class="sidebar">
+            @await Html.PartialAsync("_Sidebar", (ctrl, act))
+        </aside>
+        <main class="content">
             @RenderBody()
         </main>
     </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - AdminTool - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

@@ -1,0 +1,39 @@
+﻿@using AdminTool.Models
+
+@model IEnumerable<Icon>
+
+<h2>Icons</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Key</th>
+            <th>Path</th>
+            <th>Atlas</th>
+            <th>W</th>
+            <th>H</th>
+            <th>Version</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var icon in Model)
+        {
+            <tr>
+                <td>@icon.IconId</td>
+                <td>@icon.Key</td>
+                <td>@icon.Path</td>
+                <td>@icon.Atlas</td>
+                <td>@icon.W</td>
+                <td>@icon.H</td>
+                <td>@icon.Version</td>
+                <td>
+                    <a asp-controller="Icons" asp-action="Edit" asp-route-id="@icon.IconId">Edit</a> |
+                    <a asp-controller="Icons" asp-action="Details" asp-route-id="@icon.IconId">Details</a> |
+                    <a asp-controller="Icons" asp-action="Delete" asp-route-id="@icon.IconId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
