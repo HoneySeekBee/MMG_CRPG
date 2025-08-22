@@ -1,0 +1,26 @@
+﻿@model Icon
+<form id="icon-form">
+    <div class="mb-2">
+        <label class="form-label">Key</label>
+        <input class="form-control" name="Key" value="@Model?.Key" required />
+    </div>
+    <div class="mb-2">
+        <label class="form-label">Path</label>
+        <input class="form-control" name="Path" value="@Model?.Path" required />
+    </div>
+    <div class="row">
+        <div class="col-6 mb-2">
+            <label class="form-label">Atlas</label>
+            <input class="form-control" name="Atlas" value="@Model?.Atlas" />
+        </div>
+        <div class="col-3 mb-2">
+            <label class="form-label">W</label>
+            <input class="form-control" name="W" type="number" value="@Model?.W" />
+        </div>
+        <div class="col-3 mb-2">
+            <label class="form-label">H</label>
+            <input class="form-control" name="H" type="number" value="@Model?.H" />
+        </div>
+    </div>
+    <input type="hidden" name="IconId" value="@Model?.IconId" />
+</form>

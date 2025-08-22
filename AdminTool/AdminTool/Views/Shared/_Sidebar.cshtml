@@ -1,0 +1,38 @@
+﻿@model (string ctrl, string act)
+
+@functions{
+    bool isActive(string c, string? a = null)
+    {
+        var (curC, curA) = Model;
+        if (!string.Equals(curC, c, StringComparison.OrdinalIgnoreCase)) return false;
+        if (a is null) return true;
+        return string.Equals(curA, a, StringComparison.OrdinalIgnoreCase);
+    }
+    string ActiveCls(string c, string? a = null) => isActive(c, a) ? "active" : "";
+}
+
+<!-- [ Common ] -->
+<div class="section">Common</div>
+<a asp-controller="Dashboard" asp-action="Index" class="@ActiveCls("Dashboard")">Dashboard</a>
+<a asp-controller="AuditLogs" asp-action="Index" class="@ActiveCls("AuditLogs")">AuditLogs</a>
+<a asp-controller="Publish" asp-action="Index" class="@ActiveCls("Publish")">Dashboard</a>
+
+<div class="section">Code/Master</div>
+<a asp-controller="Icons" asp-action="Index" class="@ActiveCls("Icons")">Icons</a>
+<a asp-controller="Element" asp-action="Index" class="@ActiveCls("Element")">Element</a>
+<a asp-controller="ElementAffinity" asp-action="Index" class="@ActiveCls("ElementAffinity")">ElementAffinity</a>
+<a asp-controller="Faction" asp-action="Index" class="@ActiveCls("Faction")">Faction</a>
+<a asp-controller="Role" asp-action="Index" class="@ActiveCls("Role")">Role</a>
+<a asp-controller="Rarity" asp-action="Index" class="@ActiveCls("Rarity")">Rarity</a>
+
+
+<div class="section">Contents</div>
+<a asp-controller="Characters" asp-action="Index" class="@ActiveCls("Characters")">Characters</a>
+<a asp-controller="Items" asp-action="Index" class="@ActiveCls("Items")">Items</a>
+<a asp-controller="Skills" asp-action="Index" class="@ActiveCls("Skills")">Skills</a>
+
+<div class="section">Synergy</div>
+<a asp-controller="Synergy" asp-action="Index" class="@ActiveCls("Synergy")">Synergy</a>
+
+<div class="section">Banners</div>
+<a asp-controller="Banners" asp-action="Index" class="@ActiveCls("Banners")">Banner</a>
