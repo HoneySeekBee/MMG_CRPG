@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
-using WebServer.Models;
 
-namespace WebServer
+namespace Infrastructure.Persistence
 {
     public class GameDBContext : DbContext
     {
@@ -24,7 +24,6 @@ namespace WebServer
                 e.ToTable("Icons"); // 테이블 명
                 e.HasKey(x => x.IconId);
                 e.Property(x => x.Key).IsRequired();
-                e.Property(x => x.Path).IsRequired();
                 e.HasIndex(x => x.Key).IsUnique();
             });
         }

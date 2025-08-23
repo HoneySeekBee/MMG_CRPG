@@ -6,16 +6,17 @@ namespace AdminTool
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            builder.Services.AddControllersWithViews();
-            
+            // Add services to the container
+
             builder.Services.AddHttpClient("GameApi", client =>
             {
-                client.BaseAddress = new Uri("https://localhost:7110/"); // WebServer аж╪р
+                client.BaseAddress = new Uri(builder.Configuration["GameApiBaseUrl"]!);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(
                     new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
             });
+
+            builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
 

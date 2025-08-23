@@ -1,3 +1,9 @@
+using Application.Icons;
+using Application.Repositories;
+using Application.Storage;
+using Infrastructure.Persistence;
+using Infrastructure.Repositories;
+using Infrastructure.Storage;
 using Microsoft.EntityFrameworkCore;
 
 namespace WebServer
@@ -21,6 +27,18 @@ namespace WebServer
                 errorCodesToAdd: null))
             .EnableSensitiveDataLogging(false));
             builder.Services.AddEndpointsApiExplorer();
+
+            builder.Services.AddScoped<IconService>();
+            builder.Services.AddScoped<IIconRepository, EfIconRepository>();
+
+            builder.Services.AddSingleton<IIconStorage>(sp =>
+            {
+                var env = sp.GetRequiredService<IWebHostEnvironment>();
+                var cfg = sp.GetRequiredService<IConfiguration>();
+
+                return new LocalIconStorage(env.WebRootPath, cfg["PublicBaseUrl"]);
+            });
+
             var conn = builder.Configuration.GetConnectionString("GameDb");
             var sb = new Npgsql.NpgsqlConnectionStringBuilder(conn);
             Console.WriteLine($"[ConnString] Host={sb.Host}; Port={sb.Port}; Database={sb.Database}; Username={sb.Username}; Password=***");
@@ -34,7 +52,11 @@ namespace WebServer
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                OnPrepareResponse = ctx =>
+                    ctx.Context.Response.Headers["Cache-Control"] = "public,max-age=31536000,immutable"
+            });
             app.MapControllers();
 
             app.UseHttpsRedirection();
