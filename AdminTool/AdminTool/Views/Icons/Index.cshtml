@@ -1,39 +1,31 @@
 ﻿@using AdminTool.Models
-
-@model IEnumerable<Icon>
+@model IEnumerable<AdminTool.Models.IconVm>
 
 <h2>Icons</h2>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Key</th>
-            <th>Path</th>
-            <th>Atlas</th>
-            <th>W</th>
-            <th>H</th>
-            <th>Version</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var icon in Model)
-        {
+<div class="table-scroll">
+    <table class="table table-bordered">
+        <thead>
             <tr>
-                <td>@icon.IconId</td>
-                <td>@icon.Key</td>
-                <td>@icon.Path</td>
-                <td>@icon.Atlas</td>
-                <td>@icon.W</td>
-                <td>@icon.H</td>
-                <td>@icon.Version</td>
-                <td>
-                    <a asp-controller="Icons" asp-action="Edit" asp-route-id="@icon.IconId">Edit</a> |
-                    <a asp-controller="Icons" asp-action="Details" asp-route-id="@icon.IconId">Details</a> |
-                    <a asp-controller="Icons" asp-action="Delete" asp-route-id="@icon.IconId">Delete</a>
-                </td>
+                <th>Key</th>
+                <th>Image</th>
+                <th>Version</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var icon in Model)
+            {
+                <tr>
+                    <td>@icon.Key</td>
+                    <td><img src="@icon.Url" alt="@icon.Key" style="max-width:32px;max-height:32px;" /></td>
+                    <td>@icon.Version</td>
+                    <td>
+                        <a asp-controller="Icons" asp-action="Edit" asp-route-id="@icon.IconId">Edit</a> |
+                        <a asp-controller="Icons" asp-action="Details" asp-route-id="@icon.IconId">Details</a> |
+                        <a asp-controller="Icons" asp-action="Delete" asp-route-id="@icon.IconId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

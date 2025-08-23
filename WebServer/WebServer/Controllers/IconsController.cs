@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Application.Icons;
+using Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
-using WebServer.Models;
 
 namespace WebServer.Controllers
 {
@@ -9,93 +11,58 @@ namespace WebServer.Controllers
     [Route("api/[controller]")]
     public class IconsController : ControllerBase
     {
-        private readonly GameDBContext _db;
-        public IconsController(GameDBContext db)
-        {
-            _db = db;
-        }
+        private readonly IconService _svc;
+
+        public IconsController(IconService svc)
+            => _svc = svc;
 
         #region CRUD 
 
         // [1] R - 전체 읽기 및 Id로 검색해서 읽기 
         [HttpGet]
         public async Task<IActionResult> GetAll(CancellationToken ct)
-        {
-            var Icons = await _db.Icons.AsNoTracking().ToListAsync(ct);
-            return Ok(Icons);
-        }
+         => Ok(await _svc.GetAllAsync(ct));
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id, CancellationToken ct)
-        {
-            var icon = await _db.Icons
-                .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.IconId == id, ct);
-
-            if (icon is null)
-                return NotFound();
-
-            return Ok(icon);
-        }
+        => (await _svc.GetByIdAsync(id, ct) is { } dto ? Ok(dto) : NotFound());
 
         // [2] C - 생성 
         // Post
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Icon icon, CancellationToken ct)
+        public async Task<IActionResult> Create([FromBody] CreateIconCommand cmd, CancellationToken ct)
         {
-            _db.Icons.Add(icon);
-            try
-            {
-                await _db.SaveChangesAsync(ct);
-            }
-            catch (DbUpdateException ex)
-            {
-                return Conflict(new { message = $"Failed Create Icon... {ex.Message} " });
-            }
-            return CreatedAtAction(nameof(GetById), new {id = icon.IconId}, icon);
+            var dto = await _svc.CreateAsync(cmd, ct);
+            return CreatedAtAction(nameof(GetById), new { id = dto.IconId }, dto);
         }
 
         // [3] U - 수정 
         // Post
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Edit(int id, [FromBody] Icon updateIcon, CancellationToken ct)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateIconCommand cmd, CancellationToken ct)
         {
-            var icon = await _db.Icons.FirstOrDefaultAsync(i => i.IconId == id, ct);
-            if (icon is null)
-                return NotFound();
-
-            icon.Key = updateIcon.Key;
-            icon.Path = updateIcon.Path;
-            icon.Atlas = updateIcon.Atlas;
-            icon.X = updateIcon.X;
-            icon.Y = updateIcon.Y;
-            icon.W = updateIcon.W;
-            icon.H = updateIcon.H;
-            icon.Version = updateIcon.Version;
-
-            try
-            {
-                await _db.SaveChangesAsync(ct);
-            }
-            catch(DbUpdateException ex)
-            {
-                return Conflict(new { message = "Failed Icon Update", detail = ex.Message });
-            }
-            return Ok(icon);
+            if (cmd.Id != id) return BadRequest();
+            var dto = await _svc.UpdateAsync(cmd, ct);
+            return dto is null ? NotFound() : Ok(dto);
         }
 
         // [4] D - 삭제 
 
         // Post
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteConfiremd(int id, CancellationToken ct)
-        {
-            var icon = await _db.Icons.FirstOrDefaultAsync(i => i.IconId == id);
-            if (icon is null)
-                return NotFound();
+        public async Task<IActionResult> Delete(int id, CancellationToken ct)
+         => await _svc.DeleteAsync(id, ct) ? NoContent() : NotFound();
 
-            _db.Icons.Remove(icon);
-            await _db.SaveChangesAsync();
-            return NoContent();
+        // 파일 업로드 ( 예 : form-data ) 
+        [HttpPost("upload")]
+        public async Task<IActionResult> Upload([FromBody] string key, [FromForm] IFormFile file, CancellationToken ct)
+        {
+            if (file is null || file.Length == 0) return BadRequest("Empty file");
+
+            await using var stream = file.OpenReadStream();
+            var cmd = new UploadIconCommand { Key = key, Content = stream, ContentType = file.ContentType };
+            await _svc.UploadAsync(cmd, ct);
+            return Ok();
         }
         #endregion
 
