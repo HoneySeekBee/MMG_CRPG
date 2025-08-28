@@ -21,11 +21,20 @@
                     <td>@icon.Version</td>
                     <td>
                         <a asp-controller="Icons" asp-action="Edit" asp-route-id="@icon.IconId">Edit</a> |
-                        <a asp-controller="Icons" asp-action="Details" asp-route-id="@icon.IconId">Details</a> |
-                        <a asp-controller="Icons" asp-action="Delete" asp-route-id="@icon.IconId">Delete</a>
+                        <form asp-action="Delete" asp-route-id="@icon.IconId" method="post" class="d-inline">
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-sm btn-danger"
+            onclick="return confirm('정말 삭제할까요?');">
+        Delete
+    </button>
+</form>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+</div>
+
+<div>
+<a asp-controller="Icons" asp-action="Create" class="btn btn-primary mt-3">Create</a>
 </div>

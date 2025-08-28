@@ -63,13 +63,13 @@ namespace Application.Icons
 
             if (icon is null) return null;
 
-            icon.Key = cmd.Key;
-            icon.Atlas = cmd.Atlas;
-            icon.X = cmd.X;
-            icon.Y = cmd.Y;
-            icon.W = cmd.W;
-            icon.H = cmd.H;
-            icon.Version = cmd.Version;
+            if (cmd.Key is not null) icon.Key = cmd.Key;
+            if (cmd.Atlas is not null) icon.Atlas = cmd.Atlas;
+            if (cmd.X.HasValue) icon.X = cmd.X.Value;
+            if (cmd.Y.HasValue) icon.Y = cmd.Y.Value;
+            if (cmd.W.HasValue) icon.W = cmd.W.Value;
+            if (cmd.H.HasValue) icon.H = cmd.H.Value;
+            if (cmd.Version.HasValue) icon.Version = cmd.Version.Value;
 
             await _repo.UpdateAsync(icon, ct);
             return new IconDto

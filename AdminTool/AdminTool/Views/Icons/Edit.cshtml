@@ -1,0 +1,129 @@
+﻿@model AdminTool.Models.IconEditVm
+
+@{
+    ViewData["Title"] = "Edit Icon";
+}
+
+<h2 class="mb-3">Edit Icon</h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <!-- 필수 키/아이디 값 -->
+    <input type="hidden" asp-for="IconId" />
+
+    <!-- Key(읽기 전용) -->
+    <div class="mb-3">
+        <label asp-for="Key" class="form-label">key</label>
+        <input asp-for="Key" class="form-control" readonly />
+        <span class="form-text">파일명은 [Key].png 입니다.</span>
+    </div>
+    
+    <!-- 현재 버전/이미지 -->
+    <div class="mb-3">
+        <label class="form-label">현재 버전</label>
+        <div class="form-control-plaintext">@Model.CurrentVersion</div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">현재 이미지</label>
+        <div>
+            <img src="@Model.ImageUrl"
+                 alt="current icon"
+                 style="max-width:240px; border:1px solid #ddd; border-radius:8px; padding:6px;" />
+        </div>
+        <div class="form-text">아래에서 새 이미지를 업로드하면 교체되며 버전이 +1 됩니다.</div>
+    </div>
+    <!-- 새 이미지(선택) -->
+    <div class="mb-3">
+        <label class="form-label">새 이미지 (선택)</label>
+
+        <div id="dropzone"
+             class="border border-2 border-dashed rounded p-4 text-center"
+             style="cursor:pointer;">
+            <div id="dz-text">여기로 이미지를 드래그하거나 클릭하여 선택</div>
+            <img id="preview" alt="preview"
+                 style="display:none; max-width:240px; margin-top:12px;" />
+        </div>
+
+        <!-- 숨겨진 파일 입력 -->
+        <input asp-for="IconFile" id="fileInput" type="file"
+               accept=".png,.jpg,.jpeg,.webp"
+               style="display:none" />
+        <span asp-validation-for="IconFile" class="text-danger"></span>
+
+        <div class="form-text">권장: 32×32, PNG/JPG/WebP (※ SVG는 서버에서 PNG 변환 미지원 시 업로드 불가 처리)</div>
+    </div>
+
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">저장</button>
+        <a asp-action="Index" class="btn btn-secondary">취소</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function () {
+            const dropzone = document.getElementById('dropzone');
+            const fileInput = document.getElementById('fileInput');
+            const preview = document.getElementById('preview');
+            const dzText = document.getElementById('dz-text');
+
+            function setPreview(file) {
+                if (!file) return;
+                const allowed = ['image/png', 'image/jpeg', 'image/webp'];
+                if (!allowed.includes(file.type)) {
+                    alert('PNG/JPG/WebP/SVG 파일만 가능합니다.');
+                    return;
+                }
+                const url = URL.createObjectURL(file);
+                preview.src = url;
+                preview.style.display = 'block';
+                dzText.style.display = 'none';
+            }
+
+            dropzone.addEventListener('click', () => fileInput.click());
+
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files && e.target.files[0];
+                setPreview(file);
+            });
+
+            ['dragenter', 'dragover'].forEach(evt =>
+                dropzone.addEventListener(evt, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dropzone.classList.add('border-primary');
+                })
+            );
+            ['dragleave', 'drop'].forEach(evt =>
+                dropzone.addEventListener(evt, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dropzone.classList.remove('border-primary');
+                })
+            );
+            dropzone.addEventListener('drop', (e) => {
+                const dt = e.dataTransfer;
+                const file = dt && dt.files && dt.files[0];
+                if (file) {
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    fileInput.files = dataTransfer.files;
+                    setPreview(file);
+                }
+            });
+        })();
+    </script>
+}
