@@ -1,0 +1,121 @@
+﻿@model AdminTool.Models.IconCreateVm
+
+@{
+    ViewData["Title"] = "Create Icon";
+}
+
+<h2 class="mb-3">Create Icon</h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <!-- Key 입력 부분 -->
+    <div class="mb-3">
+        <label asp-for="Key" class="form-label">Key</label>
+        <input asp-for="Key" class="form-control" placeholder="예: user, settings, bell-01" />
+        <span asp-validation-for="Key" class="text-danger"></span>
+        <div class="form-text">영문/숫자/.-_만 허용. 파일명으로 사용됩니다. : [Key].png</div>
+    </div>
+
+    <!-- 이미지 입력 부분  -->
+    <div class="mb-3">
+        <label class="form-label">Icon 이미지</label>
+
+        <div id="dropzone"
+             class="border border-2 border-dashed rounded p-4 text-center"
+             style="cursor:pointer;">
+            <div id="dz-text">여기로 이미지를 드래그하거나 클릭하여 선택하세요</div>
+            <img id="preview" alt="preview" style="display:none; max-width:240px; margin:12px;" />
+        </div>
+
+        <!-- 실제 파일이 입력 되는 부분 (숨김) -->
+        <input asp-for="IconFile" id="fileInput" type="file"
+               accept=".png, .jpg, .jpeg, .webp, .svg"
+               style="display:none" />
+        <span asp-validation-for="IconFile" class="text-danger"></span>
+
+        <!-- 대안: 명시적 '찾기' 버튼 -->
+        <div class="mt-2">
+            <button type="button" id="browseBtn" class="btn btn-outline-secondary">찾기</button>
+        </div>
+        <div class="form-text">권장 32x32</div>
+    </div>
+
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">전송</button>
+        <a asp-action="Index" class="btn btn-secondary">취소</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function () {
+            const dropzone = document.getElementById('dropzone');
+            const fileInput = document.getElementById('fileInput');
+            const browseBtn = document.getElementById('browseBtn');
+            const preview = document.getElementById('preview');
+            const dzText = document.getElementById('dz-text');
+
+            function setPreview(file) {
+                if (!file) return; 
+                const allowed = ['image/png', 'image/jpeg', 'image/webp', 'image/svg+xml'];
+                if (!allowed.includes(file.type)) {
+                    alert('PNG/JPG/WebP/SVG 파일만 가능합니다.');
+                    return;
+                }
+                const url = URL.createObjectURL(file);
+                preview.src = url;
+                preview.style.display = 'block';
+                dzText.style.display = 'none';
+            }
+
+            // 클릭해서 파일 선택
+            dropzone.addEventListener('click', () => fileInput.click());
+            browseBtn.addEventListener('click', () => fileInput.click());
+
+            // 파일 선택 변화
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files && e.target.files[0];
+                setPreview(file);
+            });
+
+            // 드래그앤드롭
+            ['dragenter', 'dragover'].forEach(evt =>
+                dropzone.addEventListener(evt, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dropzone.classList.add('border-primary');
+                })
+            );
+            ['dragleave', 'drop'].forEach(evt =>
+                dropzone.addEventListener(evt, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dropzone.classList.remove('border-primary');
+                })
+            );
+            dropzone.addEventListener('drop', (e) => {
+                const dt = e.dataTransfer;
+                const file = dt && dt.files && dt.files[0];
+                if (file) {
+                    // input에 파일 주입
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    fileInput.files = dataTransfer.files;
+                    setPreview(file);
+                }
+            });
+        })();
+    </script>
+}

@@ -12,14 +12,14 @@ namespace Application.Icons
     }
     public sealed class UpdateIconCommand
     {
-        public int Id { get; init; }
-        public string Key { get; init; } = default!;
+        public int Id { get; init; }                 // 경로의 {id}와 일치해야 함
+        public string? Key { get; init; }            // 변경 시에만 값 제공
         public string? Atlas { get; init; }
         public int? X { get; init; }
         public int? Y { get; init; }
         public int? W { get; init; }
         public int? H { get; init; }
-        public int Version { get; init; }
+        public int? Version { get; init; }
     }
 
     public sealed class UploadIconCommand
