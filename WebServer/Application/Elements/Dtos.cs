@@ -1,0 +1,21 @@
+﻿using Domain.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Application.Elements
+{
+    public sealed record ElementDto(
+    int ElementId,
+    string Key,
+    string Label,
+    int? IconId,
+    string ColorHex,
+    short SortOrder,
+    bool IsActive,
+    string MetaJson,
+    DateTime CreatedAt,
+    DateTime UpdatedAt);
+}

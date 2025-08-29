@@ -1,3 +1,4 @@
+using Application.Elements;
 using Application.Icons;
 using Application.Repositories;
 using Application.Storage;
@@ -30,6 +31,8 @@ namespace WebServer
 
             builder.Services.AddScoped<IconService>();
             builder.Services.AddScoped<IIconRepository, EfIconRepository>();
+            builder.Services.AddScoped<IElementRepository, ElementRepository>();
+            builder.Services.AddScoped<IElementService, ElementService>();
 
             builder.Services.AddSingleton<IIconStorage>(sp =>
             {
