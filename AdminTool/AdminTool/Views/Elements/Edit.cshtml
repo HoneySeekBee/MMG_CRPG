@@ -1,0 +1,137 @@
+﻿@model AdminTool.Models.ElementEditVm
+
+<h2 class="mb-3">Edit Element</h2>
+
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+    <input asp-for="ElementId" type="hidden" />
+
+    <!-- 유효성 요약 -->
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <!-- Key (수정 불가라면 readonly) -->
+    <div class="mb-3">
+        <label asp-for="Key" class="form-label">Key</label>
+        <input asp-for="Key" class="form-control" readonly />
+    </div>
+
+    <!-- Label -->
+    <div class="mb-3">
+        <label asp-for="Label" class="form-label">Label</label>
+        <input asp-for="Label" class="form-control" />
+        <span asp-validation-for="Label" class="text-danger"></span>
+    </div>
+
+    <!-- 아이콘 선택 -->
+    <div class="mb-3">
+        <input asp-for="IconId" id="IconId" type="hidden" />
+        <div class="d-flex align-items-center gap-2 mb-2">
+            <img id="iconPreviewImg" src="@Model.IconUrl"
+                 alt="icon" style="width:32px;height:32px;border:1px solid #eee;border-radius:6px;object-fit:contain" />
+            <button type="button" class="btn btn-outline-primary btn-sm"
+                    data-bs-toggle="modal" data-bs-target="#iconPickerModal">
+                아이콘 선택
+            </button>
+        </div>
+        @await Html.PartialAsync("~/Views/Elements/PickIconModal.cshtml",
+                 new PickIconModalVm
+        {
+            ModalId = "iconPickerModal",
+            Icons = Model.Icons,
+            TargetHiddenId = "IconId",
+            TargetPreviewImgId = "iconPreviewImg"
+        })
+    </div>
+
+    <!-- 색상 선택 -->
+    <div class="mb-3">
+        <label asp-for="ColorHex" class="form-label">Color</label>
+
+        <input type="color" id="colorPicker" value="@Model.ColorHex" class="d-none" />
+        <input asp-for="ColorHex" id="ColorHex" class="form-control d-none" />
+
+        <button type="button" id="colorSwatchBtn" class="btn btn-outline-secondary"
+                style="display:inline-flex;align-items:center;gap:.5rem;">
+            <span id="colorSwatch"
+                  style="display:inline-block;width:20px;height:20px;border:1px solid #ccc;border-radius:4px;background:@Model.ColorHex"></span>
+            <span id="colorText">@Model.ColorHex</span>
+        </button>
+        <h2 id="elementPreview" style="color:@Model.ColorHex">Element</h2>
+    </div>
+
+    <!-- SortOrder -->
+    <div class="mb-3">
+        <label asp-for="SortOrder" class="form-label">SortOrder</label>
+        <input asp-for="SortOrder" class="form-control" />
+        <span asp-validation-for="SortOrder" class="text-danger"></span>
+    </div>
+
+    <!-- Meta -->
+    <div class="mb-3">
+        <label class="form-label">Description</label>
+        <input asp-for="MetaDescription" id="MetaDescription" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Etc</label>
+        <input asp-for="MetaEtc" id="MetaEtc" class="form-control" />
+    </div>
+    <input asp-for="Meta" id="Meta" type="hidden" />
+
+    <!-- 제출 버튼 -->
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <script>
+        // Color picker 동기화
+        (function () {
+            const picker = document.getElementById('colorPicker');
+            const hexInput = document.getElementById('ColorHex');
+            const swatchBtn = document.getElementById('colorSwatchBtn');
+            const swatch = document.getElementById('colorSwatch');
+            const colorText = document.getElementById('colorText');
+            const preview = document.getElementById('elementPreview');
+
+            // 초기값
+            picker.value = to6Hex(hexInput.value || "#FFFFFF");
+            swatch.style.background = hexInput.value || "#FFFFFF";
+            colorText.textContent = hexInput.value || "#FFFFFF";
+            preview.style.color = hexInput.value || "#FFFFFF";
+
+            swatchBtn.addEventListener('click', () => picker.click());
+
+            picker.addEventListener('input', () => {
+                const hex = picker.value;
+                hexInput.value = hex;
+                swatch.style.background = hex;
+                colorText.textContent = hex;
+                preview.style.color = hex;
+            });
+
+            function to6Hex(v) {
+                const m = /^#([0-9A-Fa-f]{6})([0-9A-Fa-f]{2})?$/.exec(v || "");
+                return m ? ('#' + m[1]) : (v || '#FFFFFF');
+            }
+        })();
+
+        // Meta 동기화
+        (function () {
+            const $desc = document.getElementById('MetaDescription');
+            const $etc = document.getElementById('MetaEtc');
+            const $meta = document.getElementById('Meta');
+
+            function sync() {
+                const obj = {
+                    description: $desc?.value ?? "",
+                    etc: $etc?.value ?? ""
+                };
+                $meta.value = JSON.stringify(obj);
+            }
+            $desc?.addEventListener('input', sync);
+            $etc?.addEventListener('input', sync);
+
+            sync(); // 초기 1회 동기화
+        })();
+    </script>
+}

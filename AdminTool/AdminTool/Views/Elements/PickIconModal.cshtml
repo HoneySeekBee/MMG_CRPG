@@ -1,0 +1,55 @@
+﻿@using AdminTool.Models.UI.Components.Modal
+@model AdminTool.Models.PickIconModalVm
+@using AdminTool.Models
+
+
+@{
+    var modalVm = new ModalVm(
+        Id: Model.ModalId,
+        Title: "아이콘 선택",
+        BodyPartial: "~/Views/Elements/_PickIconBody.cshtml",
+        BodyModel: Model.Icons,
+        StaticBackdrop: true,
+        Centered: true
+    );
+}
+
+@await Html.PartialAsync("~/Views/Shared/Components/Modal/Default.cshtml", modalVm)
+
+<script>
+    (function(){
+      const modalId = "@Model.ModalId";
+      const modalEl = document.getElementById(modalId);
+      const okBtnId = modalId + "-primary";
+      const okBtn   = document.getElementById(okBtnId);
+
+      const hiddenId = "@Model.TargetHiddenId";
+      const previewId = "@(Model.TargetPreviewImgId ?? "")";
+
+      const hidden = document.getElementById(hiddenId);
+      const preview = previewId ? document.getElementById(previewId) : null;
+
+      // 타일 클릭 시 선택 표시
+      modalEl.addEventListener('click', (e) => {
+        const tile = e.target.closest('.icon-tile');
+        if (!tile) return;
+        modalEl.querySelectorAll('.icon-tile.selected').forEach(x => x.classList.remove('selected'));
+        tile.classList.add('selected');
+      });
+
+      // OK → 값 반영 + 모달 닫기
+      okBtn.addEventListener('click', () => {
+        const sel = modalEl.querySelector('.icon-tile.selected');
+        if (!sel) { alert('아이콘을 선택하세요.'); return; }
+
+        const id  = sel.getAttribute('data-id');
+        const url = sel.getAttribute('data-url');
+
+        if (hidden) hidden.value = id;
+        if (preview) preview.src = url;
+
+        const bsModal = bootstrap.Modal.getInstance(modalEl);
+        bsModal?.hide();
+      });
+    })();
+</script>

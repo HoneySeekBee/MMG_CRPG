@@ -15,7 +15,7 @@ namespace Application.Elements
     string ColorHex,
     short SortOrder,
     bool IsActive,
-    string MetaJson,
+    string Meta,
     DateTime CreatedAt,
     DateTime UpdatedAt);
 }
