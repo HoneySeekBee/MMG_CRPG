@@ -1,0 +1,78 @@
+﻿@model IEnumerable<AdminTool.Models.ElementAffinityVm>
+@{
+    ViewData["Title"] = "Element Affinity";
+    var opts = (List<AdminTool.Models.ElementOptionVm>)ViewBag.ElementOptions;
+}
+
+<h2>Element Affinity</h2>
+
+<div class="mb-3">
+    <form method="get" class="row g-2">
+        <div class="col-auto">
+            <select name="attacker" class="form-select">
+                <option value="">-- Attacker --</option>
+                @foreach (var o in opts)
+                {
+                    <option value="@o.ElementId" selected="@(ViewBag.FilterAttacker == o.ElementId)">
+                        @o
+                    </option>
+                }
+            </select>
+        </div>
+
+        <div class="col-auto">
+            <select name="defender" class="form-select">
+                <option value="">-- Defender --</option>
+                @foreach (var o in opts)
+                {
+                    <option value="@o.ElementId" selected="@(ViewBag.FilterDefender == o.ElementId)">
+                        @o
+                    </option>
+                }
+            </select>
+        </div>
+
+        <div class="col-auto">
+            <button class="btn btn-outline-secondary">Filter</button>
+            <a asp-action="Index" class="btn btn-outline-dark">Reset</a>
+            <a asp-action="Create" class="btn btn-primary">Create</a>
+        </div>
+
+    </form>
+</div>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Attacker</th>
+            <th>Defender</th>
+            <th class="text-end">Multiplier</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var x in Model)
+        {
+            <tr>
+                <td class="text-end">@x.AttackerElementLabel</td>
+                <td class="text-end">@x.DefenderElementLabel</td>
+                <td class="text-end">@x.Multiplier.ToString("0.00")</td>
+                <td class="text-nowrap">
+                    <a class="btn btn-sm btn-outline-primary"
+                       asp-action="Edit"
+                       asp-route-attacker="@x.AttackerElementId"
+                       asp-route-defender="@x.DefenderElementId">수정</a>
+
+                    <form asp-action="Delete" method="post" style="display:inline;"
+                          asp-route-attacker="@x.AttackerElementId" asp-route-defender="@x.DefenderElementId">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm btn-outline-danger"
+                                onclick="return confirm('삭제할까요?');">
+                            삭제
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

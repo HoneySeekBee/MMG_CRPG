@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Reflection.Emit;
 
 namespace Infrastructure.Persistence
@@ -10,12 +11,14 @@ namespace Infrastructure.Persistence
 
         public DbSet<Icon> Icons => Set<Icon>();
         public DbSet<Element> Elements => Set<Element>();
+        public DbSet<ElementAffinity> ElementAffinities => Set<ElementAffinity>();  
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             Console.WriteLine("OnModelCreateing");
             Modeling_Icon(modelBuilder);
             Modeling_Element(modelBuilder);
+            Modeling_Element_ElementAffinity(modelBuilder);
         }
 
         private void Modeling_Icon(ModelBuilder modelBuilder)
@@ -41,6 +44,17 @@ namespace Infrastructure.Persistence
                 e.Property(x => x.Meta).HasColumnType("jsonb"); // PostgreSQL
                 e.HasIndex(x => new { x.IsActive, x.SortOrder });
                 e.HasIndex(x => x.Key).IsUnique();
+            });
+        }
+        public void Modeling_Element_ElementAffinity(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ElementAffinity>(e =>
+            {
+                e.ToTable("ElementAffinity");
+                e.HasKey(x => new { x.AttackerElementId, x.DefenderElementId });
+                e.Property(x => x.Multiplier)
+                .HasColumnType("numeric(4,2)")
+                .HasDefaultValue(1.00m);
             });
         }
     }

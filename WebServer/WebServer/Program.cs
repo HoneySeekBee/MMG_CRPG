@@ -32,7 +32,12 @@ namespace WebServer
             builder.Services.AddScoped<IconService>();
             builder.Services.AddScoped<IIconRepository, EfIconRepository>();
             builder.Services.AddScoped<IElementRepository, ElementRepository>();
-            builder.Services.AddScoped<IElementService, ElementService>();
+            builder.Services.AddScoped<IElementService, ElementService>(); 
+            builder.Services.AddScoped<Application.ElementAffinities.IElementAffinityService,
+                            Application.ElementAffinities.ElementAffinityService>();
+            builder.Services.AddScoped<Application.Repositories.IElementAffinityRepository,
+                                        Infrastructure.Repositories.ElementAffinityRepository>();
+
 
             builder.Services.AddSingleton<IIconStorage>(sp =>
             {
