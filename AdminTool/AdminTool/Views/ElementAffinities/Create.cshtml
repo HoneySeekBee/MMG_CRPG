@@ -1,0 +1,54 @@
+﻿@model AdminTool.Models.ElementAffinityCreateVm
+
+@{
+    ViewData["Title"] = "Create Element Affinity";
+    var opts = Model.Elements ?? new List<AdminTool.Models.ElementOptionVm>();
+}
+<h2>Create Element Affinity</h2>
+
+<form id="affinityForm" asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label class="form-label">Attacker</label>
+        <select asp-for="AttackerElementId" class="form-select">
+            <option value="">-- Attacker --</option>
+            @foreach (var o in opts)
+            {
+                <option value="@o.ElementId">@o</option>
+            }
+        </select>
+        <span asp-validation-for="AttackerElementId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Defender</label>
+        <select asp-for="DefenderElementId" class="form-select">
+            <option value="">-- Defender --</option>
+            @foreach (var o in opts)
+            {
+                <option value="@o.ElementId">@o</option>
+            }
+        </select>
+        <span asp-validation-for="DefenderElementId" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Multiplier" class="form-label"></label>
+        <select asp-for="Multiplier" class="form-select">
+            <option value="0.5">0.5</option>
+            <option value="0.75">0.75</option>
+            <option value="1">1.00</option>
+            <option value="1.25">1.25</option>
+            <option value="1.5">1.50</option>
+        </select>
+        <span asp-validation-for="Multiplier" class="text-danger"></span>
+    </div> 
+    <button type="submit" form="affinityForm" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Back</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

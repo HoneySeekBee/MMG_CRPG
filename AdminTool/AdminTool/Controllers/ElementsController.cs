@@ -31,8 +31,8 @@ namespace AdminTool.Controllers
             var client = _http.CreateClient("GameApi");
 
             // (1) Element 조회 
-            var Elements = await client.GetFromJsonAsync<List<ElementDto>>("/api/element", ct)
-                ?? new List<ElementDto>();
+            var Elements = await client.GetFromJsonAsync<List<Application.Elements.ElementDto>>("/api/element", ct)
+                ?? new List<Application.Elements.ElementDto>();
 
             // (2) Icon 조회
             var icons = await client.GetFromJsonAsync<List<IconApiDto>>("/api/icons", ct)
@@ -154,7 +154,7 @@ namespace AdminTool.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var dto = await resp.Content.ReadFromJsonAsync<ElementDto>(cancellationToken: ct);
+            var dto = await resp.Content.ReadFromJsonAsync<Application.Elements.ElementDto>(cancellationToken: ct);
             if (dto == null)
             {
                 TempData["Error"] = "Element 데이터를 읽을 수 없습니다.";

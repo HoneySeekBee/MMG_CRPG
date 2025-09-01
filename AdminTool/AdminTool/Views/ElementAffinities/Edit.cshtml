@@ -1,0 +1,42 @@
+﻿@model AdminTool.Models.ElementAffinityEditVm
+@{
+    ViewData["Title"] = "Edit Affinity";
+}
+
+<h2>Edit Affinity</h2>
+
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" asp-for="AttackerElementId" />
+    <input type="hidden" asp-for="DefenderElementId" />
+
+    <div class="mb-3">
+        <label class="form-label">Attacker</label>
+        <div class="form-control-plaintext fw-bold">
+            @Model.AttackerElementLabel
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Defender</label>
+        <div class="form-control-plaintext fw-bold">
+            @Model.DefenderElementLabel
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Multiplier" class="form-label"></label>
+        <select asp-for="Multiplier" class="form-select">
+            <option value="0.5">0.5</option>
+            <option value="0.75">0.75</option>
+            <option value="1">1.00</option>
+            <option value="1.25">1.25</option>
+            <option value="1.5">1.50</option>
+        </select>
+        <span asp-validation-for="Multiplier" class="text-danger"></span>
+    </div>
+
+    <button class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+</form>
