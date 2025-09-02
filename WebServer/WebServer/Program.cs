@@ -1,6 +1,9 @@
 using Application.Elements;
+using Application.Factions;
 using Application.Icons;
+using Application.Rarities;
 using Application.Repositories;
+using Application.Roles;
 using Application.Storage;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories;
@@ -38,6 +41,13 @@ namespace WebServer
             builder.Services.AddScoped<Application.Repositories.IElementAffinityRepository,
                                         Infrastructure.Repositories.ElementAffinityRepository>();
 
+            builder.Services.AddScoped<IFactionRepository, FactionRepository>();   // Infra ±¸ÇöÃ¼
+            builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+            builder.Services.AddScoped<IRarityRepository, RarityRepository>();
+
+            builder.Services.AddScoped<IFactionService, FactionService>();
+            builder.Services.AddScoped<IRoleService, RoleService>();
+            builder.Services.AddScoped<IRarityService, RarityService>();
 
             builder.Services.AddSingleton<IIconStorage>(sp =>
             {
