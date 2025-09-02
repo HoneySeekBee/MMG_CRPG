@@ -16,6 +16,8 @@ namespace Infrastructure.Persistence
         public DbSet<Faction> Factions => Set<Faction>();
         public DbSet<Role> Roles => Set<Role>();
         public DbSet<Rarity> Rarities => Set<Rarity>();
+        public DbSet<Skill> Skills => Set<Skill>();
+        public DbSet<SkillLevel> SkillLevels => Set<SkillLevel>();
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             Console.WriteLine("OnModelCreateing");
@@ -25,6 +27,8 @@ namespace Infrastructure.Persistence
             Modeling_Faction(modelBuilder);
             Modeling_Role(modelBuilder);
             Modeling_Rarity(modelBuilder);
+            Modeling_Skill(modelBuilder);
+            Modeling_SkillLevel(modelBuilder);
         }
 
         private void Modeling_Icon(ModelBuilder modelBuilder)
@@ -77,7 +81,7 @@ namespace Infrastructure.Persistence
                 e.Property(x => x.Meta).HasColumnType("jsonb");      // pg jsonb
                 e.Property(x => x.IsActive).HasDefaultValue(true);
 
-                e.HasIndex(x => x.Key).IsUnique();               
+                e.HasIndex(x => x.Key).IsUnique();
             });
         }
         public void Modeling_Role(ModelBuilder modelBuilder)
@@ -104,7 +108,7 @@ namespace Infrastructure.Persistence
                 e.ToTable("Rarity");
                 e.HasKey(x => x.RarityId);
                 e.Property(x => x.RarityId).ValueGeneratedOnAdd();
-                e.Property(x => x.Stars).IsRequired();           
+                e.Property(x => x.Stars).IsRequired();
                 e.Property(x => x.Key).IsRequired();
                 e.Property(x => x.Label).IsRequired();
                 e.Property(x => x.ColorHex);
@@ -112,6 +116,56 @@ namespace Infrastructure.Persistence
                 e.Property(x => x.IsActive).HasDefaultValue(true);
 
                 e.HasIndex(x => x.Key).IsUnique();
+            });
+        }
+        public void Modeling_Skill(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Skill>(e =>
+            {
+                e.ToTable("Skills");
+                e.HasKey(x => x.SkillId);
+                e.Property(x => x.SkillId).ValueGeneratedOnAdd();
+
+                e.Property(x => x.Name).IsRequired().HasMaxLength(100);
+                e.Property(x => x.Type).HasConversion<short>().IsRequired();
+                e.Property(x => x.ElementId).IsRequired();
+                e.Property(x => x.IconId).IsRequired();
+
+                // 프로퍼티 기반으로 관계를 정의
+                e.HasMany(s => s.Levels)
+                 .WithOne()
+                 .HasForeignKey(x => x.SkillId)
+                 .OnDelete(DeleteBehavior.Cascade);
+
+                // Levels 프로퍼티의 백킹필드로 "_levels" 지정 + 필드 접근 모드
+                var nav = e.Metadata.FindNavigation(nameof(Skill.Levels));
+                nav!.SetField("_levels");
+                nav.SetPropertyAccessMode(PropertyAccessMode.Field);
+
+                e.HasIndex(x => x.Name);
+            });
+        }
+        public void Modeling_SkillLevel(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<SkillLevel>(e =>
+            {
+                e.ToTable("SkillLevels");
+
+                // 복합 PK (SkillId, Level)
+                e.HasKey(x => new { x.SkillId, x.Level });
+
+                e.Property(x => x.Description);
+
+                e.Property(x => x.CostGold)
+                    .IsRequired();
+
+                // Values (jsonb)
+                e.Property(x => x.Values)
+                    .HasColumnType("jsonb");
+
+                // Materials (jsonb)
+                e.Property(x => x.Materials)
+                    .HasColumnType("jsonb");
             });
         }
     }
