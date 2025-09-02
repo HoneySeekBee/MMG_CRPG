@@ -1,65 +1,80 @@
 ﻿
+using Application.SkillLevels;
 using Domain.Entities;
 using Domain.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace Application.Skills
 {
     public sealed class SkillListItemDto
     {
+        // [1] 기본 정보 
         public int SkillId { get; init; }
         public string Name { get; init; } = "";
-        public SkillType Type { get; init; }
-        public int ElementId { get; init; }
         public int IconId { get; init; }
 
-        public static SkillListItemDto From(Skill s) => new SkillListItemDto
+        // [2] 상세 정보 
+        public SkillType Type { get; init; }
+        public int ElementId { get; init; }
+        public SkillTargetingType TargetingType { get; init; }
+        public TargetSideType TargetSide { get; init; }
+        public AoeShapeType AoeShape { get; init; }
+
+        // [3] 기타정보
+        public bool IsActive { get; init; }
+        public string[] Tag { get; init; } = Array.Empty<string>();
+        public static SkillListItemDto From(Skill s) => new()
         {
             SkillId = s.SkillId,
             Name = s.Name,
             Type = s.Type,
             ElementId = s.ElementId,
-            IconId = s.IconId
+            IconId = s.IconId,
+            IsActive = s.IsActive,
+            TargetingType = s.TargetingType,
+            TargetSide = s.TargetSide,
+            AoeShape = s.AoeShape,
+            Tag = s.Tag ?? Array.Empty<string>()
         };
     }
+
+    // 상세 편집할때 
     public sealed class SkillDto
     {
+        // [1] 기본 정보 
         public int SkillId { get; init; }
         public string Name { get; init; } = "";
-        public SkillType Type { get; init; }
-        public int ElementId { get; init; }
         public int IconId { get; init; }
 
-        public static SkillDto From(Skill s) => new SkillDto
+        // [2] 상세 정보
+        public SkillType Type { get; init; }
+        public int ElementId { get; init; }
+        public SkillTargetingType TargetingType { get; init; }
+        public TargetSideType TargetSide { get; init; }
+        public AoeShapeType AoeShape { get; init; }
+
+        // [3] 기타 정보 
+        public bool IsActive { get; init; }
+        public string[] Tag { get; init; } = Array.Empty<string>();
+        public JsonNode? BaseInfo { get; init; }
+        public static SkillDto From(Skill s) => new()
         {
             SkillId = s.SkillId,
             Name = s.Name,
             Type = s.Type,
             ElementId = s.ElementId,
-            IconId = s.IconId
-        };
-    }
-    public sealed class SkillLevelDto
-    {
-        public int SkillId { get; init; }
-        public int Level { get; init; }
-        public IReadOnlyDictionary<string, object>? Values { get; init; }
-        public string? Description { get; init; }
-        public IReadOnlyDictionary<string, int>? Materials { get; init; }
-        public int CostGold { get; init; }
-
-        public static SkillLevelDto From(SkillLevel l) => new SkillLevelDto
-        {
-            SkillId = l.SkillId,
-            Level = l.Level,
-            Values = l.Values,
-            Description = l.Description,
-            Materials = l.Materials,
-            CostGold = l.CostGold
+            IconId = s.IconId,
+            IsActive = s.IsActive,
+            TargetingType = s.TargetingType,
+            TargetSide = s.TargetSide,
+            AoeShape = s.AoeShape,
+            Tag = s.Tag ?? Array.Empty<string>(),
+            BaseInfo = s.BaseInfo
         };
     }
     public sealed class SkillWithLevelsDto
@@ -69,15 +84,29 @@ namespace Application.Skills
         public SkillType Type { get; init; }
         public int ElementId { get; init; }
         public int IconId { get; init; }
+
+        public bool IsActive { get; init; }
+        public SkillTargetingType TargetingType { get; init; }
+        public TargetSideType TargetSide { get; init; }
+        public AoeShapeType AoeShape { get; init; }
+        public string[] Tag { get; init; } = Array.Empty<string>();
+        public JsonNode? BaseInfo { get; init; }
+
         public IReadOnlyList<SkillLevelDto> Levels { get; init; } = new List<SkillLevelDto>();
 
-        public static SkillWithLevelsDto From(Skill s) => new SkillWithLevelsDto
+        public static SkillWithLevelsDto From(Skill s) => new()
         {
             SkillId = s.SkillId,
             Name = s.Name,
             Type = s.Type,
             ElementId = s.ElementId,
             IconId = s.IconId,
+            IsActive = s.IsActive,
+            TargetingType = s.TargetingType,
+            TargetSide = s.TargetSide,
+            AoeShape = s.AoeShape,
+            Tag = s.Tag ?? Array.Empty<string>(),
+            BaseInfo = s.BaseInfo,
             Levels = s.Levels.Select(SkillLevelDto.From).ToList()
         };
     }

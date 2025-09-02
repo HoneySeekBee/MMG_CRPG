@@ -28,7 +28,7 @@ namespace Application.Skills
                 ? SkillWithLevelsDto.From(e)
                 : null;
 
-        // 목록 (요약 DTO 반환)
+        // 목록
         public async Task<IReadOnlyList<SkillListItemDto>> ListAsync(
             SkillType? type,
             int? elementId,
@@ -42,7 +42,6 @@ namespace Application.Skills
 
             var skip = (page - 1) * pageSize;
 
-            // Repo는 필터/페이징을 적용해 도메인 엔티티 리스트 반환한다고 가정
             var list = await _repo.ListAsync(
                 type: type,
                 elementId: elementId,
@@ -54,39 +53,91 @@ namespace Application.Skills
             return list.Select(SkillListItemDto.From).ToList();
         }
 
-        // 생성
+        // 생성// 생성
         public async Task<SkillDto> CreateAsync(CreateSkillRequest req, CancellationToken ct)
         {
             Guard.NotEmpty(req.Name, nameof(req.Name));
 
-            // (선택) 이름 중복 체크가 필요하면 Repo에 메서드 추가해서 사용
-            // if (await _repo.GetByNameAsync(req.Name.Trim(), ct) is not null)
-            //     throw new InvalidOperationException("이미 존재하는 Skill 이름입니다.");
             var e = new Skill(
-    0,
-    req.Name.Trim(),
-    req.Type,
-    req.ElementId,
-    req.IconId
-);
+                0,
+                req.Name.Trim(),
+                req.Type,
+                req.ElementId,
+                req.IconId,
+                req.TargetingType,
+                req.AoeShape,
+                req.TargetSide,
+                isActive: req.IsActive?? true,           // ← 누락1
+                baseInfo: req.BaseInfo,           // ← 누락2
+                tags: req.Tag                     // ← 누락3
+            );
+
 
             await _repo.AddAsync(e, ct);
             await _repo.SaveChangesAsync(ct);
             return SkillDto.From(e);
         }
-
         // 기본정보 수정 (이름/타입/속성/아이콘)
         public async Task UpdateAsync(int id, UpdateSkillBasicsRequest req, CancellationToken ct)
         {
+            Console.WriteLine($"[API] (SkillService) : basic - name : {req.Name}, iconId : {req.IconId}");
             var e = await _repo.GetByIdAsync(id, includeLevels: false, ct)
                     ?? throw new KeyNotFoundException("대상을 찾을 수 없습니다.");
 
             Guard.NotEmpty(req.Name, nameof(req.Name));
 
-            e.Name = req.Name.Trim();
+            e.Rename(req.Name.Trim());
+            e.IconId = req.IconId;
+
+            await _repo.SaveChangesAsync(ct);
+        }
+        // 전투 속성 수정
+        public async Task UpdateCombatAsync(int id, UpdateSkillCombatRequest req, CancellationToken ct)
+        {
+            var e = await _repo.GetByIdAsync(id, includeLevels: false, ct)
+                    ?? throw new KeyNotFoundException("대상을 찾을 수 없습니다.");
+
+            // 값 적용
             e.Type = req.Type;
             e.ElementId = req.ElementId;
-            e.IconId = req.IconId;
+
+            // 액티브/패시브 및 타게팅/범위 일관성 확보
+            e.IsActive = req.IsActive;
+            e.TargetSide = req.TargetSide;
+
+            if (!e.IsActive)
+            {
+                // 패시브면 타게팅/AOE 없음
+                e.TargetingType = SkillTargetingType.None;
+                e.AoeShape = AoeShapeType.None;
+            }
+            else
+            {
+                e.TargetingType = req.TargetingType;
+                e.AoeShape = req.AoeShape;
+            }
+
+            await _repo.SaveChangesAsync(ct);
+        }
+        public async Task UpdateMetaAsync(int id, PatchSkillMetaRequest req, CancellationToken ct)
+        {
+            var e = await _repo.GetByIdAsync(id, includeLevels: false, ct)
+                    ?? throw new KeyNotFoundException("대상을 찾을 수 없습니다.");
+
+            // Tag 정규화
+            if (req.NormalizeTags && req.Tag is { Length: > 0 })
+                e.SetTags(req.Tag
+                    .Select(t => (t ?? "").Trim().ToLowerInvariant())
+                    .Where(t => t.Length > 0)
+                    .Distinct()
+                    .ToArray());
+            else if (req.Tag is not null)
+                e.SetTags(req.Tag);
+
+
+            // BaseInfo 교체 (merge가 필요하면 여기서 기존 e.BaseInfo와 병합 로직 추가)
+            e.BaseInfo = req.BaseInfo;
+
 
             await _repo.SaveChangesAsync(ct);
         }

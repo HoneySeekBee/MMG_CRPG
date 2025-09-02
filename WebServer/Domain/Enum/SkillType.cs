@@ -15,24 +15,22 @@ namespace Domain.Enum
         Buff = 4,
         Debuff = 5
     }
-
-    public enum TriggerType : short
-    {
-        Auto = 0,
-        Manual = 1,
-        Passive = 2,
-        OnHit = 3,
-        OnDamaged = 4
-    }
-
-    public enum TargetingRule : short
+    public enum SkillTargetingType : short
     {
         None = 0,
-        Self = 1,
-        AllySingleLowestHp = 2,
-        AllyAll = 3,
-        EnemySingle = 4,
-        EnemyAll = 5,
-        EnemyBackline = 6
+        Targeting = 1,
+        NoneTargeting = 2,
+    }
+
+    public enum AoeShapeType : short
+    {
+        None = 0,
+        Circle = 1, 
+    }
+    public enum TargetSideType : short
+    {
+        None = 0,
+        Team = 1,
+        Enemy = 2, 
     }
 }
