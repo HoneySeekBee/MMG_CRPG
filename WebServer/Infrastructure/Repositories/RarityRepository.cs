@@ -16,7 +16,7 @@ namespace Infrastructure.Repositories
         public RarityRepository(GameDBContext db) => _db = db;
 
         public Task<Rarity?> GetByIdAsync(int id, CancellationToken ct) =>
-            _db.Rarities.AsNoTracking().FirstOrDefaultAsync(x => x.RarityId == id, ct);
+            _db.Rarities.FirstOrDefaultAsync(x => x.RarityId == id, ct);
 
         public Task<Rarity?> GetByKeyAsync(string key, CancellationToken ct) =>
             _db.Rarities.AsNoTracking().FirstOrDefaultAsync(x => x.Key == key, ct);

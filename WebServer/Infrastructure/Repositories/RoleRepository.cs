@@ -16,7 +16,7 @@ namespace Infrastructure.Repositories
         public RoleRepository(GameDBContext db) => _db = db;
 
         public Task<Role?> GetByIdAsync(int id, CancellationToken ct) =>
-            _db.Roles.AsNoTracking().FirstOrDefaultAsync(x => x.RoleId == id, ct);
+            _db.Roles.FirstOrDefaultAsync(x => x.RoleId == id, ct);
 
         public Task<Role?> GetByKeyAsync(string key, CancellationToken ct) =>
             _db.Roles.AsNoTracking().FirstOrDefaultAsync(x => x.Key == key, ct);

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Application.Rarities
@@ -43,7 +44,7 @@ namespace Application.Rarities
                 ColorHex = req.ColorHex,
                 SortOrder = req.SortOrder,
                 IsActive = req.IsActive,
-                Meta = req.Meta
+                Meta = JsonSerializer.Serialize(new { description = req.Meta })
             };
 
             await _repo.AddAsync(e, ct);
@@ -64,7 +65,7 @@ namespace Application.Rarities
             e.ColorHex = req.ColorHex;
             e.SortOrder = req.SortOrder;
             e.IsActive = req.IsActive;
-            e.Meta = req.Meta;
+            e.Meta = JsonSerializer.Serialize(new { description = req.Meta });
 
             await _repo.SaveChangesAsync(ct);
         }

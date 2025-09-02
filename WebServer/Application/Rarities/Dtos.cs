@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Application.Rarities
@@ -20,16 +21,33 @@ namespace Application.Rarities
         public bool IsActive { get; init; }
         public string? Meta { get; init; }
 
-        public static RarityDto From(Rarity e) => new()
+        public static RarityDto From(Rarity e)
         {
-            RarityId = e.RarityId,
-            Stars = e.Stars,       
-            Key = e.Key,
-            Label = e.Label,
-            ColorHex = e.ColorHex,
-            SortOrder = e.SortOrder,
-            IsActive = e.IsActive,
-            Meta = e.Meta
-        };
+            string? description = null;
+
+            if (!string.IsNullOrWhiteSpace(e.Meta))
+            {
+                try
+                {
+                    using var doc = JsonDocument.Parse(e.Meta);
+                    description = doc.RootElement.GetProperty("description").GetString();
+                }
+                catch
+                {
+
+                }
+            }
+            return new RarityDto()
+            {
+                RarityId = e.RarityId,
+                Stars = e.Stars,
+                Key = e.Key,
+                Label = e.Label,
+                ColorHex = e.ColorHex,
+                SortOrder = e.SortOrder,
+                IsActive = e.IsActive,
+                Meta = description
+            };
+        }
     }
 }

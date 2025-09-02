@@ -1,0 +1,82 @@
+﻿@model AdminTool.Models.FactionCreateVm
+@{
+    ViewData["Title"] = "Create Faction";
+}
+
+<h2 class="mb-3">Create Faction</h2>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <!-- 유효성 요약 -->
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <!-- Key -->
+    <div class="mb-3">
+        <label asp-for="Key" class="form-label"></label>
+        <input asp-for="Key" class="form-control" placeholder="예: human, elf, orc" />
+        <span asp-validation-for="Key" class="text-danger"></span>
+    </div>
+
+    <!-- Label -->
+    <div class="mb-3">
+        <label asp-for="Label" class="form-label"></label>
+        <input asp-for="Label" class="form-control" placeholder="예: 인간, 엘프, 오크" />
+        <span asp-validation-for="Label" class="text-danger"></span>
+    </div>
+
+    <!-- 아이콘 선택 -->
+    <div class="mb-3">
+        <input asp-for="IconId" id="IconId" type="hidden" />
+        <div class="d-flex align-items-center gap-2 mb-2">
+            <img id="iconPreviewImg" src=""
+                 alt="icon" style="width:32px;height:32px;border:1px solid #eee;border-radius:6px;object-fit:contain" />
+            <button type="button" class="btn btn-outline-primary btn-sm"
+                    data-bs-toggle="modal" data-bs-target="#iconPickerModal">
+                아이콘 선택
+            </button>
+        </div>
+        @await Html.PartialAsync("~/Views/Elements/PickIconModal.cshtml",
+                 new PickIconModalVm
+        {
+            ModalId = "iconPickerModal",
+            Icons = Model.Icons,
+            TargetHiddenId = "IconId",
+            TargetPreviewImgId = "iconPreviewImg"
+        })
+    </div>
+
+    <!-- Color -->
+    <div class="mb-3">
+        <label asp-for="ColorHex" class="form-label">Color</label>
+        <input asp-for="ColorHex" type="color" class="form-control form-control-color" />
+        <span asp-validation-for="ColorHex" class="text-danger"></span>
+    </div>
+
+    <!-- SortOrder -->
+    <div class="mb-3">
+        <label asp-for="SortOrder" class="form-label"></label>
+        <input asp-for="SortOrder" type="number" min="1" class="form-control" placeholder="1 이상 숫자" />
+        <span asp-validation-for="SortOrder" class="text-danger"></span>
+    </div>
+
+    <!-- Active 여부 -->
+    <div class="mb-3 form-check">
+        <input asp-for="IsActive" class="form-check-input" />
+        <label asp-for="IsActive" class="form-check-label"></label>
+    </div>
+
+    <!-- Meta -->
+    <div class="mb-3">
+        <label asp-for="Meta" class="form-label">Meta (JSON or text)</label>
+        <textarea asp-for="Meta" class="form-control" rows="3" placeholder="설명, 기타 정보"></textarea>
+        <span asp-validation-for="Meta" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
