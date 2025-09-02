@@ -1,0 +1,108 @@
+﻿@model IEnumerable<AdminTool.Models.RarityVm>
+@{
+    ViewData["Title"] = "Rarities";
+    bool? isActive = ViewBag.FilterIsActive as bool?;
+    short? stars = ViewBag.FilterStars as short?;
+}
+
+<h2 class="mb-3">Rarities</h2>
+
+@if (TempData["Message"] is string msg)
+{
+    <div class="alert alert-success">@msg</div>
+}
+@if (TempData["Error"] is string err)
+{
+    <div class="alert alert-danger">@err</div>
+}
+
+<div class="mb-3">
+    <form id="filterForm" method="get" class="row g-2 align-items-end">
+        <div class="col-auto">
+            <label class="form-label">Stars</label>
+            <input type="number" name="stars" class="form-control" min="0" max="10"
+                   value="@(stars?.ToString() ?? "")" />
+        </div>
+        <div class="col-auto">
+            <label class="form-label">Is Active</label>
+            <select name="isActive" class="form-select">
+                <option value="" selected="@(isActive == null)">All</option>
+                <option value="true" selected="@(isActive == true)">Active</option>
+                <option value="false" selected="@(isActive == false)">Inactive</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-outline-secondary">Filter</button>
+            <a asp-action="Index" class="btn btn-outline-dark">Reset</a>
+            <a asp-action="Create" class="btn btn-primary">Create</a>
+        </div>
+    </form>
+</div>
+
+<table class="table table-bordered align-middle">
+    <thead class="table-light">
+        <tr>
+            <th style="width:80px;">ID</th>
+            <th style="width:80px;">Stars</th>
+            <th>Key</th>
+            <th>Label</th>
+            <th style="width:120px;">Color</th>
+            <th class="text-end" style="width:120px;">Sort</th>
+            <th style="width:110px;">Active</th>
+            <th style="width:180px;"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var x in Model)
+        {
+            <tr>
+                <td>@x.RarityId</td>
+                <td>@x.Stars</td>
+                <td class="text-monospace">@x.Key</td>
+                <td>@x.Label</td>
+                <td>
+                    @if (!string.IsNullOrWhiteSpace(x.ColorHex))
+                    {
+                        <span class="d-inline-flex align-items-center gap-2">
+                            <span style="display:inline-block;width:18px;height:18px;border:1px solid #ccc;border-radius:4px;background:@x.ColorHex"></span>
+                            <small>@x.ColorHex</small>
+                        </span>
+                    }
+                </td>
+                <td class="text-end">@x.SortOrder</td>
+                <td>
+                    @if (x.IsActive)
+                    {
+                        <span class="badge bg-success">Active</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Inactive</span>
+                    }
+                </td>
+                <td class="text-nowrap">
+                    <a class="btn btn-sm btn-outline-primary" asp-action="Edit" asp-route-id="@x.RarityId">Edit</a>
+
+                    <form asp-action="Delete" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@x.RarityId" />
+                        <button type="submit" class="btn btn-sm btn-outline-danger"
+                                onclick="return confirm('삭제할까요?');">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        (function(){
+          const f = document.getElementById('filterForm');
+          const sel = f.querySelector('select[name="isActive"]');
+          sel.addEventListener('change', () => f.submit());
+        })();
+    </script>
+}

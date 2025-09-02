@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Application.Factions
@@ -43,7 +44,7 @@ namespace Application.Factions
                 ColorHex = req.ColorHex,
                 SortOrder = req.SortOrder,
                 IsActive = req.IsActive,
-                Meta = req.Meta
+                Meta = JsonSerializer.Serialize(new { description = req.Meta })
             };
 
             await _repo.AddAsync(e, ct);
@@ -53,6 +54,8 @@ namespace Application.Factions
 
         public async Task UpdateAsync(int id, UpdateFactionRequest req, CancellationToken ct)
         {
+            Console.WriteLine($"FactionService - Update (id : {id}) ");
+            Console.WriteLine($"FactionService - Update (label : {req.Label}) (iconId : {req.IconId}) (meta : {req.Meta} ");
             var e = await _repo.GetByIdAsync(id, ct) ?? throw new KeyNotFoundException("대상을 찾을 수 없습니다.");
 
             Guard.NotEmpty(req.Label, nameof(req.Label));
@@ -63,7 +66,7 @@ namespace Application.Factions
             e.ColorHex = req.ColorHex;
             e.SortOrder = req.SortOrder;
             e.IsActive = req.IsActive;
-            e.Meta = req.Meta;
+            e.Meta = JsonSerializer.Serialize(new { description = req.Meta });
 
             await _repo.SaveChangesAsync(ct);
         }

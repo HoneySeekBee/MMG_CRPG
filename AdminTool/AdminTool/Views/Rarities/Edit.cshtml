@@ -1,0 +1,56 @@
+﻿@model AdminTool.Models.RarityEditVm
+@{
+    ViewData["Title"] = "Edit Rarity";
+}
+
+<h2 class="mb-3">Edit Rarity</h2>
+
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" asp-for="RarityId" />
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="Stars" class="form-label">Stars</label>
+        <input asp-for="Stars" type="number" min="1" max="10" class="form-control" />
+        <span asp-validation-for="Stars" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Label" class="form-label"></label>
+        <input asp-for="Label" class="form-control" />
+        <span asp-validation-for="Label" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ColorHex" class="form-label">Color</label>
+        <input asp-for="ColorHex" type="color" class="form-control form-control-color" />
+        <span asp-validation-for="ColorHex" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="SortOrder" class="form-label"></label>
+        <input asp-for="SortOrder" type="number" class="form-control" />
+        <span asp-validation-for="SortOrder" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3 form-check">
+        <input asp-for="IsActive" class="form-check-input" />
+        <label asp-for="IsActive" class="form-check-label"></label>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Meta" class="form-label">Meta</label>
+        <textarea asp-for="Meta" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Meta" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Application.Factions
@@ -18,16 +19,35 @@ namespace Application.Factions
         public bool IsActive { get; init; }
         public string? Meta { get; init; }
 
-        public static FactionDto From(Faction e) => new()
+        public static FactionDto From(Faction e)
         {
-            FactionId = e.FactionId,
-            Key = e.Key,
-            Label = e.Label,
-            IconId = e.IconId,
-            ColorHex = e.ColorHex,
-            SortOrder = e.SortOrder,
-            IsActive = e.IsActive,
-            Meta = e.Meta
-        };
+
+            string? description = null;
+
+            if (!string.IsNullOrWhiteSpace(e.Meta))
+            {
+                try
+                {
+                    using var doc = JsonDocument.Parse(e.Meta);
+                    description = doc.RootElement.GetProperty("description").GetString();
+                }
+                catch
+                {
+
+                }
+            }
+
+            return new FactionDto
+            {
+                FactionId = e.FactionId,
+                Key = e.Key,
+                Label = e.Label,
+                ColorHex = e.ColorHex,
+                IconId = e.IconId,
+                SortOrder = e.SortOrder,
+                IsActive = e.IsActive,
+                Meta = description
+            };
+        }
     }
 }

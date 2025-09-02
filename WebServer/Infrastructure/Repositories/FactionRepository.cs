@@ -15,8 +15,7 @@ namespace Infrastructure.Repositories
         private readonly GameDBContext _db;
         public FactionRepository(GameDBContext db) => _db = db;
 
-        public Task<Faction?> GetByIdAsync(int id, CancellationToken ct) =>
-            _db.Factions.AsNoTracking().FirstOrDefaultAsync(x => x.FactionId == id, ct);
+        public Task<Faction?> GetByIdAsync(int id, CancellationToken ct) => _db.Factions.FirstOrDefaultAsync(x => x.FactionId == id, ct);
 
         public Task<Faction?> GetByKeyAsync(string key, CancellationToken ct) =>
             _db.Factions.AsNoTracking().FirstOrDefaultAsync(x => x.Key == key, ct);

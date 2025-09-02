@@ -35,8 +35,8 @@ namespace AdminTool.Controllers
                 ?? new List<Application.Elements.ElementDto>();
 
             // (2) Icon 조회
-            var icons = await client.GetFromJsonAsync<List<IconApiDto>>("/api/icons", ct)
-                ?? new List<IconApiDto>();
+            var icons = await client.GetFromJsonAsync<List<IconVm>>("/api/icons", ct)
+                ?? new List<IconVm>();
 
             var iconMap = icons.ToDictionary(k => k.IconId, v => (v.Key, v.Version));
 
@@ -68,7 +68,7 @@ namespace AdminTool.Controllers
         private async Task<List<IconPickItem>> LoadIconsAsync(CancellationToken ct)
         {
             var client = _http.CreateClient("GameApi");
-            var apiIcons = await client.GetFromJsonAsync<List<IconApiDto>>("/api/icons", ct) ?? new();
+            var apiIcons = await client.GetFromJsonAsync<List<IconVm>>("/api/icons", ct) ?? new();
 
             return apiIcons.Select(x => new IconPickItem
             {
@@ -78,12 +78,6 @@ namespace AdminTool.Controllers
                 Url = $"{_assetsBaseUrl}/icons/{x.Key}.png?v={x.Version}"
             }).ToList();
         }
-        public sealed class IconApiDto
-        {
-            public int IconId { get; set; }
-            public string Key { get; set; } = "";
-            public int Version { get; set; }
-        }
         // [2] 쓰기 Create
         // GET
         [HttpGet]
@@ -92,7 +86,7 @@ namespace AdminTool.Controllers
             var client = _http.CreateClient("GameApi");
 
             // 아이콘을 조회
-            var apiIcons = await client.GetFromJsonAsync<List<IconApiDto>>("/api/icons", ct) ?? new();
+            var apiIcons = await client.GetFromJsonAsync<List<IconVm>>("/api/icons", ct) ?? new();
 
             var icons = apiIcons.Select(x => new IconPickItem
             {

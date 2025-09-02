@@ -1,0 +1,72 @@
+﻿@model AdminTool.Models.RoleEditVm
+@{
+    ViewData["Title"] = "Edit Role";
+}
+
+<h2 class="mb-3">Edit Role</h2>
+
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" asp-for="RoleId" />
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+    <div class="mb-3">
+        <label asp-for="Label" class="form-label"></label>
+        <input asp-for="Label" class="form-control" />
+        <span asp-validation-for="Label" class="text-danger"></span>
+    </div>
+
+    <!-- 아이콘 선택 -->
+    <div class="mb-3">
+        <input asp-for="IconId" id="IconId" type="hidden" />
+        <div class="d-flex align-items-center gap-2 mb-2">
+            <img id="iconPreviewImg" src=""
+                 alt="icon" style="width:32px;height:32px;border:1px solid #eee;border-radius:6px;object-fit:contain" />
+            <button type="button" class="btn btn-outline-primary btn-sm"
+                    data-bs-toggle="modal" data-bs-target="#iconPickerModal">
+                아이콘 선택
+            </button>
+        </div>
+        @await Html.PartialAsync("~/Views/Elements/PickIconModal.cshtml",
+                 new PickIconModalVm
+        {
+            ModalId = "iconPickerModal",
+            Icons = Model.Icons,
+            TargetHiddenId = "IconId",
+            TargetPreviewImgId = "iconPreviewImg"
+        })
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ColorHex" class="form-label">Color</label>
+        <input asp-for="ColorHex" type="color" class="form-control form-control-color" />
+        <span asp-validation-for="ColorHex" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="SortOrder" class="form-label"></label>
+        <input asp-for="SortOrder" type="number" class="form-control" />
+        <span asp-validation-for="SortOrder" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3 form-check">
+        <input asp-for="IsActive" class="form-check-input" />
+        <label asp-for="IsActive" class="form-check-label"></label>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Meta" class="form-label">Meta</label>
+        <textarea asp-for="Meta" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Meta" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
