@@ -4,6 +4,8 @@ using Application.Icons;
 using Application.Rarities;
 using Application.Repositories;
 using Application.Roles;
+using Application.SkillLevels;
+using Application.Skills;
 using Application.Storage;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories;
@@ -34,13 +36,16 @@ namespace WebServer
 
             builder.Services.AddScoped<IconService>();
             builder.Services.AddScoped<IIconRepository, EfIconRepository>();
+            
+            // 속성 및 속성 상속 
             builder.Services.AddScoped<IElementRepository, ElementRepository>();
             builder.Services.AddScoped<IElementService, ElementService>(); 
             builder.Services.AddScoped<Application.ElementAffinities.IElementAffinityService,
                             Application.ElementAffinities.ElementAffinityService>();
             builder.Services.AddScoped<Application.Repositories.IElementAffinityRepository,
                                         Infrastructure.Repositories.ElementAffinityRepository>();
-
+            
+            // 소속, 역할군, 희기도 
             builder.Services.AddScoped<IFactionRepository, FactionRepository>();   // Infra 구현체
             builder.Services.AddScoped<IRoleRepository, RoleRepository>();
             builder.Services.AddScoped<IRarityRepository, RarityRepository>();
@@ -48,6 +53,12 @@ namespace WebServer
             builder.Services.AddScoped<IFactionService, FactionService>();
             builder.Services.AddScoped<IRoleService, RoleService>();
             builder.Services.AddScoped<IRarityService, RarityService>();
+
+            // 스킬 관련 
+            builder.Services.AddScoped<ISkillRepository, SkillRepository>();
+            builder.Services.AddScoped<ISkillLevelRepository, SkillLevelRepository>();
+            builder.Services.AddScoped<ISkillService, SkillService>();
+            builder.Services.AddScoped<ISkillLevelService, SkillLevelService>();
 
             builder.Services.AddSingleton<IIconStorage>(sp =>
             {
