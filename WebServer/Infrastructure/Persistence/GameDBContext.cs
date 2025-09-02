@@ -126,10 +126,27 @@ namespace Infrastructure.Persistence
                 e.HasKey(x => x.SkillId);
                 e.Property(x => x.SkillId).ValueGeneratedOnAdd();
 
+                // 기본
                 e.Property(x => x.Name).IsRequired().HasMaxLength(100);
                 e.Property(x => x.Type).HasConversion<short>().IsRequired();
+
                 e.Property(x => x.ElementId).IsRequired();
                 e.Property(x => x.IconId).IsRequired();
+
+                e.Property(x => x.IsActive).IsRequired();
+
+                e.Property(x => x.TargetingType).HasConversion<short>().IsRequired();
+                e.Property(x => x.AoeShape).HasConversion<short>().IsRequired();
+                e.Property(x => x.TargetSide).HasConversion<short>().IsRequired();
+                
+                e.Property(x => x.BaseInfo)
+           .HasColumnType("jsonb")
+           .IsRequired(false);
+
+                e.Property(x => x.Tag)
+           .HasColumnType("text[]")
+           .HasDefaultValueSql("'{}'::text[]")
+           .IsRequired();
 
                 // 프로퍼티 기반으로 관계를 정의
                 e.HasMany(s => s.Levels)
@@ -137,12 +154,18 @@ namespace Infrastructure.Persistence
                  .HasForeignKey(x => x.SkillId)
                  .OnDelete(DeleteBehavior.Cascade);
 
-                // Levels 프로퍼티의 백킹필드로 "_levels" 지정 + 필드 접근 모드
                 var nav = e.Metadata.FindNavigation(nameof(Skill.Levels));
                 nav!.SetField("_levels");
                 nav.SetPropertyAccessMode(PropertyAccessMode.Field);
+                e.HasIndex(x => x.Name);                 // 이름 검색 용
+                e.HasIndex(x => x.Type);                 // 타입 필터
+                e.HasIndex(x => x.ElementId);            // 속성 필터
+                e.HasIndex(x => x.IsActive);             // 활성/비활성 필터
+                e.HasIndex(x => x.TargetingType);
+                e.HasIndex(x => x.AoeShape);
+                e.HasIndex(x => x.TargetSide);
 
-                e.HasIndex(x => x.Name);
+
             });
         }
         public void Modeling_SkillLevel(ModelBuilder modelBuilder)

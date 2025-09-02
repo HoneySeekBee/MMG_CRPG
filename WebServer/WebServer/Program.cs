@@ -11,6 +11,7 @@ using Infrastructure.Persistence;
 using Infrastructure.Repositories;
 using Infrastructure.Storage;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace WebServer
 {
@@ -22,29 +23,36 @@ namespace WebServer
 
             // Add services to the container.
             builder.Services.AddRazorPages();
-
             builder.Services.AddControllers();
 
+            var connString = builder.Configuration.GetConnectionString("GameDb");
+
+            var dsb = new NpgsqlDataSourceBuilder(connString);
+            dsb.EnableDynamicJson();
+            var dataSource = dsb.Build();
+
             builder.Services.AddDbContextPool<GameDBContext>(opt =>
-            opt.UseNpgsql(builder.Configuration.GetConnectionString("GameDb"),
-            npg => npg.EnableRetryOnFailure(
-                maxRetryCount: 5,
-                maxRetryDelay: TimeSpan.FromSeconds(5),
-                errorCodesToAdd: null))
-            .EnableSensitiveDataLogging(false));
+    opt.UseNpgsql(dataSource, npg =>
+        npg.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(5),
+            errorCodesToAdd: null))
+       .EnableSensitiveDataLogging(false)
+);
+
             builder.Services.AddEndpointsApiExplorer();
 
             builder.Services.AddScoped<IconService>();
             builder.Services.AddScoped<IIconRepository, EfIconRepository>();
-            
+
             // 加己 棺 加己 惑加 
             builder.Services.AddScoped<IElementRepository, ElementRepository>();
-            builder.Services.AddScoped<IElementService, ElementService>(); 
+            builder.Services.AddScoped<IElementService, ElementService>();
             builder.Services.AddScoped<Application.ElementAffinities.IElementAffinityService,
                             Application.ElementAffinities.ElementAffinityService>();
             builder.Services.AddScoped<Application.Repositories.IElementAffinityRepository,
                                         Infrastructure.Repositories.ElementAffinityRepository>();
-            
+
             // 家加, 开且焙, 锐扁档 
             builder.Services.AddScoped<IFactionRepository, FactionRepository>();   // Infra 备泅眉
             builder.Services.AddScoped<IRoleRepository, RoleRepository>();

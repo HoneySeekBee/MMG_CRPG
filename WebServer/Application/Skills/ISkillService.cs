@@ -29,6 +29,8 @@ namespace Application.Skills
 
         // 수정 (기본 정보: 이름/타입/속성/아이콘)
         Task UpdateAsync(int id, UpdateSkillBasicsRequest req, CancellationToken ct);
+        Task UpdateCombatAsync(int id, UpdateSkillCombatRequest req, CancellationToken ct);
+        Task UpdateMetaAsync(int id, PatchSkillMetaRequest req, CancellationToken ct);
 
         // (옵션) 이름만 경량 수정이 필요하면 별도 메서드 제공
         Task RenameAsync(int id, RenameSkillRequest req, CancellationToken ct);
