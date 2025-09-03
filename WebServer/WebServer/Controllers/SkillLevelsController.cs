@@ -30,6 +30,7 @@ namespace WebServer.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(int skillId, [FromBody] CreateSkillLevelRequest req, CancellationToken ct = default)
         {
+            Console.WriteLine($"[WebAPI : SkillLevelCreate] id = {skillId}, level = {req.Level}. values = {req.Values}, material = {req.Materials}");
             try
             {
                 var created = await _svc.CreateAsync(skillId, req, ct);

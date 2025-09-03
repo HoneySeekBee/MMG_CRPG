@@ -3,6 +3,7 @@ using Application.Elements;
 using Application.SkillLevels;
 using Application.Skills;
 using Domain.Enum;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
@@ -12,6 +13,7 @@ using System.Text.Json.Nodes;
 
 namespace AdminTool.Controllers
 {
+    [Route("Skills")]
     public class SkillsController : Controller
     {
         private readonly IHttpClientFactory _http;
@@ -98,6 +100,7 @@ namespace AdminTool.Controllers
             };
             return View(vm);
         }
+        
         private static IReadOnlyList<SelectListItem> BuildEnumOptions<TEnum>(TEnum? selected = null)
     where TEnum : struct, Enum
     => Enum.GetValues(typeof(TEnum))
@@ -105,50 +108,60 @@ namespace AdminTool.Controllers
            .Select(v => new SelectListItem(v.ToString(), Convert.ToInt32(v).ToString(), selected?.Equals(v) == true))
            .ToList();
 
-        [HttpGet]
+        [HttpGet("Create")]
         public async Task<IActionResult> Create(CancellationToken ct)
         {
             var client = _http.CreateClient("GameApi");
 
-            // 1) 아이콘 목록 조회
-            var apiIcons = await client.GetFromJsonAsync<List<IconVm>>("/api/icons", ct) ?? new();
-            var icons = apiIcons.Select(x => new IconPickItem
-            {
-                IconId = x.IconId,
-                Key = x.Key,
-                Version = x.Version,
-                Url = $"{_assetsBaseUrl}/{_iconsSubdir}/{x.Key}.png?v={x.Version}"
-            }).ToList();
-
-            // 2) Elements 조회
+            // 선택 옵션들
+            var icons = await LoadIconPickListAsync(ct);
             var elements = await client.GetFromJsonAsync<List<ElementDto>>("/api/element", ct) ?? new();
 
-            // 3) ViewModel 생성
+            // 기본 선택값
+            var defaultElementId = elements.FirstOrDefault()?.ElementId ?? 0;
+            var defaultIconId = icons.FirstOrDefault()?.IconId ?? 0;
+
             var vm = new SkillCreateVm
             {
-                Type = SkillType.Unknown,   // 기본값 예시
-                ElementId = elements.FirstOrDefault()?.ElementId ?? 0,
-                IconId = icons.FirstOrDefault()?.IconId ?? 0,
-                TypeOptions = BuildSkillTypeOptions(null),
+                // 드롭다운 기본 선택값
+                TypeOptions = BuildSkillTypeOptions(SkillType.Unknown),
+                TargetingTypeOptions = BuildSkillTargetOptions(SkillTargetingType.None),
+                TargetSideOptions = BuildSkillSideOptions(TargetSideType.None),
+                AoeShapeOptions = BuildAoeShapeType(AoeShapeType.None),
+
+                // 셀렉트리스트(Selected 반영)
                 ElementOptions = elements
-                    .Select(e => new SelectListItem(e.Label, e.ElementId.ToString()))
+                    .Select(e => new SelectListItem(e.Label, e.ElementId.ToString(), e.ElementId == defaultElementId))
                     .ToList(),
+
                 Icons = icons,
-                TargetingTypeOptions = BuildSkillTargetOptions(null),
-                AoeShapeOptions = BuildAoeShapeType(null),
-                TargetSideOptions = BuildSkillSideOptions(null),
+
+                // 모델 기본값
+                Name = "",
+                Type = SkillType.Unknown,
+                ElementId = defaultElementId,
+                IconId = defaultIconId,
+                IsActive = true,
+                TargetingType = SkillTargetingType.None,
+                TargetSide = TargetSideType.None,
+                AoeShape = AoeShapeType.None,
+                Tag = Array.Empty<string>(),
+                Etc = null,           // 뷰에서 Etc를 사용한다면 여기와 POST 매핑을 일치
             };
+
+            // (아이콘 프리뷰를 쓰면) 초기 프리뷰 용도
+            ViewBag.SelectedIconUrl = icons.FirstOrDefault(i => i.IconId == vm.IconId)?.Url;
 
             return View(vm);
         }
 
-        [HttpPost]
+        [HttpPost("Create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(SkillCreateVm vm, CancellationToken ct)
         {
             if (!ModelState.IsValid)
             {
-                // 실패 시 다시 선택값 로드
+                // 실패 시 옵션 재로딩
                 vm.TypeOptions = BuildSkillTypeOptions(vm.Type);
                 vm.ElementOptions = await BuildElementOptionsAsync(vm.ElementId, ct);
                 vm.Icons = await LoadIconPickListAsync(ct, vm.IconId);
@@ -158,10 +171,8 @@ namespace AdminTool.Controllers
                 return View(vm);
             }
 
-
             var client = _http.CreateClient("GameApi");
 
-            // API 요청 DTO
             var req = new CreateSkillRequest
             {
                 Name = vm.Name,
@@ -173,16 +184,17 @@ namespace AdminTool.Controllers
                 AoeShape = vm.AoeShape,
                 TargetSide = vm.TargetSide,
                 Tag = (vm.Tag ?? Array.Empty<string>())
-            .Select(t => (t ?? "").Trim().ToLowerInvariant())
-            .Where(t => t.Length > 0)
-            .Distinct()
-            .ToArray(),
-                BaseInfo = string.IsNullOrWhiteSpace(vm.Etc) ? null : new JsonObject { ["etc"] = vm.Etc }
-
+                                    .Select(t => (t ?? "").Trim().ToLowerInvariant())
+                                    .Where(t => t.Length > 0)
+                                    .Distinct()
+                                    .ToArray(),
+                // 뷰가 Etc 문자열을 쓰면 API에 맞춰 JsonObject로 변환
+                BaseInfo = string.IsNullOrWhiteSpace(vm.Etc)
+                                ? null
+                                : new JsonObject { ["etc"] = vm.Etc }
             };
 
             var resp = await client.PostAsJsonAsync("/api/skills", req, ct);
-
             if (!resp.IsSuccessStatusCode)
             {
                 ModelState.AddModelError(string.Empty, $"생성 실패: {(int)resp.StatusCode} {resp.ReasonPhrase}");
@@ -195,9 +207,15 @@ namespace AdminTool.Controllers
                 return View(vm);
             }
 
-            TempData["Message"] = "스킬이 생성되었습니다.";
-            return RedirectToAction(nameof(Index));
+            var created = await resp.Content.ReadFromJsonAsync<SkillDto>(cancellationToken: ct);
+
+            TempData["Message"] = "스킬이 생성되었습니다. 레벨을 추가하세요.";
+            // 기존: return RedirectToAction(nameof(Create), new { id = created!.SkillId, tab = "levels" });
+            // 변경: 레벨 전용 페이지로
+            return RedirectToAction("Levels", new { id = created!.SkillId });
+            // 또는: return RedirectToAction("Levels", new { id = created!.SkillId });
         }
+
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Edit(int id, CancellationToken ct)
         {
@@ -386,109 +404,173 @@ namespace AdminTool.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
-        [HttpGet("{id:int}/Levels")]
+        #region 스킬 레벨 관련 
+        [HttpGet("{id:int}/Levels", Name = "Skills_Levels")]
         public async Task<IActionResult> Levels(int id, CancellationToken ct)
         {
+            Console.WriteLine("[SkillsLevels] - Get Levels");
             var client = _http.CreateClient("GameApi");
-            var items = await client.GetFromJsonAsync<IReadOnlyList<SkillLevelDto>>($"/api/skills/{id}/levels", ct)
-                        ?? Array.Empty<SkillLevelDto>();
 
-            var vm = new SkillLevelsVm { SkillId = id, Items = items.ToList() };
-            return PartialView("Partials/_SkillLevels", vm);
+            // 스킬에 대한 정보.
+            var skill = await client.GetFromJsonAsync<SkillDto>($"/api/skills/{id}", ct);
+            if (skill is null) return NotFound();
+
+            var items = await client.GetFromJsonAsync<List<SkillLevelDto>>($"/api/skills/{id}/levels", ct)
+                        ?? new();
+
+            // AJAX 요청이면 부분뷰만 반환(목록 갱신용)
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                var listVm = new SkillLevelsVm { SkillId = id, Items = items };
+                return PartialView("~/Views/Skills/Partials/_LevelsList.cshtml", listVm);
+            }
+
+            // 일반 요청이면 전체 페이지 반환
+            var pageVm = new SkillLevelsPageVm
+            {
+                SkillId = id,
+                SkillName = skill.Name,
+                ParentType = skill.Type,
+                IsPassive = !skill.IsActive,
+                Items = items,
+                Modal = new LevelEditModalVm("levelEditModal", id, "levelsHost"),
+            };
+
+            return View("SkillLevels", pageVm);
         }
-        [HttpGet("{id:int}/Levels/{level:int}")]
+        [HttpGet("{id:int}/Levels/New", Name = "Skills_NewLevel")]
+        public async Task<IActionResult> NewLevel(int id, CancellationToken ct)
+        {
+            var client = _http.CreateClient("GameApi");
+
+            var s = await client.GetFromJsonAsync<SkillDto>($"/api/skills/{id}", ct);
+            if (s is null) return NotFound("Skill not found");
+
+            // 다음 레벨 번호 계산 (없으면 1)
+            var levels = await client.GetFromJsonAsync<IReadOnlyList<SkillLevelDto>>($"/api/skills/{id}/levels", ct)
+                         ?? Array.Empty<SkillLevelDto>();
+            var next = levels.Any() ? levels.Max(x => x.Level) + 1 : 1;
+
+            var vm = new SkillLevelFormVm
+            {
+                SkillId = id,
+                Level = next,
+                Values = "",
+                Materials = "",
+                CostGold = 0,
+                ParentType = s.Type,
+                IsPassive = !s.IsActive
+            };
+            return PartialView("Partials/_EditLevelForm", vm);
+        }
+        [HttpGet("{id:int}/Levels/{level:int}", Name = "Skills_GetLevel")]
         public async Task<IActionResult> GetLevel(int id, int level, CancellationToken ct)
         {
             var client = _http.CreateClient("GameApi");
+
+            // 편집할 레벨
             var dto = await client.GetFromJsonAsync<SkillLevelDto>($"/api/skills/{id}/levels/{level}", ct);
             if (dto is null) return NotFound();
+
+            // ★ 부모 스킬 정보도 읽어서 VM에 넣기
+            var s = await client.GetFromJsonAsync<SkillDto>($"/api/skills/{id}", ct);
 
             var vm = new SkillLevelFormVm
             {
                 SkillId = dto.SkillId,
                 Level = dto.Level,
-                ValuesJson = dto.Values is null ? null : JsonSerializer.Serialize(dto.Values),
+                Values = dto.Values is null ? "{}" : JsonSerializer.Serialize(dto.Values),
                 Description = dto.Description,
-                MaterialsJson = dto.Materials is null ? null : JsonSerializer.Serialize(dto.Materials),
-                CostGold = dto.CostGold
+                Materials = dto.Materials is null ? "{}" : JsonSerializer.Serialize(dto.Materials),
+                CostGold = dto.CostGold,
+                IsEdit = true,
+
+                // ★ 이 두 줄이 핵심
+                ParentType = s?.Type ?? SkillType.Unknown,
+                IsPassive = s is null ? false : !s.IsActive
             };
-            return PartialView("Partials/_EditLevelForm", vm);
+
+            return PartialView("~/Views/Skills/Partials/_EditLevelForm.cshtml", vm);
         }
-        [HttpPost("{id:int}/Levels")]
+        [HttpPost("{id:int}/Levels", Name = "Skills_CreateLevel")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateLevel(int id, SkillLevelFormVm vm, CancellationToken ct)
         {
-            if (id != vm.SkillId) return BadRequest("잘못된 요청입니다.");
+            // Values/Materials는 JSON 문자열로 들어옴
+            // Values: 자유형 → Dictionary<string, object?> (값은 JsonElement로 들어와도 OK)
+            Dictionary<string, object?>? values = null;
+            if (!string.IsNullOrWhiteSpace(vm.Values))
+                values = JsonSerializer.Deserialize<Dictionary<string, object?>>(vm.Values);
 
+            // Materials: {"501":3} 형태 → Dictionary<string,int>
+            Dictionary<string, int>? materials = null;
+            if (!string.IsNullOrWhiteSpace(vm.Materials))
+                materials = JsonSerializer.Deserialize<Dictionary<string, int>>(vm.Materials);
+
+            var client = _http.CreateClient("GameApi");
             var req = new CreateSkillLevelRequest
             {
+                SkillId = id,
                 Level = vm.Level,
-                Values = ParseValues(vm.ValuesJson),
                 Description = vm.Description,
-                Materials = ParseMaterials(vm.MaterialsJson),
+                Values = values,
+                Materials = materials,
                 CostGold = vm.CostGold
             };
 
-            var client = _http.CreateClient("GameApi");
-            try
-            {
-                var resp = await client.PostAsJsonAsync($"/api/skills/{id}/levels", req, ct);
-                if (!resp.IsSuccessStatusCode)
-                    return BadRequest($"생성 실패: {(int)resp.StatusCode} {resp.ReasonPhrase}");
-
-                return Ok(new { ok = true });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var resp = await client.PostAsJsonAsync($"/api/skills/{id}/levels", req, ct);
+            var body = await resp.Content.ReadAsStringAsync(ct);
+            if (!resp.IsSuccessStatusCode) return StatusCode((int)resp.StatusCode, body);
+            return Ok();
         }
-        [HttpPost("{id:int}/Levels/{level:int}")]
+        [HttpPost("{id:int}/Levels/{level:int}", Name = "Skills_UpdateLevel")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateLevel(int id, int level, SkillLevelFormVm vm, CancellationToken ct)
         {
-            if (id != vm.SkillId || level != vm.Level) return BadRequest("잘못된 요청입니다.");
+            Dictionary<string, object?>? values = null;
+            if (!string.IsNullOrWhiteSpace(vm.Values))
+                values = JsonSerializer.Deserialize<Dictionary<string, object?>>(vm.Values);
 
+            // Materials: {"501":3} 형태 → Dictionary<string,int>
+            Dictionary<string, int>? materials = null;
+            if (!string.IsNullOrWhiteSpace(vm.Materials))
+                materials = JsonSerializer.Deserialize<Dictionary<string, int>>(vm.Materials);
+
+            var client = _http.CreateClient("GameApi");
             var req = new UpdateSkillLevelRequest
             {
-                Values = ParseValues(vm.ValuesJson),
                 Description = vm.Description,
-                Materials = ParseMaterials(vm.MaterialsJson),
+                Values = values,
+                Materials = materials,
                 CostGold = vm.CostGold
             };
 
-            var client = _http.CreateClient("GameApi");
-            try
-            {
-                var resp = await client.PostAsJsonAsync($"/api/skills/{id}/levels/{level}", req, ct);
-                if (!resp.IsSuccessStatusCode)
-                    return BadRequest($"수정 실패: {(int)resp.StatusCode} {resp.ReasonPhrase}");
-
-                return Ok(new { ok = true });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var resp = await client.PutAsJsonAsync($"/api/skills/{id}/levels/{level}", req, ct);
+            var body = await resp.Content.ReadAsStringAsync(ct);
+            if (!resp.IsSuccessStatusCode) return StatusCode((int)resp.StatusCode, body);
+            return Ok();
         }
-        [HttpPost("{id:int}/Levels/{level:int}/Delete")]
+        [HttpPost("{id:int}/Levels/{level:int}/Delete", Name = "Skills_DeleteLevel")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteLevel(int id, int level, CancellationToken ct)
         {
+            Console.WriteLine($"[SkillLevel] Delete id : {id} level : {level}");
             var client = _http.CreateClient("GameApi");
-            try
-            {
-                var resp = await client.DeleteAsync($"/api/skills/{id}/levels/{level}", ct);
-                if (!resp.IsSuccessStatusCode)
-                    return BadRequest($"삭제 실패: {(int)resp.StatusCode} {resp.ReasonPhrase}");
 
-                return Ok(new { ok = true });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var resp = await client.DeleteAsync($"/api/skills/{id}/levels/{level}", ct);
+            var body = await resp.Content.ReadAsStringAsync(ct);
+            if (!resp.IsSuccessStatusCode)
+                return StatusCode((int)resp.StatusCode, body);
+
+            // AJAX 호출이면 200만 주고, 클라이언트에서 reloadLevels() 호출
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                return Ok();
+
+            // 일반 접근시 목록으로
+            return RedirectToRoute("Skills_Levels", new { id });
         }
+        #endregion
+
         private static IDictionary<string, object>? ParseValues(string? json)
             => string.IsNullOrWhiteSpace(json)
                 ? null

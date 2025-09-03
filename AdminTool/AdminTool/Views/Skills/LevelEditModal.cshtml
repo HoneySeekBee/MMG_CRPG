@@ -1,0 +1,60 @@
+﻿@using AdminTool.Models
+@using AdminTool.Models.UI.Components.Modal
+@model LevelEditModalVm
+
+@{
+    var modalVm = new ModalVm(
+        Id: Model.ModalId,
+        Title: "Level Editor",
+        BodyPartial: "~/Views/Skills/Partials/_LevelModalBody.cshtml", // 단순 placeholder
+        BodyModel: Model,
+        StaticBackdrop: true,
+        Centered: true
+    );
+}
+@await Html.PartialAsync("~/Views/Shared/Components/Modal/Default.cshtml", modalVm)
+<script>
+    (function () {
+        // 라우트 이름으로 정확한 URL 확보
+        const createUrl = '@(Url.RouteUrl("Skills_CreateLevel", new { id = Model.SkillId }) ?? "")';
+        const updateUrl0 = '@(Url.RouteUrl("Skills_UpdateLevel", new { id = Model.SkillId, level = 0 }) ?? "")';
+        const updateUrl = (lv) => updateUrl0.replace(/\/0(\?|$)/, `/${encodeURIComponent(lv)}$1`);
+
+        function antiForgery() {
+            const t = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+            return t ? { 'RequestVerificationToken': t } : {};
+        }
+
+        window.submitLevel = async function () {
+            const modalEl = document.getElementById('@Model.ModalId');
+            const formHost = document.getElementById('levelFormHost');
+            const f = formHost?.querySelector('#levelForm');
+            if (!f) return;
+
+            // 저장 직전 ValuesJson 최신화
+            if (typeof window.__buildValuesJson === 'function') {
+                window.__buildValuesJson();
+            }
+
+            const data = new FormData(f);
+            const sid = data.get('SkillId');
+            const level = data.get('Level');
+            const mode = f.querySelector('#formMode')?.value || 'create';
+
+            const url = (mode === 'edit') ? updateUrl(level) : createUrl;
+            if (!url) { alert('URL 생성 실패'); return; }
+
+            const resp = await fetch(url, { method: 'POST', headers: { ...antiForgery() }, body: data });
+            const txt = await resp.text();
+
+            if (!resp.ok) {
+                console.error('save failed', resp.status, txt);
+                alert(`저장 실패: ${resp.status}\n${txt || '(no body)'}`);
+                return;
+            }
+
+            bootstrap.Modal.getOrCreateInstance(modalEl).hide();
+            if (typeof window.reloadLevels === 'function') await window.reloadLevels(sid);
+        };
+    })();
+</script>

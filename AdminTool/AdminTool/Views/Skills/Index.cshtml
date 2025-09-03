@@ -146,6 +146,10 @@
                         }
                     </td>
                     <td class="text-end text-nowrap">
+                        <a asp-route="Skills_Levels" asp-route-id="@x.SkillId"
+                           class="btn btn-sm btn-outline-primary">
+                            Skill Levels
+                        </a>
                         <a asp-action="Edit" asp-route-id="@x.SkillId" class="btn btn-sm btn-outline-primary">Edit</a>
                         <form asp-action="Delete" asp-route-id="@x.SkillId" method="post" class="d-inline">
                             @Html.AntiForgeryToken()

@@ -8,6 +8,7 @@ namespace Application.SkillLevels
 {
     public sealed class CreateSkillLevelRequest
     {
+        public int SkillId { get; set; }
         public int Level { get; set; }
 
         // 자유 확장 값들 (계수/지속/추가 이펙트 등)

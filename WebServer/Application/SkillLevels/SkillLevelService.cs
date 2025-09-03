@@ -16,12 +16,14 @@ namespace Application.SkillLevels
 
         public async Task<SkillLevelDto?> GetAsync(int skillId, int level, CancellationToken ct)
         {
+            Console.WriteLine($"[ WebAPI ] - GetSkill | SkillId : {skillId}");
             var e = await _repo.GetByIdAsync(skillId, level, ct);
             return e is null ? null : SkillLevelDto.From(e);
         }
 
         public async Task<IReadOnlyList<SkillLevelDto>> ListAsync(int skillId, CancellationToken ct)
         {
+            Console.WriteLine($"[ WebAPI ] - GetList | SkillId : {skillId}");
             var list = await _repo.ListAsync(skillId, ct);
             return list.Select(SkillLevelDto.From).ToList();
         }

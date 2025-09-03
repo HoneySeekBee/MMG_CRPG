@@ -1,0 +1,141 @@
+﻿@model AdminTool.Models.SkillLevelsPageVm
+
+<h2 class="mb-3">
+    Levels for @Model.SkillName (#@Model.SkillId)
+</h2>
+
+<div class="d-flex justify-content-between align-items-center mb-2">
+    <div class="d-flex align-items-center gap-2">
+        @* 필요하면 아이콘 *@
+        @if (!string.IsNullOrWhiteSpace(Model.IconUrl))
+        {
+            <img src="@Model.IconUrl" alt="icon" width="24" height="24" style="object-fit:contain;border-radius:4px" />
+        }
+    </div>
+
+    <button class="btn btn-sm btn-outline-primary" id="btnAddLevel"
+            data-skill-id="@Model.SkillId"
+            data-parent-type="@Model.ParentType"
+            data-is-passive="@Model.IsPassive.ToString().ToLower()">
+        레벨 추가
+    </button>
+</div>
+
+<div id="levelsHost">
+    @await Html.PartialAsync("Partials/_LevelsList",
+            new AdminTool.Models.SkillLevelsVm { SkillId = Model.SkillId, Items = Model.Items })
+</div>
+<div class="d-none">
+    @Html.AntiForgeryToken()
+</div>
+@await Html.PartialAsync("~/Views/Skills/LevelEditModal.cshtml", Model.Modal)
+
+@section Scripts {
+<script>
+  const urls = {
+    newLevel: '@(Url.RouteUrl("Skills_NewLevel", new { id = Model.SkillId }) ?? "")',
+    levels:   '@(Url.RouteUrl("Skills_Levels",   new { id = Model.SkillId }) ?? "")',
+    getLevelTpl: '@(Url.RouteUrl("Skills_GetLevel",    new { id = Model.SkillId, level = 0 }) ?? "")',
+    delLevelTpl: '@(Url.RouteUrl("Skills_DeleteLevel", new { id = Model.SkillId, level = 0 }) ?? "")'
+  };
+  function withLevel(tpl, lv) { return tpl ? tpl.replace(/\/0(?=\/|$)/, `/${encodeURIComponent(lv)}`) : ""; }
+  function getLevelUrl(lv)  { return withLevel(urls.getLevelTpl, lv); }
+  function getDeleteUrl(lv) { return withLevel(urls.delLevelTpl, lv); }
+
+  const modalId    = '@Model.Modal.ModalId'; // 예: levelEditModal
+  const formHostId = 'levelFormHost';
+
+  function runInlineScripts(container){
+    container.querySelectorAll('script').forEach(old=>{
+      const s=document.createElement('script');
+      if (old.src) s.src=old.src; else s.text=old.textContent;
+      document.head.appendChild(s); s.remove();
+    });
+  }
+  function antiForgery(){
+    const t = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+    return t ? { 'RequestVerificationToken': t } : {};
+  }
+
+  // --- 새 레벨 폼 열기 ---
+  async function openCreateLevel(skillId, parentType, isPassive) {
+    try {
+      isPassive = (isPassive === true || String(isPassive).toLowerCase() === 'true');
+      const base = urls.newLevel || `/Skills/${skillId}/Levels/New`;
+      const url  = `${base}?pt=${encodeURIComponent(parentType)}&passive=${isPassive?'true':'false'}`;
+      console.log('[openCreateLevel]', url);
+
+      const res  = await fetch(url, { headers: { 'X-Requested-With':'XMLHttpRequest' } });
+      const html = await res.text();
+      if (!res.ok) { console.error('NewLevel failed', res.status, html); alert('Load failed: '+res.status); return; }
+
+      const modalEl = document.getElementById(modalId);
+      const host    = document.getElementById(formHostId);
+      if (!modalEl || !host) { console.error('Missing modal/host', {modalEl,host}); alert('모달 템플릿이 없습니다.'); return; }
+
+      host.innerHTML = html;
+      runInlineScripts(host);
+      bootstrap.Modal.getOrCreateInstance(modalEl).show();
+    } catch(e) { console.error('openCreateLevel error', e); alert('오류가 발생했습니다.'); }
+  }
+
+  // --- 기존 레벨 편집 폼 열기 ---
+  async function openEditLevel(skillId, level) {
+    try {
+      const url  = getLevelUrl(level);
+      console.log('[openEditLevel]', url);
+      if (!url) { alert('URL 생성 실패'); return; }
+
+      const res  = await fetch(url, { headers: { 'X-Requested-With':'XMLHttpRequest' } });
+      const html = await res.text();
+      if (!res.ok) { console.error('GetLevel failed', res.status, html); alert('Load failed: '+res.status); return; }
+
+      const modalEl = document.getElementById(modalId);
+      const host    = document.getElementById(formHostId);
+      if (!modalEl || !host) { console.error('Missing modal/host', {modalEl,host}); alert('모달 템플릿이 없습니다.'); return; }
+
+      host.innerHTML = html;
+      runInlineScripts(host);
+      bootstrap.Modal.getOrCreateInstance(modalEl).show();
+    } catch(e) { console.error('openEditLevel error', e); alert('오류가 발생했습니다.'); }
+  }
+
+  // --- 삭제(그대로 유지) ---
+  async function deleteLevel(level){
+    const url = getDeleteUrl(level);
+    if (!url) { alert('URL 생성 실패'); return; }
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'X-Requested-With':'XMLHttpRequest', ...antiForgery() },
+      credentials: 'same-origin'
+    });
+    const txt = await res.text();
+    if (!res.ok) { console.error('delete failed', res.status, txt); alert(`삭제 실패: ${res.status}`); return; }
+    await reloadLevels('@Model.SkillId');
+  }
+
+  async function reloadLevels(_skillId){
+    const res  = await fetch(urls.levels, { headers: { 'X-Requested-With':'XMLHttpRequest' }});
+    const html = await res.text();
+    if (res.ok) document.getElementById('levelsHost').innerHTML = html;
+  }
+  window.reloadLevels = reloadLevels;
+
+  // 클릭 위임
+  document.addEventListener('click', (e)=>{
+    const addBtn = e.target.closest('#btnAddLevel');
+    if (addBtn){ openCreateLevel(addBtn.dataset.skillId, addBtn.dataset.parentType, addBtn.dataset.isPassive); return; }
+
+    const editBtn = e.target.closest('.btn-edit');
+    if (editBtn && editBtn.closest('#levelsHost')){
+      openEditLevel('@Model.SkillId', editBtn.dataset.level); return;
+    }
+
+    const delBtn = e.target.closest('.btn-del');
+    if (delBtn && delBtn.closest('#levelsHost')){
+      const lv = delBtn.dataset.level;
+      if (confirm(`Lv.${lv}을(를) 삭제할까요?`)){ deleteLevel(lv); }
+    }
+  });
+</script>
+}

@@ -96,6 +96,11 @@ namespace AdminTool.Models
         public string? Etc { get; set; }
         public string? BaseInfo { get; set; }   // JSON 에디터 바인딩 (예: Monaco)
 
+        public int? CreatedSkillId { get; init; }
+
+        public SkillType? CreateSkillType { get; set; }
+        public bool? IsPassive { get; set; }
+        public string ActiveTab { get; init; } = "skill";
 
         public List<IconPickItem> Icons { get; set; } = new(); // 아이콘 선택용 리스트
 
@@ -174,20 +179,5 @@ namespace AdminTool.Models
                 AoeShapeOptions = aoeShapeOptions,
                 Icons = icons ?? new()
             };
-    }
-    public sealed class SkillLevelsVm
-    {
-        public int SkillId { get; init; }
-        public IReadOnlyList<SkillLevelDto> Items { get; init; } = new List<SkillLevelDto>();
-    }
-    public sealed class SkillLevelFormVm
-    {
-        public int SkillId { get; init; }
-        public int Level { get; set; } // Create 시 수정가능, Update 시 read-only 처리
-
-        public string? ValuesJson { get; set; }      // {"scale":2.0,"burn":{"dmg":20,"dur":5}}
-        public string? Description { get; set; }
-        public string? MaterialsJson { get; set; }   // {"501":3,"777":1}
-        public int CostGold { get; set; }
     }
 }
