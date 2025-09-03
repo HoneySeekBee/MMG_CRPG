@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,8 @@ namespace Application.SkillLevels
         public IReadOnlyDictionary<string, int>? Materials { get; init; }
         public int CostGold { get; init; }
 
+        public SkillType ParentType { get; set; }
+        public bool IsPassive { get; set; }
         public static SkillLevelDto From(SkillLevel e) => new SkillLevelDto
         {
             SkillId = e.SkillId,
@@ -23,7 +26,7 @@ namespace Application.SkillLevels
             Values = e.Values,
             Description = e.Description,
             Materials = e.Materials,
-            CostGold = e.CostGold
+            CostGold = e.CostGold,
         };
     }
 }

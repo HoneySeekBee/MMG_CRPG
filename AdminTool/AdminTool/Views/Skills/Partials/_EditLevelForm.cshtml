@@ -1,0 +1,373 @@
+﻿@model AdminTool.Models.SkillLevelFormVm
+@{
+    var isEdit = Model.IsEdit;
+}
+
+
+<form id="levelForm" class="row g-3">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="SkillId" value="@Model.SkillId" />
+    <input type="hidden" id="formMode" value="@(isEdit ? "edit" : "create")" />
+
+    <div class="col-3">
+        <label class="form-label">Level</label>
+        <input name="Level" type="number" min="1" class="form-control"
+               value="@Model.Level" @(isEdit ? "readonly" : "") />
+    </div>
+
+    <div class="col-9">
+        <label class="form-label">Description</label>
+        <input name="Description" class="form-control" value="@Model.Description" />
+    </div>
+    <input type="hidden" name="Values" id="Values" value="@(Model.Values ?? "{}")" />
+
+    @{
+        var pt = Model.ParentType.ToString().ToLowerInvariant();
+        var isAtkOrHeal = pt.Contains("attack") || pt.Contains("heal");
+    }
+
+    @Model.ParentType
+    @Model.IsPassive
+    <div class="col-12">
+        <label class="form-label">Values</label>
+
+        @if (isAtkOrHeal)
+        {
+            <div id="values-combat" class="row g-2">
+                <div class="col-3">
+                    <label class="form-label">Flat</label>
+                    <input type="number" step="1" class="form-control" id="v-flat" />
+                </div>
+                <div class="col-3">
+                    <label class="form-label">Atk Rate</label>
+                    <input type="number" step="0.01" class="form-control" id="v-atkRate" />
+                </div>
+                <div class="col-3">
+                    <label class="form-label">HP Rate</label>
+                    <input type="number" step="0.01" class="form-control" id="v-hpRate" />
+                </div>
+                <div class="col-3">
+                    <label class="form-label">Hits</label>
+                    <input type="number" step="1" class="form-control" id="v-hits" value="1" />
+                </div>
+
+                <div class="col-12 form-check mt-2">
+                    <input class="form-check-input" type="checkbox" id="v-dot-enable">
+                    <label class="form-check-label" for="v-dot-enable">Use DOT/HoT</label>
+                </div>
+                <div class="row g-2 ms-1" id="v-dot-fields" style="display:none;">
+                    <div class="col-4">
+                        <label class="form-label">Tick</label>
+                        <input type="number" step="1" class="form-control" id="v-dot-tick" />
+                    </div>
+                    <div class="col-4">
+                        <label class="form-label">Every (sec)</label>
+                        <input type="number" step="0.1" class="form-control" id="v-dot-every" />
+                    </div>
+                    <div class="col-4">
+                        <label class="form-label">Duration (sec)</label>
+                        <input type="number" step="0.1" class="form-control" id="v-dot-duration" />
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div id="values-mods">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <label class="form-label mb-0">Modifiers</label>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" id="mods-add">+ Add</button>
+                </div>
+                <div id="mods-rows"></div>
+
+                @if (!Model.IsPassive)
+                {
+                    <div class="col-3 mt-2">
+                        <label class="form-label">Duration (sec)</label>
+                        <input type="number" step="1" class="form-control" id="v-duration" />
+                    </div>
+                }
+            </div>
+        }
+
+        <div class="mt-2">
+            <label class="form-label">Preview (read-only)</label>
+            <textarea id="ValuesPreview" class="form-control" rows="6" readonly></textarea>
+        </div>
+    </div>
+    <!-- 
+     <div class="col-12">
+        <label class="form-label">Materials (JSON)</label>
+        <textarea name="MaterialsJson" class="form-control" rows="3" spellcheck="false">
+    @Model.Materials</textarea>
+        <small class="text-muted">예) {"501":3,"777":1}</small>
+    </div>
+    -->
+
+    <div class="col-4">
+        <label class="form-label">Cost Gold</label>
+        <input name="CostGold" type="number" min="0" class="form-control" value="@Model.CostGold" />
+    </div>
+
+    <div class="col-12 d-flex gap-2">
+        <button type="button" class="btn btn-primary" onclick="submitLevel()">Save</button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-outline-dark ms-auto" onclick="prettyJson()">Pretty JSON</button>
+    </div>
+</form>
+
+
+<script>
+    (function () {
+        const form = document.getElementById('levelForm');
+        const preview = form.querySelector('#ValuesPreview');
+        const hidden = form.querySelector('#Values');
+
+        const parentType = '@Model.ParentType'.toLowerCase();
+        const isHeal = parentType.includes('heal');
+        const isAtkOrHeal = parentType.includes('attack') || isHeal;
+
+        function num(v) { const x = parseFloat(v); return isNaN(x) ? 0 : x; }
+        function intval(v, def) { const x = parseInt(v, 10); return isNaN(x) ? def : x; }
+
+        // ---- Mods helpers
+        const rows = form.querySelector('#mods-rows');
+        const addBtn = form.querySelector('#mods-add');
+        function addModRow(stat = '', op = 'add', value = '') {
+            if (!rows) return;
+            const div = document.createElement('div');
+            div.className = 'mod-row d-flex gap-2 mb-2';
+            div.innerHTML = `
+          <select class="form-select form-select-sm mod-stat" style="max-width:160px">
+            <option value="">stat…</option>
+            <option value="atk">atk</option><option value="def">def</option>
+            <option value="hpMax">hpMax</option><option value="mpMax">mpMax</option>
+            <option value="spd">spd</option><option value="critRate">critRate</option>
+            <option value="critDmg">critDmg</option><option value="res">res</option>
+          </select>
+          <select class="form-select form-select-sm mod-op" style="max-width:110px">
+            <option value="add" ${op === 'add' ? 'selected' : ''}>add</option>
+            <option value="pct" ${op === 'pct' ? 'selected' : ''}>pct</option>
+          </select>
+          <input type="number" step="0.01" class="form-control form-control-sm mod-value" style="max-width:140px" value="${value}">
+          <button type="button" class="btn btn-sm btn-outline-danger mod-del">-</button>`;
+            rows.appendChild(div);
+            div.querySelector('.mod-stat').value = stat || '';
+            div.querySelector('.mod-del').addEventListener('click', () => { rows.removeChild(div); build(); });
+            div.querySelectorAll('select,input').forEach(el => el.addEventListener('input', build));
+        }
+        addBtn?.addEventListener('click', () => addModRow());
+
+        // ----- DOT toggle -----
+        const dotEnable = document.getElementById('v-dot-enable');
+        const dotBox = document.getElementById('v-dot-fields');
+        dotEnable?.addEventListener('change', () => {
+            if (!dotBox) return;
+            dotBox.style.display = dotEnable.checked ? '' : 'none';
+            build();
+        });
+
+        // ----- Build ValuesJson -----
+        function build() {
+            const values = { power: null, mods: [], duration: null };
+
+            if (isAtkOrHeal) {
+                const flat = num(document.getElementById('v-flat')?.value ?? '0');
+                const atkRate = num(document.getElementById('v-atkRate')?.value ?? '0');
+                const hpRate = num(document.getElementById('v-hpRate')?.value ?? '0');
+                const hits = intval(document.getElementById('v-hits')?.value ?? '1', 1);
+
+                values.power = { kind: (isHeal ? 'heal' : 'damage'), flat, atkRate, hpRate, hits };
+
+                if (dotEnable?.checked) {
+                    const tick = num(document.getElementById('v-dot-tick')?.value ?? '0');
+                    const every = num(document.getElementById('v-dot-every')?.value ?? '1');
+                    const duration = num(document.getElementById('v-dot-duration')?.value ?? '0');
+                    values.power.dot = { tick, every, duration };
+                }
+            } else {
+                // mods
+                rows?.querySelectorAll('.mod-row').forEach(r => {
+                    const stat = r.querySelector('.mod-stat')?.value ?? '';
+                    const op = r.querySelector('.mod-op')?.value ?? 'add';
+                    const value = num(r.querySelector('.mod-value')?.value ?? '0');
+                    if (stat) values.mods.push({ stat, op, value });
+                });
+                // duration (패시브는 input 자체가 없음)
+                const durEl = document.getElementById('v-duration');
+                if (durEl) values.duration = num(durEl.value || '0');
+            }
+
+            hidden.value = JSON.stringify(values);
+            preview.value = JSON.stringify(values, null, 2);
+        }
+
+        // ----- 기존 JSON(편집) → 폼에 역주입 -----
+        try {
+            const initial = hidden.value ? JSON.parse(hidden.value) : null;
+            if (initial) {
+                if (isAtkOrHeal && initial.power) {
+                    document.getElementById('v-flat')?.setAttribute('value', initial.power.flat ?? 0);
+                    document.getElementById('v-atkRate')?.setAttribute('value', initial.power.atkRate ?? 0);
+                    document.getElementById('v-hpRate')?.setAttribute('value', initial.power.hpRate ?? 0);
+                    document.getElementById('v-hits')?.setAttribute('value', initial.power.hits ?? 1);
+                    if (initial.power.dot && dotEnable && dotBox) {
+                        dotEnable.checked = true;
+                        dotBox.style.display = '';
+                        document.getElementById('v-dot-tick')?.setAttribute('value', initial.power.dot.tick ?? 0);
+                        document.getElementById('v-dot-every')?.setAttribute('value', initial.power.dot.every ?? 1);
+                        document.getElementById('v-dot-duration')?.setAttribute('value', initial.power.dot.duration ?? 0);
+                    }
+                } else if (!isAtkOrHeal) {
+                    (initial.mods ?? []).forEach(m => addModRow(m.stat, m.op, m.value));
+                    if (initial.mods?.length === 0) addModRow(); // 빈 한 줄
+                    if (initial.duration != null) {
+                        const d = document.getElementById('v-duration');
+                        if (d) d.setAttribute('value', initial.duration);
+                    }
+                }
+            } else {
+                if (!isAtkOrHeal) addModRow(); // 새 버프/패시브 기본 한 줄
+            }
+        } catch { /* 무시 */ }
+
+        // 입력 이벤트 → 즉시 재빌드
+        document.currentScript.closest('form')
+            ?.querySelectorAll('input,select,textarea')
+            .forEach(el => el.addEventListener('input', build));
+
+        // 최초 1회
+        build();
+
+        // submitLevel에서 호출할 수 있도록 노출
+        window.__buildValues = build;
+    })();
+</script>
+
+<script>
+(function () {
+  const form    = document.getElementById('levelForm');
+  const preview = form.querySelector('#ValuesPreview');
+  const hidden  = form.querySelector('#Values');
+
+  const parentType  = '@Model.ParentType'.toLowerCase();
+  const isHeal      = parentType.includes('heal');
+  const isAtkOrHeal = parentType.includes('attack') || isHeal;
+
+  function num(v){ const x = parseFloat(v); return isNaN(x) ? 0 : x; }
+  function intval(v, def){ const x = parseInt(v,10); return isNaN(x) ? def : x; }
+
+  // ---- Mods helpers
+  const rows  = form.querySelector('#mods-rows');
+  const addBtn= form.querySelector('#mods-add');
+  function addModRow(stat='', op='add', value=''){
+    if (!rows) return;
+    const div = document.createElement('div');
+    div.className = 'mod-row d-flex gap-2 mb-2';
+    div.innerHTML = `
+      <select class="form-select form-select-sm mod-stat" style="max-width:160px">
+        <option value="">stat…</option>
+        <option value="atk">atk</option><option value="def">def</option>
+        <option value="hpMax">hpMax</option><option value="mpMax">mpMax</option>
+        <option value="spd">spd</option><option value="critRate">critRate</option>
+        <option value="critDmg">critDmg</option><option value="res">res</option>
+      </select>
+      <select class="form-select form-select-sm mod-op" style="max-width:110px">
+        <option value="add" ${op==='add'?'selected':''}>add</option>
+        <option value="pct" ${op==='pct'?'selected':''}>pct</option>
+      </select>
+      <input type="number" step="0.01" class="form-control form-control-sm mod-value" style="max-width:140px" value="${value}">
+      <button type="button" class="btn btn-sm btn-outline-danger mod-del">-</button>`;
+    rows.appendChild(div);
+    div.querySelector('.mod-stat').value = stat || '';
+    div.querySelector('.mod-del').addEventListener('click', ()=>{ rows.removeChild(div); build(); });
+    div.querySelectorAll('select,input').forEach(el=>{
+      el.addEventListener('input', build);
+      el.addEventListener('change', build);
+    });
+  }
+  addBtn?.addEventListener('click', ()=>addModRow());
+
+  // DOT toggle
+  const dotEnable = document.getElementById('v-dot-enable');
+  const dotBox    = document.getElementById('v-dot-fields');
+  dotEnable?.addEventListener('change', ()=>{
+    if (!dotBox) return;
+    dotBox.style.display = dotEnable.checked ? '' : 'none';
+    build();
+  });
+
+  // ----- builder
+  function build(){
+    const values = { power:null, mods:[], duration:null };
+
+    if (isAtkOrHeal){
+      const flat   = num(document.getElementById('v-flat')?.value ?? '0');
+      const atkRate= num(document.getElementById('v-atkRate')?.value ?? '0');
+      const hpRate = num(document.getElementById('v-hpRate')?.value ?? '0');
+      const hits   = intval(document.getElementById('v-hits')?.value ?? '1', 1);
+      values.power = { kind:(isHeal?'heal':'damage'), flat, atkRate, hpRate, hits };
+
+      if (dotEnable?.checked){
+        const tick = num(document.getElementById('v-dot-tick')?.value ?? '0');
+        const every= num(document.getElementById('v-dot-every')?.value ?? '1');
+        const dur  = num(document.getElementById('v-dot-duration')?.value ?? '0');
+        values.power.dot = { tick, every, duration:dur };
+      }
+    } else {
+      rows?.querySelectorAll('.mod-row').forEach(r=>{
+        const stat = r.querySelector('.mod-stat')?.value ?? '';
+        const op   = r.querySelector('.mod-op')?.value ?? 'add';
+        const value= num(r.querySelector('.mod-value')?.value ?? '0');
+        if (stat) values.mods.push({ stat, op, value });
+      });
+      const durEl = document.getElementById('v-duration');
+      if (durEl) values.duration = num(durEl.value || '0');
+    }
+
+    hidden.value  = JSON.stringify(values);
+    preview.value = JSON.stringify(values, null, 2);
+  }
+
+  // ----- 기존 JSON(편집) → 폼에 역주입  .value 로!)
+  try{
+    const initial = hidden.value ? JSON.parse(hidden.value) : null;
+    if (initial){
+      if (isAtkOrHeal && initial.power){
+        const vf  = document.getElementById('v-flat');    if (vf)  vf.value  = initial.power.flat    ?? 0;
+        const va  = document.getElementById('v-atkRate'); if (va)  va.value  = initial.power.atkRate ?? 0;
+        const vh  = document.getElementById('v-hpRate');  if (vh)  vh.value  = initial.power.hpRate  ?? 0;
+        const vhi = document.getElementById('v-hits');    if (vhi) vhi.value = initial.power.hits    ?? 1;
+
+        if (initial.power.dot && dotEnable && dotBox){
+          dotEnable.checked = true;
+          dotBox.style.display = '';
+          const dt=document.getElementById('v-dot-tick');     if (dt) dt.value = initial.power.dot.tick ?? 0;
+          const de=document.getElementById('v-dot-every');    if (de) de.value = initial.power.dot.every ?? 1;
+          const dd=document.getElementById('v-dot-duration'); if (dd) dd.value = initial.power.dot.duration ?? 0;
+        }
+      } else if (!isAtkOrHeal){
+        (initial.mods ?? []).forEach(m=>addModRow(m.stat, m.op, m.value));
+        if ((initial.mods ?? []).length === 0) addModRow();
+        if (initial.duration != null){
+          const d = document.getElementById('v-duration'); if (d) d.value = initial.duration;
+        }
+      }
+    } else {
+      if (!isAtkOrHeal) addModRow();
+    }
+  } catch { /* ignore */ }
+
+  // 입력 이벤트 → 즉시 재빌드 ( form 기준으로)
+  form.querySelectorAll('input,select,textarea').forEach(el=>{
+    el.addEventListener('input', build);
+    el.addEventListener('change', build);
+  });
+
+  // 최초 1회
+  build();
+
+  // 저장 직전 재빌드할 수 있도록 export (LevelEditModal에서 호출)
+  window.__buildValuesJson = build;
+})();
+</script>
