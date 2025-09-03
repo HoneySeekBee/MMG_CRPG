@@ -18,6 +18,10 @@ namespace Infrastructure.Persistence
         public DbSet<Rarity> Rarities => Set<Rarity>();
         public DbSet<Skill> Skills => Set<Skill>();
         public DbSet<SkillLevel> SkillLevels => Set<SkillLevel>();
+        public DbSet<Character> Characters => Set<Character>();
+        public DbSet<CharacterSkill> CharacterSkills => Set<CharacterSkill>();
+        public DbSet<CharacterStatProgression> CharacterStatProgressions => Set<CharacterStatProgression>();
+        public DbSet<CharacterPromotion> CharacterPromotions => Set<CharacterPromotion>();
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             Console.WriteLine("OnModelCreateing");
@@ -29,6 +33,14 @@ namespace Infrastructure.Persistence
             Modeling_Rarity(modelBuilder);
             Modeling_Skill(modelBuilder);
             Modeling_SkillLevel(modelBuilder);
+
+            modelBuilder.Ignore<StatModifier>();
+            modelBuilder.Ignore<PromotionMaterial>();
+
+            Modeling_Character(modelBuilder);
+            Modeling_CharacterSkill(modelBuilder);
+            Modeling_CharacterStatProgression(modelBuilder);
+            Modeling_CharacterPromotion(modelBuilder);
         }
 
         private void Modeling_Icon(ModelBuilder modelBuilder)
@@ -189,6 +201,174 @@ namespace Infrastructure.Persistence
                 // Materials (jsonb)
                 e.Property(x => x.Materials)
                     .HasColumnType("jsonb");
+            });
+        }
+        public void Modeling_Character(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Character>(e =>
+            {
+                e.ToTable("Characters");
+
+                e.HasKey(x => x.Id);
+                e.Property(x => x.Id)
+                    .HasColumnName("CharacterId")
+                    .ValueGeneratedOnAdd();
+
+                // 기본
+                e.Property(x => x.Name).IsRequired().HasMaxLength(100);
+                e.Property(x => x.RarityId).IsRequired();
+                e.Property(x => x.FactionId).IsRequired();
+                e.Property(x => x.RoleId).IsRequired();
+                e.Property(x => x.ElementId).IsRequired();
+
+                // 선택
+                e.Property(x => x.IconId).IsRequired(false);
+                e.Property(x => x.PortraitId).IsRequired(false);
+                e.Property(x => x.ReleaseDate).IsRequired(false);
+
+                e.Property(x => x.IsLimited).IsRequired().HasDefaultValue(false);
+
+                // Tags: IReadOnlyList<string> → 백필드 _tags 를 text[]로 매핑
+                e.Property<List<string>>("_tags")
+                    .HasColumnName("Tags")
+                    .HasColumnType("text[]")
+                    .HasDefaultValueSql("'{}'::text[]")
+                    .IsRequired();
+
+                // Meta: JSON 문자열을 jsonb 로 저장
+                e.Property(x => x.MetaJson)
+                    .HasColumnName("Meta")
+                    .HasColumnType("jsonb")
+                    .IsRequired(false);
+
+                // 인덱스
+                e.HasIndex(x => x.Name);
+                e.HasIndex(x => x.ElementId);
+                e.HasIndex(x => x.RarityId);
+                e.HasIndex(x => x.RoleId);
+                e.HasIndex(x => x.FactionId);
+                e.HasIndex(x => x.IsLimited);
+            });
+        }
+        public void Modeling_CharacterStatProgression(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<CharacterStatProgression>(e =>
+            {
+                e.ToTable("CharacterStatProgression");
+
+                // 복합 PK
+                e.HasKey(x => new { x.CharacterId, x.Level });
+
+                // 기본 컬럼
+                e.Property(x => x.CharacterId).IsRequired();
+                e.Property(x => x.Level).IsRequired();
+
+                e.Property(x => x.HP).IsRequired();
+                e.Property(x => x.ATK).IsRequired();
+                e.Property(x => x.DEF).IsRequired();
+                e.Property(x => x.SPD).IsRequired();
+
+                e.Property(x => x.CritRate).HasPrecision(5, 2).HasDefaultValue(5m).IsRequired();
+                e.Property(x => x.CritDamage).HasPrecision(6, 2).HasDefaultValue(150m).IsRequired();
+
+                // FK
+                e.HasOne(x => x.Character)
+                    .WithMany()
+                    .HasForeignKey(x => x.CharacterId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // 체크 제약
+                e.ToTable(t =>
+                {
+                    t.HasCheckConstraint("ck_csp_level", "\"Level\" >= 1");
+                    t.HasCheckConstraint("ck_csp_stats", "\"HP\" >= 0 AND \"ATK\" >= 0 AND \"DEF\" >= 0 AND \"SPD\" >= 0");
+                    t.HasCheckConstraint("ck_csp_cr", "\"CritRate\" >= 0 AND \"CritRate\" <= 100");
+                    t.HasCheckConstraint("ck_csp_cd", "\"CritDamage\" >= 0 AND \"CritDamage\" <= 1000");
+                });
+
+                e.HasIndex(x => x.CharacterId);
+            });
+        }
+        public void Modeling_CharacterPromotion(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<CharacterPromotion>(e =>
+            {
+                e.ToTable("CharacterPromotion");
+
+                // 복합 PK
+                e.HasKey(x => new { x.CharacterId, x.Tier });
+
+                e.Property(x => x.MaxLevel).IsRequired();
+                e.Property(x => x.CostGold).IsRequired();
+
+                // JSONB 매핑 (값 객체/리스트)
+                e.Property(x => x.Bonus)
+                    .HasColumnType("jsonb")
+                    .IsRequired(false);
+
+                e.Property<List<PromotionMaterial>>("_materials")
+          .HasColumnName("Materials")
+          .HasColumnType("jsonb")
+          .IsRequired();
+
+                // FK
+                e.HasOne(x => x.Character)
+                    .WithMany()
+                    .HasForeignKey(x => x.CharacterId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // 체크 제약
+                e.ToTable(t =>
+                {
+                    t.HasCheckConstraint("ck_cp_tier", "\"Tier\" >= 0");
+                    t.HasCheckConstraint("ck_cp_maxlevel", "\"MaxLevel\" >= 1");
+                    t.HasCheckConstraint("ck_cp_gold", "\"CostGold\" >= 0");
+                });
+
+                e.HasIndex(x => x.CharacterId);
+            });
+        }
+        public void Modeling_CharacterSkill(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<CharacterSkill>(e =>
+            {
+                e.ToTable("CharacterSkills");
+
+                // 복합 PK: (CharacterId, Slot)
+                e.HasKey(x => new { x.CharacterId, x.Slot });
+
+                e.Property(x => x.CharacterId).IsRequired();
+                e.Property(x => x.Slot).HasConversion<short>().IsRequired();
+                e.Property(x => x.SkillId).IsRequired();
+
+                e.Property(x => x.UnlockTier).IsRequired().HasDefaultValue((short)0);
+                e.Property(x => x.UnlockLevel).IsRequired().HasDefaultValue((short)1);
+
+                // 고유 제약: 캐릭터 내 동일 스킬 중복 방지
+                e.HasAlternateKey(x => new { x.CharacterId, x.SkillId });
+
+                // FK
+                e.HasOne(x => x.Character)
+                    .WithMany()
+                    .HasForeignKey(x => x.CharacterId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // Skills 테이블과 FK (삭제 제한 권장)
+                e.HasOne<Skill>()
+                    .WithMany()
+                    .HasForeignKey(x => x.SkillId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                // 체크 제약 (필요시)
+                e.ToTable(t =>
+                {
+                    t.HasCheckConstraint("ck_cs_unlock_tier", "\"UnlockTier\" >= 0");
+                    t.HasCheckConstraint("ck_cs_unlock_level", "\"UnlockLevel\" >= 1");
+                    // 슬롯 범위가 1~4라면:
+                    t.HasCheckConstraint("ck_cs_slot", "\"Slot\" BETWEEN 1 AND 4");
+                });
+
+                e.HasIndex(x => x.SkillId);
             });
         }
     }

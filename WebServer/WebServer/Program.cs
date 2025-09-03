@@ -1,3 +1,4 @@
+using Application.Character;
 using Application.Elements;
 using Application.Factions;
 using Application.Icons;
@@ -67,6 +68,12 @@ namespace WebServer
             builder.Services.AddScoped<ISkillLevelRepository, SkillLevelRepository>();
             builder.Services.AddScoped<ISkillService, SkillService>();
             builder.Services.AddScoped<ISkillLevelService, SkillLevelService>();
+
+            // 캐릭터 관련 
+            builder.Services.AddScoped<ICharacterRepository, CharacterRepository>();
+            builder.Services.AddScoped<ICharacterService, CharacterService>();
+
+
 
             builder.Services.AddSingleton<IIconStorage>(sp =>
             {
