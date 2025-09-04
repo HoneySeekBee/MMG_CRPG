@@ -54,7 +54,7 @@ namespace Application.Character
                 new CharacterSkillDto(s.Slot, s.SkillId, s.UnlockTier, s.UnlockLevel)).ToList();
 
             var progDtos = progressions.Select(p =>
-                new CharacterStatProgressionDto(p.Level, p.HP, p.ATK, p.DEF, p.SPD, p.CritRate, p.CritDamage)).ToList();
+                new CharacterStatProgressionDto(p.Level, p.HP, p.ATK, p.DEF, p.SPD, p.CriRate, p.CriDamage)).ToList();
 
             var promoDtos = promotions.Select(p =>
                 new CharacterPromotionDto(

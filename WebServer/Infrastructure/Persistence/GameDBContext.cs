@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Reflection.Emit;
 
 namespace Infrastructure.Persistence
@@ -17,6 +18,7 @@ namespace Infrastructure.Persistence
         public DbSet<Role> Roles => Set<Role>();
         public DbSet<Rarity> Rarities => Set<Rarity>();
         public DbSet<Skill> Skills => Set<Skill>();
+        public DbSet<Portrait> Portraits => Set<Portrait>();
         public DbSet<SkillLevel> SkillLevels => Set<SkillLevel>();
         public DbSet<Character> Characters => Set<Character>();
         public DbSet<CharacterSkill> CharacterSkills => Set<CharacterSkill>();
@@ -26,6 +28,7 @@ namespace Infrastructure.Persistence
         {
             Console.WriteLine("OnModelCreateing");
             Modeling_Icon(modelBuilder);
+            Modeling_Portrait(modelBuilder);
             Modeling_Element(modelBuilder);
             Modeling_ElementAffinity(modelBuilder);
             Modeling_Faction(modelBuilder);
@@ -51,6 +54,28 @@ namespace Infrastructure.Persistence
                 e.HasKey(x => x.IconId);
                 e.Property(x => x.Key).IsRequired();
                 e.HasIndex(x => x.Key).IsUnique();
+            });
+        }
+        private void Modeling_Portrait(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Portrait>(e =>
+            {
+                e.ToTable("Portraits");                 // 테이블명
+                e.HasKey(x => x.PortraitId);
+                e.Property(x => x.PortraitId).ValueGeneratedOnAdd();
+
+                e.Property(x => x.Key).IsRequired();    // 파일 키(유니크 권장)
+                e.HasIndex(x => x.Key).IsUnique();
+
+                // 스프라이트 좌표/아틀라스(없으면 NULL 허용)
+                e.Property(x => x.Atlas).IsRequired(false);
+                e.Property(x => x.X).IsRequired(false);
+                e.Property(x => x.Y).IsRequired(false);
+                e.Property(x => x.W).IsRequired(false);
+                e.Property(x => x.H).IsRequired(false);
+
+                // 캐시 무효화를 위한 버전
+                e.Property(x => x.Version).HasDefaultValue(1);
             });
         }
         private void Modeling_Element(ModelBuilder modelBuilder)
@@ -224,8 +249,14 @@ namespace Infrastructure.Persistence
                 // 선택
                 e.Property(x => x.IconId).IsRequired(false);
                 e.Property(x => x.PortraitId).IsRequired(false);
-                e.Property(x => x.ReleaseDate).IsRequired(false);
 
+                var utcConverter = new ValueConverter<DateTimeOffset?, DateTimeOffset?>(
+                    v => v.HasValue ? v.Value.ToUniversalTime() : v,  // Save: UTC로
+                    v => v                                            // Read: 그대로(이미 UTC)
+                );
+                e.Property(x => x.ReleaseDate)
+       .HasConversion(utcConverter)   
+       .IsRequired(false);
                 e.Property(x => x.IsLimited).IsRequired().HasDefaultValue(false);
 
                 // Tags: IReadOnlyList<string> → 백필드 _tags 를 text[]로 매핑
@@ -268,8 +299,8 @@ namespace Infrastructure.Persistence
                 e.Property(x => x.DEF).IsRequired();
                 e.Property(x => x.SPD).IsRequired();
 
-                e.Property(x => x.CritRate).HasPrecision(5, 2).HasDefaultValue(5m).IsRequired();
-                e.Property(x => x.CritDamage).HasPrecision(6, 2).HasDefaultValue(150m).IsRequired();
+                e.Property(x => x.CriRate).HasPrecision(5, 2).HasDefaultValue(5m).IsRequired();
+                e.Property(x => x.CriDamage).HasPrecision(6, 2).HasDefaultValue(150m).IsRequired();
 
                 // FK
                 e.HasOne(x => x.Character)
@@ -338,11 +369,13 @@ namespace Infrastructure.Persistence
                 e.HasKey(x => new { x.CharacterId, x.Slot });
 
                 e.Property(x => x.CharacterId).IsRequired();
+
                 e.Property(x => x.Slot).HasConversion<short>().IsRequired();
+
                 e.Property(x => x.SkillId).IsRequired();
 
-                e.Property(x => x.UnlockTier).IsRequired().HasDefaultValue((short)0);
-                e.Property(x => x.UnlockLevel).IsRequired().HasDefaultValue((short)1);
+                e.Property(x => x.UnlockTier).HasDefaultValue(0);
+                e.Property(x => x.UnlockLevel).HasDefaultValue(0);
 
                 // 고유 제약: 캐릭터 내 동일 스킬 중복 방지
                 e.HasAlternateKey(x => new { x.CharacterId, x.SkillId });

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebServer.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/characters")]
     public sealed class CharacterController : ControllerBase
     {
 
@@ -29,14 +29,24 @@ namespace WebServer.Controllers
         }
 
         // GET /api/characters/{id}
+
         [HttpGet("{id:int}")]
-        [ProducesResponseType(typeof(CharacterDetailDto), 200)]
-        [ProducesResponseType(404)]
-        public async Task<ActionResult<CharacterDetailDto>> GetById(int id, CancellationToken ct = default)
+        public async Task<IActionResult> GetById(int id, CancellationToken ct)
         {
-            var dto = await _svc.GetDetailAsync(id, ct);
-            if (dto is null) return NotFound();
-            return Ok(dto);
+            try
+            {
+                var dto = await _svc.GetDetailAsync(id, ct);
+                if (dto is null) return NotFound();
+                return Ok(dto);
+            }
+            catch (Exception ex)
+            {
+                return Problem(
+                    statusCode: 500,
+                    title: "Get character failed",
+                    detail: ex.Message
+                );
+            }
         }
 
         // POST /api/characters
@@ -45,6 +55,7 @@ namespace WebServer.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> Create([FromBody] CreateCharacterRequest req, CancellationToken ct = default)
         {
+            Console.WriteLine($"[API] [Character] [Create] | iconId :{req.IconId} Portrait : {req.PortraitId} element : {req.ElementId}, role : {req.RoleId}");
             try
             {
                 var id = await _svc.CreateAsync(req, ct);

@@ -22,8 +22,8 @@ namespace Domain.Entities
         public int SPD { get; private set; }            // >= 0
 
         // ==== Crit (퍼센트값; 5 = 5%) ====
-        public decimal CritRate { get; private set; } = 5m;    // 0..100
-        public decimal CritDamage { get; private set; } = 150m;  // 0..1000 (예: 150 = +150%)
+        public decimal CriRate { get; private set; } = 5m;    // 0..100
+        public decimal CriDamage { get; private set; } = 150m;  // 0..1000 (예: 150 = +150%)
 
         // ==== Navigation ====
         public Character Character { get; private set; } = null!;
@@ -57,8 +57,8 @@ namespace Domain.Entities
                 ATK = atk,
                 DEF = def,
                 SPD = spd,
-                CritRate = cr,
-                CritDamage = cd
+                CriRate = cr,
+                CriDamage = cd
             };
         }
 
@@ -78,8 +78,8 @@ namespace Domain.Entities
             if (critDamage < 0 || critDamage > 1000)
                 throw new ArgumentOutOfRangeException(nameof(critDamage));
 
-            CritRate = critRate;
-            CritDamage = critDamage;
+            CriRate = critRate;
+            CriDamage = critDamage;
         }
     }
 }
