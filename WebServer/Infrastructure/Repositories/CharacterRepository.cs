@@ -79,10 +79,11 @@ namespace Infrastructure.Repositories
         }
 
         // ===== Commands =====
-
-        public async Task AddAsync(Domain.Entities.Character entity, CancellationToken ct)
-            => await _db.Characters.AddAsync(entity, ct);
-
+        public Task AddAsync(Character e, CancellationToken ct)
+        {
+            _db.Characters.Add(e);
+            return Task.CompletedTask;
+        }
         public Task RemoveAsync(Domain.Entities.Character entity, CancellationToken ct)
         {
             _db.Characters.Remove(entity);
@@ -123,7 +124,29 @@ namespace Infrastructure.Repositories
 
             await _db.CharacterPromotions.AddRangeAsync(promotions, ct);
         }
-
-        public Task SaveChangesAsync(CancellationToken ct) => _db.SaveChangesAsync(ct);
+        public async Task<int> SaveChangesAsync(CancellationToken ct)
+        {
+            Console.WriteLine($"[INFRA] SaveChangesAsync");
+            try
+            {
+                var rows = await _db.SaveChangesAsync(ct);
+                Console.WriteLine($"[INFRA] SaveChanges OK rows={rows}");
+                return rows;
+            }
+            catch (DbUpdateException ex)
+            {
+                Console.WriteLine("[INFRA] DbUpdateException in SaveChanges:");
+                Console.WriteLine(ex.ToString());
+                if (ex.InnerException != null)
+                    Console.WriteLine("[INFRA] Inner: " + ex.InnerException);
+                throw; // 반드시 다시 던지기
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("[INFRA] Exception in SaveChanges:");
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
+        }
     }
 }

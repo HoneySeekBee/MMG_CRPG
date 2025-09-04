@@ -1,0 +1,319 @@
+﻿@using AdminTool.Models
+@model CharacterPromotionsVm
+
+@{
+    ViewData["Title"] = "Promotions";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Promotions</h2>
+    <a asp-action="Index" class="btn btn-outline-secondary">← Back to list</a>
+</div>
+
+@if (TempData["toast"] is string toast && !string.IsNullOrWhiteSpace(toast))
+{
+    <div class="alert alert-success">@toast</div>
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+<form asp-action="Promotions" asp-route-id="@Model.CharacterId" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="CharacterId" />
+
+    <div class="card">
+        <div class="card-header d-flex align-items-center justify-content-between">
+            <div>승급 티어</div>
+            <div class="d-flex gap-2">
+                <button type="button" id="btnAddTier" class="btn btn-sm btn-outline-primary">+ Tier</button>
+                <button type="button" id="btnSortTier" class="btn btn-sm btn-outline-secondary">Sort by Tier</button>
+                <button type="button" id="btnClearAll" class="btn btn-sm btn-outline-danger">Clear all</button>
+            </div>
+        </div>
+
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-sm align-middle mb-0" id="tierTable">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width:90px;">Tier</th>
+                            <th style="width:120px;">Max Lv</th>
+                            <th style="width:140px;">Cost Gold</th>
+                            <th>Bonus (옵션)</th>
+                            <th style="width:80px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tierBody">
+                        @for (var i = 0; i < Model.Rows.Count; i++)
+                        {
+                            var r = Model.Rows[i];
+                            <tr class="align-top" data-index="@i">
+                                <td>
+                                    <input class="form-control form-control-sm" name="Rows[@i].Tier" value="@r.Tier" type="number" min="0" step="1" required />
+                                </td>
+                                <td>
+                                    <input class="form-control form-control-sm" name="Rows[@i].MaxLevel" value="@r.MaxLevel" type="number" min="1" step="1" required />
+                                </td>
+                                <td>
+                                    <input class="form-control form-control-sm" name="Rows[@i].CostGold" value="@r.CostGold" type="number" min="0" step="1" />
+                                </td>
+                                <td>
+                                    <!-- Bonus block -->
+                                    <div class="row g-2">
+                                        <div class="col-6 col-md-4">
+                                            <label class="form-label form-label-sm mb-0 small">HP</label>
+                                            <input class="form-control form-control-sm" name="Rows[@i].Bonus.HP" value="@r.Bonus?.HP" type="number" step="1" />
+                                        </div>
+                                        <div class="col-6 col-md-4">
+                                            <label class="form-label form-label-sm mb-0 small">ATK</label>
+                                            <input class="form-control form-control-sm" name="Rows[@i].Bonus.ATK" value="@r.Bonus?.ATK" type="number" step="1" />
+                                        </div>
+                                        <div class="col-6 col-md-4">
+                                            <label class="form-label form-label-sm mb-0 small">DEF</label>
+                                            <input class="form-control form-control-sm" name="Rows[@i].Bonus.DEF" value="@r.Bonus?.DEF" type="number" step="1" />
+                                        </div>
+                                        <div class="col-6 col-md-4">
+                                            <label class="form-label form-label-sm mb-0 small">SPD</label>
+                                            <input class="form-control form-control-sm" name="Rows[@i].Bonus.SPD" value="@r.Bonus?.SPD" type="number" step="1" />
+                                        </div>
+                                        <div class="col-6 col-md-4">
+                                            <label class="form-label form-label-sm mb-0 small">CritRate</label>
+                                            <input class="form-control form-control-sm" name="Rows[@i].Bonus.CritRate" value="@r.Bonus?.CritRate" type="number" step="0.1" />
+                                        </div>
+                                        <div class="col-6 col-md-4">
+                                            <label class="form-label form-label-sm mb-0 small">CritDamage</label>
+                                            <input class="form-control form-control-sm" name="Rows[@i].Bonus.CritDamage" value="@r.Bonus?.CritDamage" type="number" step="0.1" />
+                                        </div>
+                                    </div>
+
+                                    <!-- Materials -->
+                                    <div class="mt-2">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <div class="small fw-semibold">Materials</div>
+                                            <button type="button" class="btn btn-xs btn-outline-primary btn-add-mat">+ Material</button>
+                                        </div>
+                                        <div class="table-responsive mt-1">
+                                            <table class="table table-xs table-bordered mb-0">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th style="width: 65%;">Item</th>
+                                                        <th style="width: 25%;">Qty</th>
+                                                        <th style="width: 10%;"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="mat-body">
+                                                    @for (var m = 0; m < r.Materials.Count; m++)
+                                                    {
+                                                        var mat = r.Materials[m];
+                                                        <tr>
+                                                            <td>
+                                                                <select class="form-select form-select-sm"
+                                                                        name="Rows[@i].Materials[@m].ItemId">
+                                                                    <option value="">-- select item --</option>
+                                                                    @foreach (var it in Model.Items)
+                                                                    {
+                                                                        <option value="@it.Value" selected="@(it.Value == mat.ItemId.ToString())">
+                                                                            @it.Text
+                                                                        </option>
+                                                                    }
+                                                                </select>
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control form-control-sm"
+                                                                       name="Rows[@i].Materials[@m].Quantity"
+                                                                       value="@mat.Quantity"
+                                                                       type="number" min="1" step="1" />
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <button type="button" class="btn btn-sm btn-outline-danger btn-remove-mat">-</button>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-end">
+                                    <button type="button" class="btn btn-sm btn-outline-danger btn-remove-tier">삭제</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card-footer d-flex justify-content-between">
+            <div class="text-muted small">티어(Tier)는 중복되면 안 됩니다.</div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+                (function () {
+                    const tierBody = document.getElementById('tierBody');
+                    const btnAddTier = document.getElementById('btnAddTier');
+                    const btnSortTier = document.getElementById('btnSortTier');
+                    const btnClearAll = document.getElementById('btnClearAll');
+
+                    function tierRows() { return Array.from(tierBody.querySelectorAll('tr')); }
+                    function nextTierIndex() { return tierRows().length; }
+
+                    function templateTier(i, tier) {
+                        // 간결한 기본 템플릿 (보너스/재료는 빈값으로 시작)
+                        return `
+        <tr class="align-top" data-index="${i}">
+          <td><input class="form-control form-control-sm" name="Rows[${i}].Tier" type="number" min="0" step="1" value="${tier}" required></td>
+          <td><input class="form-control form-control-sm" name="Rows[${i}].MaxLevel" type="number" min="1" step="1" value="1" required></td>
+          <td><input class="form-control form-control-sm" name="Rows[${i}].CostGold" type="number" min="0" step="1" value="0"></td>
+          <td>
+            <div class="row g-2">
+              <div class="col-6 col-md-4">
+                <label class="form-label form-label-sm mb-0 small">HP</label>
+                <input class="form-control form-control-sm" name="Rows[${i}].Bonus.HP" type="number" step="1" value="">
+              </div>
+              <div class="col-6 col-md-4">
+                <label class="form-label form-label-sm mb-0 small">ATK</label>
+                <input class="form-control form-control-sm" name="Rows[${i}].Bonus.ATK" type="number" step="1" value="">
+              </div>
+              <div class="col-6 col-md-4">
+                <label class="form-label form-label-sm mb-0 small">DEF</label>
+                <input class="form-control form-control-sm" name="Rows[${i}].Bonus.DEF" type="number" step="1" value="">
+              </div>
+              <div class="col-6 col-md-4">
+                <label class="form-label form-label-sm mb-0 small">SPD</label>
+                <input class="form-control form-control-sm" name="Rows[${i}].Bonus.SPD" type="number" step="1" value="">
+              </div>
+              <div class="col-6 col-md-4">
+                <label class="form-label form-label-sm mb-0 small">CritRate</label>
+                <input class="form-control form-control-sm" name="Rows[${i}].Bonus.CritRate" type="number" step="0.1" value="">
+              </div>
+              <div class="col-6 col-md-4">
+                <label class="form-label form-label-sm mb-0 small">CritDamage</label>
+                <input class="form-control form-control-sm" name="Rows[${i}].Bonus.CritDamage" type="number" step="0.1" value="">
+              </div>
+            </div>
+
+            <div class="mt-2">
+              <div class="d-flex align-items-center justify-content-between">
+                <div class="small fw-semibold">Materials</div>
+                <button type="button" class="btn btn-xs btn-outline-primary btn-add-mat">+ Material</button>
+              </div>
+              <div class="table-responsive mt-1">
+                <table class="table table-xs table-bordered mb-0">
+                  <thead class="table-light">
+                    <tr><th style="width:65%;">Item</th><th style="width:25%;">Qty</th><th style="width:10%;"></th></tr>
+                  </thead>
+                  <tbody class="mat-body">
+                    <!-- new materials will be inserted here -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </td>
+          <td class="text-end">
+            <button type="button" class="btn btn-sm btn-outline-danger btn-remove-tier">삭제</button>
+          </td>
+        </tr>`;
+                    }
+
+                    function addTier() {
+                        const i = nextTierIndex();
+                        // 자동 Tier 값: 현재 최대 tier + 1
+                        const maxTier = tierRows().reduce((mx, tr) => {
+                            const v = parseInt(tr.querySelector('input[name$=".Tier"]').value || '0', 10);
+                            return Math.max(mx, isNaN(v) ? 0 : v);
+                        }, -1);
+                        tierBody.insertAdjacentHTML('beforeend', templateTier(i, Math.max(0, maxTier + 1)));
+                    }
+
+                    function renumberAll() {
+                        // 티어 row 인덱스 재부여
+                        tierRows().forEach((tr, i) => {
+                            tr.setAttribute('data-index', i);
+                            tr.querySelectorAll('input,select').forEach(inp => {
+                                inp.name = inp.name.replace(/Rows\[\d+\]\./, `Rows[${i}].`);
+                                // material 인덱스는 아래에서 다시 정리
+                            });
+
+                            // material rows reindex
+                            const mats = tr.querySelectorAll('.mat-body tr');
+                            mats.forEach((mr, mi) => {
+                                mr.querySelectorAll('input,select').forEach(inp => {
+                                    inp.name = inp.name
+                                        .replace(/Rows\[\d+\]\./, `Rows[${i}].`)
+                                        .replace(/Materials\[\d+\]/, `Materials[${mi}]`);
+                                });
+                            });
+                        });
+                    }
+
+                    function sortByTier() {
+                        const rows = tierRows();
+                        rows.sort((a, b) => {
+                            const av = parseInt(a.querySelector('input[name$=".Tier"]').value || '0', 10);
+                            const bv = parseInt(b.querySelector('input[name$=".Tier"]').value || '0', 10);
+                            return av - bv;
+                        });
+                        rows.forEach(r => tierBody.appendChild(r));
+                        renumberAll();
+                    }
+
+                    function clearAll() {
+                        if (!confirm('모든 티어를 삭제할까요?')) return;
+                        tierBody.innerHTML = '';
+                    }
+
+                    function addMaterialRow(tr) {
+                        const i = parseInt(tr.getAttribute('data-index'), 10);
+                        const matBody = tr.querySelector('.mat-body');
+                        const mi = matBody.querySelectorAll('tr').length;
+
+                        // item 옵션은 서버에서 렌더링된 select만 재사용할 수 없으므로,
+                        // 새 행은 빈 select로 만들고, 사용자가 저장 전에 선택하게 한다.
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+        <td>
+          <select class="form-select form-select-sm" name="Rows[${i}].Materials[${mi}].ItemId">
+            <option value="">-- select item --</option>
+        @foreach (var it in Model.Items)
+        {
+                    <option value="@it.Value">@it.Text</option>
+        }
+          </select>
+        </td>
+        <td><input class="form-control form-control-sm" name="Rows[${i}].Materials[${mi}].Quantity" type="number" min="1" step="1" value="1"></td>
+        <td class="text-center">
+          <button type="button" class="btn btn-sm btn-outline-danger btn-remove-mat">-</button>
+        </td>`;
+                        matBody.appendChild(row);
+                    }
+
+                    // events
+                    btnAddTier.addEventListener('click', addTier);
+                    btnSortTier.addEventListener('click', sortByTier);
+                    btnClearAll.addEventListener('click', clearAll);
+
+                    tierBody.addEventListener('click', (e) => {
+                        if (e.target.classList.contains('btn-remove-tier')) {
+                            e.target.closest('tr')?.remove();
+                            renumberAll();
+                        } else if (e.target.classList.contains('btn-add-mat')) {
+                            const tr = e.target.closest('tr[data-index]');
+                            addMaterialRow(tr);
+                            renumberAll();
+                        } else if (e.target.classList.contains('btn-remove-mat')) {
+                            e.target.closest('tr')?.remove();
+                            renumberAll();
+                        }
+                    });
+                })();
+    </script>
+}

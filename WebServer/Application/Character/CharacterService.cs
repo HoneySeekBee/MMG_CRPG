@@ -1,9 +1,11 @@
 ﻿using Application.Repositories;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Application.Character
@@ -33,34 +35,67 @@ namespace Application.Character
             if (c is null) return null;
             return c.ToDetailDto(skills, progs, promos);
         }
-
+        static DateTimeOffset? ToUtc(DateTimeOffset? v)
+    => v.HasValue ? v.Value.ToUniversalTime() : v;
         public async Task<int> CreateAsync(CreateCharacterRequest req, CancellationToken ct)
         {
-            if (string.IsNullOrWhiteSpace(req.Name)) throw new ArgumentException("Name required");
+            Console.WriteLine($"[API] Create start " +
+                $"IconId {req.IconId}, Portrait {req.PortraitId}, Rarity {req.RarityId}");
 
-            var entity = Domain.Entities.Character.Create(
-                name: req.Name.Trim(),
-                rarityId: req.RarityId,
-                factionId: req.FactionId,
-                roleId: req.RoleId,
-                elementId: req.ElementId,
-                iconId: req.IconId,
-                portraitId: req.PortraitId,
-                releaseDate: req.ReleaseDate,
-                isLimited: req.IsLimited,
-                tags: req.Tags,
-                metaJson: req.MetaJson
-            );
+            try
+            {
+                Console.WriteLine("[API] before ToUtc");
+                var utc = ToUtc(req.ReleaseDate);
 
-            await _repo.AddAsync(entity, ct);
-            await _repo.SaveChangesAsync(ct);
-            return entity.Id;
+                Console.WriteLine("[API] before NormalizeJsonOrNull");
+                var meta = NormalizeJsonOrNull(req.MetaJson);   // ← 여기서도 예외 가능
+
+                Console.WriteLine("[API] before Character.Create");
+                var entity = Domain.Entities.Character.Create(
+                    name: req.Name.Trim(),
+                    rarityId: req.RarityId,
+                    factionId: req.FactionId,
+                    roleId: req.RoleId,
+                    elementId: req.ElementId,
+                    iconId: req.IconId,
+                    portraitId: req.PortraitId,
+                    releaseDate: utc,
+                    isLimited: req.IsLimited,
+                    tags: req.Tags,
+                    metaJson: meta
+                );
+
+                Console.WriteLine("[API] after Character.Create, before AddAsync");
+                await _repo.AddAsync(entity, ct);
+
+                Console.WriteLine("[API] after AddAsync, before SaveChangesAsync");
+                var rows = await _repo.SaveChangesAsync(ct);
+
+                Console.WriteLine($"[API] after SaveChanges rows={rows}, NewId={entity.Id}");
+                return entity.Id;
+            }
+            catch (DbUpdateException ex)
+            {
+                Console.WriteLine("[API][Create] DbUpdateException:");
+                Console.WriteLine(ex.ToString());
+                if (ex.InnerException != null)
+                    Console.WriteLine("[API][Create] Inner: " + ex.InnerException);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("[API][Create] Exception:");
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
         }
-
         public async Task UpdateBasicAsync(int characterId, UpdateCharacterRequest req, CancellationToken ct)
         {
             var entity = await _repo.GetByIdAsync(characterId, ct)
                          ?? throw new InvalidOperationException("Character not found");
+
+            static DateTimeOffset? ToUtc(DateTimeOffset? v)
+                => v.HasValue ? v.Value.ToUniversalTime() : v;
 
             entity.Rename(req.Name);
             // 단순 세터 사용
@@ -71,10 +106,11 @@ namespace Application.Character
 
             entity.SetIcon(req.IconId);
             entity.SetPortrait(req.PortraitId);
-            entity.SetReleaseDate(req.ReleaseDate);
+            entity.SetReleaseDate(ToUtc(req.ReleaseDate));
             entity.SetLimited(req.IsLimited);
             entity.SetMeta(req.MetaJson);
 
+            entity.SetMeta(NormalizeJsonOrNull(req.MetaJson));
             // 태그 전체 교체
             var tagField = typeof(Domain.Entities.Character).GetField("_tags", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             if (tagField != null)
@@ -145,6 +181,21 @@ namespace Application.Character
                          ?? throw new InvalidOperationException("Character not found");
             await _repo.RemoveAsync(entity, ct);
             await _repo.SaveChangesAsync(ct);
+        }
+        private static string? NormalizeJsonOrNull(string? txt)
+        {
+            if (string.IsNullOrWhiteSpace(txt)) return null;
+            try
+            {
+                using var doc = JsonDocument.Parse(txt);           // 유효성 검사
+                                                                   // 정규화된 JSON 문자열로 저장 (공백/순서 정리)
+                return JsonSerializer.Serialize(doc.RootElement);
+            }
+            catch
+            {
+                // 잘못된 JSON이면 그냥 null 저장
+                return null;
+            }
         }
     }
 }

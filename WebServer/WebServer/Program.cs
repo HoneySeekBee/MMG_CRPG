@@ -2,6 +2,7 @@ using Application.Character;
 using Application.Elements;
 using Application.Factions;
 using Application.Icons;
+using Application.Portraits;
 using Application.Rarities;
 using Application.Repositories;
 using Application.Roles;
@@ -44,7 +45,6 @@ namespace WebServer
             builder.Services.AddEndpointsApiExplorer();
 
             builder.Services.AddScoped<IconService>();
-            builder.Services.AddScoped<IIconRepository, EfIconRepository>();
 
             // 加己 棺 加己 惑加 
             builder.Services.AddScoped<IElementRepository, ElementRepository>();
@@ -73,8 +73,12 @@ namespace WebServer
             builder.Services.AddScoped<ICharacterRepository, CharacterRepository>();
             builder.Services.AddScoped<ICharacterService, CharacterService>();
 
+            builder.Services.AddScoped<IPortraitRepository, EfPortraitRepository>();
+            builder.Services.AddScoped<IPortraitStorage>(sp =>
+                new LocalPortraitStorage(sp.GetRequiredService<IWebHostEnvironment>().WebRootPath!, builder.Configuration["PublicBaseUrl"]!));
+            builder.Services.AddScoped<PortraitService>();
 
-
+            builder.Services.AddScoped<IIconRepository, EfIconRepository>();
             builder.Services.AddSingleton<IIconStorage>(sp =>
             {
                 var env = sp.GetRequiredService<IWebHostEnvironment>();

@@ -1,0 +1,147 @@
+﻿@model AdminTool.Models.CharacterIndexVm
+
+@{
+    ViewData["Title"] = "Characters";
+    var totalPages = (int)Math.Ceiling((double)(Model.TotalCount) / Math.Max(1, Model.Filter.PageSize));
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Characters</h2>
+    <a asp-action="Create" class="btn btn-primary">+ Create</a>
+</div>
+
+@if (TempData["toast"] is string toast && !string.IsNullOrWhiteSpace(toast))
+{
+    <div class="alert alert-success">@toast</div>
+}
+
+<!-- Filters -->
+<form asp-action="Index" method="get" class="row g-2 mb-3">
+    <div class="col-md-3">
+        <input asp-for="Filter.Search" class="form-control" placeholder="Search name..." />
+    </div>
+    <div class="col-md-2">
+        <select asp-for="Filter.ElementId" asp-items="Model.Filter.Elements" class="form-select">
+            <option value="">-- Element --</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <select asp-for="Filter.RarityId" asp-items="Model.Filter.Rarities" class="form-select">
+            <option value="">-- Rarity --</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <input asp-for="Filter.PageSize" class="form-control" type="number" min="1" max="200" />
+    </div>
+    <div class="col-md-3 d-flex gap-2">
+        <button type="submit" class="btn btn-outline-primary">Apply</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Reset</a>
+    </div>
+</form>
+
+<!-- List -->
+@if (Model.Items.Count == 0)
+{
+    <div class="alert alert-info">No characters found.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-sm table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th style="width:80px;">ID</th>
+                    <th>Name</th>
+                    <th style="width:110px;">Rarity</th>
+                    <th style="width:110px;">Element</th>
+                    <th style="width:110px;">Role</th>
+                    <th style="width:110px;">Faction</th>
+                    <th style="width:90px;">Limited</th>
+                    <th style="width:160px;">Release</th>
+                    <th style="width:260px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var x in Model.Items)
+                {
+                    // 선택 목록에서 표시용 이름 가져오기(있으면)
+                    string ElementName = Model.Filter.Elements.FirstOrDefault(e => e.Value == x.ElementId.ToString())?.Text ?? x.ElementId.ToString();
+                    string RarityName = Model.Filter.Rarities.FirstOrDefault(r => r.Value == x.RarityId.ToString())?.Text ?? x.RarityId.ToString();
+
+                    <tr>
+                        <td>@x.Id</td>
+                        <td class="fw-semibold">@x.Name</td>
+                        <td>@RarityName</td>
+                        <td>@ElementName</td>
+                        <td>@x.RoleId</td>
+                        <td>@x.FactionId</td>
+                        <td>@(x.IsLimited ? "Yes" : "No")</td>
+                        <td>@(x.ReleaseDate?.ToString("yyyy-MM-dd") ?? "-")</td>
+                        <td class="text-nowrap">
+                            <a asp-action="Details" asp-route-id="@x.Id" class="btn btn-outline-secondary btn-sm">Details</a>
+                            <a asp-action="Edit" asp-route-id="@x.Id" class="btn btn-outline-primary btn-sm">Edit</a>
+                            <a asp-action="Skills" asp-route-id="@x.Id" class="btn btn-outline-dark btn-sm">Skills</a>
+                            <a asp-action="Progressions" asp-route-id="@x.Id" class="btn btn-outline-dark btn-sm">Progress</a>
+                            <a asp-action="Promotions" asp-route-id="@x.Id" class="btn btn-outline-dark btn-sm">Promos</a>
+
+                            <form asp-action="Delete" asp-route-id="@x.Id" method="post" class="d-inline"
+                                  onsubmit="return confirm('Delete @x.Name ?');">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    @if (totalPages > 1)
+    {
+        <nav>
+            <ul class="pagination">
+                @{
+                    int page = Math.Max(1, Model.Filter.Page);
+                    int start = Math.Max(1, page - 2);
+                    int end = Math.Min(totalPages, page + 2);
+                }
+                <li class="page-item @(page == 1 ? "disabled" : "")">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-page="@(page - 1)"
+                       asp-route-pageSize="@Model.Filter.PageSize"
+                       asp-route-elementId="@Model.Filter.ElementId"
+                       asp-route-rarityId="@Model.Filter.RarityId"
+                       asp-route-search="@Model.Filter.Search">Prev</a>
+                </li>
+
+                @for (int i = start; i <= end; i++)
+                {
+                    <li class="page-item @(i == page ? "active" : "")">
+                        <a class="page-link"
+                           asp-action="Index"
+                           asp-route-page="@i"
+                           asp-route-pageSize="@Model.Filter.PageSize"
+                           asp-route-elementId="@Model.Filter.ElementId"
+                           asp-route-rarityId="@Model.Filter.RarityId"
+                           asp-route-search="@Model.Filter.Search">@i</a>
+                    </li>
+                }
+
+                <li class="page-item @(page == totalPages ? "disabled" : "")">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-page="@(page + 1)"
+                       asp-route-pageSize="@Model.Filter.PageSize"
+                       asp-route-elementId="@Model.Filter.ElementId"
+                       asp-route-rarityId="@Model.Filter.RarityId"
+                       asp-route-search="@Model.Filter.Search">Next</a>
+                </li>
+            </ul>
+        </nav>
+        <div class="text-muted small">
+            Total: @Model.TotalCount /
+            Page @Model.Filter.Page of @totalPages
+        </div>
+    }
+}

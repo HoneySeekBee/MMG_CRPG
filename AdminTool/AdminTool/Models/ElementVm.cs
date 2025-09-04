@@ -74,13 +74,6 @@ namespace AdminTool.Models
         public bool IsActive { get; set; }
         public List<IconPickItem> Icons { get; set; } = new();
     }
-    public sealed class IconPickItem
-    {
-        public int IconId { get; set; }
-        public string Key { get; set; } = "";
-        public int Version { get; set; }
-        public string Url { get; set; } = ""; // cdn/base/icons/{key}.png?v={version}
-    }
     public sealed class PickIconModalVm
     {
         public string ModalId { get; set; } = "iconPickerModal";   // 모달 DOM id (페이지마다 유니크)

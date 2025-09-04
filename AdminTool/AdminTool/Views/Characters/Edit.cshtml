@@ -1,0 +1,207 @@
+﻿@using AdminTool.Models
+@model CharacterFormVm
+
+@{
+    ViewData["Title"] = "Edit Character";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">@ViewData["Title"]</h2>
+
+    <div class="d-flex gap-2">
+        <a asp-action="Index" class="btn btn-outline-secondary">← Back to list</a>
+        <a asp-action="Skills" asp-route-id="@Model.Id" class="btn btn-outline-primary">Skills</a>
+        <a asp-action="Progressions" asp-route-id="@Model.Id" class="btn btn-outline-primary">Stat Progressions</a>
+        <a asp-action="Promotions" asp-route-id="@Model.Id" class="btn btn-outline-primary">Promotions</a>
+    </div>
+</div>
+
+@if (TempData["toast"] is string toast && !string.IsNullOrWhiteSpace(toast))
+{
+    <div class="alert alert-success">@toast</div>
+}
+@if (TempData["Error"] is string err && !string.IsNullOrWhiteSpace(err))
+{
+    <div class="alert alert-danger">@err</div>
+}
+
+<form asp-action="Edit" asp-route-id="@Model.Id" method="post" class="needs-validation" novalidate>
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+    <div class="row g-3">
+        <!-- 기본 -->
+        <div class="col-12 col-lg-8">
+            <div class="card">
+                <div class="card-header">Basic</div>
+                <div class="card-body row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="Name" class="form-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label asp-for="RarityId" class="form-label"></label>
+                        <select asp-for="RarityId" asp-items="Model.Rarities" class="form-select">
+                            <option value="">-- Select --</option>
+                        </select>
+                        <span asp-validation-for="RarityId" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label asp-for="ElementId" class="form-label"></label>
+                        <select asp-for="ElementId" asp-items="Model.Elements" class="form-select">
+                            <option value="">-- Select --</option>
+                        </select>
+                        <span asp-validation-for="ElementId" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="RoleId" class="form-label"></label>
+                        <select asp-for="RoleId" asp-items="Model.Roles" class="form-select">
+                            <option value="">-- Select --</option>
+                        </select>
+                        <span asp-validation-for="RoleId" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="FactionId" class="form-label"></label>
+                        <select asp-for="FactionId" asp-items="Model.Factions" class="form-select">
+                            <option value="">-- Select --</option>
+                        </select>
+                        <span asp-validation-for="FactionId" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="ReleaseDate" class="form-label"></label>
+                        <input asp-for="ReleaseDate" type="datetime-local" class="form-control" />
+                        <span asp-validation-for="ReleaseDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input asp-for="IsLimited" class="form-check-input" />
+                            <label asp-for="IsLimited" class="form-check-label"></label>
+                        </div>
+                        <span asp-validation-for="IsLimited" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 리소스/메타 -->
+        <div class="col-12 col-lg-4">
+            <div class="card mb-3">
+                <div class="card-header">Assets</div>
+                <div class="card-body">
+                    <!-- Icon pick grid -->
+                    <div class="mb-4">
+                        <div class="fw-semibold mb-2">Icon</div>
+                        @if (Model.IconChoices?.Count > 0)
+                        {
+                            <div class="row row-cols-6 row-cols-md-8 g-2" id="icon-grid">
+                                @foreach (var it in Model.IconChoices)
+                                {
+                                    var isChecked = (Model.IconId ?? 0) == it.IconId;
+                                    <div class="col">
+                                        <input type="radio"
+                                               class="btn-check"
+                                               name="IconId"
+                                               id="icon-@it.IconId"
+                                               value="@it.IconId"
+                                        @(isChecked ? "checked" : null) />
+                                        <label class="btn btn-outline-secondary w-100 p-2" for="icon-@it.IconId" title="@it.Key">
+                                            <img src="@it.Url" alt="@it.Key"
+                                                 class="img-fluid"
+                                                 style="width:48px;height:48px;object-fit:contain;" />
+                                            <div class="small text-truncate">@it.Key</div>
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <select asp-for="IconId" asp-items="Model.Icons" class="form-select">
+                                <option value="">-- None --</option>
+                            </select>
+                        }
+                        <span asp-validation-for="IconId" class="text-danger"></span>
+                    </div>
+
+                    <!-- Portrait pick grid -->
+                    <div>
+                        <div class="fw-semibold mb-2">Portrait</div>
+                        @if (Model.PortraitChoices?.Count > 0)
+                        {
+                            <div class="row row-cols-4 row-cols-md-6 g-2" id="portrait-grid">
+                                @foreach (var p in Model.PortraitChoices)
+                                {
+                                    var isChecked = (Model.PortraitId ?? 0) == p.PortraitId;
+                                    <div class="col">
+                                        <input type="radio"
+                                               class="btn-check"
+                                               name="PortraitId"
+                                               id="portrait-@p.PortraitId"
+                                               value="@p.PortraitId"
+                                        @(isChecked ? "checked" : null) />
+                                        <label class="btn btn-outline-secondary w-100 p-2" for="portrait-@p.PortraitId" title="@p.Key">
+                                            <img src="@p.Url" alt="@p.Key"
+                                                 class="img-fluid"
+                                                 style="width:96px;height:96px;object-fit:contain;" />
+                                            <div class="small text-truncate">@p.Key</div>
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <select asp-for="PortraitId" asp-items="Model.Portraits" class="form-select">
+                                <option value="">-- None --</option>
+                            </select>
+                        }
+                        <span asp-validation-for="PortraitId" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Meta</div>
+                <div class="card-body row g-3">
+                    <div class="col-12">
+                        <label asp-for="TagsCsv" class="form-label"></label>
+                        <input asp-for="TagsCsv" class="form-control" placeholder="예: healer, cleanse, regen" />
+                        <div class="form-text">쉼표로 구분해 입력하면 서버에서 표준화합니다.</div>
+                        <span asp-validation-for="TagsCsv" class="text-danger"></span>
+                    </div>
+                    <div class="col-12">
+                        <label asp-for="MetaJson" class="form-label"></label>
+                        <textarea asp-for="MetaJson" class="form-control" rows="6"
+                                  placeholder='예: {"lore":"starter healer"}'></textarea>
+                        <span asp-validation-for="MetaJson" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-3 d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+
+        <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-inline">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-outline-danger"
+                    onclick="return confirm('정말 삭제할까요?');">
+                Delete
+            </button>
+        </form>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

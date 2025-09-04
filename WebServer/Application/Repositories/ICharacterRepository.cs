@@ -29,6 +29,6 @@ namespace Application.Repositories
         Task ReplaceProgressionsAsync(int characterId, IEnumerable<CharacterStatProgression> progressions, CancellationToken ct);
         Task ReplacePromotionsAsync(int characterId, IEnumerable<CharacterPromotion> promotions, CancellationToken ct);
 
-        Task SaveChangesAsync(CancellationToken ct);
+        Task<int>  SaveChangesAsync(CancellationToken ct);
     }
 }
