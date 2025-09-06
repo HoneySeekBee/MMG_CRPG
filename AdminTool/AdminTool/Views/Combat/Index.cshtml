@@ -1,0 +1,362 @@
+﻿@model AdminTool.Models.CombatVm
+@{
+    ViewData["Title"] = "Combat Simulator";
+}
+
+<div class="container-fluid py-3">
+    <h2 class="mb-3">Combat Simulator</h2>
+
+    <form asp-action="Simulate" asp-controller="Combat" asp-area="Admin" method="post" id="simulateForm">
+        @Html.AntiForgeryToken()
+        <div class="row g-3">
+
+            <!-- 입력 카드 -->
+            <div class="col-12 col-xl-4">
+                <div class="card shadow-sm">
+                    <div class="card-header fw-semibold">입력</div>
+                    <div class="card-body">
+
+                        <div class="mb-3">
+                            <label asp-for="StageId" class="form-label"></label>
+                            <select asp-for="StageId" class="form-select"
+                                    asp-items="Model.StageOptions">
+                                <option value="">-- 스테이지 선택 --</option>
+                            </select>
+                            <span asp-validation-for="StageId" class="text-danger"></span>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col">
+                                <label asp-for="Seed" class="form-label"></label>
+                                <input asp-for="Seed" class="form-control" />
+                                <span asp-validation-for="Seed" class="text-danger"></span>
+                            </div>
+                            <div class="col">
+                                <label asp-for="ClientVersion" class="form-label"></label>
+                                <input asp-for="ClientVersion" class="form-control" />
+                                <span asp-validation-for="ClientVersion" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <hr />
+
+                        <!-- 파티 -->
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <label class="form-label m-0">파티</label>
+                            <button type="button" class="btn btn-sm btn-outline-primary" id="btnAddParty">+ 추가</button>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-sm align-middle" id="partyTable">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 60%">캐릭터 (Id | 이름 | 소속)</th>
+                                        <th style="width: 25%">레벨</th>
+                                        <th style="width: 15%"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (var i = 0; i < Model.Party.Count; i++)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <select class="form-select" name="Party[@i].CharacterId">
+                                                    @foreach (var opt in Model.CharacterOptions)
+                                                    {
+                                                        <option value="@opt.Value" selected="@(opt.Value == Model.Party[i].CharacterId.ToString() ? "selected" : null)">
+                                                            @opt.Text
+                                                        </option>
+                                                    }
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input class="form-control" name="Party[@i].Level" value="@Model.Party[i].Level" />
+                                            </td>
+                                            <td class="text-end">
+                                                <button type="button" class="btn btn-sm btn-outline-danger btnRemoveRow">삭제</button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <span asp-validation-for="Party" class="text-danger"></span>
+
+                        <hr />
+
+                        <!-- 스킬 입력 -->
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <label class="form-label m-0">스킬 입력</label>
+                            <button type="button" class="btn btn-sm btn-outline-primary" id="btnAddSkill">+ 추가</button>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-sm align-middle" id="skillTable">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 15%">시간(ms)</th>
+                                        <th style="width: 20%">시전자</th>
+                                        <th style="width: 20%">스킬 ID</th>
+                                        <th>타깃(CSV)</th>
+                                        <th style="width: 10%"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (var i = 0; i < Model.SkillInputs.Count; i++)
+                                    {
+                                        <tr>
+                                            <td><input class="form-control" name="SkillInputs[@i].TMs" value="@Model.SkillInputs[i].TMs" /></td>
+                                            <td><input class="form-control" name="SkillInputs[@i].CasterRef" value="@Model.SkillInputs[i].CasterRef" /></td>
+                                            <td><input class="form-control" name="SkillInputs[@i].SkillId" value="@Model.SkillInputs[i].SkillId" /></td>
+                                            <td><input class="form-control" name="SkillInputs[@i].TargetsCsv" value="@Model.SkillInputs[i].TargetsCsv" /></td>
+                                            <td class="text-end">
+                                                <button type="button" class="btn btn-sm btn-outline-danger btnRemoveRow">삭제</button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="mt-3 d-grid">
+                            <button type="submit" class="btn btn-primary">시뮬레이션 실행</button>
+                        </div>
+
+                        <div class="mt-2">
+                            @Html.ValidationSummary(excludePropertyErrors: true, message: null, htmlAttributes: new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 결과 카드 -->
+            <div class="col-12 col-xl-8">
+                <div class="card shadow-sm mb-3">
+                    <div class="card-header fw-semibold">결과</div>
+                    <div class="card-body">
+                        @if (Model.HasResult)
+                        {
+                            <div class="row g-3">
+                                <div class="col-md-3">
+                                    <div class="border rounded p-3 h-100">
+                                        <div class="text-muted small">CombatId</div>
+                                        <div class="fs-5">@Model.Result!.CombatId</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="border rounded p-3 h-100">
+                                        <div class="text-muted small">Result</div>
+                                        <div class="fs-5 text-uppercase">@Model.Result!.Result</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="border rounded p-3 h-100">
+                                        <div class="text-muted small">Clear(ms)</div>
+                                        <div class="fs-5">@Model.Result!.ClearMs</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="border rounded p-3 h-100">
+                                        <div class="text-muted small">Balance/Client</div>
+                                        <div class="fs-6">@Model.Result!.BalanceVersion / @Model.Result!.ClientVersion</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr />
+                            <div>
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <div class="fw-semibold">이벤트 프리뷰(최대 200개)</div>
+                                </div>
+                                <div class="table-responsive" style="max-height: 300px; overflow:auto;">
+                                    <table class="table table-sm table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>t(ms)</th>
+                                                <th>type</th>
+                                                <th>actor</th>
+                                                <th>target</th>
+                                                <th>dmg</th>
+                                                <th>crit</th>
+                                                <th>extra</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var e in Model.Result!.Events)
+                                            {
+                                                <tr>
+                                                    <td>@e.TMs</td>
+                                                    <td>@e.Type</td>
+                                                    <td>@e.Actor</td>
+                                                    <td>@e.Target</td>
+                                                    <td>@e.Damage</td>
+                                                    <td>@(e.Crit?.ToString()?.ToLower())</td>
+                                                    <td class="text-truncate" style="max-width: 320px;">
+                                                        @e.ExtraJson
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-muted">좌측에서 입력 후 <strong>시뮬레이션 실행</strong>을 눌러주세요.</div>
+                        }
+                    </div>
+                </div>
+
+                <!-- 로그 영역 -->
+                <div class="card shadow-sm">
+                    <div class="card-header fw-semibold">전체 로그</div>
+                    <div class="card-body">
+
+                        @if (Model.HasLog)
+                        {
+                            <div id="logContainer" data-combat-id="@Model.LogPage!.CombatId" data-cursor="@Model.LogPage!.NextCursor">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover" id="logTable">
+                                        <thead>
+                                            <tr>
+                                                <th>t(ms)</th>
+                                                <th>type</th>
+                                                <th>actor</th>
+                                                <th>target</th>
+                                                <th>dmg</th>
+                                                <th>crit</th>
+                                                <th>extra</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="logRows">
+                                            @await Html.PartialAsync("_CombatLogRows", Model.LogPage)
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="d-grid">
+                                    <button type="button" id="btnLoadMore" class="btn btn-outline-secondary" @(string.IsNullOrEmpty(Model.LogPage!.NextCursor) ? "disabled" : "")>
+                                        더 보기
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-muted">아직 로그가 없습니다.</div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<select id="tmplCharacterOptions" class="d-none">
+    @foreach (var opt in Model.CharacterOptions)
+    {
+        <option value="@opt.Value">@opt.Text</option>
+    }
+</select>
+
+<!-- 파티/스킬 템플릿 (hidden) -->
+<table class="d-none">
+    <tbody id="tmplPartyRow">
+        <tr>
+            <td>
+                <select class="form-select" name="Party[__idx__].CharacterId">
+                    <!-- JS에서 옵션 채워 넣음 -->
+                </select>
+            </td>
+            <td><input class="form-control" name="Party[__idx__].Level" /></td>
+            <td class="text-end"><button type="button" class="btn btn-sm btn-outline-danger btnRemoveRow">삭제</button></td>
+        </tr>
+    </tbody>
+    <!-- skill 템플릿은 기존 그대로 -->
+</table>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // --- 파티/스킬 행 추가/삭제 ---
+        (function () {
+            const partyTbody = document.querySelector('#partyTable tbody');
+            const tmplParty = document.querySelector('#tmplPartyRow').innerHTML.trim();
+            const charOptHtml = document.querySelector('#tmplCharacterOptions').innerHTML; // ✅ 옵션 원본
+
+            function nextIndex(tbody, prefix) {
+                const inputs = tbody.querySelectorAll('[name^="' + prefix + '["]');
+                let maxIdx = -1;
+                inputs.forEach(i => {
+                    const m = i.name.match(/\[(\d+)\]/);
+                    if (m) { maxIdx = Math.max(maxIdx, parseInt(m[1])); }
+                });
+                return maxIdx + 1;
+            }
+
+            document.getElementById('btnAddParty')?.addEventListener('click', () => {
+                const idx = nextIndex(partyTbody, 'Party');
+                const html = tmplParty.replaceAll('__idx__', idx);
+                const temp = document.createElement('tbody');
+                temp.innerHTML = html;
+
+                // 새로 만든 select에 옵션 주입
+                const sel = temp.querySelector('select[name="Party[' + idx + '].CharacterId"]');
+                if (sel) sel.innerHTML = charOptHtml;
+
+                partyTbody.appendChild(temp.firstElementChild);
+            });
+
+            document.addEventListener('click', (e) => {
+                if (e.target && e.target.classList.contains('btnRemoveRow')) {
+                    e.target.closest('tr')?.remove();
+                }
+            });
+        })();
+
+        // --- 로그 '더 보기' AJAX ---
+        (function(){
+            const btn = document.getElementById('btnLoadMore');
+            if(!btn) return;
+
+            btn.addEventListener('click', async ()=>{
+                const container = document.getElementById('logContainer');
+                const combatId = container.getAttribute('data-combat-id');
+                const cursor = container.getAttribute('data-cursor');
+                if(!cursor){ btn.disabled = true; return; }
+
+                btn.disabled = true; btn.textContent = '로딩...';
+                try{
+                    const url = new URL(`/Admin/Combat/Log`, window.location.origin);
+                    url.searchParams.set('combatId', combatId);
+                    url.searchParams.set('cursor', cursor);
+                    url.searchParams.set('size', '200');
+
+                    const resp = await fetch(url.toString(), { headers: { 'X-Requested-With': 'XMLHttpRequest' }});
+                    const html = await resp.text();
+
+                    // 파셜에는 tbody 내부 <tr>들과 data-next-cursor가 포함됨
+                    const temp = document.createElement('tbody');
+                    temp.innerHTML = html;
+
+                    const rows = temp.querySelectorAll('tr[data-log-row]');
+                    const next = temp.getAttribute('data-next-cursor') || temp.dataset.nextCursor;
+
+                    const tbody = document.getElementById('logRows');
+                    rows.forEach(r => tbody.appendChild(r));
+
+                    const containerEl = document.getElementById('logContainer');
+                    containerEl.setAttribute('data-cursor', next || '');
+
+                    if(!next){ btn.disabled = true; btn.textContent = '끝'; }
+                    else { btn.disabled = false; btn.textContent = '더 보기'; }
+                }catch(err){
+                    console.error(err);
+                    btn.disabled = false; btn.textContent = '더 보기';
+                }
+            });
+        })();
+    </script>
+}

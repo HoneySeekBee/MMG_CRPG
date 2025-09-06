@@ -1,4 +1,5 @@
 using Application.Character;
+using Application.Combat;
 using Application.Elements;
 using Application.Factions;
 using Application.Icons;
@@ -9,6 +10,7 @@ using Application.Roles;
 using Application.SkillLevels;
 using Application.Skills;
 using Application.Storage;
+using Domain.Services;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories;
 using Infrastructure.Storage;
@@ -77,6 +79,15 @@ namespace WebServer
             builder.Services.AddScoped<IPortraitStorage>(sp =>
                 new LocalPortraitStorage(sp.GetRequiredService<IWebHostEnvironment>().WebRootPath!, builder.Configuration["PublicBaseUrl"]!));
             builder.Services.AddScoped<PortraitService>();
+
+            // 전투 관련 
+            builder.Services.AddScoped<ICombatService, CombatService>();
+            //builder.Services.AddScoped<IMasterDataProvider, MasterDataProvider>();
+            builder.Services.AddScoped<IMasterDataProvider, FakeMasterDataProvider>();
+
+            builder.Services.AddSingleton<ICombatEngine, SimpleCombatEngine>();
+            builder.Services.AddScoped<ICombatRepository, EfCombatRepository>();
+
 
             builder.Services.AddScoped<IIconRepository, EfIconRepository>();
             builder.Services.AddSingleton<IIconStorage>(sp =>

@@ -1,3 +1,5 @@
+using AdminTool.Services;
+
 namespace AdminTool
 {
     public class Program
@@ -16,6 +18,9 @@ namespace AdminTool
                     new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
             });
 
+            builder.Services.AddScoped<AdminTool.Controllers.IStageUiProvider, AdminTool.Controllers.StaticStageUiProvider>();
+            builder.Services.AddScoped<ICombatApiClient, CombatApiClient>();
+            builder.Services.AddScoped<ICharacterUiProvider, ApiCharacterUiProvider>();
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
