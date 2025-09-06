@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Reflection.Emit;
+using System.Text.Json.Nodes;
 
 namespace Infrastructure.Persistence
 {
@@ -26,6 +27,12 @@ namespace Infrastructure.Persistence
         public DbSet<CharacterPromotion> CharacterPromotions => Set<CharacterPromotion>();
         public DbSet<CombatRecord> Combats => Set<CombatRecord>();
         public DbSet<CombatLogRecord> CombatLogs => Set<CombatLogRecord>();
+
+        public DbSet<Item> Items => Set<Item>();
+        public DbSet<ItemStat> ItemStats => Set<ItemStat>();
+        public DbSet<ItemEffect> ItemEffects => Set<ItemEffect>();
+        public DbSet<ItemPrice> ItemPrices => Set<ItemPrice>();
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             Console.WriteLine("OnModelCreateing");
@@ -49,6 +56,12 @@ namespace Infrastructure.Persistence
 
             Modeling_Combat(modelBuilder);
             Modeling_CombatLog(modelBuilder);
+
+
+            Modeling_Item(modelBuilder);
+            Modeling_ItemStat(modelBuilder);
+            Modeling_ItemEffect(modelBuilder);
+            Modeling_ItemPrice(modelBuilder);
         }
 
         private void Modeling_Icon(ModelBuilder modelBuilder)
@@ -180,7 +193,7 @@ namespace Infrastructure.Persistence
                 e.Property(x => x.TargetingType).HasConversion<short>().IsRequired();
                 e.Property(x => x.AoeShape).HasConversion<short>().IsRequired();
                 e.Property(x => x.TargetSide).HasConversion<short>().IsRequired();
-                
+
                 e.Property(x => x.BaseInfo)
            .HasColumnType("jsonb")
            .IsRequired(false);
@@ -260,7 +273,7 @@ namespace Infrastructure.Persistence
                     v => v                                            // Read: 그대로(이미 UTC)
                 );
                 e.Property(x => x.ReleaseDate)
-       .HasConversion(utcConverter)   
+       .HasConversion(utcConverter)
        .IsRequired(false);
                 e.Property(x => x.IsLimited).IsRequired().HasDefaultValue(false);
 
@@ -480,6 +493,112 @@ namespace Infrastructure.Persistence
                 .WithMany(c => c.Logs)
                 .HasForeignKey(x => x.CombatId)
                 .OnDelete(DeleteBehavior.Cascade);
+        }
+        private static string? JsonNodeToString(JsonNode? node)
+    => node is null ? null : node.ToJsonString();
+
+        private static JsonNode? StringToJsonNode(string? json)
+        {
+            if (string.IsNullOrWhiteSpace(json)) return null;
+            // 이 메서드 내부에서는 optional 인수 사용 가능
+            return JsonNode.Parse(json); // 필요하면 옵션 명시 가능: JsonNode.Parse(json, null, default)
+        }
+
+        // 2) ValueConverter는 래퍼를 호출만 함 (Expression에 금지 요소 없음)
+        private static readonly ValueConverter<JsonNode?, string?> JsonNodeConverter =
+            new(v => JsonNodeToString(v), v => StringToJsonNode(v));
+
+        private void Modeling_Item(ModelBuilder mb)
+        {
+            mb.Entity<Item>(e =>
+            {
+                e.ToTable("Item");
+                e.HasKey(x => x.Id);
+
+                e.Property(x => x.Code).IsRequired();
+                e.HasIndex(x => x.Code).IsUnique();
+
+                e.Property(x => x.Name).IsRequired();
+                e.Property(x => x.Description).HasDefaultValue("");
+
+                // FK 값들: (참조 테이블은 다른 모델에서 구성되어 있다고 가정)
+                e.Property(x => x.TypeId).IsRequired();
+                e.Property(x => x.RarityId).IsRequired();
+
+                e.Property(x => x.Stackable).HasDefaultValue(true);
+                e.Property(x => x.MaxStack).HasDefaultValue(99);
+                e.Property(x => x.Tradable).HasDefaultValue(true);
+                e.Property(x => x.Weight).HasDefaultValue(0);
+
+                // string[] -> text[] (Npgsql이 자동 매핑)
+                e.Property(x => x.Tags).HasColumnType("text[]").HasDefaultValue(new string[] { });
+
+                // JsonNode -> jsonb
+                e.Property(x => x.Meta).HasColumnType("jsonb");
+
+                e.Property(x => x.CreatedAt).HasColumnType("timestamptz");
+                e.Property(x => x.UpdatedAt).HasColumnType("timestamptz");
+
+
+                e.HasMany(i => i.Stats)
+                 .WithOne()
+                 .HasForeignKey(x => x.ItemId)
+                 .OnDelete(DeleteBehavior.Cascade);
+                e.Navigation(i => i.Stats).HasField("_stats")
+                                           .UsePropertyAccessMode(PropertyAccessMode.Field);
+
+
+                e.HasMany(i => i.Effects)
+  .WithOne()
+  .HasForeignKey(x => x.ItemId)
+  .OnDelete(DeleteBehavior.Cascade);
+                e.Navigation(i => i.Effects).HasField("_effects")
+                                             .UsePropertyAccessMode(PropertyAccessMode.Field);
+
+
+                e.HasMany(i => i.Prices)
+                 .WithOne()
+                 .HasForeignKey(x => x.ItemId)
+                 .OnDelete(DeleteBehavior.Cascade);
+                e.Navigation(i => i.Prices).HasField("_prices")
+                                .UsePropertyAccessMode(PropertyAccessMode.Field);
+            });
+        }
+        private void Modeling_ItemStat(ModelBuilder mb)
+        {
+            mb.Entity<ItemStat>(e =>
+            {
+                e.ToTable("ItemStat");
+                e.HasKey(x => x.Id);
+                e.Property(x => x.Value).HasColumnType("numeric(12,4)");
+                e.HasIndex(x => new { x.ItemId, x.StatId }).IsUnique();
+            });
+        }
+
+        private void Modeling_ItemEffect(ModelBuilder mb)
+        {
+            mb.Entity<ItemEffect>(e =>
+            {
+                e.ToTable("ItemEffect");
+                e.HasKey(x => x.Id);
+
+                e.Property(x => x.Payload).HasColumnType("jsonb");
+                e.Property(x => x.SortOrder).HasDefaultValue((short)0);
+
+                // Scope는 enum → text 저장을 원하면 컨버터 추가 가능
+                // e.Property(x => x.Scope).HasConversion<string>();
+            });
+        }
+
+        private void Modeling_ItemPrice(ModelBuilder mb)
+        {
+            mb.Entity<ItemPrice>(e =>
+            {
+                e.ToTable("ItemPrice");
+                e.HasKey(x => x.Id);
+                e.Property(x => x.Price).HasColumnType("bigint");
+                e.HasIndex(x => new { x.ItemId, x.CurrencyId, x.PriceType }).IsUnique();
+            });
         }
     }
 }

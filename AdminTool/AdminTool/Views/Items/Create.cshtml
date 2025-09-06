@@ -1,0 +1,329 @@
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@using AdminTool.Models
+@using Domain.Enum
+@model ItemEditVm
+
+@{
+    ViewData["Title"] = "New Item";
+    string formAction = "/admin/items/new"; // ItemsController.New [POST]
+}
+
+<div class="container py-3">
+    <div class="d-flex align-items-center mb-3">
+        <h2 class="mb-0">New Item</h2>
+        <a class="btn btn-outline-secondary ms-auto" href="/admin/items">← Back</a>
+    </div>
+
+    @if (TempData["Error"] is string err)
+    {
+        <div class="alert alert-danger">@err</div>
+    }
+    @if (TempData["Message"] is string msg)
+    {
+        <div class="alert alert-success">@msg</div>
+    }
+
+    <form method="post" action="@formAction" class="card" novalidate>
+        @Html.AntiForgeryToken()
+        <div class="card-body">
+
+            <h5 class="mb-3">Basic</h5>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Code</label>
+                    <input asp-for="Code" class="form-control" />
+                    <span asp-validation-for="Code" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Name</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Active</label>
+                    <select asp-for="IsActive" class="form-select">
+                        <option value="true" selected="@(Model.IsActive ? "selected" : null)">true</option>
+                        <option value="false" selected="@(!Model.IsActive ? "selected" : null)">false</option>
+                    </select>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">Description</label>
+                    <textarea asp-for="Description" class="form-control" rows="2"></textarea>
+                </div>
+            </div>
+
+            <hr class="my-4" />
+            <h5 class="mb-3">Classification & Resources</h5>
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Type</label>
+                    <select asp-for="TypeId"
+                            class="form-select"
+                            asp-items="(IEnumerable<SelectListItem>)ViewBag.TypeOptions"></select>
+                    <span asp-validation-for="TypeId" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Rarity</label>
+                    <select asp-for="RarityId"
+                            class="form-select"
+                            asp-items="(IEnumerable<SelectListItem>)ViewBag.RarityOptions"></select>
+                    <span asp-validation-for="RarityId" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Icon</label>
+                    <select asp-for="IconId"
+                            class="form-select"
+                            asp-items="(IEnumerable<SelectListItem>)ViewBag.IconOptions"></select>
+                    <small class="text-muted d-block">선택 안 하면 빈 값으로 전송 → null</small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Portrait</label>
+                    <select asp-for="PortraitId"
+                            class="form-select"
+                            asp-items="(IEnumerable<SelectListItem>)ViewBag.PortraitOptions"></select>
+                </div>
+            </div>
+
+            <hr class="my-4" />
+
+            <h5 class="mb-3">Rules</h5>
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Stackable</label>
+                    <select asp-for="Stackable" class="form-select">
+                        <option value="true" selected="@(Model.Stackable ? "selected" : null)">true</option>
+                        <option value="false" selected="@(!Model.Stackable ? "selected" : null)">false</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">MaxStack</label>
+                    <input asp-for="MaxStack" type="number" class="form-control" />
+                    <span asp-validation-for="MaxStack" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">BindType</label>
+                    <select asp-for="BindType" class="form-select">
+                        @{
+                            var names = Enum.GetNames(typeof(BindType));
+                            foreach (var n in names)
+                            {
+                                <option value="@n" selected="@(Model.BindType.ToString()==n ? "selected" : null)">@n</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Tradable</label>
+                    <select asp-for="Tradable" class="form-select">
+                        <option value="true" selected="@(Model.Tradable ? "selected" : null)">true</option>
+                        <option value="false" selected="@(!Model.Tradable ? "selected" : null)">false</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">DurabilityMax</label>
+                    <input asp-for="DurabilityMax" type="number" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Weight</label>
+                    <input asp-for="Weight" type="number" class="form-control" />
+                    <span asp-validation-for="Weight" class="text-danger"></span>
+                </div>
+            </div>
+
+            <hr class="my-4" />
+
+            <h5 class="mb-3">Tags & Meta</h5>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Tags (comma/space separated)</label>
+                    <input asp-for="Tags" class="form-control" placeholder="weapon, starter" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Meta (JSON)</label>
+                    <textarea asp-for="MetaJson" class="form-control" rows="4" placeholder='{ "set": "IRON" }'></textarea>
+                </div>
+            </div>
+
+            <hr class="my-4" />
+
+            <h5 class="mb-2">Stats</h5>
+            <div id="stats" class="mb-3">
+                <!-- 초기 1행 -->
+                <div class="row g-2 align-items-end stat-row">
+                    <div class="col-3">
+                        <label class="form-label">StatId</label>
+                        <input name="Stats[0].StatId" type="number" class="form-control" />
+                    </div>
+                    <div class="col-3">
+                        <label class="form-label">Value</label>
+                        <input name="Stats[0].Value" type="number" step="0.0001" class="form-control" />
+                    </div>
+                    <div class="col-3">
+                        <button type="button" class="btn btn-outline-danger" onclick="removeRow(this)">Remove</button>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-outline-primary btn-sm mb-3" onclick="addStat()">+ Add Stat</button>
+
+            <h5 class="mb-2">Effects</h5>
+            <div id="effects" class="mb-3">
+                <div class="row g-2 align-items-end effect-row">
+                    <div class="col-md-3">
+                        <label class="form-label">Scope</label>
+                        <select name="Effects[0].Scope" class="form-select">
+                            @{
+                                var scopes = Enum.GetNames(typeof(ItemEffectScope));
+                                foreach (var s in scopes)
+                                {
+                                    <option value="@s">@s</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Payload (JSON)</label>
+                        <textarea name="Effects[0].PayloadJson" class="form-control" rows="3">{}</textarea>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Sort</label>
+                        <input name="Effects[0].SortOrder" type="number" class="form-control" value="0" />
+                    </div>
+                    <div class="col-md-1">
+                        <button type="button" class="btn btn-outline-danger" onclick="removeRow(this)">Remove</button>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-outline-primary btn-sm mb-3" onclick="addEffect()">+ Add Effect</button>
+
+            <h5 class="mb-2">Prices</h5>
+            <div id="prices" class="mb-3">
+                <div class="row g-2 align-items-end price-row">
+                    <div class="col-md-3">
+                        <label class="form-label">CurrencyId</label>
+                        <input name="Prices[0].CurrencyId" type="number" class="form-control" value="1" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">PriceType</label>
+                        <select name="Prices[0].PriceType" class="form-select">
+                            @{
+                                var ptypes = Enum.GetNames(typeof(ItemPriceType));
+                                foreach (var p in ptypes)
+                                {
+                                    <option value="@p">@p</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Price</label>
+                        <input name="Prices[0].Price" type="number" class="form-control" value="0" />
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-outline-danger" onclick="removeRow(this)">Remove</button>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-outline-primary btn-sm mb-4" onclick="addPrice()">+ Add Price</button>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Create</button>
+                <a class="btn btn-outline-secondary" href="/admin/items">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function removeRow(btn) {
+            const row = btn.closest('.row');
+            row?.parentElement?.removeChild(row);
+            renumber('stats', 'Stats');
+            renumber('effects', 'Effects');
+            renumber('prices', 'Prices');
+        }
+        function addStat() {
+            const c = document.getElementById('stats');
+            const idx = c.querySelectorAll('.stat-row').length;
+            const html = `
+        <div class="row g-2 align-items-end stat-row">
+          <div class="col-3">
+            <label class="form-label">StatId</label>
+            <input name="Stats[${idx}].StatId" type="number" class="form-control" />
+          </div>
+          <div class="col-3">
+            <label class="form-label">Value</label>
+            <input name="Stats[${idx}].Value" type="number" step="0.0001" class="form-control" />
+          </div>
+          <div class="col-3">
+            <button type="button" class="btn btn-outline-danger" onclick="removeRow(this)">Remove</button>
+          </div>
+        </div>`;
+            c.insertAdjacentHTML('beforeend', html);
+        }
+        function addEffect() {
+            const c = document.getElementById('effects');
+            const idx = c.querySelectorAll('.effect-row').length;
+            const scopes = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Enum.GetNames(typeof(ItemEffectScope))));
+            const options = scopes.map(s => `<option value="${s}">${s}</option>`).join('');
+            const html = `
+        <div class="row g-2 align-items-end effect-row">
+          <div class="col-md-3">
+            <label class="form-label">Scope</label>
+            <select name="Effects[${idx}].Scope" class="form-select">${options}</select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Payload (JSON)</label>
+            <textarea name="Effects[${idx}].PayloadJson" class="form-control" rows="3">{}</textarea>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Sort</label>
+            <input name="Effects[${idx}].SortOrder" type="number" class="form-control" value="0" />
+          </div>
+          <div class="col-md-1">
+            <button type="button" class="btn btn-outline-danger" onclick="removeRow(this)">Remove</button>
+          </div>
+        </div>`;
+            c.insertAdjacentHTML('beforeend', html);
+        }
+        function addPrice() {
+            const c = document.getElementById('prices');
+            const idx = c.querySelectorAll('.price-row').length;
+            const types = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Enum.GetNames(typeof(ItemPriceType))));
+            const options = types.map(s => `<option value="${s}">${s}</option>`).join('');
+            const html = `
+        <div class="row g-2 align-items-end price-row">
+          <div class="col-md-3">
+            <label class="form-label">CurrencyId</label>
+            <input name="Prices[${idx}].CurrencyId" type="number" class="form-control" value="1" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">PriceType</label>
+            <select name="Prices[${idx}].PriceType" class="form-select">${options}</select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Price</label>
+            <input name="Prices[${idx}].Price" type="number" class="form-control" value="0" />
+          </div>
+          <div class="col-md-3">
+            <button type="button" class="btn btn-outline-danger" onclick="removeRow(this)">Remove</button>
+          </div>
+        </div>`;
+            c.insertAdjacentHTML('beforeend', html);
+        }
+        function renumber(containerId, prefix) {
+            const c = document.getElementById(containerId);
+            const rows = c.querySelectorAll(`.${containerId.slice(0, -1)}-row`);
+            rows.forEach((row, i) => {
+                row.querySelectorAll('input,select,textarea').forEach(el => {
+                    el.name = el.name.replace(new RegExp(`${prefix}\\[\\d+\\]`), `${prefix}[${i}]`);
+                });
+            });
+        }
+    </script>
+}
