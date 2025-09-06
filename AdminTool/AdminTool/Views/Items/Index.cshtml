@@ -1,0 +1,209 @@
+﻿@using AdminTool.Models
+@model List<ItemVm>
+
+@{
+    ViewData["Title"] = "Items";
+    var filter = ViewBag.Filter as ItemListFilterVm ?? new ItemListFilterVm();
+    var page = ViewBag.Page; // Application.Common.Models.PagedResult<ItemDto>가 들어옴
+    int currentPage = page?.Page ?? filter.Page;
+    int pageSize = page?.PageSize ?? filter.PageSize;
+    long totalCount = page?.TotalCount ?? 0;
+    int totalPages = page?.TotalPages ?? (int)Math.Ceiling((double)totalCount / Math.Max(1, pageSize));
+    string QueryFor(int p)
+    {
+        var q = new List<string>();
+        if (filter.TypeId is { } t) q.Add($"typeId={t}");
+        if (filter.RarityId is { } r) q.Add($"rarityId={r}");
+        if (filter.IsActive is { } a) q.Add($"isActive={a.ToString().ToLower()}");
+        if (!string.IsNullOrWhiteSpace(filter.Search)) q.Add($"search={Uri.EscapeDataString(filter.Search)}");
+        if (filter.Tags is { Length: > 0 })
+            q.AddRange(filter.Tags.Select(x => $"tags={Uri.EscapeDataString(x)}"));
+        if (!string.IsNullOrWhiteSpace(filter.Sort)) q.Add($"sort={filter.Sort}");
+        q.Add($"page={p}");
+        q.Add($"pageSize={pageSize}");
+        return "?" + string.Join("&", q);
+    }
+}
+
+<div class="container py-3">
+
+    <div class="d-flex align-items-center mb-3">
+        <h2 class="mb-0">Items</h2>
+        <a class="btn btn-primary ms-auto" href="/admin/items/new">+ New Item</a>
+    </div>
+
+    <!-- Alerts -->
+    @if (TempData["Message"] is string msg)
+    {
+        <div class="alert alert-success">@msg</div>
+    }
+    @if (TempData["Error"] is string err)
+    {
+        <div class="alert alert-danger">@err</div>
+    }
+
+    <!-- Filter -->
+    <form method="get" class="card card-body mb-3">
+        <div class="row g-2">
+            <div class="col-12 col-sm-6 col-md-3">
+                <label class="form-label">Type Id</label>
+                <input type="number" name="typeId" class="form-control" value="@(filter.TypeId?.ToString() ?? "")" />
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <label class="form-label">Rarity Id</label>
+                <input type="number" name="rarityId" class="form-control" value="@(filter.RarityId?.ToString() ?? "")" />
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <label class="form-label">Active</label>
+                <select name="isActive" class="form-select">
+                    <option value="" selected="@(filter.IsActive is null ? "selected" : null)">All</option>
+                    <option value="true" selected="@(filter.IsActive == true ? "selected" : null)">Active</option>
+                    <option value="false" selected="@(filter.IsActive == false ? "selected" : null)">Inactive</option>
+                </select>
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <label class="form-label">Search</label>
+                <input type="text" name="search" class="form-control" value="@(filter.Search ?? "")" placeholder="code/name contains..." />
+            </div>
+
+            <div class="col-12 col-md-6">
+                <label class="form-label">Tags (comma or space separated)</label>
+                <input type="text" name="tags"
+                       class="form-control"
+                       value="@(filter.Tags is { Length: > 0 } ? string.Join(',', filter.Tags) : "")" />
+                <small class="text-muted">예: weapon,starter</small>
+            </div>
+
+            <div class="col-6 col-md-3">
+                <label class="form-label">Sort</label>
+                <select name="sort" class="form-select">
+                    @{
+                        string[] sorts = new[] { "code","name","rarity","type","created","updated" };
+                        foreach (var s in sorts)
+                        {
+                            <option value="@s" selected="@(string.Equals(filter.Sort, s, StringComparison.OrdinalIgnoreCase) ? "selected" : null)">@s</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="col-3 col-md-1">
+                <label class="form-label">Page</label>
+                <input type="number" name="page" class="form-control" value="@currentPage" min="1" />
+            </div>
+            <div class="col-3 col-md-1">
+                <label class="form-label">Size</label>
+                <input type="number" name="pageSize" class="form-control" value="@pageSize" min="1" max="500" />
+            </div>
+
+            <div class="col-12 d-flex gap-2 mt-2">
+                <button type="submit" class="btn btn-primary">Filter</button>
+                <a href="/admin/items" class="btn btn-outline-secondary">Reset</a>
+            </div>
+        </div>
+    </form>
+
+    <!-- Summary -->
+    <div class="mb-2 text-muted">
+        Total: <strong>@totalCount</strong> item(s),
+        Page: <strong>@currentPage</strong> / @Math.Max(1, totalPages)
+    </div>
+
+    <!-- Table -->
+    <div class="table-responsive">
+        <table class="table table-sm table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 90px;">ID</th>
+                    <th>Code</th>
+                    <th>Name</th>
+                    <th style="width: 90px;">Type</th>
+                    <th style="width: 90px;">Rarity</th>
+                    <th style="width: 110px;">Stack</th>
+                    <th style="width: 90px;">Weight</th>
+                    <th style="width: 140px;">Tags</th>
+                    <th style="width: 140px;">Created</th>
+                    <th style="width: 140px;">Updated</th>
+                    <th style="width: 120px;">Counts</th>
+                    <th style="width: 130px;">Status</th>
+                    <th style="width: 120px;"></th>
+                </tr>
+            </thead>
+            <tbody>
+            @if (Model.Count == 0)
+            {
+                <tr><td colspan="13" class="text-center text-muted py-4">No items</td></tr>
+            }
+            else
+            {
+                foreach (var x in Model)
+                {
+                    <tr>
+                        <td>@x.Id</td>
+                        <td><code>@x.Code</code></td>
+                        <td>@x.Name</td>
+                        <td>@x.TypeId</td>
+                        <td>@x.RarityId</td>
+                        <td>@(x.Stackable ? $"Yes ({x.MaxStack})" : "No")</td>
+                        <td>@x.Weight</td>
+                        <td class="text-truncate" style="max-width:160px">@x.Tags</td>
+                        <td>@x.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
+                        <td>@x.UpdatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
+                        <td>
+                            <span class="badge bg-secondary">S @x.StatCount</span>
+                            <span class="badge bg-info text-dark">E @x.EffectCount</span>
+                            <span class="badge bg-warning text-dark">P @x.PriceCount</span>
+                        </td>
+                        <td>
+                            @if (x.IsActive)
+                            { <span class="badge bg-success">Active</span> }
+                            else
+                            { <span class="badge bg-secondary">Inactive</span> }
+                        </td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-primary" href="/admin/items/@x.Id">Edit</a>
+                            <form method="post" action="/admin/items/@x.Id/delete" class="d-inline"
+                                  onsubmit="return confirm('Delete item @x.Code ?');">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <nav aria-label="pagination" class="mt-2">
+        <ul class="pagination pagination-sm mb-0">
+            <li class="page-item @(currentPage <= 1 ? "disabled" : "")">
+                <a class="page-link" href="@($"/admin/items{QueryFor(1)}")">« First</a>
+            </li>
+            <li class="page-item @(currentPage <= 1 ? "disabled" : "")">
+                <a class="page-link" href="@($"/admin/items{QueryFor(Math.Max(1, currentPage-1))}")">‹ Prev</a>
+            </li>
+
+            @{
+                // 간단한 윈도우
+                int start = Math.Max(1, currentPage - 2);
+                int end = Math.Min(totalPages == 0 ? 1 : totalPages, currentPage + 2);
+                for (int i = start; i <= end; i++)
+                {
+                    <li class="page-item @(i == currentPage ? "active" : "")">
+                        <a class="page-link" href="@($"/admin/items{QueryFor(i)}")">@i</a>
+                    </li>
+                }
+            }
+
+            <li class="page-item @(currentPage >= Math.Max(1, totalPages) ? "disabled" : "")">
+                <a class="page-link" href="@($"/admin/items{QueryFor(Math.Min(Math.Max(1,totalPages), currentPage+1))}")">Next ›</a>
+            </li>
+            <li class="page-item @(currentPage >= Math.Max(1, totalPages) ? "disabled" : "")">
+                <a class="page-link" href="@($"/admin/items{QueryFor(Math.Max(1, totalPages))}")">Last »</a>
+            </li>
+        </ul>
+    </nav>
+
+</div>

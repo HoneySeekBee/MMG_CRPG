@@ -3,6 +3,7 @@ using Application.Combat;
 using Application.Elements;
 using Application.Factions;
 using Application.Icons;
+using Application.Items;
 using Application.Portraits;
 using Application.Rarities;
 using Application.Repositories;
@@ -79,6 +80,11 @@ namespace WebServer
             builder.Services.AddScoped<IPortraitStorage>(sp =>
                 new LocalPortraitStorage(sp.GetRequiredService<IWebHostEnvironment>().WebRootPath!, builder.Configuration["PublicBaseUrl"]!));
             builder.Services.AddScoped<PortraitService>();
+
+            // 아이템 관련 
+
+            builder.Services.AddScoped<IItemRepository, ItemRepository>();
+            builder.Services.AddScoped<IItemService, ItemService>();
 
             // 전투 관련 
             builder.Services.AddScoped<ICombatService, CombatService>();
