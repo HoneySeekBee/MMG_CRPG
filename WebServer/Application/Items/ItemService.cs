@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace Application.Items
@@ -63,6 +65,10 @@ namespace Application.Items
             if (!await _repo.IsCodeUniqueAsync(req.Code.Trim(), excludeId: null, ct))
                 throw new InvalidOperationException($"Code '{req.Code}' already exists.");
 
+            var metaNode = req.Meta is null
+                ? JsonDocument.Parse("{}")!
+                : JsonDocument.Parse(req.Meta.RootElement.GetRawText())!;
+
             var item = new Item(
                 id: 0, // db가 채움
                 code: req.Code,
@@ -80,7 +86,7 @@ namespace Application.Items
                 weight: req.Weight,
                 tags: req.Tags,
                 isActive: req.IsActive,
-                meta: req.Meta,
+        meta: metaNode,
                 createdBy: req.CreatedBy
             );
 
