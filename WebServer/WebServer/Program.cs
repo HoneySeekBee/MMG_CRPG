@@ -1,9 +1,11 @@
 using Application.Character;
 using Application.Combat;
+using Application.Currency;
 using Application.Elements;
 using Application.Factions;
 using Application.Icons;
 using Application.Items;
+using Application.ItemTypes;
 using Application.Portraits;
 using Application.Rarities;
 using Application.Repositories;
@@ -86,6 +88,13 @@ namespace WebServer
             builder.Services.AddScoped<IItemRepository, ItemRepository>();
             builder.Services.AddScoped<IItemService, ItemService>();
 
+
+            builder.Services.AddScoped<ICurrencyRepository, EFCurrencyRepository>();
+            builder.Services.AddScoped<ICurrencyService, CurrencyService>();
+
+            builder.Services.AddScoped<IItemTypeService, ItemTypeService>();
+            builder.Services.AddScoped<IItemTypeRepository, EFItemTypeRepository>();
+
             // 전투 관련 
             builder.Services.AddScoped<ICombatService, CombatService>();
             //builder.Services.AddScoped<IMasterDataProvider, MasterDataProvider>();
@@ -94,6 +103,9 @@ namespace WebServer
             builder.Services.AddSingleton<ICombatEngine, SimpleCombatEngine>();
             builder.Services.AddScoped<ICombatRepository, EfCombatRepository>();
 
+            // 스텟 관련
+            builder.Services.AddScoped<Application.StatTypes.IStatTypeService, Application.StatTypes.StatTypeService>();
+            builder.Services.AddScoped<Application.Repositories.IStatTypeRepository, Infrastructure.Repositories.EFStatTypeRepository>();
 
             builder.Services.AddScoped<IIconRepository, EfIconRepository>();
             builder.Services.AddSingleton<IIconStorage>(sp =>

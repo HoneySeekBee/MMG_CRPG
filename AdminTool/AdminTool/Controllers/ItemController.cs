@@ -47,65 +47,100 @@ namespace AdminTool.Controllers
                 return new List<T>();
             }
         }
-        // =============== Create ===============
         [HttpGet("/admin/items/new")]
         public async Task<IActionResult> New(CancellationToken ct)
         {
-            var client = _http.CreateClient("GameApi");
-
-            // 필요한 것들을 병렬로 로딩
-            var typesTask = GetListOrEmpty<ItemTypeDto>(client, "/api/itemtypes", ct);
-            var raritiesTask = GetListOrEmpty<RarityDto>(client, "/api/rarities", ct);
-            var iconsTask = GetListOrEmpty<IconApiDto>(client, "/api/icons", ct);
-            var portraitsTask = GetListOrEmpty<PortraitApiDto>(client, "/api/portraits", ct);
-
-            await Task.WhenAll(typesTask!, raritiesTask!, iconsTask!, portraitsTask!);
-
-            // SelectListItem 변환 (아이콘/초상화는 null 허용이므로 빈 옵션 포함)
-            ViewBag.TypeOptions = (typesTask!.Result ?? new())
-                .OrderBy(x => x.Name)
-                .Select(x => new SelectListItem($"{x.Name} (#{x.Id})", x.Id.ToString()))
-                .ToList();
-
-            ViewBag.RarityOptions = (raritiesTask!.Result ?? new())
-                .OrderBy(x => x.SortOrder)
-                .Select(x => new SelectListItem($"{x.Label} ★{x.Stars}", x.RarityId.ToString()))
-                .ToList();
-
-            var iconItems = new List<SelectListItem> { new SelectListItem("(none)", "") };
-            iconItems.AddRange((iconsTask!.Result ?? new())
-                .OrderBy(x => x.Key)
-                .Select(x => new SelectListItem($"{x.Key} (#{x.IconId})", x.IconId.ToString())));
-            ViewBag.IconOptions = iconItems;
-
-            var portraitItems = new List<SelectListItem> { new SelectListItem("(none)", "") };
-            portraitItems.AddRange((portraitsTask!.Result ?? new())
-                .OrderBy(x => x.Key)
-                .Select(x => new SelectListItem($"{x.Key} (#{x.PortraitId})", x.PortraitId.ToString())));
-            ViewBag.PortraitOptions = portraitItems;
-
+            await PopulateLookups(ct);
             return View("Create", new ItemEditVm());
         }
+        private async Task<List<T>> GetPagedItemsOrEmpty<T>(HttpClient client, string url, CancellationToken ct)
+        {
+            try
+            {
+                var env = await client.GetFromJsonAsync<PagedEnvelope<T>>(url, ct);
+                return env?.Items ?? new List<T>();
+            }
+            catch
+            {
+                return new List<T>();
+            }
+        }
+        private sealed class PagedEnvelope<T>
+        {
+            public List<T>? Items { get; set; }
+        }
+        private sealed record CurrencyDto(short Id, string Code, string Name);
+        private sealed record StatTypeDto(int Id, string Code, string Name, bool IsPercent);
         private sealed record ItemTypeDto(int Id, string Code, string Name);
         
         [HttpPost("/admin/items/new")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> New(ItemEditVm vm, CancellationToken ct)
         {
-            if (!ModelState.IsValid) return View(vm);
+            if (!ModelState.IsValid)
+            {
+                await PopulateLookups(ct);      
+                return View("Create", vm);            
+            }
 
             var req = vm.ToCreateRequest(User?.Identity?.Name ?? "admin");
             var resp = await Api.PostAsJsonAsync("/api/items", req, ct);
 
             if (!resp.IsSuccessStatusCode)
             {
-                TempData["Error"] = $"생성 실패: {(int)resp.StatusCode} {resp.ReasonPhrase}";
-                return View(vm);
+                var body = await resp.Content.ReadAsStringAsync(ct);
+                await PopulateLookups(ct);
+                TempData["Error"] = $"생성 실패: {(int)resp.StatusCode} {resp.ReasonPhrase} - {body}";
+                return View("Create", vm);
             }
-
             var created = await resp.Content.ReadFromJsonAsync<ItemDto>(cancellationToken: ct);
             TempData["Message"] = $"[{vm.Code}] 생성 완료";
-            return RedirectToAction(nameof(Edit), new { id = created!.Id });
+            return RedirectToAction(nameof(Index))
+        }
+        private async Task PopulateLookups(CancellationToken ct)
+        {
+            var client = _http.CreateClient("GameApi");
+
+            var typesTask = GetPagedItemsOrEmpty<ItemTypeDto>(client, "/api/itemtypes?page=1&pageSize=1000", ct);
+            var raritiesTask = GetListOrEmpty<RarityDto>(client, "/api/rarities", ct);
+            var iconsTask = GetListOrEmpty<IconApiDto>(client, "/api/icons", ct);
+            var portraitsTask = GetListOrEmpty<PortraitApiDto>(client, "/api/portraits", ct);
+            var statsTask = GetListOrEmpty<StatTypeDto>(client, "/api/stattypes", ct);
+            var currenciesTask = GetListOrEmpty<CurrencyDto>(client, "/api/currencies", ct);
+            await Task.WhenAll(typesTask, raritiesTask, iconsTask, portraitsTask, statsTask, currenciesTask);
+
+            ViewBag.TypeOptions = (typesTask.Result ?? new())
+                .OrderBy(x => x.Name)
+                .Select(x => new SelectListItem($"{x.Name} (#{x.Id})", x.Id.ToString()))
+                .ToList();
+
+            ViewBag.RarityOptions = (raritiesTask.Result ?? new())
+                .OrderBy(x => x.SortOrder)
+                .Select(x => new SelectListItem($"{x.Label} ★{x.Stars}", x.RarityId.ToString()))
+                .ToList();
+
+            var iconItems = new List<SelectListItem> { new("(none)", "") };
+            iconItems.AddRange((iconsTask.Result ?? new())
+                .OrderBy(x => x.Key)
+                .Select(x => new SelectListItem($"{x.Key} (#{x.IconId})", x.IconId.ToString())));
+            ViewBag.IconOptions = iconItems;
+
+            var portraitItems = new List<SelectListItem> { new("(none)", "") };
+            portraitItems.AddRange((portraitsTask.Result ?? new())
+                .OrderBy(x => x.Key)
+                .Select(x => new SelectListItem($"{x.Key} (#{x.PortraitId})", x.PortraitId.ToString())));
+            ViewBag.PortraitOptions = portraitItems;
+
+            ViewBag.StatOptions = (statsTask.Result ?? new())
+                .OrderBy(s => s.Name)
+                .Select(s => new SelectListItem(
+                    text: $"{s.Name} ({s.Code}){(s.IsPercent ? " %" : "")}",
+                    value: s.Id.ToString()))
+                .ToList();
+            ViewBag.CurrencyOptions = (currenciesTask.Result ?? new())
+                .OrderBy(c => c.Code)
+                .Select(c => new SelectListItem($"{c.Code} - {c.Name}", c.Id.ToString()))
+                .ToList();
         }
 
         // =============== Edit (기본정보) ===============

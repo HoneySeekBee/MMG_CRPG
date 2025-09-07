@@ -33,6 +33,11 @@ namespace Infrastructure.Persistence
         public DbSet<ItemEffect> ItemEffects => Set<ItemEffect>();
         public DbSet<ItemPrice> ItemPrices => Set<ItemPrice>();
 
+        public DbSet<StatType> StatTypes => Set<StatType>();
+
+        public DbSet<ItemType> ItemTypes => Set<ItemType>();
+        public DbSet<EquipSlot> EquipSlots => Set<EquipSlot>();
+        public DbSet<Currency> Currencies => Set<Currency>();
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             Console.WriteLine("OnModelCreateing");
@@ -62,6 +67,11 @@ namespace Infrastructure.Persistence
             Modeling_ItemStat(modelBuilder);
             Modeling_ItemEffect(modelBuilder);
             Modeling_ItemPrice(modelBuilder);
+
+            Modeling_StatTypes(modelBuilder);
+            Modeling_ItemType(modelBuilder);
+            Modeling_EquipSlot(modelBuilder);
+            Modeling_Currency(modelBuilder);
         }
 
         private void Modeling_Icon(ModelBuilder modelBuilder)
@@ -536,6 +546,8 @@ namespace Infrastructure.Persistence
                 // JsonNode -> jsonb
                 e.Property(x => x.Meta).HasColumnType("jsonb");
 
+
+
                 e.Property(x => x.CreatedAt).HasColumnType("timestamptz");
                 e.Property(x => x.UpdatedAt).HasColumnType("timestamptz");
 
@@ -598,6 +610,59 @@ namespace Infrastructure.Persistence
                 e.HasKey(x => x.Id);
                 e.Property(x => x.Price).HasColumnType("bigint");
                 e.HasIndex(x => new { x.ItemId, x.CurrencyId, x.PriceType }).IsUnique();
+            });
+        }
+        private static void Modeling_StatTypes(ModelBuilder mb)
+        {
+            var e = mb.Entity<StatType>();
+            e.ToTable("StatTypes");
+            e.HasKey(x => x.Id);
+            e.Property(x => x.Id)
+                .ValueGeneratedOnAdd(); // smallserial과 매칭
+            e.Property(x => x.Code).IsRequired();
+            e.HasIndex(x => x.Code).IsUnique();
+            e.Property(x => x.Name).IsRequired();
+            e.Property(x => x.IsPercent).IsRequired();
+        }
+        private static void Modeling_EquipSlot(ModelBuilder mb)
+        {
+            mb.Entity<EquipSlot>(e =>
+            {
+                e.ToTable("EquipSlots");
+                e.HasKey(x => x.Id);
+                e.Property(x => x.Code).IsRequired();
+                e.Property(x => x.Name).IsRequired();
+                e.Property(x => x.SortOrder).HasDefaultValue((short)0);
+                e.HasIndex(x => x.Code).IsUnique();
+            });
+        }
+
+        private static void Modeling_ItemType(ModelBuilder mb)
+        {
+            mb.Entity<ItemType>(e =>
+            {
+                e.ToTable("ItemType");
+                e.HasKey(x => x.Id);
+                e.Property(x => x.Code).IsRequired();
+                e.Property(x => x.Name).IsRequired();
+                e.HasIndex(x => x.Code).IsUnique();
+
+                e.HasOne(x => x.Slot)
+                 .WithMany()
+                 .HasForeignKey(x => x.SlotId)
+                 .OnDelete(DeleteBehavior.SetNull);
+            });
+        }
+        private void Modeling_Currency(ModelBuilder mb)
+        {
+            mb.Entity<Currency>(e =>
+            {
+                e.ToTable("Currencies");
+                e.HasKey(x => x.Id);
+                e.Property(x => x.Id).ValueGeneratedOnAdd();
+                e.Property(x => x.Code).IsRequired();
+                e.Property(x => x.Name).IsRequired();
+                e.HasIndex(x => x.Code).IsUnique();
             });
         }
     }
