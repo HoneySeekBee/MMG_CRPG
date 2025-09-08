@@ -3,6 +3,8 @@ using Application.Combat;
 using Application.Currency;
 using Application.Elements;
 using Application.Factions;
+using Application.GachaBanner;
+using Application.GachaPool;
 using Application.Icons;
 using Application.Items;
 using Application.ItemTypes;
@@ -106,6 +108,13 @@ namespace WebServer
             // ½ºÅÝ °ü·Ã
             builder.Services.AddScoped<Application.StatTypes.IStatTypeService, Application.StatTypes.StatTypeService>();
             builder.Services.AddScoped<Application.Repositories.IStatTypeRepository, Infrastructure.Repositories.EFStatTypeRepository>();
+
+            // »Ì±â °ü·Ã
+            builder.Services.AddScoped<IGachaBannerRepository, GachaBannerRepository>();
+            builder.Services.AddScoped<IGachaBannerService, GachaBannerService>();
+
+            builder.Services.AddScoped<IGachaPoolRepository, GachaPoolRepository>();
+            builder.Services.AddScoped<IGachaPoolService, GachaPoolService>();
 
             builder.Services.AddScoped<IIconRepository, EfIconRepository>();
             builder.Services.AddSingleton<IIconStorage>(sp =>
