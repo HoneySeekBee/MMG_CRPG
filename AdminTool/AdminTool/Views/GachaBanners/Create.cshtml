@@ -1,0 +1,94 @@
+﻿@model AdminTool.Models.GachaBannerFormVm
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Create Gacha Banner";
+}
+
+<div class="container py-3">
+    <h2 class="mb-3">Create Gacha Banner</h2>
+
+    <div class="mb-3">
+        <a asp-action="Index" class="btn btn-outline-secondary">← 목록으로</a>
+    </div>
+
+    <form asp-action="Create" method="post" class="needs-validation" novalidate>
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label asp-for="Key" class="form-label"></label>
+                <input asp-for="Key" class="form-control" />
+                <span asp-validation-for="Key" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Title" class="form-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Subtitle" class="form-label"></label>
+                <input asp-for="Subtitle" class="form-control" />
+                <span asp-validation-for="Subtitle" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="GachaPoolId" class="form-label"></label>
+                <select asp-for="GachaPoolId" asp-items="Model.PoolOptions" class="form-select">
+                    <option value="">-- 풀 선택 --</option>
+                </select>
+                <span asp-validation-for="GachaPoolId" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="PortraitId" class="form-label"></label>
+                <select asp-for="PortraitId" asp-items="Model.PortraitOptions" class="form-select">
+                    <option value="">-- (선택) 포트레이트 --</option>
+                </select>
+                <span asp-validation-for="PortraitId" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="Priority" class="form-label"></label>
+                <input asp-for="Priority" class="form-control" />
+                <span asp-validation-for="Priority" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="Status" class="form-label"></label>
+                <select asp-for="Status" class="form-select"
+                        asp-items="Html.GetEnumSelectList<Domain.Enum.GachaBannerStatus>()">
+                </select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="StartsAtLocal" class="form-label"></label>
+                <input asp-for="StartsAtLocal" class="form-control" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm}" />
+                <span asp-validation-for="StartsAtLocal" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="EndsAtLocal" class="form-label"></label>
+                <input asp-for="EndsAtLocal" class="form-control" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm}" />
+                <span asp-validation-for="EndsAtLocal" class="text-danger"></span>
+            </div>
+
+            <div class="col-12 form-check mt-2">
+                <input asp-for="IsActive" class="form-check-input" />
+                <label asp-for="IsActive" class="form-check-label"></label>
+            </div>
+        </div>
+
+        <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">저장</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">취소</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

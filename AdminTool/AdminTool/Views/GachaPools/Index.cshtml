@@ -1,0 +1,106 @@
+﻿@model AdminTool.Models.GachaPoolIndexVm
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Gacha Pools";
+
+    string Qs(string key, object? val)
+    {
+        var dict = new Dictionary<string, string?>
+                {
+                    ["Keyword"] = Model.Filter.Keyword,
+                    ["Skip"] = Model.Skip.ToString(),
+                    ["Take"] = Model.Take.ToString()
+                };
+        dict[key] = val?.ToString();
+        var q = string.Join("&", dict.Where(kv => !string.IsNullOrEmpty(kv.Value))
+                                     .Select(kv => $"{kv.Key}={Uri.EscapeDataString(kv.Value!)}"));
+        return "?" + q;
+    }
+}
+
+<div class="container py-3">
+    <h2 class="mb-3">Gacha Pools</h2>
+
+    @if (TempData["toast"] is string toast && !string.IsNullOrWhiteSpace(toast))
+    {
+        <div class="alert alert-success">@toast</div>
+    }
+    @if (TempData["Error"] is string err && !string.IsNullOrWhiteSpace(err))
+    {
+        <div class="alert alert-danger">@err</div>
+    }
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <form asp-action="Index" method="get" class="d-flex gap-2">
+            <input type="text" name="Keyword" value="@Model.Filter.Keyword" class="form-control" placeholder="검색어 (이름/버전)" />
+            <input type="hidden" name="Skip" value="0" />
+            <input type="hidden" name="Take" value="@Model.Take" />
+            <button type="submit" class="btn btn-primary">검색</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">초기화</a>
+        </form>
+
+        <a asp-action="Create" class="btn btn-success">+ 새 가챠풀</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-sm table-striped align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th style="width:80px;">ID</th>
+                    <th>이름</th>
+                    <th style="width:160px;">표 버전</th>
+                    <th style="width:180px;">시작(로컬)</th>
+                    <th style="width:180px;">종료(로컬)</th>
+                    <th style="width:150px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Items.Count == 0)
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">데이터가 없습니다.</td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var p in Model.Items)
+                    {
+                        <tr>
+                            <td>@p.PoolId</td>
+                            <td class="fw-semibold">@p.Name</td>
+                            <td>@(string.IsNullOrWhiteSpace(p.TablesVersion) ? "-" : p.TablesVersion)</td>
+                            <td>@p.ScheduleStart.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@(p.ScheduleEnd.HasValue ? p.ScheduleEnd.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm") : "-")</td>
+                            <td class="text-nowrap">
+                                <a asp-action="Edit" asp-route-id="@p.PoolId" class="btn btn-sm btn-outline-primary">Edit</a>
+                                <form asp-action="Delete" asp-route-id="@p.PoolId" method="post" class="d-inline"
+                                      onsubmit="return confirm('정말 삭제할까요?');">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @{
+        var from = Model.Total == 0 ? 0 : Model.Skip + 1;
+        var to = Math.Min(Model.Skip + Model.Take, Model.Total);
+        var prevSkip = Math.Max(0, Model.Skip - Model.Take);
+        var nextSkip = (Model.Skip + Model.Take < Model.Total) ? Model.Skip + Model.Take : Model.Skip;
+        var hasPrev = Model.Skip > 0;
+        var hasNext = Model.Skip + Model.Take < Model.Total;
+    }
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="text-muted">Showing @from–@to of @Model.Total</div>
+        <div class="btn-group">
+            <a class="btn btn-outline-secondary @(hasPrev ? "" : "disabled")"
+               href="@(hasPrev ? Url.Action("Index") + Qs("Skip", prevSkip) : "#")">« Prev</a>
+            <a class="btn btn-outline-secondary @(hasNext ? "" : "disabled")"
+               href="@(hasNext ? Url.Action("Index") + Qs("Skip", nextSkip) : "#")">Next »</a>
+        </div>
+    </div>
+</div>

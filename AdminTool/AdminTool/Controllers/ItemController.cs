@@ -95,7 +95,7 @@ namespace AdminTool.Controllers
             }
             var created = await resp.Content.ReadFromJsonAsync<ItemDto>(cancellationToken: ct);
             TempData["Message"] = $"[{vm.Code}] 생성 완료";
-            return RedirectToAction(nameof(Index))
+            return RedirectToAction(nameof(Index));
         }
         private async Task PopulateLookups(CancellationToken ct)
         {

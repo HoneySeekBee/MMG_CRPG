@@ -38,6 +38,12 @@ namespace Infrastructure.Persistence
         public DbSet<ItemType> ItemTypes => Set<ItemType>();
         public DbSet<EquipSlot> EquipSlots => Set<EquipSlot>();
         public DbSet<Currency> Currencies => Set<Currency>();
+        public DbSet<GachaBanner> GachaBanners => Set<GachaBanner>();
+
+        public DbSet<GachaPool> GachaPools => Set<GachaPool>();
+        public DbSet<GachaPoolEntry> GachaPoolEntries => Set<GachaPoolEntry>();
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             Console.WriteLine("OnModelCreateing");
@@ -72,6 +78,8 @@ namespace Infrastructure.Persistence
             Modeling_ItemType(modelBuilder);
             Modeling_EquipSlot(modelBuilder);
             Modeling_Currency(modelBuilder);
+            Modeling_GatchaBanner(modelBuilder);
+            Modeling_GachaPool(modelBuilder);
         }
 
         private void Modeling_Icon(ModelBuilder modelBuilder)
@@ -663,6 +671,62 @@ namespace Infrastructure.Persistence
                 e.Property(x => x.Code).IsRequired();
                 e.Property(x => x.Name).IsRequired();
                 e.HasIndex(x => x.Code).IsUnique();
+            });
+        }
+        private void Modeling_GatchaBanner(ModelBuilder b)
+        {
+            b.Entity<GachaBanner>(e =>
+            {
+                e.ToTable("GachaBanner");
+                e.HasKey(x => x.Id);
+                e.Property(x => x.Id).HasColumnName("BannerId");
+                e.HasIndex(x => x.Key).IsUnique();
+                e.Property(x => x.Status).HasConversion<short>();   // smallint 매핑
+                e.Property(x => x.StartsAt).HasColumnName("StartsAt");
+                e.Property(x => x.EndsAt).HasColumnName("EndsAt");
+                // 필요한 컬럼 매핑 추가…
+            });
+        }
+        public void Modeling_GachaPool(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<GachaPool>(e =>
+            {
+                e.ToTable("GachaPool");
+                e.HasKey(x => x.PoolId);
+                e.Property(x => x.PoolId).ValueGeneratedOnAdd();
+
+                e.Property(x => x.Name).IsRequired();
+
+                e.Property(x => x.ScheduleStart).IsRequired();
+                e.Property(x => x.ScheduleEnd);
+
+                // jsonb 매핑 (문자열을 그대로 jsonb 컬럼에 보관)
+                e.Property(x => x.PityJson).HasColumnType("jsonb");
+                e.Property(x => x.Config).HasColumnType("jsonb");
+                e.Property(x => x.TablesVersion);
+
+                // 관계: 1 → N
+                e.HasMany<GachaPoolEntry>()
+                 .WithOne()
+                 .HasForeignKey(en => en.PoolId)
+                 .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<GachaPoolEntry>(e =>
+            {
+                e.ToTable("GachaPoolEntry");
+
+                // 복합 PK (PoolId + CharacterId)
+                e.HasKey(x => new { x.PoolId, x.CharacterId });
+
+                e.Property(x => x.PoolId).IsRequired();
+                e.Property(x => x.CharacterId).IsRequired();
+                e.Property(x => x.Grade).IsRequired();
+                e.Property(x => x.RateUp).HasDefaultValue(false);
+                e.Property(x => x.Weight).IsRequired();
+
+                // 간단 체크 제약(포스트그레스일 때 유효)
+                e.HasCheckConstraint("ck_gpe_weight_pos", "\"Weight\" > 0");
             });
         }
     }
