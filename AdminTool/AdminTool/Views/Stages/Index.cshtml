@@ -1,0 +1,161 @@
+﻿@model AdminTool.Models.StageIndexVm
+@{
+    ViewData["Title"] = "Stages";
+    Layout = "_Layout";
+}
+@{
+    ViewData["Title"] = "Stages";
+    var total = Model.TotalCount;
+    var page = Model.Filter.Page <= 0 ? 1 : Model.Filter.Page;
+    var size = Model.Filter.PageSize <= 0 ? 20 : Model.Filter.PageSize;
+    var totalPages = Math.Max(1, (int)Math.Ceiling(total / (double)size));
+    string QueryForPage(int p) =>
+        $"?page={p}&pageSize={size}" +
+        (Model.Filter.Chapter.HasValue ? $"&chapter={Model.Filter.Chapter}" : "") +
+        (Model.Filter.IsActive.HasValue ? $"&isActive={Model.Filter.IsActive.Value.ToString().ToLower()}" : "") +
+        (!string.IsNullOrWhiteSpace(Model.Filter.Search) ? $"&search={Uri.EscapeDataString(Model.Filter.Search)}" : "");
+}
+
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <h2 class="mb-0">Stages</h2>
+    <a class="btn btn-primary" href="~/stages/create">새 스테이지</a>
+</div>
+
+<form method="get" class="card mb-3">
+    <div class="card-body">
+        <div class="row g-2">
+            <div class="col-sm-2">
+                <label class="form-label">챕터</label>
+                <select name="chapter" class="form-select">
+                    <option value="">전체</option>
+                    @foreach (var c in Model.Filter.Chapters)
+                    {
+                        <option value="@c.Value" selected="@(Model.Filter.Chapter?.ToString()==c.Value)">
+                            @c.Text
+                        </option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <label class="form-label">활성</label>
+                <select name="isActive" class="form-select">
+                    @foreach (var it in Model.Filter.ActiveFlags)
+                    {
+                        var sel = (Model.Filter.IsActive.HasValue ? Model.Filter.IsActive!.Value.ToString().ToLower() : "") == it.Value;
+                        <option value="@it.Value" selected="@(sel)">@it.Text</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-4">
+                <label class="form-label">검색어</label>
+                <input name="search" class="form-control" value="@Model.Filter.Search" placeholder="이름 또는 Ch-Order (예: 1-3)" />
+            </div>
+            <div class="col-sm-2">
+                <label class="form-label">페이지 크기</label>
+                <select name="pageSize" class="form-select">
+                    @{
+                        int[] sizes = new[] { 10, 20, 50, 100, 200 };
+                        foreach (var s in sizes)
+                        {
+                            <option value="@s" selected="@(Model.Filter.PageSize==s)">@s</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-sm-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-secondary w-100">필터 적용</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 80px;">ID</th>
+                    <th style="width: 120px;">Chapter-Order</th>
+                    <th>이름</th>
+                    <th style="width: 140px;">권장 전투력</th>
+                    <th style="width: 120px;">스태미나</th>
+                    <th style="width: 100px;">활성</th>
+                    <th style="width: 160px;"></th>
+                </tr>
+            </thead>
+            <tbody>
+            @if (Model.Items.Count == 0)
+            {
+                <tr><td colspan="7" class="text-center text-muted py-4">데이터가 없습니다.</td></tr>
+            }
+            else
+            {
+                foreach (var s in Model.Items)
+                {
+                    <tr>
+                        <td>@s.Id</td>
+                        <td><span class="badge bg-secondary">Ch @s.Chapter - @s.Order</span></td>
+                        <td>@(string.IsNullOrWhiteSpace(s.Name) ? "-" : s.Name)</td>
+                        <td>@s.RecommendedPower</td>
+                        <td>@s.StaminaCost</td>
+                        <td>
+                            @if (s.IsActive) { <span class="badge bg-success">활성</span> }
+                            else { <span class="badge bg-outline-secondary border">비활성</span> }
+                        </td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-primary" href="~/stages/@s.Id/edit">수정</a>
+                            <form action="~/stages/@s.Id/delete" method="post" class="d-inline" onsubmit="return confirm('삭제하시겠습니까?');">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-outline-danger">삭제</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card-footer d-flex justify-content-between align-items-center">
+        <div class="text-muted">
+            총 <strong>@total</strong>건 · 페이지  / <strong>@totalPages</strong>
+        </div>
+        <nav>
+            <ul class="pagination mb-0">
+                <li class="page-item @(page<=1 ? "disabled" : "")">
+                    <a class="page-link" href="@QueryForPage(1)">«</a>
+                </li>
+                <li class="page-item @(page<=1 ? "disabled" : "")">
+                    <a class="page-link" href="@QueryForPage(Math.Max(1, page-1))">이전</a>
+                </li>
+
+                @{
+                    // 중앙 페이징(현재 기준 ±2)
+                    var start = Math.Max(1, page - 2);
+                    var end = Math.Min(totalPages, page + 2);
+                    for (var p = start; p <= end; p++)
+                    {
+                        <li class="page-item @(p==page ? "active" : "")">
+                            <a class="page-link" href="@QueryForPage(p)">@p</a>
+                        </li>
+                    }
+                }
+
+                <li class="page-item @(page>=totalPages ? "disabled" : "")">
+                    <a class="page-link" href="@QueryForPage(Math.Min(totalPages, page+1))">다음</a>
+                </li>
+                <li class="page-item @(page>=totalPages ? "disabled" : "")">
+                    <a class="page-link" href="@QueryForPage(totalPages)">»</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+@if (TempData["Toast"] is string toast && !string.IsNullOrWhiteSpace(toast))
+{
+    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+        @toast
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
