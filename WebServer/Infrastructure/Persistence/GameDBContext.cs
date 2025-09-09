@@ -48,6 +48,10 @@ namespace Infrastructure.Persistence
         public DbSet<SynergyBonus> SynergyBonuses => Set<SynergyBonus>();
         //public DbSet<SynergyTarget> SynergyTargets => Set<SynergyTarget>();
 
+        public DbSet<User> Users => Set<User>();
+        public DbSet<UserProfile> UserProfiles => Set<UserProfile>();
+        public DbSet<Session> Sessions => Set<Session>();
+        public DbSet<SecurityEvent> SecurityEvents => Set<SecurityEvent>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -87,6 +91,7 @@ namespace Infrastructure.Persistence
             Modeling_GachaPool(modelBuilder);
 
             Modeling_Synergy(modelBuilder);
+            OnModelCreating_User(modelBuilder);
         }
 
         private void Modeling_Icon(ModelBuilder modelBuilder)
@@ -808,16 +813,163 @@ namespace Infrastructure.Persistence
             e.HasIndex(x => new { x.Metric, x.RefId }).HasDatabaseName("ix_rule_metric_ref");
         }
 
-        //private static void ConfigureTarget(EntityTypeBuilder<SynergyTarget> e)
-        //{
-        //    e.ToTable("SynergyTarget");
-        //    e.HasKey(x => new { x.SynergyId, x.TargetType, x.TargetId }); // 복합 PK
 
-        //    e.Property(x => x.SynergyId).HasColumnName("SynergyId");
-        //    e.Property(x => x.TargetType).HasConversion<short>().HasColumnName("TargetType");
-        //    e.Property(x => x.TargetId).HasColumnName("TargetId");
+        private void OnModelCreating_User(ModelBuilder b)
+        {
+            Modeling_User(b);
+            Modeling_UserProfile(b);
+            Modeling_Session(b);
+            Modeling_SecurityEvent(b);
+        }
 
-        //    e.HasIndex(x => new { x.TargetType, x.TargetId }).HasDatabaseName("ix_target_type_id");
-        //}
+        // ---------- User ----------
+        private static void Modeling_User(ModelBuilder b)
+        {
+            // Users
+            b.Entity<User>(e =>
+            {
+                e.ToTable("Users");
+                e.HasKey(x => x.Id);
+                e.Property(x => x.Id).HasColumnName("Id").ValueGeneratedOnAdd();
+
+                e.Property(x => x.Account).HasColumnName("Account").HasMaxLength(64).IsRequired();
+                e.HasIndex(x => x.Account).IsUnique();
+
+                e.Property(x => x.PasswordHash).HasColumnName("PasswordHash").IsRequired();
+                e.Property(x => x.Status).HasColumnName("Status").HasConversion<short>();
+
+                e.Property(x => x.CreatedAt).HasColumnName("CreatedAt");
+                e.Property(x => x.LastLoginAt)
+ .HasColumnName("LastLoginAt")
+ .IsRequired(false);
+
+                // 1:1 Profile (FK: UserProfile.UserId)
+                e.HasOne(x => x.Profile)
+                 .WithOne()
+                 .HasForeignKey<UserProfile>(p => p.UserId)
+                 .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // UsersProfiles
+            b.Entity<UserProfile>(e =>
+            {
+                e.ToTable("UsersProfiles");
+
+                e.HasKey(x => x.UserId);
+                e.Property(x => x.UserId).HasColumnName("UserId");
+
+                e.Property(x => x.NickName).HasColumnName("NickName").HasMaxLength(100).IsRequired();
+                e.Property(x => x.Level).HasColumnName("Level").IsRequired();
+                e.Property(x => x.Exp).HasColumnName("Exp").IsRequired();
+                e.Property(x => x.Gold).HasColumnName("Gold").IsRequired();
+                e.Property(x => x.Cristal).HasColumnName("Cristal").IsRequired();
+                e.Property(x => x.IconId).HasColumnName("IconId").IsRequired(false);
+           
+                e.HasOne<User>()
+         .WithOne(u => u.Profile)
+         .HasForeignKey<UserProfile>(p => p.UserId)
+         .OnDelete(DeleteBehavior.Cascade);
+
+                e.HasIndex(x => x.UserId).IsUnique(); // 1:1 보장
+            });
+        }
+        private static void ConfigureUser(EntityTypeBuilder<User> e)
+        {
+            e.ToTable("Users");
+            e.HasKey(x => x.Id);
+            e.Property(x => x.Id).HasColumnName("UserId").ValueGeneratedOnAdd();
+
+            e.Property(x => x.Account).IsRequired().HasMaxLength(64);
+            e.HasIndex(x => x.Account).IsUnique();
+
+            e.Property(x => x.PasswordHash).IsRequired();
+
+            e.Property(x => x.Status).IsRequired(); // enum → 기본 매핑 (smallint 권하면 .HasConversion<short>())
+            e.Property(x => x.CreatedAt).IsRequired();
+            e.Property(x => x.LastLoginAt)
+ .HasColumnName("LastLoginAt")
+ .IsRequired(false);
+
+            // 1:1 Profile
+            e.HasOne(x => x.Profile)
+             .WithOne()
+             .HasForeignKey<UserProfile>(p => p.UserId)
+             .OnDelete(DeleteBehavior.Cascade);
+        }
+
+        // ---------- UserProfile ----------
+        private void Modeling_UserProfile(ModelBuilder b)
+        {
+            b.Entity<UserProfile>(ConfigureUserProfile);
+        }
+
+        private static void ConfigureUserProfile(EntityTypeBuilder<UserProfile> e)
+        {
+            e.ToTable("UsersProfiles");
+            e.HasKey(x => x.Id);
+            e.Property(x => x.Id).HasColumnName("ProfileId").ValueGeneratedOnAdd();
+
+            e.Property(x => x.UserId).IsRequired();
+            e.HasIndex(x => x.UserId).IsUnique();
+
+            e.Property(x => x.NickName).IsRequired().HasMaxLength(100);
+            e.Property(x => x.Level).IsRequired();
+            e.Property(x => x.Exp).IsRequired();
+
+            e.Property(x => x.Gold).IsRequired();
+            e.Property(x => x.Cristal).IsRequired();
+
+            e.Property(x => x.IconId).IsRequired(false);
+        }
+
+        // ---------- Session ----------
+        private void Modeling_Session(ModelBuilder b)
+        {
+            b.Entity<Session>(ConfigureSession);
+        }
+
+        private static void ConfigureSession(EntityTypeBuilder<Session> e)
+        {
+            e.ToTable("Sessions");
+            e.HasKey(x => x.Id);
+            e.Property(x => x.Id).HasColumnName("Id").ValueGeneratedOnAdd();
+
+            e.Property(x => x.UserId).IsRequired();
+
+            e.Property(x => x.AccessTokenHash).IsRequired().HasMaxLength(64);
+            e.Property(x => x.RefreshTokenHash).IsRequired().HasMaxLength(64);
+
+            e.Property(x => x.ExpiresAt).IsRequired();
+            e.Property(x => x.RefreshExpiresAt).IsRequired();
+            e.Property(x => x.Revoked).IsRequired();
+            e.Property(x => x.CreatedAt).IsRequired();
+
+            e.HasIndex(x => new { x.UserId, x.Revoked, x.ExpiresAt });
+            e.HasIndex(x => x.RefreshTokenHash).IsUnique();
+        }
+
+        // ---------- SecurityEvent ----------
+        private void Modeling_SecurityEvent(ModelBuilder b)
+        {
+            b.Entity<SecurityEvent>(ConfigureSecurityEvent);
+        }
+
+        private static void ConfigureSecurityEvent(EntityTypeBuilder<SecurityEvent> e)
+        {
+            e.ToTable("SecurityEvents");
+            e.HasKey(x => x.Id);
+            e.Property(x => x.Id).HasColumnName("Id").ValueGeneratedOnAdd();
+
+            e.Property(x => x.UserId).IsRequired(false);
+            e.Property(x => x.Type).IsRequired();     // enum
+            e.Property(x => x.Meta)
+      .HasColumnName("Meta")
+      .HasColumnType("jsonb")
+      .IsRequired(false);
+            // jsonb 매핑(문자열)
+            e.Property(x => x.CreatedAt).IsRequired();
+
+            e.HasIndex(x => new { x.UserId, x.CreatedAt });
+        }
     }
 }

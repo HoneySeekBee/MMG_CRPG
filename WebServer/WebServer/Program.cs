@@ -16,12 +16,18 @@ using Application.SkillLevels;
 using Application.Skills;
 using Application.Storage;
 using Application.Synergy;
+using Application.Users;
 using Domain.Services;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories;
 using Infrastructure.Storage;
+using Infrastructure.Auth;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Npgsql;
+using System.Security.Claims;
+using System.Text;
 
 namespace WebServer
 {
@@ -30,7 +36,9 @@ namespace WebServer
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("Jwt:Key missing");
+            var jwtIssuer = builder.Configuration["Jwt:Issuer"]; 
+            var jwtAudience = builder.Configuration["Jwt:Audience"];
             // Add services to the container.
             builder.Services.AddRazorPages();
             builder.Services.AddControllers();
@@ -49,6 +57,32 @@ namespace WebServer
             errorCodesToAdd: null))
        .EnableSensitiveDataLogging(false)
 );
+
+            builder.Services
+       .AddAuthentication(options =>
+       {
+           options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+           options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+       })
+       .AddJwtBearer(options =>
+       {
+           options.RequireHttpsMetadata = true;
+           options.SaveToken = false;
+           options.TokenValidationParameters = new TokenValidationParameters
+           {
+               ValidateIssuerSigningKey = true,
+               IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+               ValidateIssuer = !string.IsNullOrWhiteSpace(jwtIssuer),
+               ValidIssuer = jwtIssuer,
+               ValidateAudience = !string.IsNullOrWhiteSpace(jwtAudience),
+               ValidAudience = jwtAudience,
+               ValidateLifetime = true,
+               ClockSkew = TimeSpan.Zero,
+               NameClaimType = ClaimTypes.NameIdentifier
+           };
+       });
+
+            builder.Services.AddAuthorization();
 
             builder.Services.AddEndpointsApiExplorer();
 
@@ -121,6 +155,32 @@ namespace WebServer
             builder.Services.AddScoped<ISynergyRepository, SynergyRepository>();
             builder.Services.AddScoped<ISynergyService, SynergyService>();
 
+            // 유저 관련 
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddSingleton<IClock, SystemClock>();
+            builder.Services.AddSingleton<IPasswordHasher, Pbkdf2PasswordHasher>();
+            builder.Services.AddSingleton<ITokenService>(sp =>
+            {
+                var cfg = sp.GetRequiredService<IConfiguration>();
+                var key = cfg["Jwt:Key"]!;
+                var issuer = cfg["Jwt:Issuer"];
+                var audience = cfg["Jwt:Audience"];
+
+                return new JwtTokenService(
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+                    issuer,
+                    audience,
+                    accessTtl: TimeSpan.FromMinutes(30),
+                    refreshTtl: TimeSpan.FromDays(7));
+            });
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IUserQueryRepository, UserQueryRepository>();
+            builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
+            builder.Services.AddScoped<ISessionRepository, SessionRepository>();
+            builder.Services.AddScoped<ISessionQueryRepository, SessionQueryRepository>();
+            builder.Services.AddScoped<ISecurityEventRepository, SecurityEventRepository>();
+
+
             builder.Services.AddScoped<IIconRepository, EfIconRepository>();
             builder.Services.AddSingleton<IIconStorage>(sp =>
             {
@@ -129,7 +189,6 @@ namespace WebServer
 
                 return new LocalIconStorage(env.WebRootPath, cfg["PublicBaseUrl"]);
             });
-
             var conn = builder.Configuration.GetConnectionString("GameDb");
             var sb = new Npgsql.NpgsqlConnectionStringBuilder(conn);
             Console.WriteLine($"[ConnString] Host={sb.Host}; Port={sb.Port}; Database={sb.Database}; Username={sb.Username}; Password=***");
@@ -155,8 +214,10 @@ namespace WebServer
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
+            app.MapControllers();
             app.MapRazorPages();
 
             app.Run();

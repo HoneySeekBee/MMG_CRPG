@@ -1,0 +1,164 @@
+﻿@model AdminRegisterVm
+@{
+    ViewData["Title"] = "Admin Register";
+}
+
+<style>
+    .auth-card {
+        max-width: 520px;
+        margin: 48px auto;
+        padding: 28px;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+        background: #fff;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", Arial, "Apple SD Gothic Neo", sans-serif;
+    }
+
+    .auth-title {
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+
+    .auth-sub {
+        color: #6b7280;
+        margin-bottom: 20px;
+    }
+
+    .form-row {
+        margin-bottom: 14px;
+    }
+
+        .form-row label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .form-row input[type="text"],
+        .form-row input[type="password"] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .form-row input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,.15);
+        }
+
+    .btn {
+        display: inline-block;
+        padding: 10px 16px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        background: #2563eb;
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .btn-secondary {
+        background: #6b7280;
+    }
+
+    .actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .link {
+        color: #2563eb;
+        text-decoration: none;
+    }
+
+        .link:hover {
+            text-decoration: underline;
+        }
+
+    .alert {
+        padding: 10px 12px;
+        border-radius: 8px;
+        margin-bottom: 14px;
+    }
+
+        .alert.ok {
+            background: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .alert.err {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+    .val-summary {
+        margin-bottom: 12px;
+        color: #991b1b;
+    }
+
+    .hint {
+        color: #6b7280;
+        font-size: 12px;
+        margin-top: 6px;
+    }
+</style>
+
+<div class="auth-card">
+    <div class="auth-title">운영툴 회원 생성</div>
+    <div class="auth-sub">테스트/운영에 사용할 계정을 만듭니다. 생성 후 로그인 페이지로 이동합니다.</div>
+
+    @if (TempData["ok"] is string okMsg)
+    {
+        <div class="alert ok">@okMsg</div>
+    }
+    @if (TempData["err"] is string errMsg)
+    {
+        <div class="alert err">@errMsg</div>
+    }
+
+    @Html.ValidationSummary(false, "", new { @class = "val-summary" })
+
+    <form asp-action="Register" asp-controller="AdminAuth" method="post">
+        @Html.AntiForgeryToken()
+
+        <div class="form-row">
+            <label asp-for="Account"></label>
+            <input asp-for="Account" type="text" autocomplete="username" />
+            <span asp-validation-for="Account" class="text-danger"></span>
+        </div>
+
+        <div class="form-row">
+            <label asp-for="Password"></label>
+            <input asp-for="Password" type="password" autocomplete="new-password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+            <div class="hint">최소 8자 이상, 운영 환경에서는 복잡도 정책 권장</div>
+        </div>
+
+        <div class="form-row">
+            <label asp-for="NickName"></label>
+            <input asp-for="NickName" type="text" />
+            <span asp-validation-for="NickName" class="text-danger"></span>
+        </div>
+
+        <div class="actions">
+            <button class="btn" type="submit">회원 생성</button>
+            <a class="btn btn-secondary" asp-action="Login" asp-controller="AdminAuth">로그인으로</a>
+            <a class="link" href="/swagger" target="_blank" rel="noreferrer">Swagger</a>
+        </div>
+
+        <div class="hint">
+            생성된 계정은 <strong>/api/auth/login</strong>으로도 로그인 가능합니다.
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
