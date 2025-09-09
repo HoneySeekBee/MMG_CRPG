@@ -1,0 +1,584 @@
+﻿@using AdminTool.Models
+@using Domain.Enum
+@model SynergyEditVm
+
+@{
+    ViewData["Title"] = "Edit Synergy";
+}
+
+<h2 class="mb-3">Edit Synergy</h2>
+
+@if (TempData["ok"] is string ok)
+{
+    <div class="alert alert-success">@ok</div>
+}
+@if (TempData["err"] is string err)
+{
+    <div class="alert alert-danger">@err</div>
+}
+
+<form asp-action="Edit" asp-route-id="@Model.SynergyId" method="post" class="needs-validation" novalidate>
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="SynergyId" />
+
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+    <!-- 기본 정보 -->
+    <div class="row g-3">
+        <div class="col-md-4">
+            <label asp-for="Key" class="form-label"></label>
+            <input asp-for="Key" class="form-control" />
+            <span asp-validation-for="Key" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+            <div class="form-check">
+                <input asp-for="IsActive" class="form-check-input" type="checkbox" />
+                <label asp-for="IsActive" class="form-check-label ms-1"></label>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3 mt-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" rows="2" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <!-- 아이콘 선택 -->
+    <div class="mb-3">
+        <label class="form-label">Icon</label>
+        <input type="hidden" asp-for="IconId" />
+        @if (Model.Icons?.Count > 0)
+        {
+            <div class="row row-cols-6 g-2" id="icon-grid">
+                @foreach (var ic in Model.Icons)
+                {
+                    var isChecked = Model.IconId.HasValue && Model.IconId.Value == ic.IconId ? "checked" : "";
+                    <div class="col">
+                        <label class="d-block border rounded p-1 text-center icon-card" style="cursor:pointer;">
+                            <input type="radio" name="__icon_pick" value="@ic.IconId" class="form-check-input me-1" @isChecked />
+                            <img src="@ic.Url" alt="@ic.Key" class="img-fluid" style="max-height:48px;" />
+                            <div class="small text-muted text-truncate" title="@ic.Key">@ic.Key</div>
+                        </label>
+                    </div>
+                }
+            </div>
+            <small class="text-muted">이미지를 클릭해 아이콘을 선택하세요.</small>
+        }
+        else
+        {
+            <div class="text-muted">등록된 아이콘이 없습니다.</div>
+        }
+        <span asp-validation-for="IconId" class="text-danger"></span>
+    </div>
+
+    <!-- 효과/스태킹/기간 -->
+    <div class="row g-3">
+        <!-- 메인 효과 빌더 -->
+        <div class="col-12">
+            <label class="form-label">Effect</label>
+
+            <!-- 서버 전송용 실제 JSON -->
+            <textarea asp-for="EffectJson" class="d-none"></textarea>
+
+            <table class="table table-sm" id="tblEffectMods">
+                <thead>
+                    <tr>
+                        <th style="width:280px;">Stat</th>
+                        <th style="width:180px;">Op</th>
+                        <th style="width:160px;">Value</th>
+                        <th style="width:60px;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 자바스크립트가 Model.EffectJson을 파싱해 행을 채움. 실패 시 이 1행 템플릿 유지 -->
+                    <tr>
+                        <td>
+                            <select class="form-select form-select-sm __eff-stat">
+                                @foreach (var st in Model.StatTypes)
+                                {
+                                    <option value="@st.Code">@st.Name (@st.Code)</option>
+                                }
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-select form-select-sm __eff-op">
+                                <option value="0">고정(+)</option>
+                                <option value="1">퍼센트(+%)</option>
+                                <option value="2">계수(×)</option>
+                                <option value="3">설정(=)</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="number" step="0.01" class="form-control form-control-sm __eff-val" value="0" />
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="removeRow(this)">-</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="addMod()">+ Add Modifier</button>
+            <div class="form-text">
+                퍼센트(+%)는 10% → <b>10</b>, 계수(×)는 20% 증가 → <b>1.2</b>.
+            </div>
+            <span asp-validation-for="EffectJson" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label asp-for="Stacking" class="form-label"></label>
+            <select asp-for="Stacking" class="form-select">
+                <option value="@((short)Stacking.None)">None</option>
+                <option value="@((short)Stacking.Additive)">Additive</option>
+                <option value="@((short)Stacking.Multiplicative)">Multiplicative</option>
+                <option value="@((short)Stacking.HighestOnly)">HighestOnly</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="StartAt" class="form-label"></label>
+            <input asp-for="StartAt" type="datetime-local" class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label asp-for="EndAt" class="form-label"></label>
+            <input asp-for="EndAt" type="datetime-local" class="form-control" />
+        </div>
+    </div>
+
+    <hr />
+
+    <!-- Bonuses -->
+    <h5>Bonuses</h5>
+    <table class="table table-sm" id="tblBonuses">
+        <thead>
+            <tr>
+                <th style="width:120px;">Threshold</th>
+                <th style="width:280px;">Stat</th>
+                <th style="width:180px;">Op</th>
+                <th style="width:160px;">Value</th>
+                <th style="width:220px;">Note</th>
+                <th style="width:60px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Bonuses.Count; i++)
+            {
+                <tr>
+                    <td><input asp-for="Bonuses[i].Threshold" class="form-control form-control-sm" /></td>
+
+                    <!-- 서버 전송용 숨김 JSON -->
+                    <td class="d-none"><textarea asp-for="Bonuses[i].EffectJson" class="__bonus-json"></textarea></td>
+
+                    <!-- UI 입력(파싱해서 세팅) -->
+                    <td>
+                        <select class="form-select form-select-sm __bonus-stat">
+                            @foreach (var st in Model.StatTypes)
+                            {
+                                <option value="@st.Code">@st.Name (@st.Code)</option>
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <select class="form-select form-select-sm __bonus-op">
+                            <option value="0">고정(+)</option>
+                            <option value="1">퍼센트(+%)</option>
+                            <option value="2">계수(×)</option>
+                            <option value="3">설정(=)</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="number" step="0.01" class="form-control form-control-sm __bonus-val" value="0" />
+                    </td>
+                    <td><input asp-for="Bonuses[i].Note" class="form-control form-control-sm" /></td>
+                    <td><button type="button" class="btn btn-outline-danger btn-sm" onclick="removeRow(this)">-</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button type="button" class="btn btn-outline-primary btn-sm" onclick="addBonus()">+ Add Bonus</button>
+    <span asp-validation-for="Bonuses" class="text-danger"></span>
+
+    <hr />
+
+    <!-- Rules -->
+    <h5>Rules</h5>
+    <table class="table table-sm" id="tblRules">
+        <thead>
+            <tr>
+                <th style="width:110px;">Scope</th>
+                <th style="width:160px;">Metric</th>
+                <th style="width:240px;">Ref</th>
+                <th style="width:120px;">Required</th>
+                <th>Extra (JSON)</th>
+                <th style="width:60px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Rules.Count; i++)
+            {
+                var metric = (Metric)Model.Rules[i].Metric;
+                <tr>
+                    <!-- Scope -->
+                    <td>
+                        <select name="Rules[@i].Scope" class="form-select form-select-sm __scope">
+                            <option value="@((short)Scope.Party)" selected="@(Model.Rules[i].Scope == (short)Scope.Party)">Party</option>
+                            <option value="@((short)Scope.Character)" selected="@(Model.Rules[i].Scope == (short)Scope.Character)">Character</option>
+                        </select>
+                    </td>
+
+                    <!-- Metric -->
+                    <td>
+                        <select name="Rules[@i].Metric" class="form-select form-select-sm __metric">
+                            <option value="@((short)Metric.PartyElement)" selected="@(metric == Metric.PartyElement)">PartyElement</option>
+                            <option value="@((short)Metric.PartyFaction)" selected="@(metric == Metric.PartyFaction)">PartyFaction</option>
+                            <option value="@((short)Metric.CharacterItemTag)" selected="@(metric == Metric.CharacterItemTag)">CharacterItemTag</option>
+                        </select>
+                    </td>
+
+                    <!-- Ref / Tag -->
+                    <td>
+                        <div class="__ref">
+                            @if (metric == Metric.CharacterItemTag)
+                            {
+                                <input type="hidden" name="Rules[@i].RefId" value="0" />
+                                <input type="text" class="form-control form-control-sm __tag-input" placeholder="태그코드 (예: dragon)" />
+                            }
+                            else if (metric == Metric.PartyFaction)
+                            {
+                                <select name="Rules[@i].RefId" class="form-select form-select-sm">
+                                    @foreach (var f in Model.Factions)
+                                    {
+                                        <option value="@f.Id" selected="@(Model.Rules[i].RefId == f.Id)">@f.Name</option>
+                                    }
+                                </select>
+                            }
+                            else
+                            {
+                                <select name="Rules[@i].RefId" class="form-select form-select-sm">
+                                    @foreach (var e in Model.Elements)
+                                    {
+                                        <option value="@e.Id" selected="@(Model.Rules[i].RefId == e.Id)">@e.Name</option>
+                                    }
+                                </select>
+                            }
+                        </div>
+                    </td>
+
+                    <!-- RequiredCnt -->
+                    <td>
+                        <input name="Rules[@i].RequiredCnt" class="form-control form-control-sm" type="number" min="1" value="@Model.Rules[i].RequiredCnt" />
+                    </td>
+
+                    <!-- Extra -->
+                    <td>
+                        @{
+                            var extra = string.IsNullOrWhiteSpace(Model.Rules[i].ExtraJson)
+                            ? (metric == Metric.CharacterItemTag ? "{ \"tag\": \"\" }" : "")
+                            : Model.Rules[i].ExtraJson;
+                        }
+                        <textarea name="Rules[@i].ExtraJson" rows="1" class="form-control form-control-sm font-monospace">@extra</textarea>
+                    </td>
+
+                    <td>
+                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="removeRow(this)">-</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button type="button" class="btn btn-outline-primary btn-sm" onclick="addRule()">+ Add Rule</button>
+    <span asp-validation-for="Rules" class="text-danger"></span>
+
+    <div class="mt-4 d-flex gap-2">
+        <button class="btn btn-primary" type="submit">Save</button>
+        <a asp-action="Index" class="btn btn-secondary">Back</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // ===== 공통 =====
+        document.addEventListener('change', function (e) {
+            if (e.target && e.target.name === '__icon_pick') {
+                const val = parseInt(e.target.value);
+                const hidden = document.querySelector('input[name="IconId"]');
+                if (hidden) hidden.value = isNaN(val) ? "" : String(val);
+            }
+        });
+                function removeRow(btn) { btn.closest('tr').remove(); }
+
+                // ===== 메인 Effect Mods =====
+        function addMod() {
+            const tbody = document.querySelector('#tblEffectMods tbody');
+            tbody.insertAdjacentHTML('beforeend', `
+            <tr>
+                      <td>
+                        <select class="form-select form-select-sm __eff-stat">
+        @foreach (var st in Model.StatTypes)
+        {
+            <text><option value="@st.Code">@st.Name (@st.Code)</option></text>
+        }
+                        </select>
+                      </td>
+                      <td>
+                <select class="form-select form-select-sm __eff-op">
+                          <option value="0">고정(+)</option>
+                  <option value="1">퍼센트(+%)</option>
+                  <option value="2">계수(×)</option>
+                  <option value="3">설정(=)</option>
+                </select>
+                      </td>
+                      <td><input type="number" step="0.01" class="form-control form-control-sm __eff-val" value="0"/></td>
+                      <td><button type="button" class="btn btn-outline-danger btn-sm" onclick="removeRow(this)">-</button></td>
+                    </tr>`);
+                }
+
+                // ===== Bonus 행 추가 =====
+                function addBonus() {
+            const tbody = document.querySelector('#tblBonuses tbody');
+                    const idx = tbody.querySelectorAll('tr').length;
+            tbody.insertAdjacentHTML('beforeend', `
+            <tr>
+              <td><input name="Bonuses[${idx}].Threshold" class="form-control form-control-sm"/></td>
+              <td class="d-none"><textarea name="Bonuses[${idx}].EffectJson" class="__bonus-json"></textarea></td>
+                      <td>
+                        <select class="form-select form-select-sm __bonus-stat">
+        @foreach (var st in Model.StatTypes)
+        {
+            <text><option value="@st.Code">@st.Name (@st.Code)</option></text>
+        }
+                        </select>
+                      </td>
+              <td>
+                    <select class="form-select form-select-sm __bonus-op">
+                          <option value="0">고정(+)</option>
+                          <option value="1">퍼센트(+%)</option>
+                          <option value="2">계수(×)</option>
+                          <option value="3">설정(=)</option>
+                        </select>
+                      </td>
+                      <td><input type="number" step="0.01" class="form-control form-control-sm __bonus-val" value="0"/></td>
+                      <td><input name="Bonuses[${idx}].Note" class="form-control form-control-sm"/></td>
+                      <td><button type="button" class="btn btn-outline-danger btn-sm" onclick="removeRow(this)">-</button></td>
+                    </tr>`);
+                }
+
+                // ===== Rules =====
+                // 서버에서 넘어온 목록
+                const elements = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                Model.Elements.Select(e => new { id = e.Id, name = e.Name })));
+                const factions = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                Model.Factions.Select(f => new { id = f.Id, name = f.Name })));
+
+                // enum 숫자 매핑
+                const Scope  = { Party: 0, Character: 1 };
+                const Metric = { PartyElement: 0, PartyFaction: 1, CharacterItemTag: 2 };
+
+                function renderRefArea(tr) {
+                    const metric = parseInt(tr.querySelector('.__metric').value, 10);
+                    const refDiv = tr.querySelector('div.__ref');
+                    const refName = (tr.querySelector('select[name$=".RefId"]') || tr.querySelector('input[name$=".RefId"]'))?.getAttribute('name') || 'Rules[0].RefId';
+
+                    if (metric === Metric.CharacterItemTag) {
+                        refDiv.innerHTML = `
+                            <input type="hidden" name="${refName}" value="0" />
+                            <input type="text" class="form-control form-control-sm __tag-input" placeholder="태그코드 (예: dragon)" />`;
+                        return;
+                    }
+
+                    const src = (metric === Metric.PartyFaction) ? factions : elements;
+                    const options = src.map(x => `<option value="${x.id}">${x.name}</option>`).join('');
+                    refDiv.innerHTML = `<select class="form-select form-select-sm" name="${refName}">${options}</select>`;
+                }
+
+                function enforceScopeMetric(tr) {
+                    const scopeSel = tr.querySelector('.__scope');
+                    const metricSel = tr.querySelector('.__metric');
+                    const scope = parseInt(scopeSel.value, 10);
+
+                    // Party -> PartyElement/PartyFaction만, Character -> CharacterItemTag만
+                    [...metricSel.options].forEach(opt => {
+                        const v = parseInt(opt.value, 10);
+                        opt.disabled = (scope === Scope.Party) ? (v === Metric.CharacterItemTag)
+                                                               : (v !== Metric.CharacterItemTag);
+                    });
+
+                    if (metricSel.options[metricSel.selectedIndex].disabled) {
+                        metricSel.value = (scope === Scope.Party) ? String(Metric.PartyElement)
+                                                                  : String(Metric.CharacterItemTag);
+                    }
+                }
+
+                function updateRuleRow(tr) {
+                    enforceScopeMetric(tr);
+                    renderRefArea(tr);
+                }
+
+                // 초기 Rule 행들 보정
+                document.querySelectorAll('#tblRules tbody tr').forEach(updateRuleRow);
+
+                document.addEventListener('change', e => {
+                    if (!e.target.closest('#tblRules')) return;
+                    if (!e.target.classList.contains('__scope') && !e.target.classList.contains('__metric')) return;
+                    const tr = e.target.closest('tr');
+                    updateRuleRow(tr);
+                });
+
+                function addRule() {
+                    const tbody = document.querySelector('#tblRules tbody');
+                    const idx = tbody.querySelectorAll('tr').length;
+
+                    tbody.insertAdjacentHTML('beforeend', `
+                    <tr>
+                      <td>
+                        <select name="Rules[${idx}].Scope" class="form-select form-select-sm __scope">
+                          <option value="${Scope.Party}">Party</option>
+                          <option value="${Scope.Character}">Character</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select name="Rules[${idx}].Metric" class="form-select form-select-sm __metric">
+                          <option value="${Metric.PartyElement}">PartyElement</option>
+                          <option value="${Metric.PartyFaction}">PartyFaction</option>
+                          <option value="${Metric.CharacterItemTag}">CharacterItemTag</option>
+                        </select>
+                      </td>
+                      <td>
+                        <div class="__ref">
+                          <select name="Rules[${idx}].RefId" class="form-select form-select-sm">
+                            ${elements.map(x => `<option value="${x.id}">${x.name}</option>`).join('')}
+                          </select>
+                        </div>
+                      </td>
+                      <td><input name="Rules[${idx}].RequiredCnt" class="form-control form-control-sm" type="number" min="1" value="1"/></td>
+                      <td><textarea name="Rules[${idx}].ExtraJson" rows="1" class="form-control form-control-sm font-monospace"></textarea></td>
+                      <td><button type="button" class="btn btn-outline-danger btn-sm" onclick="removeRow(this)">-</button></td>
+                    </tr>`);
+
+                    updateRuleRow(tbody.lastElementChild);
+                }
+
+                // ===== 초기값 세팅 (Effect / Bonuses 파싱) =====
+                (function initFromJson() {
+                    // 1) EffectJson -> modifiers 로우 구성
+                    try {
+                        const effectText = document.querySelector('textarea[name="EffectJson"]').value || '';
+                        const obj = JSON.parse(effectText);
+                        const mods = Array.isArray(obj?.modifiers) ? obj.modifiers : [];
+
+                        if (mods.length > 0) {
+                            const tbody = document.querySelector('#tblEffectMods tbody');
+                            tbody.innerHTML = ''; // 템플릿 제거
+                            for (const m of mods) {
+                                const opNum =
+                                    m.op === 'add_pct' ? 1 :
+                                    m.op === 'mul'     ? 2 :
+                                    m.op === 'set'     ? 3 : 0; // add_flat
+                                tbody.insertAdjacentHTML('beforeend', `
+                                  <tr>
+                                    <td>
+                                      <select class="form-select form-select-sm __eff-stat">
+        @foreach (var st in Model.StatTypes)
+        {
+            <text><option value="@st.Code">@st.Name (@st.Code)</option></text>
+        }
+                                      </select>
+                                    </td>
+                                    <td>
+                                      <select class="form-select form-select-sm __eff-op">
+                                        <option value="0">고정(+)</option>
+                                        <option value="1">퍼센트(+%)</option>
+                                        <option value="2">계수(×)</option>
+                                        <option value="3">설정(=)</option>
+                                      </select>
+                                    </td>
+                                    <td><input type="number" step="0.01" class="form-control form-control-sm __eff-val" value="${Number(m.value) || 0}"/></td>
+                                    <td><button type="button" class="btn btn-outline-danger btn-sm" onclick="removeRow(this)">-</button></td>
+                                  </tr>`);
+                                const tr = tbody.lastElementChild;
+                                tr.querySelector('.__eff-stat').value = m.stat ?? '';
+                                tr.querySelector('.__eff-op').value = String(opNum);
+                            }
+                        }
+                    } catch { /* 무시하고 템플릿 1행 유지 */ }
+
+                    // 2) 각 Bonus의 EffectJson -> 단일 modifier로 파싱해서 UI 채움
+                    document.querySelectorAll('#tblBonuses tbody tr').forEach(tr => {
+                        try {
+                            const ta = tr.querySelector('textarea.__bonus-json');
+                            if (!ta) return;
+                            const text = ta.value || '';
+                            const obj = JSON.parse(text);
+                            const m = (Array.isArray(obj?.modifiers) && obj.modifiers.length > 0) ? obj.modifiers[0] : null;
+                            if (!m) return;
+                            const opNum =
+                                m.op === 'add_pct' ? 1 :
+                                m.op === 'mul'     ? 2 :
+                                m.op === 'set'     ? 3 : 0;
+                            tr.querySelector('.__bonus-stat').value = m.stat ?? '';
+                            tr.querySelector('.__bonus-op').value = String(opNum);
+                            tr.querySelector('.__bonus-val').value = Number(m.value) || 0;
+                        } catch { /* skip */ }
+                    });
+                })();
+
+                // ===== 제출 직전 직렬화 =====
+                document.addEventListener('submit', function (e) {
+                    const form = e.target.closest('form');
+                    if (!form) return;
+
+                    // 메인 Effect -> EffectJson
+                    const modRows = [...form.querySelectorAll('#tblEffectMods tbody tr')];
+                    const mods = modRows.map(r => {
+                        const stat = r.querySelector('.__eff-stat').value;
+                        const opNum = parseInt(r.querySelector('.__eff-op').value);
+                        const val = parseFloat(r.querySelector('.__eff-val').value);
+                        const opCode = ({ 0: 'add_flat', 1: 'add_pct', 2: 'mul', 3: 'set' })[opNum] ?? 'add_flat';
+                        return { stat: stat, op: opCode, value: isNaN(val) ? 0 : val };
+                    });
+                    const effectTa = form.querySelector('textarea[name="EffectJson"]');
+                    if (effectTa) effectTa.value = JSON.stringify({ modifiers: mods });
+
+                    // 보너스 -> Bonuses[i].EffectJson
+                    const bonusRows = [...form.querySelectorAll('#tblBonuses tbody tr')];
+                    bonusRows.forEach((r) => {
+                        const stat = r.querySelector('.__bonus-stat').value;
+                        const opNum = parseInt(r.querySelector('.__bonus-op').value);
+                        const val = parseFloat(r.querySelector('.__bonus-val').value);
+                        const opCode = ({ 0: 'add_flat', 1: 'add_pct', 2: 'mul', 3: 'set' })[opNum] ?? 'add_flat';
+                        const json = JSON.stringify({ modifiers: [{ stat: stat, op: opCode, value: isNaN(val) ? 0 : val }] });
+                        const ta = r.querySelector('textarea.__bonus-json');
+                        if (ta) ta.value = json;
+                    });
+
+                    // Rule 중 CharacterItemTag의 ExtraJson 자동 구성(tag 입력 반영)
+                    document.querySelectorAll('#tblRules tbody tr').forEach(tr => {
+                        const metricSel = tr.querySelector('.__metric');
+                        if (!metricSel) return;
+                        const metric = parseInt(metricSel.value, 10);
+                        if (metric === Metric.CharacterItemTag) {
+                            const input = tr.querySelector('.__tag-input');
+                            const extra = tr.querySelector('textarea[name$=".ExtraJson"]');
+                            if (extra) {
+                                const tag = (input?.value ?? '').trim();
+                                extra.value = JSON.stringify({ tag: tag });
+                            }
+                            const ref = tr.querySelector('input[name$=".RefId"]');
+                            if (ref) ref.value = '0';
+                        }
+                    });
+                }, true);
+
+                // 전역 노출
+                window.addMod = addMod;
+                window.addBonus = addBonus;
+                window.addRule = addRule;
+                window.removeRow = removeRow;
+    </script>
+}

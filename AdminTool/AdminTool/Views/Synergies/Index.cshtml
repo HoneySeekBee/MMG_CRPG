@@ -1,0 +1,98 @@
+﻿@using Application.Synergy
+@model IReadOnlyList<SynergyDto>
+
+@{
+    ViewData["Title"] = "Synergies";
+    // Stacking 숫자 → 레이블 매핑
+    string StackingLabel(short s) => s switch
+    {
+        1 => "Additive",
+        2 => "Multiplicative",
+        3 => "HighestOnly",
+        _ => "None"
+    };
+    string Period(DateTime? s, DateTime? e)
+        => (s.HasValue || e.HasValue)
+           ? $"{(s.HasValue ? s.Value.ToString("yyyy-MM-dd HH:mm") : "~")} ~ {(e.HasValue ? e.Value.ToString("yyyy-MM-dd HH:mm") : "~")}"
+           : "-";
+}
+
+<div class="d-flex align-items-center mb-3">
+    <h2 class="me-auto mb-0">Synergies</h2>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i> Create
+    </a>
+</div>
+
+@if (TempData["ok"] is string ok)
+{
+    <div class="alert alert-success">@ok</div>
+}
+@if (TempData["err"] is string err)
+{
+    <div class="alert alert-danger">@err</div>
+}
+
+@if (Model == null || Model.Count == 0)
+{
+    <div class="alert alert-info">등록된 시너지가 없습니다.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 80px;">ID</th>
+                    <th>Key / Name</th>
+                    <th style="width: 110px;">Active</th>
+                    <th style="width: 280px;">Period</th>
+                    <th style="width: 140px;">Stacking</th>
+                    <th style="width: 100px;">Bonuses</th>
+                    <th style="width: 100px;">Rules</th>
+                    <th style="width: 100px;">Targets</th>
+                    <th style="width: 180px;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var s in Model.OrderBy(m => m.Key))
+                {
+                    <tr>
+                        <td>@s.SynergyId</td>
+                        <td>
+                            <div class="fw-semibold">@s.Key</div>
+                            <div class="text-muted small">@s.Name</div>
+                        </td>
+                        <td>
+                            @if (s.IsActive)
+                            {
+                                <span class="badge bg-success">Active</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Inactive</span>
+                            }
+                        </td>
+                        <td class="text-nowrap">@Period(s.StartAt, s.EndAt)</td>
+                        <td>@StackingLabel(s.Stacking)</td>
+                        <td>@s.Bonuses.Count</td>
+                        <td>@s.Rules.Count</td>
+                        <td class="text-end">
+                            <a asp-action="Edit" asp-route-id="@s.SynergyId" class="btn btn-sm btn-outline-primary me-1">
+                                Edit
+                            </a>
+                            <a asp-action="Details" asp-route-id="@s.SynergyId" class="btn btn-sm btn-outline-secondary me-1">
+                                Details
+                            </a>
+                            <form asp-action="Delete" asp-route-id="@s.SynergyId" method="post" class="d-inline"
+                                  onsubmit="return confirm('삭제하시겠습니까?');">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

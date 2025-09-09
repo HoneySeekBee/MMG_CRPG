@@ -43,6 +43,11 @@ namespace Infrastructure.Persistence
         public DbSet<GachaPool> GachaPools => Set<GachaPool>();
         public DbSet<GachaPoolEntry> GachaPoolEntries => Set<GachaPoolEntry>();
 
+        public DbSet<Synergy> Synergies => Set<Synergy>();
+        public DbSet<SynergyRule> SynergyRules => Set<SynergyRule>();
+        public DbSet<SynergyBonus> SynergyBonuses => Set<SynergyBonus>();
+        //public DbSet<SynergyTarget> SynergyTargets => Set<SynergyTarget>();
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -80,6 +85,8 @@ namespace Infrastructure.Persistence
             Modeling_Currency(modelBuilder);
             Modeling_GatchaBanner(modelBuilder);
             Modeling_GachaPool(modelBuilder);
+
+            Modeling_Synergy(modelBuilder);
         }
 
         private void Modeling_Icon(ModelBuilder modelBuilder)
@@ -729,5 +736,88 @@ namespace Infrastructure.Persistence
                 e.HasCheckConstraint("ck_gpe_weight_pos", "\"Weight\" > 0");
             });
         }
+        private void Modeling_Synergy(ModelBuilder b)
+        {
+            b.Entity<Synergy>(ConfigureSynergy);
+            b.Entity<SynergyBonus>(ConfigureBonus);
+            b.Entity<SynergyRule>(ConfigureRule);
+            //b.Entity<SynergyTarget>(ConfigureTarget);
+        }
+
+        private static void ConfigureSynergy(EntityTypeBuilder<Synergy> e)
+        {
+            e.ToTable("Synergy");
+            e.HasKey(x => x.SynergyId);
+            e.Property(x => x.SynergyId).HasColumnName("SynergyId");
+
+            e.Property(x => x.Key).IsRequired();
+            e.HasIndex(x => x.Key).IsUnique();
+
+            e.Property(x => x.Name).IsRequired();
+            e.Property(x => x.Description).IsRequired();
+
+            e.Property(x => x.IconId).HasColumnName("IconId");
+
+            e.Property(x => x.Effect).HasColumnName("Effect"); // jsonb ← JsonDocument (Npgsql가 자동 매핑)
+            e.Property(x => x.Stacking).HasConversion<short>(); // smallint
+
+            e.Property(x => x.IsActive).HasColumnName("IsActive");
+            e.Property(x => x.StartAt).HasColumnName("StartAt");
+            e.Property(x => x.EndAt).HasColumnName("EndAt");
+
+            // 관계
+            e.HasMany(x => x.Bonuses)
+             .WithOne(x => x.Synergy!)
+             .HasForeignKey(x => x.SynergyId)
+             .OnDelete(DeleteBehavior.Cascade);
+
+            e.HasMany(x => x.Rules)
+             .WithOne(x => x.Synergy!)
+             .HasForeignKey(x => x.SynergyId)
+             .OnDelete(DeleteBehavior.Cascade);
+
+            //e.HasMany(x => x.Targets)
+            // .WithOne(x => x.Synergy!)
+            // .HasForeignKey(x => x.SynergyId)
+            // .OnDelete(DeleteBehavior.Cascade);
+        }
+
+        private static void ConfigureBonus(EntityTypeBuilder<SynergyBonus> e)
+        {
+            e.ToTable("SynergyBonus");
+            e.HasKey(x => new { x.SynergyId, x.Threshold }); // 복합 PK
+            e.Property(x => x.SynergyId).HasColumnName("SynergyId");
+            e.Property(x => x.Threshold).HasColumnName("Threshold");
+            e.Property(x => x.Effect).HasColumnName("Effect"); // jsonb
+            e.Property(x => x.Note).HasColumnName("Note");
+        }
+
+        private static void ConfigureRule(EntityTypeBuilder<SynergyRule> e)
+        {
+            e.ToTable("SynergyRule");
+            e.HasKey(x => new { x.SynergyId, x.Scope, x.Metric, x.RefId }); // 복합 PK
+
+            e.Property(x => x.SynergyId).HasColumnName("SynergyId");
+            e.Property(x => x.Scope).HasConversion<short>().HasColumnName("Scope");
+            e.Property(x => x.Metric).HasConversion<short>().HasColumnName("Metric");
+            e.Property(x => x.RefId).HasColumnName("RefId");
+            e.Property(x => x.RequiredCnt).HasColumnName("RequiredCnt");
+            e.Property(x => x.Extra).HasColumnName("Extra"); // jsonb nullable
+
+            // 성능 인덱스(후보 조회)
+            e.HasIndex(x => new { x.Metric, x.RefId }).HasDatabaseName("ix_rule_metric_ref");
+        }
+
+        //private static void ConfigureTarget(EntityTypeBuilder<SynergyTarget> e)
+        //{
+        //    e.ToTable("SynergyTarget");
+        //    e.HasKey(x => new { x.SynergyId, x.TargetType, x.TargetId }); // 복합 PK
+
+        //    e.Property(x => x.SynergyId).HasColumnName("SynergyId");
+        //    e.Property(x => x.TargetType).HasConversion<short>().HasColumnName("TargetType");
+        //    e.Property(x => x.TargetId).HasColumnName("TargetId");
+
+        //    e.HasIndex(x => new { x.TargetType, x.TargetId }).HasDatabaseName("ix_target_type_id");
+        //}
     }
 }
