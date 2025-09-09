@@ -28,6 +28,7 @@ using Microsoft.IdentityModel.Tokens;
 using Npgsql;
 using System.Security.Claims;
 using System.Text;
+using Application.Stages;
 
 namespace WebServer
 {
@@ -150,6 +151,13 @@ namespace WebServer
 
             builder.Services.AddScoped<IGachaPoolRepository, GachaPoolRepository>();
             builder.Services.AddScoped<IGachaPoolService, GachaPoolService>();
+
+            // 스테이지 관련
+            builder.Services.AddScoped<IStagesRepository, EfStagesRepository>();
+            builder.Services.AddScoped<IStageQueryRepository, EfStageQueryRepository>();
+            builder.Services.AddScoped<IStagesService, StagesService>();
+
+            builder.Services.AddScoped<ISecurityEventSink, SecurityEventSink>();
 
             // 시너지 관련 
             builder.Services.AddScoped<ISynergyRepository, SynergyRepository>();

@@ -1,0 +1,538 @@
+﻿@model AdminTool.Models.StageFormVm
+@{
+    var isEdit = Model.Id.HasValue;
+    var action = isEdit ? "Edit" : "Create";
+    ViewData["Title"] = isEdit ? "Edit Stage" : "Create Stage";
+    Layout = "_Layout";
+}
+
+<h2 class="mb-3">@ViewData["Title"]</h2>
+
+<form asp-action="@action" asp-controller="Stages" method="post" id="stageForm">
+    @Html.AntiForgeryToken()
+    @if (isEdit)
+    {
+        <input type="hidden" asp-for="Id" />
+    }
+
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+    <ul class="nav nav-tabs" id="stageTabs" role="tablist">
+        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#pane-basic" type="button">Basic</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#pane-waves" type="button">Waves</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#pane-drops" type="button">Drops</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#pane-first" type="button">First Clear</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#pane-req" type="button">Requirements</button></li>
+    </ul>
+
+    <div class="tab-content border border-top-0 p-3">
+        <!-- BASIC -->
+        <div class="tab-pane fade show active" id="pane-basic" role="tabpanel">
+            <div class="row g-3">
+                <div class="col-md-2">
+                    <label asp-for="Chapter" class="form-label"></label>
+                    <select asp-for="Chapter" class="form-select" asp-items="Model.ChapterOptions"></select>
+                    <span asp-validation-for="Chapter" class="text-danger"></span>
+                </div>
+                <div class="col-md-2">
+                    <label asp-for="Order" class="form-label"></label>
+                    <input asp-for="Order" class="form-control" />
+                    <span asp-validation-for="Order" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Name" class="form-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="col-md-2">
+                    <label asp-for="RecommendedPower" class="form-label"></label>
+                    <input asp-for="RecommendedPower" class="form-control" />
+                    <span asp-validation-for="RecommendedPower" class="text-danger"></span>
+                </div>
+                <div class="col-md-2">
+                    <label asp-for="StaminaCost" class="form-label"></label>
+                    <input asp-for="StaminaCost" class="form-control" />
+                    <span asp-validation-for="StaminaCost" class="text-danger"></span>
+                </div>
+                <div class="col-md-2 form-check mt-2">
+                    <input asp-for="IsActive" class="form-check-input" />
+                    <label asp-for="IsActive" class="form-check-label"></label>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-3">
+                <button type="button" class="btn btn-primary" onclick="goNext('#pane-waves', validateBasic)">Next</button>
+            </div>
+        </div>
+
+        <!-- WAVES -->
+        <div class="tab-pane fade" id="pane-waves" role="tabpanel">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="mb-0">Waves</h5>
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addWave()">+ Add Wave</button>
+            </div>
+
+            <div id="waves-container" class="vstack gap-3">
+                @for (var i = 0; i < Model.Waves.Count; i++)
+                {
+                    <div class="card wave-card" data-wave-index="@i">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>Wave</strong>
+                                <input name="Waves[@i].Index" value="@Model.Waves[i].Index" class="form-control d-inline-block" style="width:90px" />
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeWave(this)">Remove</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="fw-semibold">Enemies</span>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="addEnemy(this)">+ Add Enemy</button>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-sm align-middle mb-0 enemy-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:40%;">Character</th>
+                                            <th style="width:15%;">Level</th>
+                                            <th style="width:15%;">Slot</th>
+                                            <th>AI Profile</th>
+                                            <th style="width:90px;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (var j = 0; j < Model.Waves[i].Enemies.Count; j++)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <select name="Waves[@i].Enemies[@j].EnemyCharacterId" class="form-select">
+                                                        @foreach (var opt in Model.EnemyOptions)
+                                                        {
+                                                            <option value="@opt.Value" selected="@(opt.Value == Model.Waves[i].Enemies[j].EnemyCharacterId.ToString())">@opt.Text</option>
+                                                        }
+                                                    </select>
+                                                </td>
+                                                <td><input name="Waves[@i].Enemies[@j].Level" value="@Model.Waves[i].Enemies[j].Level" class="form-control" /></td>
+                                                <td>
+                                                    <select name="Waves[@i].Enemies[@j].Slot" class="form-select">
+                                                        @for (short s = 1; s <= 9; s++)
+                                                        {
+                                                            <option value="@s" selected="@(s == Model.Waves[i].Enemies[j].Slot)">@s</option>
+                                                        }
+                                                    </select>
+                                                </td>
+                                                <td><input name="Waves[@i].Enemies[@j].AiProfile" value="@Model.Waves[i].Enemies[j].AiProfile" class="form-control" /></td>
+                                                <td class="text-end">
+                                                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeRow(this)">Del</button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="d-flex justify-content-between mt-3">
+                <button type="button" class="btn btn-outline-secondary" onclick="goPrev('#pane-basic')">Prev</button>
+                <button type="button" class="btn btn-primary" onclick="goNext('#pane-drops', validateWaves)">Next</button>
+            </div>
+        </div>
+
+        <!-- DROPS -->
+        <div class="tab-pane fade" id="pane-drops" role="tabpanel">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="mb-0">Drops</h5>
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addDrop()">+ Add Drop</button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-sm align-middle" id="drops-table">
+                    <thead>
+                        <tr>
+                            <th style="width:40%;">Item</th>
+                            <th style="width:15%;">Rate (0~1)</th>
+                            <th style="width:15%;">Min</th>
+                            <th style="width:15%;">Max</th>
+                            <th style="width:10%;">First Only</th>
+                            <th style="width:90px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (var i = 0; i < Model.Drops.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    <select name="Drops[@i].ItemId" class="form-select">
+                                        @foreach (var opt in Model.ItemOptions)
+                                        {
+                                            <option value="@opt.Value" selected="@(opt.Value == Model.Drops[i].ItemId.ToString())">@opt.Text</option>
+                                        }
+                                    </select>
+                                </td>
+                                <td><input name="Drops[@i].Rate" value="@Model.Drops[i].Rate" class="form-control" /></td>
+                                <td><input name="Drops[@i].MinQty" value="@Model.Drops[i].MinQty" class="form-control" /></td>
+                                <td><input name="Drops[@i].MaxQty" value="@Model.Drops[i].MaxQty" class="form-control" /></td>
+                                <td class="text-center">
+                                    <input class="form-check-input" type="checkbox" name="Drops[@i].FirstClearOnly" @(Model.Drops[i].FirstClearOnly ? "checked" : "") />
+                                </td>
+                                <td class="text-end">
+                                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeRow(this)">Del</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-2">
+                <small class="text-muted">* 드롭 확률 합이 1.0을 넘지 않도록 주의하세요.</small>
+            </div>
+
+            <div class="d-flex justify-content-between mt-3">
+                <button type="button" class="btn btn-outline-secondary" onclick="goPrev('#pane-waves')">Prev</button>
+                <button type="button" class="btn btn-primary" onclick="goNext('#pane-first', validateDrops)">Next</button>
+            </div>
+        </div>
+
+        <!-- FIRST CLEAR -->
+        <div class="tab-pane fade" id="pane-first" role="tabpanel">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="mb-0">First Clear Rewards</h5>
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addFirstReward()">+ Add Reward</button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-sm align-middle" id="first-table">
+                    <thead>
+                        <tr>
+                            <th style="width:60%;">Item</th>
+                            <th style="width:20%;">Qty</th>
+                            <th style="width:90px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (var i = 0; i < Model.FirstRewards.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    <select name="FirstRewards[@i].ItemId" class="form-select">
+                                        @foreach (var opt in Model.ItemOptions)
+                                        {
+                                            <option value="@opt.Value" selected="@(opt.Value == Model.FirstRewards[i].ItemId.ToString())">@opt.Text</option>
+                                        }
+                                    </select>
+                                </td>
+                                <td><input name="FirstRewards[@i].Qty" value="@Model.FirstRewards[i].Qty" class="form-control" /></td>
+                                <td class="text-end">
+                                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeRow(this)">Del</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="d-flex justify-content-between mt-3">
+                <button type="button" class="btn btn-outline-secondary" onclick="goPrev('#pane-drops')">Prev</button>
+                <button type="button" class="btn btn-primary" onclick="goNext('#pane-req', null)">Next</button>
+            </div>
+        </div>
+
+        <!-- REQUIREMENTS (최종 제출 탭) -->
+        <div class="tab-pane fade" id="pane-req" role="tabpanel">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="mb-0">Requirements</h5>
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addRequirement()">+ Add Requirement</button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-sm align-middle" id="req-table">
+                    <thead>
+                        <tr>
+                            <th style="width:60%;">Required Stage</th>
+                            <th style="width:20%;">Min Account Lv</th>
+                            <th style="width:90px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (var i = 0; i < Model.Requirements.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    <select name="Requirements[@i].RequiredStageId" class="form-select">
+                                        <option value="">(None)</option>
+                                        @foreach (var opt in Model.StageOptions)
+                                        {
+                                            <option value="@opt.Value" selected="@(opt.Value == Model.Requirements[i].RequiredStageId?.ToString())">@opt.Text</option>
+                                        }
+                                    </select>
+                                </td>
+                                <td><input name="Requirements[@i].MinAccountLevel" value="@Model.Requirements[i].MinAccountLevel" class="form-control" /></td>
+                                <td class="text-end">
+                                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeRow(this)">Del</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="d-flex justify-content-between mt-3">
+                <button type="button" class="btn btn-outline-secondary" onclick="goPrev('#pane-first')">Prev</button>
+                <button type="submit" class="btn btn-success">@((isEdit ? "Save" : "Create"))</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-3 d-flex gap-2">
+        <a href="~/stages" class="btn btn-outline-secondary">Back</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // ───── 탭 네비게이션 ─────
+        function goNext(targetPaneSelector, validator) {
+            if (typeof validator === 'function' && !validator()) return;
+            const tabBtn = document.querySelector(`[data-bs-target="${targetPaneSelector}"]`);
+            if (tabBtn) new bootstrap.Tab(tabBtn).show();
+        }
+        function goPrev(targetPaneSelector) {
+            const tabBtn = document.querySelector(`[data-bs-target="${targetPaneSelector}"]`);
+            if (tabBtn) new bootstrap.Tab(tabBtn).show();
+        }
+
+        // ───── Basic 검증 ─────
+        function validateBasic() {
+            const pane = document.querySelector('#pane-basic');
+            const inputs = pane.querySelectorAll('input,select,textarea');
+            for (const el of inputs) {
+                if (!el.checkValidity()) { el.reportValidity(); return false; }
+            }
+            return true;
+        }
+
+        // ───── Waves 검증 ─────
+        function validateWaves() {
+            const waves = document.querySelectorAll('.wave-card');
+            if (waves.length === 0) { alert('웨이브를 최소 1개 추가하세요.'); return false; }
+            for (const w of waves) {
+                const rows = w.querySelectorAll('.enemy-table tbody tr');
+                if (rows.length === 0) { alert('각 웨이브에 적을 최소 1명 추가하세요.'); return false; }
+                for (const tr of rows) {
+                    const level = tr.querySelector('input[name$=".Level"]');
+                    const slot = tr.querySelector('select[name$=".Slot"]');
+                    if (!level || !slot) continue;
+                    const lv = parseInt(level.value || '0');
+                    const s = parseInt(slot.value || '0');
+                    if (lv <= 0) { alert('적 레벨을 확인하세요.'); return false; }
+                    if (s < 1 || s > 9) { alert('슬롯은 1~9 범위입니다.'); return false; }
+                }
+            }
+            return true;
+        }
+
+        // ───── Drops 검증 ─────
+        function validateDrops() {
+            let sum = 0;
+            document.querySelectorAll('#drops-table tbody input[name$=".Rate"]').forEach(i => {
+                const v = parseFloat(i.value?.toString().replace(',', '.') || '0');
+                if (!isNaN(v)) sum += v;
+            });
+            if (sum > 1.0 + 1e-9) {
+                alert(`드롭 확률 합이 1.0을 초과했습니다. (현재: ${sum.toFixed(3)})`);
+                return false;
+            }
+            const rows = document.querySelectorAll('#drops-table tbody tr');
+            for (const tr of rows) {
+                const min = parseInt((tr.querySelector('input[name$=".MinQty"]')?.value) || '0');
+                const max = parseInt((tr.querySelector('input[name$=".MaxQty"]')?.value) || '0');
+                if (max < min) { alert('드롭 수량의 최대값은 최소값보다 크거나 같아야 합니다.'); return false; }
+            }
+            return true;
+        }
+
+        // ───── Waves/Enemies 동적 행 ─────
+        function addWave() {
+            const container = document.getElementById('waves-container');
+            const waveIdx = container.querySelectorAll('.wave-card').length;
+            const card = document.createElement('div');
+            card.className = 'card wave-card';
+            card.innerHTML = `
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>Wave</strong>
+                                <input name="Waves[${waveIdx}].Index" value="${waveIdx + 1}" class="form-control d-inline-block" style="width:90px" />
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeWave(this)">Remove</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="fw-semibold">Enemies</span>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="addEnemy(this)">+ Add Enemy</button>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-sm align-middle enemy-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:40%;">Character</th>
+                                            <th style="width:15%;">Level</th>
+                                            <th style="width:15%;">Slot</th>
+                                            <th>AI Profile</th>
+                                            <th style="width:90px;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>${renderEnemySelect(`Waves[${waveIdx}].Enemies[0].EnemyCharacterId`)}</td>
+                                            <td><input name="Waves[${waveIdx}].Enemies[0].Level" value="1" class="form-control" /></td>
+                                            <td>${renderSlotSelect(`Waves[${waveIdx}].Enemies[0].Slot`, 1)}</td>
+                                            <td><input name="Waves[${waveIdx}].Enemies[0].AiProfile" class="form-control" /></td>
+                                            <td class="text-end">
+                                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeRow(this)">Del</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>`;
+            container.appendChild(card);
+        }
+        function removeWave(btn) {
+            const card = btn.closest('.wave-card');
+            card?.remove();
+            renumberWaves();
+        }
+        function addEnemy(btn) {
+            const table = btn.closest('.card-body').querySelector('.enemy-table tbody');
+            const waveCard = btn.closest('.wave-card');
+            const waveIdx = Array.from(document.querySelectorAll('.wave-card')).indexOf(waveCard);
+            const rowIdx = table.querySelectorAll('tr').length;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                        <td>${renderEnemySelect(`Waves[${waveIdx}].Enemies[${rowIdx}].EnemyCharacterId`)}</td>
+                        <td><input name="Waves[${waveIdx}].Enemies[${rowIdx}].Level" value="1" class="form-control" /></td>
+                        <td>${renderSlotSelect(`Waves[${waveIdx}].Enemies[${rowIdx}].Slot`, 1)}</td>
+                        <td><input name="Waves[${waveIdx}].Enemies[${rowIdx}].AiProfile" class="form-control" /></td>
+                        <td class="text-end">
+                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeRow(this)">Del</button>
+                        </td>`;
+            table.appendChild(tr);
+        }
+        function renumberWaves() {
+            document.querySelectorAll('.wave-card').forEach((card, w) => {
+                const idxInput = card.querySelector('input[name^="Waves["][name$="].Index"]');
+                if (idxInput) idxInput.name = `Waves[${w}].Index`;
+                const rows = card.querySelectorAll('.enemy-table tbody tr');
+                rows.forEach((tr, j) => {
+                    fixName(tr, /\Waves\[\d+\]\.Enemies\[\d+\]/g, `Waves[${w}].Enemies[${j}]`);
+                });
+            });
+        }
+
+        // ───── Drops / FirstClear / Requirements 동적 행 ─────
+        function addDrop() {
+            const body = document.querySelector('#drops-table tbody');
+            const i = body.querySelectorAll('tr').length;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                        <td>${renderItemSelect(`Drops[${i}].ItemId`)}</td>
+                        <td><input name="Drops[${i}].Rate" class="form-control" value="0" /></td>
+                        <td><input name="Drops[${i}].MinQty" class="form-control" value="0" /></td>
+                        <td><input name="Drops[${i}].MaxQty" class="form-control" value="1" /></td>
+                        <td class="text-center"><input type="checkbox" class="form-check-input" name="Drops[${i}].FirstClearOnly" /></td>
+                        <td class="text-end"><button type="button" class="btn btn-sm btn-outline-danger" onclick="removeRow(this)">Del</button></td>`;
+            body.appendChild(tr);
+        }
+        function addFirstReward() {
+            const body = document.querySelector('#first-table tbody');
+            const i = body.querySelectorAll('tr').length;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                        <td>${renderItemSelect(`FirstRewards[${i}].ItemId`)}</td>
+                        <td><input name="FirstRewards[${i}].Qty" class="form-control" value="1" /></td>
+                        <td class="text-end"><button type="button" class="btn btn-sm btn-outline-danger" onclick="removeRow(this)">Del</button></td>`;
+            body.appendChild(tr);
+        }
+        function addRequirement() {
+            const body = document.querySelector('#req-table tbody');
+            const i = body.querySelectorAll('tr').length;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                        <td>${renderStageSelect(`Requirements[${i}].RequiredStageId`, true)}</td>
+                        <td><input name="Requirements[${i}].MinAccountLevel" class="form-control" /></td>
+                        <td class="text-end"><button type="button" class="btn btn-sm btn-outline-danger" onclick="removeRow(this)">Del</button></td>`;
+            body.appendChild(tr);
+        }
+
+        // ───── 네임 리페어 & 공용 삭제 ─────
+        function removeRow(btn) {
+            const tr = btn.closest('tr');
+            const tableId = tr.closest('table').id;
+            tr.remove();
+            if (tableId === 'drops-table') renumberRows('#drops-table tbody', 'Drops');
+            if (tableId === 'first-table') renumberRows('#first-table tbody', 'FirstRewards');
+            if (tableId === 'req-table') renumberRows('#req-table tbody', 'Requirements');
+        }
+        function renumberRows(selector, prefix) {
+            document.querySelectorAll(`${selector} tr`).forEach((tr, i) => {
+                fixName(tr, new RegExp(`${prefix}\\[\\d+\\]`, 'g'), `${prefix}[${i}]`);
+            });
+        }
+        function fixName(root, regex, replacement) {
+            root.querySelectorAll('input,select,textarea').forEach(el => {
+                if (el.name) el.name = el.name.replace(regex, replacement);
+            });
+        }
+
+        // ───── 옵션 렌더링 데이터 (서버에서 전달된 SelectList → JSON) ─────
+        const enemyOptions = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+        Model.EnemyOptions.Select(o => new { value = o.Value, text = o.Text })
+        ));
+        const itemOptions = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+        Model.ItemOptions.Select(o => new { value = o.Value, text = o.Text })
+        ));
+        const stageOptions = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+        Model.StageOptions.Select(o => new { value = o.Value, text = o.Text })
+        ));
+
+        function renderEnemySelect(name) { return renderSelect(name, enemyOptions); }
+        function renderItemSelect(name) { return renderSelect(name, itemOptions); }
+        function renderStageSelect(name, allowEmpty) { return renderSelect(name, stageOptions, allowEmpty); }
+
+        function renderSelect(name, options, allowEmpty) {
+            let html = `<select name="${name}" class="form-select">`;
+            if (allowEmpty) html += `<option value="">(None)</option>`;
+            for (const o of options) {
+                html += `<option value="${o.value}">${escapeHtml(o.text)}</option>`;
+            }
+            html += `</select>`;
+            return html;
+        }
+        function renderSlotSelect(name, selected) {
+            let html = `<select name="${name}" class="form-select">`;
+            for (let s = 1; s <= 9; s++) {
+                html += `<option value="${s}" ${s === selected ? 'selected' : ''}>${s}</option>`;
+            }
+            html += `</select>`;
+            return html;
+        }
+        function escapeHtml(s) {
+            return String(s).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;');
+        }
+
+        // ───── 첫 에러가 있는 탭 자동 열기 ─────
+        (function openFirstErrorTab() {
+            const err = document.querySelector('.input-validation-error');
+            if (!err) return;
+            const pane = err.closest('.tab-pane');
+            if (!pane) return;
+            const target = '#' + pane.id;
+            const tabBtn = document.querySelector(`[data-bs-target="${target}"]`);
+            if (tabBtn) new bootstrap.Tab(tabBtn).show();
+        })();
+    </script>
+}
