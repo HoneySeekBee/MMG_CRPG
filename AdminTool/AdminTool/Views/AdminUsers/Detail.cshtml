@@ -1,0 +1,340 @@
+﻿@model UserDetailVm
+@{
+    ViewData["Title"] = "User Detail";
+}
+
+<style>
+    .page {
+        max-width: 1100px;
+        margin: 28px auto;
+        padding: 0 16px;
+        font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",Arial,"Apple SD Gothic Neo",sans-serif;
+    }
+
+    .title {
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 14px;
+    }
+
+    .alert {
+        padding: 10px 12px;
+        border-radius: 8px;
+        margin-bottom: 14px;
+    }
+
+        .alert.ok {
+            background: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .alert.err {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+    .grid {
+        display: grid;
+        grid-template-columns: 1.2fr .8fr;
+        gap: 16px;
+    }
+
+    .card {
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        background: #fff;
+        box-shadow: 0 6px 18px rgba(0,0,0,.04);
+    }
+
+        .card .hd {
+            padding: 14px 16px;
+            font-weight: 700;
+            border-bottom: 1px solid #eef2f7;
+        }
+
+        .card .bd {
+            padding: 14px 16px;
+        }
+
+    .kvs {
+        display: grid;
+        grid-template-columns: 140px 1fr;
+        row-gap: 8px;
+    }
+
+        .kvs .k {
+            color: #6b7280;
+        }
+
+    .mono {
+        font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;
+    }
+
+    .status {
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 12px;
+        display: inline-block;
+    }
+
+        .status.Active {
+            background: #ecfdf5;
+            color: #065f46;
+        }
+
+        .status.Suspended {
+            background: #fff7ed;
+            color: #9a3412;
+        }
+
+        .status.Deleted {
+            background: #fef2f2;
+            color: #991b1b;
+        }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 10px 8px;
+        border-bottom: 1px solid #f1f5f9;
+        text-align: left;
+    }
+
+    th {
+        font-size: 12px;
+        color: #6b7280;
+        font-weight: 700;
+    }
+
+    tbody tr:hover {
+        background: #fbfdff;
+    }
+
+    .form-row {
+        margin-bottom: 12px;
+    }
+
+        .form-row label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .form-row input, .form-row select {
+            width: 100%;
+            padding: 9px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+        }
+
+    .btn {
+        display: inline-block;
+        padding: 9px 14px;
+        border-radius: 8px;
+        border: none;
+        background: #2563eb;
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+        .btn.secondary {
+            background: #6b7280;
+        }
+
+        .btn.warn {
+            background: #b91c1c;
+        }
+
+    .row-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+</style>
+
+<div class="page">
+    <div class="title">사용자 상세</div>
+
+    @if (TempData["ok"] is string okMsg)
+    {
+        <div class="alert ok">@okMsg</div>
+    }
+    @if (TempData["err"] is string errMsg)
+    {
+        <div class="alert err">@errMsg</div>
+    }
+
+    <div class="grid">
+        <!-- 좌: 요약/프로필/세션 -->
+        <div class="stack">
+            <div class="card" style="margin-bottom:16px;">
+                <div class="hd">요약</div>
+                <div class="bd">
+                    <div class="kvs">
+                        <div class="k">UserId</div><div class="mono">@Model.Id</div>
+                        <div class="k">Account</div><div class="mono">@Model.Account</div>
+                        <div class="k">Status</div><div><span class="status @Model.Status">@Model.Status</span></div>
+                        <div class="k">Created</div><div class="mono">@Model.CreatedAt.ToString("yyyy-MM-dd HH:mm")</div>
+                        <div class="k">Last Login</div><div class="mono">@Model.LastLoginAt?.ToString("yyyy-MM-dd HH:mm")</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-bottom:16px;">
+                <div class="hd">프로필</div>
+                <div class="bd">
+                    <div class="kvs">
+                        <div class="k">NickName</div><div>@Model.NickName</div>
+                        <div class="k">Level</div><div class="mono">@Model.Level</div>
+                        <div class="k">Exp</div><div class="mono">@Model.Exp</div>
+                        <div class="k">Gold</div><div class="mono">@Model.Gold</div>
+                        <div class="k">Cristal</div><div class="mono">@Model.Cristal</div>
+                        <div class="k">IconId</div><div class="mono">@Model.IconId</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="hd">최근 세션</div>
+                <div class="bd">
+                    <div style="overflow:auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Access Exp</th>
+                                    <th>Refresh Exp</th>
+                                    <th>Revoked</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.RecentSessions == null || Model.RecentSessions.Count == 0)
+                                {
+                                    <tr><td colspan="4" style="text-align:center; color:#6b7280; padding:18px;">최근 세션이 없습니다.</td></tr>
+                                }
+                                else
+                                {
+                                    foreach (var s in Model.RecentSessions)
+                                    {
+                                        <tr>
+                                            <td class="mono">@s.Id</td>
+                                            <td class="mono">@s.ExpiresAt.ToString("yyyy-MM-dd HH:mm")</td>
+                                            <td class="mono">@s.RefreshExpiresAt.ToString("yyyy-MM-dd HH:mm")</td>
+                                            <td>@(s.Revoked ? "Yes" : "No")</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 우: 운영 액션 -->
+        <div class="stack">
+            <!-- 상태 변경 -->
+            <div class="card" style="margin-bottom:16px;">
+                <div class="hd">상태 변경</div>
+                <div class="bd">
+                    <form asp-action="SetStatus" asp-controller="AdminUsers" asp-route-userId="@Model.Id" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="UserId" value="@Model.Id" />
+                        <div class="form-row">
+                            <label for="status">Status</label>
+                            <select id="status" name="Status">
+                                <option value="Active" selected="@(Model.Status==Domain.Enum.UserStatus.Active)">Active</option>
+                                <option value="Suspended" selected="@(Model.Status==Domain.Enum.UserStatus.Suspended)">Suspended</option>
+                                <option value="Deleted" selected="@(Model.Status==Domain.Enum.UserStatus.Deleted)">Deleted</option>
+                            </select>
+                        </div>
+                        <div class="row-actions">
+                            <button class="btn" type="submit">변경</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 닉네임 변경 -->
+            <div class="card" style="margin-bottom:16px;">
+                <div class="hd">닉네임 변경</div>
+                <div class="bd">
+                    <form asp-action="SetNickname" asp-controller="AdminUsers" asp-route-userId="@Model.Id" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="UserId" value="@Model.Id" />
+                        <div class="form-row">
+                            <label for="nn">NickName</label>
+                            <input id="nn" name="NickName" value="@Model.NickName" />
+                        </div>
+                        <div class="row-actions">
+                            <button class="btn" type="submit">변경</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 비밀번호 초기화 -->
+            <div class="card" style="margin-bottom:16px;">
+                <div class="hd">비밀번호 초기화</div>
+                <div class="bd">
+                    <form asp-action="ResetPassword" asp-controller="AdminUsers" asp-route-userId="@Model.Id" method="post" onsubmit="return confirm('해당 사용자의 비밀번호를 초기화합니다. 계속할까요?');">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="UserId" value="@Model.Id" />
+                        <div class="form-row">
+                            <label for="npw">새 비밀번호</label>
+                            <input id="npw" name="NewPassword" type="password" autocomplete="new-password" />
+                        </div>
+                        <div class="row-actions">
+                            <button class="btn warn" type="submit">초기화</button>
+                        </div>
+                    </form>
+                    <div style="color:#6b7280; font-size:12px; margin-top:6px;">
+                        초기화 후에는 기존 세션이 유효할 수 있습니다. 필요 시 아래 “세션 만료”를 함께 실행하세요.
+                    </div>
+                </div>
+            </div>
+
+            <!-- 세션 만료 -->
+            <div class="card">
+                <div class="hd">세션 만료</div>
+                <div class="bd">
+                    <form asp-action="RevokeSession" asp-controller="AdminUsers" asp-route-userId="@Model.Id" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="UserId" value="@Model.Id" />
+
+                        <div class="form-row">
+                            <label for="sid">세션 ID (단일 세션 만료 시)</label>
+                            <input id="sid" name="SessionId" type="number" min="1" />
+                        </div>
+                        <div class="form-row">
+                            <label><input type="checkbox" name="AllOfUser" value="true" /> 해당 유저의 모든 세션 만료</label>
+                        </div>
+
+                        <div class="row-actions">
+                            <button class="btn warn" type="submit" onclick="return confirm('선택한 세션(들)을 만료합니다. 계속할까요?');">만료 실행</button>
+                        </div>
+
+                        <div style="color:#6b7280; font-size:12px; margin-top:6px;">
+                            <b>Tip:</b> 모든 세션을 만료하면 강제 로그아웃됩니다. 비밀번호 초기화 후 함께 사용하세요.
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div style="margin-top:16px;">
+        <a class="btn secondary" asp-action="Index" asp-controller="AdminUsers">목록으로</a>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
