@@ -1,0 +1,31 @@
+﻿@model SynergyEditVm
+<hr />
+<h5>Rules</h5>
+
+<table class="table table-sm" id="tblRules">
+    <thead>
+        <tr>
+            <th style="width:110px;">Scope</th>
+            <th style="width:120px;">Metric</th>
+            <th style="width:120px;">RefId</th>
+            <th style="width:120px;">Required</th>
+            <th>Extra (JSON)</th>
+            <th style="width:60px;"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Rules.Count; i++)
+        {
+            <tr>
+                <td><input asp-for="Rules[i].Scope" class="form-control form-control-sm" /></td>
+                <td><input asp-for="Rules[i].Metric" class="form-control form-control-sm" /></td>
+                <td><input asp-for="Rules[i].RefId" class="form-control form-control-sm" /></td>
+                <td><input asp-for="Rules[i].RequiredCnt" class="form-control form-control-sm" /></td>
+                <td><textarea asp-for="Rules[i].ExtraJson" rows="1" class="form-control form-control-sm font-monospace"></textarea></td>
+                <td><button type="button" class="btn btn-outline-danger btn-sm" onclick="removeRow(this)">-</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+<button type="button" class="btn btn-outline-primary btn-sm" onclick="addRule()">+ Add Rule</button>
+<span asp-validation-for="Rules" class="text-danger"></span>

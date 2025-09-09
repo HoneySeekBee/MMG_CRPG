@@ -1,0 +1,25 @@
+﻿@model SynergyEditVm
+<hr />
+<h5>Targets</h5>
+
+<table class="table table-sm" id="tblTargets">
+    <thead>
+        <tr>
+            <th style="width:160px;">TargetType</th>
+            <th style="width:160px;">TargetId</th>
+            <th style="width:60px;"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Targets.Count; i++)
+        {
+            <tr>
+                <td><input asp-for="Targets[i].TargetType" class="form-control form-control-sm" /></td>
+                <td><input asp-for="Targets[i].TargetId" class="form-control form-control-sm" /></td>
+                <td><button type="button" class="btn btn-outline-danger btn-sm" onclick="removeRow(this)">-</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+<button type="button" class="btn btn-outline-primary btn-sm" onclick="addTarget()">+ Add Target</button>
+<span asp-validation-for="Targets" class="text-danger"></span>

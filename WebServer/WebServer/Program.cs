@@ -15,6 +15,7 @@ using Application.Roles;
 using Application.SkillLevels;
 using Application.Skills;
 using Application.Storage;
+using Application.Synergy;
 using Domain.Services;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories;
@@ -115,6 +116,10 @@ namespace WebServer
 
             builder.Services.AddScoped<IGachaPoolRepository, GachaPoolRepository>();
             builder.Services.AddScoped<IGachaPoolService, GachaPoolService>();
+
+            // 시너지 관련 
+            builder.Services.AddScoped<ISynergyRepository, SynergyRepository>();
+            builder.Services.AddScoped<ISynergyService, SynergyService>();
 
             builder.Services.AddScoped<IIconRepository, EfIconRepository>();
             builder.Services.AddSingleton<IIconStorage>(sp =>
