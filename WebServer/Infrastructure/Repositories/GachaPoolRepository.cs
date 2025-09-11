@@ -75,25 +75,23 @@ namespace Infrastructure.Repositories
         // ─────────── 엔트리 벌크 교체 ───────────
         public async Task ReplaceEntriesAsync(int poolId, IEnumerable<GachaPoolEntry> entries, CancellationToken ct = default)
         {
-            // 트랜잭션 권장
-            await using var tx = await _db.Database.BeginTransactionAsync(ct);
-
             // 1) 기존 것 제거
-            var olds = await _db.GachaPoolEntries.Where(x => x.PoolId == poolId).ToListAsync(ct);
+            var olds = await _db.GachaPoolEntries
+                .Where(x => x.PoolId == poolId)
+                .ToListAsync(ct);
             _db.GachaPoolEntries.RemoveRange(olds);
 
-            // 2) 새로 추가 (PoolId를 주입)
+            // 2) 새로 추가 (PoolId 주입)
             var list = entries?.ToList() ?? new();
             foreach (var e in list)
             {
-                // EF가 읽기 전용 프로퍼티일 경우 Shadow Property 사용 가능하지만
-                // 여기서는 public setter가 없으므로 Entry API로 값 주입
+                // public setter가 없다면 Entry API로 주입
                 _db.Entry(e).Property(nameof(GachaPoolEntry.PoolId)).CurrentValue = poolId;
             }
             await _db.GachaPoolEntries.AddRangeAsync(list, ct);
 
+            // 3) 커밋은 한 번만 → EF 내부 트랜잭션 사용
             await _db.SaveChangesAsync(ct);
-            await tx.CommitAsync(ct);
         }
 
         public Task<int> SaveChangesAsync(CancellationToken ct = default)

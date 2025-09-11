@@ -19,7 +19,8 @@ namespace Domain.Entities
 
         // 초기엔 필드로 두되, 추후 통화 테이블로 분리 가능
         public int Gold { get; private set; } = 0;
-        public int Cristal { get; private set; } = 0;
+        public int Gem { get; private set; } = 0;
+        public int Token { get; private set; } = 0;
 
         public int? IconId { get; private set; }
 
@@ -53,30 +54,6 @@ namespace Domain.Entities
             if (amount < 0) throw new ArgumentOutOfRangeException(nameof(amount));
             Exp += amount;
             // 레벨업 규칙은 Application에서 성장 곡선/테이블을 사용해 처리
-        }
-
-        public void GrantGold(int amount)
-        {
-            if (amount < 0) throw new ArgumentOutOfRangeException(nameof(amount));
-            checked { Gold += amount; }
-        }
-        public bool SpendGold(int amount)
-        {
-            if (amount < 0) return false;
-            if (Gold < amount) return false;
-            Gold -= amount; return true;
-        }
-
-        public void GrantCristal(int amount)
-        {
-            if (amount < 0) throw new ArgumentOutOfRangeException(nameof(amount));
-            checked { Cristal += amount; }
-        }
-        public bool SpendCristal(int amount)
-        {
-            if (amount < 0) return false;
-            if (Cristal < amount) return false;
-            Cristal -= amount; return true;
         }
 
         public void SetIcon(int? iconId) => IconId = iconId;

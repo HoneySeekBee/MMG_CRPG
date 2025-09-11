@@ -1,4 +1,5 @@
 ﻿using Application.Repositories;
+using Application.UserCurrency;
 using Domain.Entities;
 using Domain.Enum;
 
@@ -16,6 +17,9 @@ namespace Application.Users
         private readonly ITokenService _tokens;
         private readonly IClock _clock;
 
+        private readonly IUserCurrencyRepository _userCurrs;
+        private readonly IWalletService _wallet;
+
         public UserService(
             IUserRepository users,
             IUserQueryRepository userQuery,
@@ -25,7 +29,9 @@ namespace Application.Users
             ISecurityEventRepository sec,
             IPasswordHasher hasher,
             ITokenService tokens,
-            IClock clock)
+            IClock clock,
+        IUserCurrencyRepository userCurrs,
+          IWalletService wallet)
         {
             _users = users;
             _userQuery = userQuery;
@@ -36,6 +42,9 @@ namespace Application.Users
             _hasher = hasher;
             _tokens = tokens;
             _clock = clock;
+
+            _userCurrs = userCurrs;
+            _wallet = wallet;
         }
 
         // --- 인증/계정 -------------------------------------------------------
@@ -60,6 +69,8 @@ namespace Application.Users
             var profile = UserProfile.Create(user.Id, req.NickName.Trim());
             await _profiles.AddAsync(profile, ct);
             await _profiles.SaveChangesAsync(ct);
+
+            await _userCurrs.InitializeForUserAsync(user.Id, ct);
 
             // 4) 이벤트
             await _sec.AddAsync(SecurityEvent.Create(SecurityEventType.LoginSuccess, _clock.UtcNow, user.Id, "{\"register\":true}"), ct);
@@ -177,7 +188,6 @@ namespace Application.Users
         }
 
         // --- 내 정보 / 프로필 -------------------------------------------------
-
         public async Task<UserSummaryDto> GetMySummaryAsync(int userId, CancellationToken ct)
         {
             var u = await _users.GetByIdAsync(userId, ct) ?? throw new InvalidOperationException("USER_NOT_FOUND");
@@ -196,8 +206,26 @@ namespace Application.Users
 
         public async Task<UserProfileDto> GetProfileAsync(int userId, CancellationToken ct)
         {
-            var p = await _profiles.GetByUserIdAsync(userId, ct) ?? throw new InvalidOperationException("PROFILE_NOT_FOUND");
-            return p.ToProfileDto();
+            var p = await _profiles.GetByUserIdAsync(userId, ct)
+                    ?? throw new InvalidOperationException("PROFILE_NOT_FOUND");
+
+            // 동적 지갑에서 골드/젬/토큰 조회
+            var balances = await _wallet.GetBalancesAsync(userId, ct); // List<(string Code,long Amount)>
+            long gold = balances.FirstOrDefault(x => x.Code == "GOLD").Amount;
+            long gem = balances.FirstOrDefault(x => x.Code == "GEM").Amount;
+            long token = balances.FirstOrDefault(x => x.Code == "TOKEN").Amount;
+
+            return new UserProfileDto(
+                Id: p.Id,
+                UserId: p.UserId,
+                NickName: p.NickName,
+                Level: p.Level,
+                Exp: p.Exp,
+                Gold: (int)Math.Min(int.MaxValue, gold),
+                Gem: (int)Math.Min(int.MaxValue, gem),
+                Token: (int)Math.Min(int.MaxValue, token),
+                IconId: p.IconId
+            );
         }
 
         public async Task<UserProfileDto> UpdateProfileAsync(int userId, UpdateProfileRequest req, CancellationToken ct)

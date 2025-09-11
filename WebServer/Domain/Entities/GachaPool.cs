@@ -14,7 +14,7 @@ namespace Domain.Entities
         // EF용
         private GachaPool() { }
 
-        public int PoolId { get; private set; }              // PK
+        public int PoolId { get; set; }              // PK
         public string Name { get; private set; } = default!;  // 표기용
 
         // 기간

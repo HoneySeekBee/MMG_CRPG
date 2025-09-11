@@ -12,7 +12,7 @@ namespace Domain.Entities
         // --- 생성/식별 ---
         private GachaBanner() { }
 
-        public int Id { get; private set; }                 // PK (DB: serial/bigserial)
+        public int Id { get; set; }                 // PK (DB: serial/bigserial)
         public string Key { get; private set; } = default!; // 운영툴/시드 참조용, UNIQUE
 
         // --- 표시/연결 ---

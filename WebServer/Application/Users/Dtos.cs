@@ -14,7 +14,9 @@ namespace Application.Users
         string NickName,
         short Level,
         int Gold,
-        int Cristal,
+        int Gem,
+        int Token,
+        int? IconId,
         UserStatus Status,
         DateTimeOffset CreatedAt,
         DateTimeOffset? LastLoginAt
@@ -28,7 +30,8 @@ namespace Application.Users
         short Level,
         int Exp,
         int Gold,
-        int Cristal,
+        int Gem,
+        int Token,
         int? IconId
     );
 
@@ -50,7 +53,8 @@ namespace Application.Users
         short Level,
         int Exp,
         int Gold,
-        int Cristal,
+        int Gem,
+        int Token,
         int? IconId,
         IReadOnlyList<SessionBriefDto>? RecentSessions // null 가능
     );

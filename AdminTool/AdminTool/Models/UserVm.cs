@@ -72,7 +72,8 @@ namespace AdminTool.Models
         public string NickName { get; init; } = string.Empty;
         public short Level { get; init; }
         public int Gold { get; init; }
-        public int Cristal { get; init; }
+        public int Gem { get; init; }
+        public int Token { get; init; }
         public UserStatus Status { get; init; }
         public DateTimeOffset CreatedAt { get; init; }
         public DateTimeOffset? LastLoginAt { get; init; }
@@ -108,7 +109,8 @@ namespace AdminTool.Models
         public short Level { get; init; }
         public int Exp { get; init; }
         public int Gold { get; init; }
-        public int Cristal { get; init; }
+        public int Gem { get; init; }
+        public int Token { get; init; }
         public int? IconId { get; init; }
 
         // 최근 세션
@@ -204,7 +206,7 @@ namespace AdminTool.Models
                 NickName = x.NickName,
                 Level = x.Level,
                 Gold = x.Gold,
-                Cristal = x.Cristal,
+                Gem = x.Gem,
                 Status = x.Status,
                 CreatedAt = x.CreatedAt,
                 LastLoginAt = x.LastLoginAt
@@ -222,7 +224,8 @@ namespace AdminTool.Models
                 Level = d.Level,
                 Exp = d.Exp,
                 Gold = d.Gold,
-                Cristal = d.Cristal,
+                Gem = d.Gem,
+                Token = d.Token,
                 IconId = d.IconId,
                 RecentSessions = d.RecentSessions is null
                     ? Array.Empty<SessionListItemVm>()

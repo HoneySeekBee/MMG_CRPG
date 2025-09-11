@@ -1,0 +1,43 @@
+syntax = "proto3";
+package gameapi;
+option csharp_namespace = "Contracts.Protos";
+
+message GuestAuthRequest { string device_id = 1; }
+message RefreshRequest   { string refresh_token = 1; }
+
+message AuthResponse {
+  string player_id = 1;
+  string access_token = 2;
+  string refresh_token = 3;
+  int64  server_unix_ms = 4;
+}
+
+message PlayerBootstrap {
+  string nickname = 1;
+  int32  soft_currency = 2;
+  int32  hard_currency = 3;
+  repeated string banner_summaries = 4;
+  int64  server_unix_ms = 5;
+}
+
+message Status {
+  bool maintenance = 1;
+  bool force_update = 2;
+  string message = 3;
+  int64  server_unix_ms = 4;
+}
+
+message LoginAuthRequest {
+  string account  = 1;
+  string password = 2;
+}
+message RegisterAuthRequest {
+  string account  = 1;
+  string password = 2;
+  string nickname = 3;
+}
+message RegisterResponse {
+  int32 userId = 1;
+}
+
+message ErrorEnvelope { string error_code = 1; string message = 2; }
