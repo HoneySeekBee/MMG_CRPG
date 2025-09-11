@@ -281,6 +281,36 @@ namespace AdminTool.Controllers
             }
             catch { return default; }
         }
+        [HttpGet("Details/{id:int}")]
+        public async Task<IActionResult> Detail(int id, CancellationToken ct)
+        {
+            var api = _http.CreateClient("GameApi");
+            var resp = await api.GetAsync($"/api/gacha/pools/{id}", ct);
+            var body = await resp.Content.ReadAsStringAsync(ct);
+
+            if (!resp.IsSuccessStatusCode)
+            {
+                TryParseProblemToTempData(body);
+                return RedirectToAction(nameof(Index));
+            }
+
+            var dto = JsonSerializer.Deserialize<GachaPoolDetailDto>(body,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            if (dto is null)
+            {
+                TempData["Error"] = "API 응답을 해석할 수 없습니다.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Edit에서와 동일하게 FormVm으로 매핑(표시는 읽기 전용으로만 사용)
+            var vm = GachaPoolFormVm.FromDetailDto(dto, "Asia/Seoul");
+
+            // 캐릭터 이름 표기를 위해 옵션 로드(대량 옵션 허용)
+            var pick = new CharacterPickFilter { PageSize = 2000 }; // 필요 시 조절
+            vm.CharacterOptions = await GetCharacterOptionsAsync(pick, ct);
+
+            return View(vm); // Views/GachaPools/Details.cshtml
+        }
         public sealed class CharacterPickFilter
         {
             public string? Search { get; set; }
