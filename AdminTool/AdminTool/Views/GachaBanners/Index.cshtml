@@ -120,12 +120,13 @@
                                 }
                             </td>
                             <td class="text-nowrap">
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">Details</a>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary ms-1">Edit</a>
 
-                                <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline"
+                                <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline ms-1"
                                       onsubmit="return confirm('정말 삭제할까요?');">
-                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                                     @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                                 </form>
                             </td>
                         </tr>
