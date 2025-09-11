@@ -72,6 +72,7 @@
                             <td>@p.ScheduleStart.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
                             <td>@(p.ScheduleEnd.HasValue ? p.ScheduleEnd.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm") : "-")</td>
                             <td class="text-nowrap">
+                                <a asp-action="Details" asp-route-id="@p.PoolId" class="btn btn-sm btn-outline-secondary">Details</a>
                                 <a asp-action="Edit" asp-route-id="@p.PoolId" class="btn btn-sm btn-outline-primary">Edit</a>
                                 <form asp-action="Delete" asp-route-id="@p.PoolId" method="post" class="d-inline"
                                       onsubmit="return confirm('정말 삭제할까요?');">
