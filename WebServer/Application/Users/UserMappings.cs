@@ -16,8 +16,10 @@ namespace Application.Users
                 Account: u.Account,
                 NickName: p.NickName,
                 Level: p.Level,
+                IconId: p.IconId ?? 0,
                 Gold: p.Gold,
-                Cristal: p.Cristal,
+                Gem: p.Gem,
+                Token: p.Token,
                 Status: u.Status,
                 CreatedAt: u.CreatedAt,
                 LastLoginAt: u.LastLoginAt
@@ -32,7 +34,8 @@ namespace Application.Users
                 Level: p.Level,
                 Exp: p.Exp,
                 Gold: p.Gold,
-                Cristal: p.Cristal,
+                Gem: p.Gem,
+                Token: p.Token,
                 IconId: p.IconId
             );
 
@@ -59,7 +62,8 @@ namespace Application.Users
                 Level: p.Level,
                 Exp: p.Exp,
                 Gold: p.Gold,
-                Cristal: p.Cristal,
+                Gem: p.Gem,
+                Token: p.Token,
                 IconId: p.IconId,
                 RecentSessions: sessions
             );

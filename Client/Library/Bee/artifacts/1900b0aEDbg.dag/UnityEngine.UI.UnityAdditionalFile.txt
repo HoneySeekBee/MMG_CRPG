@@ -1,1 +1,1 @@
-C:\Dev\MMG_CRPG\Client
+C:\Dev\MMG_CRPG\MMG_CRPG\Client

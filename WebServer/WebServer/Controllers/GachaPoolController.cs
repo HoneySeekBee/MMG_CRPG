@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebServer.Controllers
 {
     [ApiController]
-    [Route("api/gachapools")]
+    [Route("api/gacha/pools")]
     public sealed class GachaPoolController : ControllerBase
     {
         private readonly IGachaPoolService _svc;

@@ -60,6 +60,7 @@ namespace Infrastructure.Persistence
         public DbSet<StageFirstClearReward> StageFirstClearRewards => Set<StageFirstClearReward>();
         public DbSet<StageRequirement> StageRequirements => Set<StageRequirement>();
         public DbSet<UserStageProgress> UserStageProgresses => Set<UserStageProgress>();
+        public DbSet<UserCurrency> UserCurrencies => Set<UserCurrency>();
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -712,34 +713,35 @@ namespace Infrastructure.Persistence
         }
         public void Modeling_GachaPool(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<GachaPool>(e =>
+            modelBuilder.Entity<GachaPool>(g =>
             {
-                e.ToTable("GachaPool");
-                e.HasKey(x => x.PoolId);
-                e.Property(x => x.PoolId).ValueGeneratedOnAdd();
+                g.ToTable("GachaPool");
+                g.HasKey(x => x.PoolId);
+                g.Property(x => x.PoolId).ValueGeneratedOnAdd();
+                g.Property(x => x.Name).IsRequired();
 
-                e.Property(x => x.Name).IsRequired();
+                g.Property(x => x.ScheduleStart).IsRequired().HasColumnType("timestamp with time zone");
+                g.Property(x => x.ScheduleEnd).IsRequired(false).HasColumnType("timestamp with time zone");
 
-                e.Property(x => x.ScheduleStart).IsRequired();
-                e.Property(x => x.ScheduleEnd);
+                g.Property(x => x.PityJson).HasColumnType("jsonb");
+                g.Property(x => x.Config).HasColumnType("jsonb");
+                g.Property(x => x.TablesVersion);
 
-                // jsonb 매핑 (문자열을 그대로 jsonb 컬럼에 보관)
-                e.Property(x => x.PityJson).HasColumnType("jsonb");
-                e.Property(x => x.Config).HasColumnType("jsonb");
-                e.Property(x => x.TablesVersion);
+                // 읽기 전용 컬렉션 백킹 필드
+                g.Metadata.FindNavigation(nameof(GachaPool.Entries))!
+                 .SetPropertyAccessMode(PropertyAccessMode.Field);
 
-                // 관계: 1 → N
-                e.HasMany<GachaPoolEntry>()
-                 .WithOne()
-                 .HasForeignKey(en => en.PoolId)
+                // 네비게이션을 이용해 "하나의 관계"로 고정
+                g.HasMany(x => x.Entries)
+                 .WithOne()                       // GachaPoolEntry에 네비가 없으니 WithOne()
+                 .HasForeignKey(x => x.PoolId)
+                 .IsRequired()
                  .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<GachaPoolEntry>(e =>
             {
                 e.ToTable("GachaPoolEntry");
-
-                // 복합 PK (PoolId + CharacterId)
                 e.HasKey(x => new { x.PoolId, x.CharacterId });
 
                 e.Property(x => x.PoolId).IsRequired();
@@ -748,8 +750,10 @@ namespace Infrastructure.Persistence
                 e.Property(x => x.RateUp).HasDefaultValue(false);
                 e.Property(x => x.Weight).IsRequired();
 
-                // 간단 체크 제약(포스트그레스일 때 유효)
                 e.HasCheckConstraint("ck_gpe_weight_pos", "\"Weight\" > 0");
+
+                // 안전장치: 혹시 섀도우 속성이 남아있으면 무시
+                e.Ignore("GachaPoolPoolId");   // 섀도우 FK 강제 무시
             });
         }
         private void Modeling_Synergy(ModelBuilder b)
@@ -831,6 +835,17 @@ namespace Infrastructure.Persistence
             Modeling_UserProfile(b);
             Modeling_Session(b);
             Modeling_SecurityEvent(b);
+            Modeling_UserCurrency(b);
+        }
+        private static void Modeling_UserCurrency(ModelBuilder b)
+        {
+            b.Entity<UserCurrency>(b =>
+            {
+                b.ToTable("UserCurrency");
+                b.HasKey(x => new { x.UserId, x.CurrencyId });
+                b.HasOne<User>().WithMany().HasForeignKey(x => x.UserId);
+                b.HasOne<Currency>().WithMany().HasForeignKey(x => x.CurrencyId);
+            });
         }
 
         // ---------- User ----------
@@ -873,7 +888,8 @@ namespace Infrastructure.Persistence
                 e.Property(x => x.Level).HasColumnName("Level").IsRequired();
                 e.Property(x => x.Exp).HasColumnName("Exp").IsRequired();
                 e.Property(x => x.Gold).HasColumnName("Gold").IsRequired();
-                e.Property(x => x.Cristal).HasColumnName("Cristal").IsRequired();
+                e.Property(x => x.Gem).HasColumnName("Gem").IsRequired();
+                e.Property(x => x.Token).HasColumnName("Token").IsRequired();
                 e.Property(x => x.IconId).HasColumnName("IconId").IsRequired(false);
            
                 e.HasOne<User>()
@@ -928,7 +944,8 @@ namespace Infrastructure.Persistence
             e.Property(x => x.Exp).IsRequired();
 
             e.Property(x => x.Gold).IsRequired();
-            e.Property(x => x.Cristal).IsRequired();
+            e.Property(x => x.Gem).IsRequired();
+            e.Property(x => x.Token).IsRequired();
 
             e.Property(x => x.IconId).IsRequired(false);
         }

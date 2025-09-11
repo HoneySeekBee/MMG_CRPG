@@ -29,6 +29,8 @@ using Npgsql;
 using System.Security.Claims;
 using System.Text;
 using Application.Stages;
+using WebServer.Formatters;
+using Application.UserCurrency;
 
 namespace WebServer
 {
@@ -58,6 +60,12 @@ namespace WebServer
             errorCodesToAdd: null))
        .EnableSensitiveDataLogging(false)
 );
+            builder.Services.AddControllers(opts =>
+            {
+                // Google.Protobuf(IMessage)용 포매터를 최우선으로 꽂음
+                opts.InputFormatters.Insert(0, new ProtobufInputFormatter());
+                opts.OutputFormatters.Insert(0, new ProtobufOutputFormatter());
+            });
 
             builder.Services
        .AddAuthentication(options =>
@@ -126,7 +134,8 @@ namespace WebServer
             builder.Services.AddScoped<IItemRepository, ItemRepository>();
             builder.Services.AddScoped<IItemService, ItemService>();
 
-
+            builder.Services.AddScoped<IUserCurrencyRepository, UserCurrencyRepository>();
+            builder.Services.AddScoped<IWalletService, WalletService>();
             builder.Services.AddScoped<ICurrencyRepository, EFCurrencyRepository>();
             builder.Services.AddScoped<ICurrencyService, CurrencyService>();
 
@@ -210,12 +219,7 @@ namespace WebServer
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                OnPrepareResponse = ctx =>
-                    ctx.Context.Response.Headers["Cache-Control"] = "public,max-age=31536000,immutable"
-            });
-            app.MapControllers();
+
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

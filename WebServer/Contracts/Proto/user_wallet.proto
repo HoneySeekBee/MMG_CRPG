@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package contracts.protos;
+
+// 개별 재화
+message CurrencyBalancePb {
+  // "GOLD", "GEM", "TOKEN" 등 마스터 테이블의 Code
+  string code   = 1;
+  // 보유 수량 (큰 값 대비 int64)
+  int64  amount = 2;
+  // (선택) 마스터의 정렬/표시용 순서가 필요하면 넣기
+  int32  sort_order = 3;
+}
+
+// 유저 지갑 전체
+message UserWalletPb {
+  // 재화 목록
+  repeated CurrencyBalancePb balances = 1;
+
+  // 서버 기준 갱신 시각 (unix ms)
+  int64 updated_unix_ms = 2;
+
+  // (선택) 클라 캐싱용 버전/etag 같은 값이 필요할 때
+  string version = 3;
+}

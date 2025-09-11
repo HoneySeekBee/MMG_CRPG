@@ -75,12 +75,17 @@ namespace AdminTool.Controllers
                 vm.CharacterOptions = await GetCharacterOptionsAsync(pick, ct);
                 return View(vm);
             }
+            Console.WriteLine("GachaPool Create 1");
+            
+
 
             var api = _http.CreateClient("GameApi");
 
             // 1) 풀 생성
             var createReq = vm.ToCreateRequest("Asia/Seoul");
+
             var resp = await api.PostAsJsonAsync("/api/gacha/pools", createReq, ct);
+
             if (!resp.IsSuccessStatusCode)
             {
                 await AddModelErrorsAsync(resp, ct);
@@ -88,6 +93,7 @@ namespace AdminTool.Controllers
                 return View(vm);
             }
 
+            Console.WriteLine("GachaPool Create ");
             var id = await resp.Content.ReadFromJsonAsync<IdOnly>(cancellationToken: ct);
             if (id is null)
             {
@@ -96,6 +102,7 @@ namespace AdminTool.Controllers
                 return View(vm);
             }
 
+            Console.WriteLine("GachaPool Create 3");
             // 2) 엔트리 업서트
             if (vm.Entries.Count > 0)
             {
@@ -108,6 +115,7 @@ namespace AdminTool.Controllers
                     return View(vm);
                 }
             }
+            Console.WriteLine("GachaPool Create 4");
 
             TempData["toast"] = "가챠풀이 생성되었습니다.";
             return RedirectToAction(nameof(Index));

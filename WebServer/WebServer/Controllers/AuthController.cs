@@ -1,4 +1,5 @@
-﻿using Application.Users;
+﻿using Application.UserCurrency;
+using Application.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
