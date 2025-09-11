@@ -1,0 +1,74 @@
+﻿@model AdminTool.Models.GachaBannerFormVm
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Gacha Banner Details";
+}
+
+<div class="container py-3">
+    <h2 class="mb-3">Gacha Banner Details</h2>
+
+    <div class="mb-3">
+        <a asp-action="Index" class="btn btn-outline-secondary">← 목록으로</a>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary ms-2">Edit</a>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-4">
+            <label class="form-label">Key</label>
+            <input class="form-control" value="@Model.Key" disabled />
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Title</label>
+            <input class="form-control" value="@Model.Title" disabled />
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Subtitle</label>
+            <input class="form-control" value="@Model.Subtitle" disabled />
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Gacha Pool</label>
+            <select class="form-select" disabled>
+                <option>
+                    @($"{Model.PoolOptions?.FirstOrDefault(o => o.Value == Model.GachaPoolId.ToString())?.Text ?? $"#{Model.GachaPoolId}"}")
+                </option>
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Portrait</label>
+            <select class="form-select" disabled>
+                <option>
+                    @($"{Model.PortraitOptions?.FirstOrDefault(o => o.Value == Model.PortraitId?.ToString())?.Text ?? (Model.PortraitId is null ? "-" : $"#{Model.PortraitId}")}")
+                </option>
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Priority</label>
+            <input class="form-control" value="@Model.Priority" disabled />
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Status</label>
+            <input class="form-control" value="@Model.Status" disabled />
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Starts (Local)</label>
+            <input class="form-control" value="@Model.StartsAtLocal?.ToString("yyyy-MM-dd HH:mm")" disabled />
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Ends (Local)</label>
+            <input class="form-control" value="@(Model.EndsAtLocal?.ToString("yyyy-MM-dd HH:mm") ?? "-")" disabled />
+        </div>
+
+        <div class="col-12 form-check mt-2">
+            <input type="checkbox" class="form-check-input" @(Model.IsActive ? "checked" : "") disabled />
+            <label class="form-check-label">활성화</label>
+        </div>
+    </div>
+</div>

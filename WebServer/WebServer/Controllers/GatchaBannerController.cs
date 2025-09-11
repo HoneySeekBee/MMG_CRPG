@@ -23,10 +23,9 @@ namespace WebServer.Controllers
         }
 
         // GET: api/GachaBanner/5
-        [HttpGet("{id:int}")]
-        [ProducesResponseType(typeof(GachaBannerDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetAsync([FromRoute] int id, CancellationToken ct = default)
+
+        [HttpGet("{id:int}", Name = "GetGachaBannerById")]
+        public async Task<IActionResult> GetAsync(int id, CancellationToken ct = default)
         {
             var dto = await _service.GetAsync(id, ct);
             return dto is null ? NotFound() : Ok(dto);
@@ -60,7 +59,7 @@ namespace WebServer.Controllers
             if (req is null) return BadRequest();
 
             var dto = await _service.CreateAsync(req, ct);
-            return CreatedAtAction(nameof(GetAsync), new { id = dto.Id }, dto);
+            return CreatedAtRoute("GetGachaBannerById", new { id = dto.Id }, dto);
         }
 
         // PUT: api/GachaBanner/5
