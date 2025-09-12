@@ -1,0 +1,49 @@
+syntax = "proto3";
+package Contracts.Protos;
+
+// 단일 배너
+message GachaBannerPb {
+  int32  id           = 1;
+  string key          = 2;
+  string title        = 3;
+  string subtitle     = 4;
+  int32  portraitId   = 5;
+  int32  gachaPoolId  = 6;
+  int64  startsAtUtc  = 7; // Unix seconds
+  int64  endsAtUtc    = 8; // 0이면 무기한
+  int32  priority     = 9;
+  int32  status       = 10; // 서버 enum -> int
+  bool   isActive     = 11;
+}
+
+// 배너 목록
+message GachaBannerListPb {
+  repeated GachaBannerPb banners = 1;
+}
+
+// 풀 엔트리(확률표 한 줄)
+message GachaEntryPb {
+  int32 characterId = 1;
+  int32 grade       = 2;
+  bool  rateUp      = 3;
+  int32 weight      = 4;
+}
+
+// 풀 상세
+message GachaPoolDetailPb {
+  int32  poolId            = 1;
+  string name              = 2;
+  string tablesVersion     = 3;
+  string pityJson          = 4; // 서버의 JSON 원문 그대로
+  string configJson        = 5; // 서버의 JSON 원문 그대로
+  int64  scheduleStartUtc  = 6; // Unix seconds
+  int64  scheduleEndUtc    = 7; // 0이면 무기한
+  repeated GachaEntryPb entries = 8;
+}
+
+// 카탈로그: 활성 배너 + 참조 풀들
+message GachaCatalogPb {
+  int64 version = 1; // 캐싱/버전관리(선택)
+  repeated GachaBannerPb banners = 2;
+  repeated GachaPoolDetailPb pools = 3;
+}

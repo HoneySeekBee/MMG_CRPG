@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebServer.Controllers
 {
@@ -80,16 +81,30 @@ namespace WebServer.Controllers
 
             return NoContent(); // 204
         }
+        public sealed class IconUploadRequest
+        {
+            [Required] public string Key { get; set; } = "";
+            [Required] public IFormFile File { get; set; } = default!;
+        }
         // 파일 업로드 ( 예 : form-data ) 
         [HttpPost("upload")]
-        public async Task<IActionResult> Upload([FromBody] string key, [FromForm] IFormFile file, CancellationToken ct)
+        [Consumes("multipart/form-data")]
+        [Produces("application/json")]
+        public async Task<IActionResult> Upload([FromForm] IconUploadRequest req, CancellationToken ct)
         {
-            if (file is null || file.Length == 0) return BadRequest("Empty file");
+            if (req.File is null || req.File.Length == 0)
+                return BadRequest("Empty file");
 
-            await using var stream = file.OpenReadStream();
-            var cmd = new UploadIconCommand { Key = key, Content = stream, ContentType = file.ContentType };
+            await using var stream = req.File.OpenReadStream();
+            var cmd = new UploadIconCommand
+            {
+                Key = req.Key,
+                Content = stream,
+                ContentType = req.File.ContentType
+            };
             await _svc.UploadAsync(cmd, ct);
-            return Ok();
+
+            return Ok(new { key = req.Key });
         }
         #endregion
 
