@@ -1,5 +1,6 @@
 ﻿using Application.Portraits;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebServer.Controllers
 {
@@ -68,16 +69,28 @@ namespace WebServer.Controllers
         }
 
         // [5] 업로드 (폼 업로드 권장: key + file)
-        [HttpPost("upload")]
-        public async Task<IActionResult> Upload([FromForm] string key, [FromForm] IFormFile file, CancellationToken ct)
+        public sealed class PortraitUploadRequest
         {
-            if (string.IsNullOrWhiteSpace(key)) return BadRequest("key is required");
-            if (file is null || file.Length == 0) return BadRequest("Empty file");
+            [Required] public string Key { get; set; } = "";
+            [Required] public IFormFile File { get; set; } = default!;
+        }
 
-            await using var stream = file.OpenReadStream();
-            var cmd = new UploadPortraitCommand { Key = key, Content = stream, ContentType = file.ContentType };
+        [HttpPost("upload")]
+        [Consumes("multipart/form-data")]   
+        [Produces("application/json")]
+        public async Task<IActionResult> Upload([FromForm] PortraitUploadRequest req, CancellationToken ct)
+        {
+            if (req.File is null || req.File.Length == 0) return BadRequest("Empty file");
+
+            await using var stream = req.File.OpenReadStream();
+            var cmd = new UploadPortraitCommand
+            {
+                Key = req.Key,
+                Content = stream,
+                ContentType = req.File.ContentType
+            };
             await _svc.UploadAsync(cmd, ct);
-            return Ok();
+            return Ok(new { key = req.Key });
         }
     }
 }

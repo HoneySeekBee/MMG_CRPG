@@ -31,6 +31,8 @@ using System.Text;
 using Application.Stages;
 using WebServer.Formatters;
 using Application.UserCurrency;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.OpenApi.Models;
 
 namespace WebServer
 {
@@ -94,6 +96,30 @@ namespace WebServer
             builder.Services.AddAuthorization();
 
             builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen(o =>
+            {
+                o.SwaggerDoc("v1", new OpenApiInfo { Title = "RPG Backend API", Version = "v1" });
+
+                // JWT Authorize 버튼
+                var scheme = new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "JWT Bearer 토큰 (예: Bearer eyJ...)"
+                };
+                o.AddSecurityDefinition("Bearer", scheme);
+                o.AddSecurityRequirement(new OpenApiSecurityRequirement { { scheme, Array.Empty<string>() } });
+
+                // 충돌 방지: 클래스 전체이름(네임스페이스 포함)으로 스키마 ID 생성
+                o.CustomSchemaIds(t => t.FullName?.Replace("+", ".")); // nested type 대비
+            });
+            builder.Services.AddHealthChecks();
+            builder.Services.AddCors(o => o.AddDefaultPolicy(p =>
+    p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+
 
             builder.Services.AddScoped<IconService>();
 
@@ -219,12 +245,26 @@ namespace WebServer
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "RPG Backend API v1");
+                    c.RoutePrefix = "swagger"; // /swagger 로 접근
+                });
+            }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                app.UseHsts();
+            }
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseCors();
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -232,6 +272,20 @@ namespace WebServer
             app.MapControllers();
             app.MapRazorPages();
 
+            app.MapHealthChecks("/health", new HealthCheckOptions()).AllowAnonymous();
+
+            app.MapGet("/version", () => new
+            {
+                name = "RPG Backend",
+                version = typeof(Program).Assembly.GetName().Version?.ToString() ?? "1.0.0",
+                timeUtc = DateTime.UtcNow
+            }).AllowAnonymous();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<GameDBContext>();
+                SeedData.EnsureSeeded(db);
+            }
             app.Run();
         }
     }
