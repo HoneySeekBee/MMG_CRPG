@@ -33,6 +33,7 @@ using WebServer.Formatters;
 using Application.UserCurrency;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
+using Application.UserInventory;
 
 namespace WebServer
 {
@@ -222,7 +223,10 @@ namespace WebServer
             builder.Services.AddScoped<ISessionRepository, SessionRepository>();
             builder.Services.AddScoped<ISessionQueryRepository, SessionQueryRepository>();
             builder.Services.AddScoped<ISecurityEventRepository, SecurityEventRepository>();
+            builder.Services.AddScoped<IUserInventoryRepository, UserInventoryRepository>();
+            builder.Services.AddScoped<IUserInventoryQueryRepository, UserInventoryQueryRepository>();
 
+            builder.Services.AddScoped<IUserInventoryService, UserInventoryService>();
 
             builder.Services.AddScoped<IIconRepository, EfIconRepository>();
             builder.Services.AddSingleton<IIconStorage>(sp =>

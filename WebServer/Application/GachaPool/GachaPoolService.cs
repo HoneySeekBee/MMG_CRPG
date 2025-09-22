@@ -17,16 +17,7 @@ namespace Application.GachaPool
         public async Task<GachaPoolDto?> GetAsync(int poolId, CancellationToken ct = default)
             => (await _repo.GetByIdAsync(poolId, ct))?.ToDto();
 
-        public async Task<GachaPoolDetailDto?> GetDetailAsync(int poolId, CancellationToken ct = default)
-        {
-            var e = await _repo.GetByIdAsync(poolId, ct);
-            if (e is null) return null;
-
-            // Entries가 필요하다면 레포를 Include 방식으로 바꿔도 됨.
-            // 여기서는 ReplaceEntries 시 항상 DB에 존재하므로 다시 한 번 가져와도 OK
-            var withEntries = await _repo.GetWithEntriesAsync(poolId, ct) ?? e;
-            return withEntries.ToDetailDto();
-        }
+        
 
         public async Task<(IReadOnlyList<GachaPoolDto> Items, int Total)> SearchAsync(
             QueryGachaPoolsRequest req, CancellationToken ct = default)
@@ -75,6 +66,16 @@ namespace Application.GachaPool
             await _repo.UpdateAsync(e, ct);
             await _repo.SaveChangesAsync(ct);
             return e.ToDto();
+        }
+        public async Task<GachaPoolDetailDto?> GetDetailAsync(int poolId, CancellationToken ct = default)
+        {
+            var e = await _repo.GetByIdAsync(poolId, ct);
+            if (e is null) return null;
+
+            // Entries가 필요하다면 레포를 Include 방식으로 바꿔도 됨.
+            // 여기서는 ReplaceEntries 시 항상 DB에 존재하므로 다시 한 번 가져와도 OK
+            var withEntries = await _repo.GetWithEntriesAsync(poolId, ct) ?? e;
+            return withEntries.ToDetailDto();
         }
 
         public async Task DeleteAsync(int poolId, CancellationToken ct = default)

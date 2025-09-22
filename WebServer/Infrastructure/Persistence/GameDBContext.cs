@@ -61,7 +61,7 @@ namespace Infrastructure.Persistence
         public DbSet<StageRequirement> StageRequirements => Set<StageRequirement>();
         public DbSet<UserStageProgress> UserStageProgresses => Set<UserStageProgress>();
         public DbSet<UserCurrency> UserCurrencies => Set<UserCurrency>();
-
+        public DbSet<UserInventory> UserInventories => Set<UserInventory>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -836,6 +836,7 @@ namespace Infrastructure.Persistence
             Modeling_Session(b);
             Modeling_SecurityEvent(b);
             Modeling_UserCurrency(b);
+            Modeling_UserInventory(b);
         }
         private static void Modeling_UserCurrency(ModelBuilder b)
         {
@@ -898,6 +899,24 @@ namespace Infrastructure.Persistence
          .OnDelete(DeleteBehavior.Cascade);
 
                 e.HasIndex(x => x.UserId).IsUnique(); // 1:1 보장
+            });
+        }
+        private static void Modeling_UserInventory(ModelBuilder b)
+        {
+            b.Entity<UserInventory>(e =>
+            {
+                e.ToTable("UserInventory");
+
+                e.HasKey(x => new { x.UserId, x.ItemId });
+
+                e.Property(x => x.UserId).HasColumnName("UserId");
+                e.Property(x => x.ItemId).HasColumnName("ItemId");
+                e.Property(x => x.Count).HasColumnName("Count");
+                e.Property(x => x.UpdatedAt).IsRequired();
+
+                e.HasIndex(x => x.UserId);
+                e.HasIndex(x => x.ItemId);
+                e.HasIndex(x => x.UpdatedAt);
             });
         }
         private static void ConfigureUser(EntityTypeBuilder<User> e)
