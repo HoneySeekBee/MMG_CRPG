@@ -47,7 +47,7 @@ namespace Application.UserCurrency
             if (row is null)
             {
                 // 새 지갑행 생성 후 지급
-                row = Domain.Entities.UserCurrency.Create(userId, m.Id, _clock.UtcNow);
+                row = Domain.Entities.User.UserCurrency.Create(userId, m.Id, _clock.UtcNow);
                 row.Grant(amount, _clock.UtcNow);
                 await _userCur.AddAsync(row, ct);
             }

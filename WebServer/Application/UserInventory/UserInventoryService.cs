@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static Application.UserInventory.IUserInventoryService;
 using UserInvenPagedResult = Application.Common.Models.PagedResult<Application.UserInventory.UserInventoryDto>;
-using UserInven = Domain.Entities.UserInventory;
+using UserInven = Domain.Entities.User.UserInventory;
 
 namespace Application.UserInventory
 {

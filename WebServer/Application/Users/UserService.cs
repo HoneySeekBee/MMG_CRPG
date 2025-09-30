@@ -1,6 +1,7 @@
 ﻿using Application.Repositories;
 using Application.UserCurrency;
 using Domain.Entities;
+using Domain.Entities.User;
 using Domain.Enum;
 
 namespace Application.Users

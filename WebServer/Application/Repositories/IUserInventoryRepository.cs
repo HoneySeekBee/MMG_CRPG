@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UserInven = Domain.Entities.UserInventory;
+using UserInven = Domain.Entities.User.UserInventory;
 
 namespace Application.Repositories
 {

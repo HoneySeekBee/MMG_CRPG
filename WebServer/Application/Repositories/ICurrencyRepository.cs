@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EntitiyCurrency = Domain.Entities.Currency;
-using EntitiyUserCurrency = Domain.Entities.UserCurrency;
+using EntitiyUserCurrency = Domain.Entities.User.UserCurrency;
 
 namespace Application.UserCurrency
 {

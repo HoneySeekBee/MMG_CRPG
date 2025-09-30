@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Domain.Entities.User
 {
     public sealed class UserInventory
     {
-        private UserInventory(){ }
+        private UserInventory() { }
 
         public int UserId { get; set; }
-        public int ItemId{ get; set; }
+        public int ItemId { get; set; }
         public int Count { get; set; }
-        public DateTimeOffset UpdatedAt{ get; set; }
+        public DateTimeOffset UpdatedAt { get; set; }
 
         public static UserInventory Create(int userId, int itemId, int count = 0, DateTimeOffset? now = null)
         {
