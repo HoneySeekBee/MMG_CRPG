@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Entities.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -63,6 +64,9 @@ namespace Infrastructure.Persistence
         public DbSet<UserCurrency> UserCurrencies => Set<UserCurrency>();
         public DbSet<UserInventory> UserInventories => Set<UserInventory>();
 
+        public DbSet<UserCharacter> UserCharacters => Set<UserCharacter>();
+        public DbSet<UserCharacterSkill> UserCharacterSkills => Set<UserCharacterSkill>(); 
+        public DbSet<CharacterExp> CharacterExps => Set<CharacterExp>();
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             Console.WriteLine("OnModelCreateing");
@@ -837,6 +841,10 @@ namespace Infrastructure.Persistence
             Modeling_SecurityEvent(b);
             Modeling_UserCurrency(b);
             Modeling_UserInventory(b);
+            Modeling_UserCharacter(b);
+            Modeling_UserCharacterSkill(b);
+            Modeling_CharacterExp(b);
+
         }
         private static void Modeling_UserCurrency(ModelBuilder b)
         {
@@ -967,6 +975,88 @@ namespace Infrastructure.Persistence
             e.Property(x => x.Token).IsRequired();
 
             e.Property(x => x.IconId).IsRequired(false);
+        }
+        private static void Modeling_UserCharacter(ModelBuilder b)
+        {
+            b.Entity<UserCharacter>(e =>
+            {
+                e.ToTable("UserCharacter");
+
+                // PK (복합키)
+                e.HasKey(x => new { x.UserId, x.CharacterId });
+
+                // 컬럼 매핑
+                e.Property(x => x.UserId).HasColumnName("UserId");
+                e.Property(x => x.CharacterId).HasColumnName("CharacterId");
+                e.Property(x => x.Level).HasColumnName("Level");
+                e.Property(x => x.Exp).HasColumnName("Exp");
+                e.Property(x => x.BreakThrough).HasColumnName("BreakThrough");
+                e.Property(x => x.UpdatedAt).HasColumnName("UpdatedAt").IsRequired();
+
+                // 동시성 토큰(선택) – UpdatedAt을 ETag처럼 사용
+                e.Property(x => x.UpdatedAt).IsConcurrencyToken();
+
+                // 인덱스(조회 패턴에 맞춰 선택)
+                e.HasIndex(x => x.UserId);
+                e.HasIndex(x => x.CharacterId);
+                e.HasIndex(x => x.UpdatedAt);
+
+                // 컬렉션(백킹필드) 매핑: private readonly List<UserCharacterSkill> _skills
+                e.Navigation(nameof(UserCharacter.Skills)).UsePropertyAccessMode(PropertyAccessMode.Field);
+
+                e.HasMany<UserCharacterSkill>("_skills")
+                 .WithOne() // 역참조 내비게이션이 없으므로
+                 .HasForeignKey(s => new { s.UserId, s.CharacterId })
+                 .OnDelete(DeleteBehavior.Cascade);
+            });
+        }
+        private static void Modeling_UserCharacterSkill(ModelBuilder b)
+        {
+            b.Entity<UserCharacterSkill>(e =>
+            {
+                e.ToTable("UserCharacterSkill");
+
+                // PK (복합키)
+                e.HasKey(x => new { x.UserId, x.CharacterId, x.SkillId });
+
+                // 컬럼 매핑
+                e.Property(x => x.UserId).HasColumnName("UserId");
+                e.Property(x => x.CharacterId).HasColumnName("CharacterId");
+                e.Property(x => x.SkillId).HasColumnName("SkillId");
+                e.Property(x => x.Level).HasColumnName("Level");
+                e.Property(x => x.UpdatedAt).HasColumnName("UpdatedAt").IsRequired();
+
+                // 동시성 토큰(선택)
+                e.Property(x => x.UpdatedAt).IsConcurrencyToken();
+
+                // FK는 UserCharacter 쪽에서 .HasMany(...).HasForeignKey(...)로 이미 정의됨
+                // 여기서 중복으로 WithOne(UserCharacter navigation) 안 쓰는 이유:
+                // UserCharacterSkill에 내비게이션 프로퍼티를 두지 않았기 때문 (원하면 추가 가능)
+
+                // 인덱스
+                e.HasIndex(x => x.UserId);
+                e.HasIndex(x => x.CharacterId);
+                e.HasIndex(x => x.SkillId);
+                e.HasIndex(x => x.UpdatedAt);
+            });
+        }
+        private static void Modeling_CharacterExp(ModelBuilder b)
+        {
+            b.Entity<CharacterExp>(e =>
+            {
+                e.ToTable("CharacterExp");
+
+                // PK (레어도, 레벨)
+                e.HasKey(x => new { x.RarityId, x.Level });
+
+                // 컬럼 매핑
+                e.Property(x => x.RarityId).HasColumnName("RarityId");
+                e.Property(x => x.Level).HasColumnName("Level");
+                e.Property(x => x.RequiredExp).HasColumnName("RequiredExp").IsRequired();
+
+                // 자주 조회하면 추가 인덱스
+                e.HasIndex(x => x.Level);
+            });
         }
 
         // ---------- Session ----------

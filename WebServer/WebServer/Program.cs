@@ -34,6 +34,7 @@ using Application.UserCurrency;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using Application.UserInventory;
+using Application.UserCharacter;
 
 namespace WebServer
 {
@@ -227,6 +228,9 @@ namespace WebServer
             builder.Services.AddScoped<IUserInventoryQueryRepository, UserInventoryQueryRepository>();
 
             builder.Services.AddScoped<IUserInventoryService, UserInventoryService>();
+
+            builder.Services.AddScoped<IUserCharacterRepository, UserCharacterRepository>();
+            builder.Services.AddScoped<IUserCharacterService, UserCharacterService>();
 
             builder.Services.AddScoped<IIconRepository, EfIconRepository>();
             builder.Services.AddSingleton<IIconStorage>(sp =>

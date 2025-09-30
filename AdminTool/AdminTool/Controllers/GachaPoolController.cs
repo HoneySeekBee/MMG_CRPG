@@ -16,9 +16,8 @@ namespace AdminTool.Controllers
 
         public GachaPoolsController(IHttpClientFactory http) => _http = http;
 
-        // ──────────────────────────────────────────────────────────────────
+
         // 목록/검색
-        // ──────────────────────────────────────────────────────────────────
         [HttpGet("")]
         public async Task<IActionResult> Index([FromQuery] GachaPoolFilterVm filter, CancellationToken ct)
         {
@@ -53,9 +52,7 @@ namespace AdminTool.Controllers
             return View(vm);
         }
 
-        // ──────────────────────────────────────────────────────────────────
         // Create
-        // ──────────────────────────────────────────────────────────────────
         [HttpGet("Create")]
         public async Task<IActionResult> Create([FromQuery] CharacterPickFilter pick, CancellationToken ct)
         {
@@ -120,9 +117,8 @@ namespace AdminTool.Controllers
             TempData["toast"] = "가챠풀이 생성되었습니다.";
             return RedirectToAction(nameof(Index));
         }
-        // ──────────────────────────────────────────────────────────────────
+
         // Edit
-        // ──────────────────────────────────────────────────────────────────
         [HttpGet("Edit/{id:int}")]
         public async Task<IActionResult> Edit(int id, [FromQuery] CharacterPickFilter pick, CancellationToken ct)
         {
@@ -183,9 +179,9 @@ namespace AdminTool.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // ──────────────────────────────────────────────────────────────────
+
         // Delete
-        // ──────────────────────────────────────────────────────────────────
+
         [HttpPost("{id:int}/Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id, CancellationToken ct)
@@ -199,9 +195,8 @@ namespace AdminTool.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // ──────────────────────────────────────────────────────────────────
+
         // 헬퍼
-        // ──────────────────────────────────────────────────────────────────
         private async Task<IEnumerable<SelectListItem>> GetCharacterOptionsAsync(CharacterPickFilter filter, CancellationToken ct)
         {
             var api = _http.CreateClient("GameApi");

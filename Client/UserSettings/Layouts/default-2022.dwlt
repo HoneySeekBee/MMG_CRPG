@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 989
   m_ShowMode: 4
-  m_Title: Game
+  m_Title: Inspector
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -847,7 +847,7 @@ MonoBehaviour:
   m_Position:
     m_Target: {x: -3.1838558, y: 2.0129733, z: -5.025109}
     speed: 2
-    m_Value: {x: -3.2037835, y: 1.9386482, z: -5.0236545}
+    m_Value: {x: -3.1838558, y: 2.0129733, z: -5.025109}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -899,7 +899,7 @@ MonoBehaviour:
   m_Size:
     m_Target: 3.376941
     speed: 2
-    m_Value: 3.2315226
+    m_Value: 3.376941
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -1127,9 +1127,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: d06effff
-      m_LastClickedID: -37168
-      m_ExpandedIDs: d06effff9e91ffffa691ffffe491ffffbc94ffffb6abffff34b6ffff92c9ffffc2ccffff9ae5ffffbeefffffc6efffffd0efffff06f0ffffe8faffffda62000082f1000072ff0000
+      m_SelectedIDs: a27f0000
+      m_LastClickedID: 0
+      m_ExpandedIDs: 6ce3ffff00fbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1245,7 +1245,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/ExternalAsset/GUIPackCartoon/Demo/Resources/Popups
+    - Assets/Scenes/Web
     m_Globs: []
     m_OriginalText: 
     m_ImportLogFlags: 0
@@ -1253,16 +1253,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/ExternalAsset/GUIPackCartoon/Demo/Resources/Popups
+  - Assets/Scenes/Web
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Dev\MMG_CRPG\MMG_CRPG\Client
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 180}
-    m_SelectedIDs: 226e0000
-    m_LastClickedID: 28194
-    m_ExpandedIDs: 00000000ba6d0000bc6d0000be6d0000c06d0000c26d0000c46d0000c66d0000c86d0000ca6d0000cc6d0000ce6d0000d06d0000d26d0000d46d0000d66d0000d86d0000da6d0000dc6d0000de6d0000e06d0000e26d0000e46d0000e66d0000e86d0000ea6d0000ec6d0000ee6d0000f06d0000f46d0000f66d0000f86d0000fa6d0000fc6d0000fe6d0000006e0000586e000000ca9a3b
+    scrollPos: {x: 0, y: 0}
+    m_SelectedIDs: 9e7f0000
+    m_LastClickedID: 32670
+    m_ExpandedIDs: 00000000047e0000067e0000087e00000a7e00000c7e00000e7e0000107e0000127e0000147e0000167e0000187e00001a7e00001c7e00001e7e0000207e0000227e0000247e0000267e0000287e00002a7e00002c7e00002e7e0000307e0000327e0000347e0000367e00003a7e00003c7e00003e7e0000407e0000427e0000447e0000467e0000487e00004a7e00003a7f000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1290,7 +1290,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000ba6d0000bc6d0000be6d0000c06d0000c26d0000c46d0000c66d0000c86d0000ca6d0000cc6d0000ce6d0000d06d0000d26d0000d46d0000d66d0000d86d0000da6d0000dc6d0000de6d0000e06d0000e26d0000e46d0000e66d0000e86d0000ea6d0000ec6d0000ee6d0000f06d0000f26d0000f46d0000f66d0000f86d0000fa6d0000fc6d0000fe6d0000006e0000
+    m_ExpandedIDs: 00000000047e0000067e0000087e00000a7e00000c7e00000e7e0000107e0000127e0000147e0000167e0000187e00001a7e00001c7e00001e7e0000207e0000227e0000247e0000267e0000287e00002a7e00002c7e00002e7e0000307e0000327e0000347e0000367e0000387e00003a7e00003c7e00003e7e0000407e0000427e0000447e0000467e0000487e00004a7e0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1321,20 +1321,20 @@ MonoBehaviour:
     m_ExpandedInstanceIDs: 0ac90000ac6b0100da0a0200100a0200f4b40300f8f1000064710000509100004270000098700000288400004aec0000f48a000092790000c2720000fa880000028900002289000074710000448700001c8a0000448c0000e08a0000b88c0000fc8f000052900000d68d0000ca8e0000548400006484000086700000669700006c970000da970000e097000036a1000038a100005ea1000060a100005cb100003ac20000c070000020e90000b0d80000a687000086890000f090000086730000be4c0100cc4d01002a4e01002e4e0100364e01003e4e010096930000c29c00007293000076930000869300001a65010022650100f6640100549900005a990000965001002e790000847900008a7900007e790000188c00002a8c0000248c0000fa8b00000c8c0000008c0000ba950000de950000d8950000ea950000e4950000cc950000c0950000ae8a00001e8c0000988b00009e8b0000d28b0000d68b000036820000fa7e0000cc750000d6cf000008780000e2750000cc7a00009cb40000dabd00000a8a0000fe890000e6890000deb20000000000006c8a0000628a000030860000328600002a8600003aa500002e860000c6b30000507000008089000094760000ac320100a43201009276000098320100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: Level
-      m_OriginalName: Level
+      m_Name: 
+      m_OriginalName: 
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 32264
+      m_UserData: 0
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 11
       m_IsRenamingFilename: 1
-      m_ClientGUIView: {fileID: 12}
+      m_ClientGUIView: {fileID: 11}
     m_CreateAssetUtility:
       m_EndAction: {fileID: 0}
       m_InstanceID: 0

@@ -1,4 +1,4 @@
-﻿using UserInven = Domain.Entities.UserInventory;
+﻿using UserInven = Domain.Entities.User.UserInventory;
 
 namespace Application.UserInventory
 {
