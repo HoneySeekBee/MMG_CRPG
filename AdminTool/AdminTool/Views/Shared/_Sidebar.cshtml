@@ -1,4 +1,13 @@
-﻿@model (string ctrl, string act)
+﻿@using System.Security.Claims
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor Http
+@{
+    var isAuthed = User?.Identity?.IsAuthenticated == true;
+    var uid = Http?.HttpContext?.Request?.Query["userId"].ToString();
+    if (string.IsNullOrWhiteSpace(uid) && isAuthed)
+        uid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+}
+
+@model (string ctrl, string act)
 
 @functions{
     bool isActive(string c, string? a = null)
@@ -47,4 +56,28 @@
 <a asp-controller="AdminUsers" asp-action="Index" class="@ActiveCls("AdminUsers")">Users</a>
 <a asp-controller="AdminAuth" asp-action="Login" class="@ActiveCls("AdminAuth","Login")">Login</a>
 <a asp-controller="AdminAuth" asp-action="Register" class="@ActiveCls("AdminAuth","Register")">Register</a>
+@if (isAuthed)
+{
+    <a asp-controller="UserInventory"
+       asp-action="Index"
+       asp-route-userId="@uid"
+       class="@ActiveCls("UserInventory")">Inventory</a>
 
+    <a asp-controller="UserCharacter"
+       asp-action="Index"
+       asp-route-userId="@uid"
+       class="@ActiveCls("UserCharacter")">UserCharacter</a>
+}
+else
+{
+    <!-- 미로그인: 로그인으로 보내되 returnUrl은 경로만 -->
+    <a asp-controller="AdminAuth"
+       asp-action="Login"
+       asp-route-returnUrl="@Url.Action("Index","UserInventory")"
+       class="@ActiveCls("UserInventory")">Inventory</a>
+
+    <a asp-controller="AdminAuth"
+       asp-action="Login"
+       asp-route-returnUrl="@Url.Action("Index","UserCharacter")"
+       class="@ActiveCls("UserCharacter")">UserCharacter</a>
+}

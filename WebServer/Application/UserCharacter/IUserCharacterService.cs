@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Application.Common.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,5 +14,7 @@ namespace Application.UserCharacter
         Task<UserCharacterDto> LearnSkillAsync(LearnSkillRequest req, CancellationToken ct = default);
         Task<UserCharacterDto> LevelUpSkillAsync(LevelUpSkillRequest req, CancellationToken ct = default);
         Task<UserCharacterDto?> GetAsync(GetUserCharacterRequest req, CancellationToken ct = default);
+        Task<PagedResult<UserCharacterDto>> GetListAsync(int userId, int page = 1, int pageSize = 50, CancellationToken ct = default);
+
     }
 }

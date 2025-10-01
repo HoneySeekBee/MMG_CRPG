@@ -1,0 +1,35 @@
+﻿@using System.Security.Claims
+@model Application.Common.Models.PagedResult<Application.UserCharacter.UserCharacterDto>
+
+@{ 
+    var userIdText =
+        (ViewBag.UserId?.ToString())
+        ?? (Context.Request.Query["userId"].ToString())
+        ?? User.FindFirstValue(ClaimTypes.NameIdentifier);
+}
+
+<h1>User Characters (UserId: @userIdText)</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>CharacterId</th>
+            <th>Level</th>
+            <th>Exp</th>
+            <th>BreakThrough</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var c in Model.Items)
+        {
+            <tr>
+                <td>@c.CharacterId</td>
+                <td>@c.Level</td>
+                <td>@c.Exp</td>
+                <td>@c.BreakThrough</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>Page @Model.Page / @Model.PageSize</div>

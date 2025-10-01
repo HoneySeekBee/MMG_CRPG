@@ -12,9 +12,7 @@ namespace Application.Repositories
     {
         Task<UserCha?> GetAsync(int userId, int characterId, CancellationToken ct = default);
         Task AddAsync(UserCha entity, CancellationToken ct = default);
-    }
-    public interface IUnitOfWork
-    {
-        Task<int> SaveChangesAsync(CancellationToken ct = default);
+        Task<(IReadOnlyList<UserCha> Items, int TotalCount)> GetListAsync(
+           int userId, int page, int pageSize, CancellationToken ct = default);
     }
 }
