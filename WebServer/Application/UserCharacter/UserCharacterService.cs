@@ -23,7 +23,7 @@ namespace Application.UserCharacter
             var existing = await _repo.GetAsync(req.UserId, req.CharacterId, ct);
             if (existing is not null) throw new InvalidOperationException("이미 보유한 캐릭터");
 
-            var entity = UserCha.Create(req.UserId, (short)req.CharacterId, _clock.UtcNow);
+            var entity = UserCha.Create(req.UserId, req.CharacterId, _clock.UtcNow);
             await _repo.AddAsync(entity, ct);
             await _uow.SaveChangesAsync(ct);
             return entity.ToDto();
@@ -69,6 +69,13 @@ namespace Application.UserCharacter
 
         public async Task<UserCharacterDto?> GetAsync(GetUserCharacterRequest req, CancellationToken ct)
             => (await _repo.GetAsync(req.UserId, req.CharacterId, ct))?.ToDto();
+
+        public async Task<Application.Common.Models.PagedResult<UserCharacterDto>> GetListAsync(int userId, int page = 1, int pageSize = 50, CancellationToken ct = default)
+        {
+            var (entities, total) = await _repo.GetListAsync(userId, page, pageSize, ct);
+            var dtos = entities.Select(e => e.ToDto()).ToList();
+            return new Application.Common.Models.PagedResult<UserCharacterDto>(dtos, page, pageSize, total);
+        }
 
         private async Task<UserCha> LoadAsync(int userId, int characterId, CancellationToken ct)
             => await _repo.GetAsync(userId, characterId, ct)

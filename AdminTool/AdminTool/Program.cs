@@ -1,4 +1,5 @@
 using AdminTool.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace AdminTool
 {
@@ -16,12 +17,36 @@ namespace AdminTool
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(
                     new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-            });
-
+            })
+            .AddHttpMessageHandler<TokenAttachHandler>();
             builder.Services.AddScoped<AdminTool.Controllers.IStageUiProvider, AdminTool.Controllers.StaticStageUiProvider>();
             builder.Services.AddScoped<ICombatApiClient, CombatApiClient>();
             builder.Services.AddScoped<ICharacterUiProvider, ApiCharacterUiProvider>();
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            })
+.AddCookie(options =>
+{
+    options.LoginPath = "/admin/auth/login";
+    options.LogoutPath = "/admin/auth/logout";
+    options.SlidingExpiration = true;
+    options.ExpireTimeSpan = TimeSpan.FromHours(8);
+});
+            builder.Services.AddAuthorization();
+
+            builder.Services.AddSession(o =>
+            {
+                o.Cookie.Name = ".AdminTool.Session";
+                o.Cookie.HttpOnly = true;
+                o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                o.IdleTimeout = TimeSpan.FromHours(2);
+            });
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddTransient<TokenAttachHandler>();
+
 
             var app = builder.Build();
 
@@ -39,6 +64,7 @@ namespace AdminTool
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseSession();
 
             app.MapControllerRoute(
                 name: "default",

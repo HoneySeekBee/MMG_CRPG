@@ -1,8 +1,12 @@
 ﻿using AdminTool.Models;
 using Application.Users;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
+using System.Security.Claims;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AdminTool.Controllers
 {
@@ -22,15 +26,22 @@ namespace AdminTool.Controllers
         }
 
         // ===== Login =====
+        [AllowAnonymous]
         [HttpGet("login")]
-        public IActionResult Login() => View("~/Views/AdminAuth/Login.cshtml");
+        public IActionResult Login([FromQuery] string? returnUrl = null)
+        {
+            return View("~/Views/AdminAuth/Login.cshtml",
+                new AdminLoginVm { ReturnUrl = returnUrl });
+        }
 
         [HttpPost("login")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(AdminLoginVm vm, CancellationToken ct)
         {
+            Console.WriteLine($"1 Auth의 Return : {vm.ReturnUrl} ");
             if (!ModelState.IsValid) return View("~/Views/AdminAuth/Login.cshtml", vm);
 
+            // WebAPI에 로그인 요청
             var api = _http.CreateClient("GameApi");
             var resp = await api.PostAsJsonAsync("/api/auth/login",
                 new LoginUserRequest(vm.Account, vm.Password), ct);
@@ -48,23 +59,30 @@ namespace AdminTool.Controllers
                 return View("~/Views/AdminAuth/Login.cshtml", vm);
             }
 
-            // 토큰 쿠키 저장 (HttpOnly/Secure)
-            Response.Cookies.Append("accessToken", dto.Tokens.AccessToken, new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.Strict,
-                Expires = dto.Tokens.AccessExpiresAt.UtcDateTime
-            });
-            Response.Cookies.Append("refreshToken", dto.Tokens.RefreshToken, new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.Strict,
-                Expires = dto.Tokens.RefreshExpiresAt.UtcDateTime
-            });
+            // 세션에 토큰 저장 
+            HttpContext.Session.SetString("access_token", dto.Tokens.AccessToken);
+            HttpContext.Session.SetString("refresh_token", dto.Tokens.RefreshToken);
+
+            // 쿠키 세션 발급 
+            var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.NameIdentifier, dto.User.Id.ToString()),
+        new Claim(ClaimTypes.Name, dto.User.Account),
+        // 필요하면 역할/권한
+        // new Claim(ClaimTypes.Role, "admin"),
+    };
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(identity));
 
             TempData["ok"] = "로그인 성공";
+
+            Console.WriteLine($"Auth의 Return : {vm.ReturnUrl} ");
+
+            if (!string.IsNullOrWhiteSpace(vm.ReturnUrl) && Url.IsLocalUrl(vm.ReturnUrl))
+                return Redirect(vm.ReturnUrl);
+
             return RedirectToAction("Index", "AdminUsers");
         }
 
@@ -97,15 +115,21 @@ namespace AdminTool.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout(CancellationToken ct)
         {
-            var refresh = Request.Cookies["refreshToken"];
+            // (1) 웹서버에 로그아웃 알림
+            var refresh = HttpContext.Session.GetString("refresh_token");
             if (!string.IsNullOrWhiteSpace(refresh))
             {
-                var api = Api();
-                await api.PostAsJsonAsync("/api/auth/logout", new LogoutRequest(refresh), ct);
+                var api = _http.CreateClient("GameApi");
+                try { await api.PostAsJsonAsync("/api/auth/logout", new LogoutRequest(refresh), ct); }
+                catch { /* 실패해도 무시 */ }
             }
 
-            Response.Cookies.Delete("accessToken");
-            Response.Cookies.Delete("refreshToken");
+            // (2) 세션에 로그인 토큰 제거
+            HttpContext.Session.Remove("access_token");
+            HttpContext.Session.Remove("refresh_token");
+
+            // (3) 운영툴 "쿠키 세션" 종료 
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             TempData["ok"] = "로그아웃 되었습니다.";
             return RedirectToAction("Login");

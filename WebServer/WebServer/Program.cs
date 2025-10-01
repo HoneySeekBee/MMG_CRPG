@@ -231,7 +231,7 @@ namespace WebServer
 
             builder.Services.AddScoped<IUserCharacterRepository, UserCharacterRepository>();
             builder.Services.AddScoped<IUserCharacterService, UserCharacterService>();
-
+            builder.Services.AddScoped<IUnitOfWork, EfUnitOfWork>();  
             builder.Services.AddScoped<IIconRepository, EfIconRepository>();
             builder.Services.AddSingleton<IIconStorage>(sp =>
             {

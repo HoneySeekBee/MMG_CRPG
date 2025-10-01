@@ -1,0 +1,33 @@
+﻿@using System.Security.Claims
+@model Application.Common.Models.PagedResult<Application.UserInventory.UserInventoryDto>
+
+@{
+    var userIdText =
+        (ViewBag.UserId?.ToString())
+        ?? (Context.Request.Query["userId"].ToString())
+        ?? User.FindFirstValue(ClaimTypes.NameIdentifier);
+}
+
+<h1>User Inventory (UserId: @userIdText)</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ItemId</th>
+            <th>Count</th>
+            <th>UpdatedAt</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var i in Model.Items)
+        {
+            <tr>
+                <td>@i.ItemId</td>
+                <td>@i.Count</td>
+                <td>@i.UpdatedAt</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>Page @Model.Page / @Model.PageSize</div>

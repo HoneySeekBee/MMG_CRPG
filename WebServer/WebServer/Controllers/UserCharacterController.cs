@@ -26,6 +26,22 @@ namespace WebServer.Controllers
             return Ok(dto);
         }
 
+        // 캐릭터 리스트 조회
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<UserCharacterDto>>> GetList(
+            int userId,
+            [FromQuery] int page = 1, 
+            [FromQuery] int pageSize = 50,
+            CancellationToken ct = default)
+        {
+            var list = await _svc.GetListAsync(userId, page, pageSize, ct);
+
+            return Ok(list);
+        }
+
+
+
+
         // 캐릭터 생성
         [HttpPost]
         public async Task<ActionResult<UserCharacterDto>> Create(

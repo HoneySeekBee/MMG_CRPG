@@ -980,60 +980,50 @@ namespace Infrastructure.Persistence
         {
             b.Entity<UserCharacter>(e =>
             {
-                e.ToTable("UserCharacter");
-
-                // PK (복합키)
+                e.ToTable("UserCharacters");               // 실제 테이블명과 일치
                 e.HasKey(x => new { x.UserId, x.CharacterId });
 
-                // 컬럼 매핑
                 e.Property(x => x.UserId).HasColumnName("UserId");
                 e.Property(x => x.CharacterId).HasColumnName("CharacterId");
                 e.Property(x => x.Level).HasColumnName("Level");
                 e.Property(x => x.Exp).HasColumnName("Exp");
                 e.Property(x => x.BreakThrough).HasColumnName("BreakThrough");
                 e.Property(x => x.UpdatedAt).HasColumnName("UpdatedAt").IsRequired();
-
-                // 동시성 토큰(선택) – UpdatedAt을 ETag처럼 사용
                 e.Property(x => x.UpdatedAt).IsConcurrencyToken();
 
-                // 인덱스(조회 패턴에 맞춰 선택)
+                // 백킹필드 내비 사용
+                var nav = e.Metadata.FindNavigation(nameof(UserCharacter.Skills));
+                nav!.SetField("_skills");
+                nav.SetPropertyAccessMode(PropertyAccessMode.Field);
+
+                // (선택) 인덱스
                 e.HasIndex(x => x.UserId);
                 e.HasIndex(x => x.CharacterId);
                 e.HasIndex(x => x.UpdatedAt);
-
-                // 컬렉션(백킹필드) 매핑: private readonly List<UserCharacterSkill> _skills
-                e.Navigation(nameof(UserCharacter.Skills)).UsePropertyAccessMode(PropertyAccessMode.Field);
-
-                e.HasMany<UserCharacterSkill>("_skills")
-                 .WithOne() // 역참조 내비게이션이 없으므로
-                 .HasForeignKey(s => new { s.UserId, s.CharacterId })
-                 .OnDelete(DeleteBehavior.Cascade);
             });
         }
         private static void Modeling_UserCharacterSkill(ModelBuilder b)
         {
             b.Entity<UserCharacterSkill>(e =>
             {
-                e.ToTable("UserCharacterSkill");
-
-                // PK (복합키)
+                e.ToTable("UserCharacterSkill");          // 실제 테이블명 (복수 추천)
                 e.HasKey(x => new { x.UserId, x.CharacterId, x.SkillId });
 
-                // 컬럼 매핑
                 e.Property(x => x.UserId).HasColumnName("UserId");
                 e.Property(x => x.CharacterId).HasColumnName("CharacterId");
                 e.Property(x => x.SkillId).HasColumnName("SkillId");
                 e.Property(x => x.Level).HasColumnName("Level");
                 e.Property(x => x.UpdatedAt).HasColumnName("UpdatedAt").IsRequired();
-
-                // 동시성 토큰(선택)
                 e.Property(x => x.UpdatedAt).IsConcurrencyToken();
 
-                // FK는 UserCharacter 쪽에서 .HasMany(...).HasForeignKey(...)로 이미 정의됨
-                // 여기서 중복으로 WithOne(UserCharacter navigation) 안 쓰는 이유:
-                // UserCharacterSkill에 내비게이션 프로퍼티를 두지 않았기 때문 (원하면 추가 가능)
+                //  
+                e.HasOne(s => s.UserCharacter) 
+ .WithMany(uc => uc.Skills)
+ .HasForeignKey(s => new { s.UserId, s.CharacterId })
+ .HasPrincipalKey(uc => new { uc.UserId, uc.CharacterId })
+ .OnDelete(DeleteBehavior.Cascade);
 
-                // 인덱스
+                // (선택) 인덱스
                 e.HasIndex(x => x.UserId);
                 e.HasIndex(x => x.CharacterId);
                 e.HasIndex(x => x.SkillId);
