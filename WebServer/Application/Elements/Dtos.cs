@@ -16,6 +16,6 @@ namespace Application.Elements
     short SortOrder,
     bool IsActive,
     string Meta,
-    DateTime CreatedAt,
-    DateTime UpdatedAt);
+    DateTimeOffset CreatedAt,
+    DateTimeOffset UpdatedAt);
 }

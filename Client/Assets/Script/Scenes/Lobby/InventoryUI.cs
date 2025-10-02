@@ -4,12 +4,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class InventoryUI : MonoBehaviour
 {
     [Header("Item Type")]
     public ToggleGroup ItemTypeToggleGroup;
     public ItemTypeToggleUI ItemTypeToggle;
+
+    [Header("UserInventory")]
+    public ScrollRect ItemIconRect;
+    public Transform ItemIconViewContent;
+    public BagItemIconUI BagItemIcon; 
 
     // 1. 카테고리 목록을 받아온다.
 
