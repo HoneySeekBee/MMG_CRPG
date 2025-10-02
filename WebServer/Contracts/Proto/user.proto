@@ -25,8 +25,25 @@ message UserProfilePb {
   int32  iconId   = 9; // 없으면 0 
   string iconKey  = 10;   // 예: "hero_0001"
   int32  iconVersion = 11;
+
+  repeated InventoryItemPb inventory = 30;
+  repeated HeroPb          heroes    = 31;
 }
 
+message InventoryItemPb {
+  string refId = 1;   // "mat_exp_1", "potion_small" 등
+  int64  amount = 2;
+}
+
+message HeroPb {
+  string heroId   = 1;  // "h001"
+  int32  rarity   = 2;
+  int32  level    = 3;
+  int32  tier     = 4;  // 돌파 단계
+  int32  baseAtk  = 5;
+  int32  baseHp   = 6;
+  // 필요 시 잠금/선호/장비슬롯 등 추가
+}
 // 수정 요청
 message UpdateProfilePb {
   string nickname = 1;

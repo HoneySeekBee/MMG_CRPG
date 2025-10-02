@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package contracts.assets;
+
+// icon
+message IconMessage {
+  int32 icon_id = 1;
+  string key = 2;
+  int32 version = 3;
+  string url = 4;   
+}
+message ListIconsResponse {
+  repeated IconMessage icons = 1;
+  int32 total_count = 2;
+}
+
+message GetIconResponse {
+  IconMessage icon = 1;
+}
+
+// Portrait
+
+message PortraitMessage {
+  int32 portrait_id = 1;
+  string key = 2;
+  int32 version = 3;
+  string url = 4;      
+}
+
+message ListPortraitsResponse {
+  repeated PortraitMessage portraits = 1;
+  int32 total_count = 2;
+}
+
+message GetPortraitResponse {
+  PortraitMessage portrait = 1;
+}

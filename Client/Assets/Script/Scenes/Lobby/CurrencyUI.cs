@@ -14,7 +14,9 @@ namespace Game.Lobby
 
         public void Set(UserProfilePb p)
         {
-
+            TokenText.text = p.Token.ToString();
+            GoldTextt.text = p.Gold.ToString();
+            GemText.text = p.Gem.ToString();
         }
     }
 

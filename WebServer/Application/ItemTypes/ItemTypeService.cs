@@ -32,7 +32,7 @@ namespace Application.ItemTypes
 
         public async Task<ItemTypeDto> CreateAsync(CreateItemTypeRequest req, CancellationToken ct)
         {
-            var entity = new ItemType(req.Code, req.Name, req.SlotId);
+            var entity = new ItemType(req.Code, req.Name, req.SlotId, active:req.Active);
             await _repo.AddAsync(entity, ct);
             await _repo.SaveChangesAsync(ct);
             var created = await _repo.GetByIdAsync(entity.Id, includeSlot: true, ct);
@@ -45,6 +45,7 @@ namespace Application.ItemTypes
             e.ChangeCode(req.Code);
             e.Rename(req.Name);
             e.SetSlot(req.SlotId);
+            e.SetActive(req.Active);
             await _repo.SaveChangesAsync(ct);
         }
 
@@ -64,6 +65,6 @@ namespace Application.ItemTypes
             await _repo.SaveChangesAsync(ct);
         }
         private static ItemTypeDto Map(ItemType x) =>
-            new(x.Id, x.Code, x.Name, x.SlotId, x.Slot?.Code, x.Slot?.Name, x.CreatedAt, x.UpdatedAt);
+            new(x.Id, x.Code, x.Name, x.SlotId, x.Slot?.Code, x.Slot?.Name, x.CreatedAt, x.UpdatedAt, x.Active);
     }
 }

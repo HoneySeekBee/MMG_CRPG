@@ -16,4 +16,6 @@ public static class ApiRoutes
     public const string MeProfile = "/me/profile";
     public const string MeProfileUpdate = "/me/profile";
     public const string MeChangePassword = "/me/change-password";
+
+    public const string ItemTypes = "/itemtypes";
 }

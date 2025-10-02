@@ -14,7 +14,8 @@ namespace Application.ItemTypes
         string? SlotCode,
         string? SlotName,
         DateTimeOffset CreatedAt,
-        DateTimeOffset UpdatedAt
+        DateTimeOffset UpdatedAt,
+        bool Active
     );
 
     public sealed record ListItemTypesRequest(
@@ -29,14 +30,16 @@ namespace Application.ItemTypes
     public sealed record CreateItemTypeRequest(
         string Code,
         string Name,
-        short? SlotId
+        short? SlotId,
+        bool Active
     );
 
     public sealed record UpdateItemTypeRequest(
         short Id,
         string Code,
         string Name,
-        short? SlotId
+        short? SlotId,
+        bool Active
     );
 
     public sealed record PatchItemTypeSlotRequest(

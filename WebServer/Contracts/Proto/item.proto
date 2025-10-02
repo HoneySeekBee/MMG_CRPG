@@ -1,0 +1,128 @@
+syntax = "proto3";
+
+package contracts.protos;
+
+
+// Enum
+enum BindTypePb {
+  BIND_TYPE_NONE     = 0;  // Domain.Enum.BindType.None
+  BIND_TYPE_ON_PICKUP = 1; // Domain.Enum.BindType.OnPickup
+  BIND_TYPE_ON_EQUIP  = 2; // Domain.Enum.BindType.OnEquip
+}
+
+enum ItemEffectScopePb {
+  ITEM_EFFECT_SCOPE_ON_USE  = 0; // Domain.Enum.ItemEffectScope.OnUse
+  ITEM_EFFECT_SCOPE_ON_EQUIP = 1; // Domain.Enum.ItemEffectScope.OnEquip
+  ITEM_EFFECT_SCOPE_PASSIVE  = 2; // Domain.Enum.ItemEffectScope.Passive
+}
+
+enum ItemPriceTypePb {
+  ITEM_PRICE_BUY     = 0; // Domain.Enum.ItemPriceType.Buy
+  ITEM_PRICE_SELL    = 1; // Domain.Enum.ItemPriceType.Sell
+  ITEM_PRICE_UPGRADE = 2; // Domain.Enum.ItemPriceType.Upgrade
+  ITEM_PRICE_CRAFT   = 3; // Domain.Enum.ItemPriceType.Craft
+}
+enum StatOpPb {
+  STAT_OP_ADD_FLAT = 0; // Domain.Enum.StatOp.AddFlat
+  STAT_OP_ADD_PCT  = 1; // Domain.Enum.StatOp.AddPct
+  STAT_OP_MUL      = 2; // Domain.Enum.StatOp.Mul
+  STAT_OP_SET      = 3; // Domain.Enum.StatOp.Set
+}
+
+
+
+// [ Item  ]
+message ItemStatMessage {
+  int64 id     = 1;
+  int32 stat_id = 2;
+  double value = 3;  
+  // StatOpPb op = 4;
+}
+
+message ItemEffectMessage {
+  int64 id              = 1;
+  ItemEffectScopePb scope = 2;
+  string payload_json   = 3; 
+  int32 sort_order      = 4;
+}
+
+message ItemPriceMessage {
+  int64 id              = 1;
+  int32 currency_id     = 2;
+  ItemPriceTypePb price_type = 3;
+  int64 price           = 4;
+} 
+message ItemSummaryMessage {
+  int64 id        = 1;
+  string code     = 2;
+  string name     = 3;
+  int32 type_id   = 4;
+  int32 rarity_id = 5;
+  int32 icon_id   = 6;  // 0 = null
+  bool  is_active = 7;
+  string icon_url = 20; // 선택
+}
+message ItemMessage {
+  int64 id            = 1;
+  string code         = 2;
+  string name         = 3;
+  string description  = 4;
+  int32 type_id       = 5;
+  int32 rarity_id     = 6;
+  int32 icon_id       = 7;   // 0 = null
+  int32 portrait_id   = 8;   // 0 = null
+  bool  stackable     = 9;
+  int32 max_stack     = 10;
+  BindTypePb bind_type = 11;
+  bool  tradable      = 12;
+  int32 durability_max = 13; // 0 = null
+  int32 weight        = 14;
+  repeated string tags = 15;
+  bool  is_active     = 16;
+  string meta_json    = 17;
+  string created_by   = 18;
+  int64 created_at_ms = 19;
+  int64 updated_at_ms = 20;
+  repeated ItemStatMessage   stats   = 21;
+  repeated ItemEffectMessage effects = 22;
+  repeated ItemPriceMessage  prices  = 23;
+  string icon_url     = 30;  // 선택
+  string portrait_url = 31;  // 선택
+}
+ 
+// 조회 API
+message ListItemsRequest {
+  string search     = 1;
+  int32  type_id    = 2; // 0 = ignore
+  int32  rarity_id  = 3; // 0 = ignore
+  bool   active_only = 4;
+  int32 page        = 10; // 1-base
+  int32 page_size   = 11; // default by server
+}
+
+message ListItemsResponse {
+  repeated ItemSummaryMessage items = 1;
+  int32 total_count = 2;
+}
+
+message GetItemResponse {
+  ItemMessage item = 1;
+}
+
+// [ ItemType ]
+
+message ItemTypeMessage {
+  int32 id = 1;          
+  string code = 2;       
+  string name = 3;        
+  int32 slot_id = 4;      
+  bool active = 5;       
+  int64 created_at = 6; 
+  int64 updated_at = 7;  
+}
+
+
+message ListItemTypesResponseMessage {
+  repeated ItemTypeMessage items = 1;
+  int32 total_count = 2; 
+}
