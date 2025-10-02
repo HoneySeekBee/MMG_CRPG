@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package Game.MasterData;
+
+import "rarity.proto";
+import "element.proto";
+import "role.proto";
+import "faction.proto";
+
+message MasterDataBundle {
+  repeated RarityMessage rarities = 1;
+  repeated ElementMessage elements = 2;
+  repeated RoleMessage roles = 3;
+  repeated FactionMessage factions = 4;
+}

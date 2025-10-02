@@ -67,6 +67,10 @@ namespace WebServer.Extensions
             s.AddSingleton<IIconCache, IconCache>();
             s.AddSingleton<IPortraitsCache, PortraitCache>();
             s.AddSingleton<IItemCache, ItemCache>();
+            s.AddSingleton<IRarityCache, RarityCache>();
+            s.AddSingleton<IElementCache, ElementCache>();
+            s.AddSingleton<IRoleCache, RoleCache>();
+            s.AddSingleton<IFactionCache, FactionCache>();
 
             // 도메인/리포지토리/서비스 (Scoped)
 
