@@ -53,9 +53,7 @@ namespace Game.Scenes.Init
                 SceneController.Instance.Go("Login");
             });
         }
-
-        // ApiRoutes.Status가 "/status" 라면 그대로 사용해도 되고,
-        // 베이스 URL에 /api/pb 를 쓰는 경우 경로 조합을 여기서 안전하게 감쌉니다.
+         
         private string StatusRoute() => ApiRoutes.Status; // 예: "/status"
     }
 }

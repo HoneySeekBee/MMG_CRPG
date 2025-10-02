@@ -16,10 +16,10 @@ namespace Domain.Entities
 
         public DateTimeOffset CreatedAt { get; private set; }
         public DateTimeOffset UpdatedAt { get; private set; }
-
+        public bool Active { get; private set; }
         private ItemType() { }
 
-        public ItemType(string code, string name, short? slotId = null)
+        public ItemType(string code, string name, short? slotId = null, bool active = false)
         {
             if (string.IsNullOrWhiteSpace(code)) throw new ArgumentException("Code is required.", nameof(code));
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Name is required.", nameof(name));
@@ -27,6 +27,7 @@ namespace Domain.Entities
             Name = name.Trim();
             SlotId = slotId;
             CreatedAt = UpdatedAt = DateTimeOffset.UtcNow;
+            Active = active;
         }
 
         public void Rename(string name)
@@ -39,6 +40,11 @@ namespace Domain.Entities
         {
             if (string.IsNullOrWhiteSpace(code)) throw new ArgumentException(nameof(code));
             Code = code.Trim();
+            Touch();
+        }
+        public void SetActive(bool active)
+        {
+            Active = active;
             Touch();
         }
         public void SetSlot(short? slotId) { SlotId = slotId; Touch(); }

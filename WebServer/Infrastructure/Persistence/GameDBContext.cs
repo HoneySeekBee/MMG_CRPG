@@ -65,7 +65,7 @@ namespace Infrastructure.Persistence
         public DbSet<UserInventory> UserInventories => Set<UserInventory>();
 
         public DbSet<UserCharacter> UserCharacters => Set<UserCharacter>();
-        public DbSet<UserCharacterSkill> UserCharacterSkills => Set<UserCharacterSkill>(); 
+        public DbSet<UserCharacterSkill> UserCharacterSkills => Set<UserCharacterSkill>();
         public DbSet<CharacterExp> CharacterExps => Set<CharacterExp>();
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -682,7 +682,7 @@ namespace Infrastructure.Persistence
                 e.Property(x => x.Code).IsRequired();
                 e.Property(x => x.Name).IsRequired();
                 e.HasIndex(x => x.Code).IsUnique();
-
+                e.Property(x => x.Active).IsRequired();
                 e.HasOne(x => x.Slot)
                  .WithMany()
                  .HasForeignKey(x => x.SlotId)
@@ -900,7 +900,7 @@ namespace Infrastructure.Persistence
                 e.Property(x => x.Gem).HasColumnName("Gem").IsRequired();
                 e.Property(x => x.Token).HasColumnName("Token").IsRequired();
                 e.Property(x => x.IconId).HasColumnName("IconId").IsRequired(false);
-           
+
                 e.HasOne<User>()
          .WithOne(u => u.Profile)
          .HasForeignKey<UserProfile>(p => p.UserId)
@@ -1017,7 +1017,7 @@ namespace Infrastructure.Persistence
                 e.Property(x => x.UpdatedAt).IsConcurrencyToken();
 
                 //  
-                e.HasOne(s => s.UserCharacter) 
+                e.HasOne(s => s.UserCharacter)
  .WithMany(uc => uc.Skills)
  .HasForeignKey(s => new { s.UserId, s.CharacterId })
  .HasPrincipalKey(uc => new { uc.UserId, uc.CharacterId })

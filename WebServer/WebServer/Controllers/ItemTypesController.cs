@@ -1,5 +1,6 @@
 ﻿using Application.Items;
 using Application.ItemTypes;
+using Contracts.Protos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
@@ -16,6 +17,7 @@ namespace WebServer.Controllers
         public ItemTypesController(IItemTypeService svc, ILogger<ItemTypesController> log)
         { _svc = svc; _log = log; }
 
+        #region 조회 
         // GET /api/itemtypes?search=&hasSlot=&sort=&desc=&page=&pageSize=
         [HttpGet]
         public async Task<IActionResult> List([FromQuery] ListItemTypesRequest req, CancellationToken ct)
@@ -25,6 +27,8 @@ namespace WebServer.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(short id, CancellationToken ct)
             => (await _svc.GetAsync(id, ct)) is { } dto ? Ok(dto) : NotFound();
+
+        #endregion
 
         // POST /api/itemtypes
         [HttpPost]

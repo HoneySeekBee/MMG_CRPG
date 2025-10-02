@@ -474,10 +474,13 @@
 "Assets/Script/Network/RemoteIconLoader.cs"
 "Assets/Script/Scenes/Init/InitSceneController.cs"
 "Assets/Script/Scenes/Lobby/CurrencyUI.cs"
+"Assets/Script/Scenes/Lobby/HeroListUI.cs"
+"Assets/Script/Scenes/Lobby/InventoryUI.cs"
 "Assets/Script/Scenes/Lobby/LobbySceneController.cs"
 "Assets/Script/Scenes/Lobby/UserProfileIUI.cs"
 "Assets/Script/Scenes/Login/LoginSceneController.cs"
 "Assets/Script/Scenes/Login/RegistAccount.cs"
+"Assets/Script/UI/ItemType/ItemTypeToggleUI.cs"
 "Assets/Script/UICommon/LoadingSpinner.cs"
 "Assets/Script/UICommon/Popup.cs"
 -langversion:9.0

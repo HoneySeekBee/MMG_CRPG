@@ -35,4 +35,9 @@ namespace Application.Icons
         public int Version { get; init; }
         public string Url { get; init; } = default!;
     }
+    public sealed record IconMetaDto(
+    int IconId,
+    string Key,
+    int Version
+);
 }

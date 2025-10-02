@@ -38,4 +38,9 @@ namespace Application.Portraits
         public int Version { get; init; }
         public string Url { get; init; } = default!;
     }
+    public sealed record PortraitMetaDto(
+    int PortraitId,
+    string Key,
+    int Version
+);
 }
