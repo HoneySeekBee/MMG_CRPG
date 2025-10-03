@@ -9,7 +9,7 @@ using WebServer.Mappers;
 namespace WebServer.Controllers
 {
     [ApiController]
-    [Route("api/proto/masterdata")]
+    [Route("api/pb/masterdata")]
     public sealed class MasterDataProtoController : ControllerBase
     {
         private readonly IRarityCache _rarityCache;

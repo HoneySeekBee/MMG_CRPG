@@ -462,6 +462,8 @@
 "Assets/ExternalAsset/ithappy/Cute_Characters/Scripts/FaceManagement/FacePicker.cs"
 "Assets/ExternalAsset/ithappy/Cute_Characters/Scripts/FaceManagement/FaceType.cs"
 "Assets/Script/Auth/ProtoAuthService.cs"
+"Assets/Script/Cache/ItemCache.cs"
+"Assets/Script/Cache/MasterDataCache.cs"
 "Assets/Script/Core/Constants.cs"
 "Assets/Script/Core/Result.cs"
 "Assets/Script/Data/GameState.cs"

@@ -16,7 +16,7 @@ namespace Game.Scenes.Init
         public ProtoHttpClient Http;   // 씬에 배치
         public ApiConfig ApiConfig;    // 씬에 배치
 
-        IEnumerator Start()
+        private IEnumerator Start()
         {
             if (Http == null) Http = FindObjectOfType<ProtoHttpClient>();
             if (SceneController.Instance == null) new GameObject("SceneController").AddComponent<Game.Managers.SceneController>();
@@ -27,8 +27,6 @@ namespace Game.Scenes.Init
             // JSON: Http.Get<StatusDto>(...)  →  PROTO: Http.Get<Status>(..., Status.Parser, ...)
             yield return Http.Get(StatusRoute(), Status.Parser, (res) =>
             {
-                Spinner?.Show(false);
-
                 if (!res.Ok)
                 {
                     Popup?.Show($"네트워크 오류: {res.Message}");
@@ -50,10 +48,16 @@ namespace Game.Scenes.Init
                     return;
                 }
 
-                SceneController.Instance.Go("Login");
-            });
+            }); 
+            
+            yield return MasterDataCache.Instance.CoLoadMasterData(Http, Popup);
+            yield return ItemCache.Instance.CoLoadItemData(Http, Popup);
+
+            Spinner?.Show(false);
+
+            SceneController.Instance.Go("Login");
         }
-         
+
         private string StatusRoute() => ApiRoutes.Status; // 예: "/status"
     }
 }
