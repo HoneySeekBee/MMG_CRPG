@@ -24,7 +24,6 @@ namespace Game.Scenes.Lobby
         public Popup Popup;               // 없으면 무시
         public ProtoHttpClient Http;      // 비워도 자동 탐색
 
-        private ListItemTypesResponseMessage _itemTypes;
         private void Awake()
         {
             if (Http == null) Http = ProtoHttpClient.Instance ?? FindObjectOfType<ProtoHttpClient>();
@@ -32,7 +31,6 @@ namespace Game.Scenes.Lobby
 
         private void Start()
         {
-            StartCoroutine(CoLoadItemTypes());
             StartCoroutine(CoInit());
         }
 
@@ -67,32 +65,6 @@ namespace Game.Scenes.Lobby
             CurrencyUI?.Set(profile);
         }
 
-        private IEnumerator CoLoadItemTypes()
-        {
-            Spinner?.Show(true);
-
-            yield return Http.Get(ApiRoutes.ItemTypes, ListItemTypesResponseMessage.Parser,
-                (ApiResult<ListItemTypesResponseMessage> res) =>
-                {
-                    if (!res.Ok)
-                    {
-                        Popup?.Show($"아이템 타입 불러오기 실패: {res.Message}");
-                        return;
-                    } 
-                    _itemTypes = res.Data;
-                });
-
-            Debug.Log($"아이템 타입 잘 불러옴? {_itemTypes != null}");
-            if (_itemTypes != null)
-            {
-                // 예시: Active된 것만 필터링해서 UI에 바인딩
-                var activeTypes = _itemTypes.Items.Where(x => x.Active).ToList();
-                Debug.Log($"아이템 타입을 불러옴 {activeTypes.Count}");
-                ItemTypeUI?.Set(activeTypes);
-            }
-
-            Spinner?.Show(false);
-        }
     }
 
 }

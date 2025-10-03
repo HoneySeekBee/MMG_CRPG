@@ -58,8 +58,8 @@ namespace AdminTool.Controllers
                     SortOrder = x.SortOrder,
                     IsActive = x.IsActive,
                     Meta = x.Meta,
-                    CreatedAt = x.CreatedAt,
-                    UpdatedAt = x.UpdatedAt,
+                    CreatedAt = x.CreatedAt.UtcDateTime,
+                    UpdatedAt = x.UpdatedAt.UtcDateTime
                 };
             }).ToList();
 
@@ -70,13 +70,15 @@ namespace AdminTool.Controllers
             var client = _http.CreateClient("GameApi");
             var apiIcons = await client.GetFromJsonAsync<List<IconVm>>("/api/icons", ct) ?? new();
 
-            return apiIcons.Select(x => new IconPickItem
+            var result = apiIcons.Select(x => new IconPickItem
             {
                 IconId = x.IconId,
                 Key = x.Key,
                 Version = x.Version,
                 Url = $"{_assetsBaseUrl}/icons/{x.Key}.png?v={x.Version}"
             }).ToList();
+             
+            return result; 
         }
         // [2] 쓰기 Create
         // GET
