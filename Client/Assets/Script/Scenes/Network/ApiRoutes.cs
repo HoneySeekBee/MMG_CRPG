@@ -22,4 +22,7 @@ public static class ApiRoutes
     public const string Portraits = "/portraits";
     public const string Icons = "/icons";
     public const string Items = "/items";
+
+    public static string UserInventoryList(int userId) =>
+        $"/api/users/{userId}/inventory";
 }

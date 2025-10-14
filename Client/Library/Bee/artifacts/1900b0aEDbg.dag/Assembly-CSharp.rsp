@@ -468,6 +468,7 @@
 "Assets/Script/Core/Result.cs"
 "Assets/Script/Data/GameState.cs"
 "Assets/Script/Data/PlayerState.cs"
+"Assets/Script/Data/UserData.cs"
 "Assets/Script/Logging/Logger.cs"
 "Assets/Script/Managers/SceneController.cs"
 "Assets/Script/Scenes/Init/InitSceneController.cs"

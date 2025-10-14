@@ -90,6 +90,7 @@
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Character_Controller\PlayerCamera.cs" />
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\BackgroundMusic.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\BonusSeekerCharacterState.cs" />
+    <Compile Include="Assets\Script\Data\UserData.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\Movement\MovementStates\Obstacles\TeleportObstacleState.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\Movement\MovementStates\MoveToNavMeshMovementState.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\CroakLandBehavior.cs" />

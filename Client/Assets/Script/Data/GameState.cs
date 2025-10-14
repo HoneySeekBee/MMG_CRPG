@@ -16,14 +16,23 @@ namespace Game.Data
         public string Nickname { get; private set; }
         public int SoftCurrency { get; private set; }
         public int HardCurrency { get; private set; }
+        public UserData CurrentUser { get; private set; }
 
         void Awake()
         {
-            if (Instance != null && Instance != this) { Destroy(gameObject); return; }
-            Instance = this; DontDestroyOnLoad(gameObject);
+            if (Instance != null && Instance != this) 
+            { 
+                Destroy(gameObject); 
+                return;
+            }
+            Instance = this; 
+            DontDestroyOnLoad(gameObject);
         }
 
-
+        public void InitUser(int userId, string nickname, int level)
+        {
+            CurrentUser = new UserData(userId, nickname, level);
+        }
         public void LoadFromPrefs()
         {
             AccessToken = PlayerPrefs.GetString(Constants.PlayerPrefs_Token, "");

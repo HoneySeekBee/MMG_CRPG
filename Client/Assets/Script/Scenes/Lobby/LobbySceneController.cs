@@ -56,6 +56,10 @@ namespace Game.Scenes.Lobby
                 LobbySet(profile);
             }
 
+            // 아이템 타입 받아오기 
+            if (ItemCache.Instance != null)
+                ItemTypeUI.Set(ItemCache.Instance.ItemTypeList);
+
             Spinner?.Show(false);
         }
 

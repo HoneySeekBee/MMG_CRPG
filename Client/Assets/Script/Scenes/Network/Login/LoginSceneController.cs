@@ -201,6 +201,22 @@ namespace Game.Scenes.Login
             GameState.Instance.SetNickname(boot.Nickname);
             GameState.Instance.SetCurrencies(boot.SoftCurrency, boot.HardCurrency);
 
+            // 3) 인벤토리 불러오기
+            ListUserInventoryResponse invRes = null;
+
+            yield return Http.Get(ApiRoutes.UserInventoryList(int.Parse(GameState.Instance.PlayerId)), ListUserInventoryResponse.Parser,
+    (res) =>
+    {
+        if (!res.Ok) { Spinner?.Show(false); Popup?.Show($"인벤토리 불러오기 실패: {res.Message}"); return; }
+        invRes = res.Data;
+    });
+
+            if (invRes != null)
+            {
+                GameState.Instance.CurrentUser.SyncInventory(invRes.Items);
+            }
+
+
             Spinner?.Show(false);
             if (GuestLoginButton) GuestLoginButton.interactable = true;
             if (LoginButton) LoginButton.interactable = true;
