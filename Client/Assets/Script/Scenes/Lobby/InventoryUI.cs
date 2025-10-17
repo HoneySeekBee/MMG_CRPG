@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using static UnityEditor.Progress;
+using TMPro;
 using Toggle = UnityEngine.UI.Toggle;
 public class InventoryUI : MonoBehaviour
 {
@@ -26,6 +27,11 @@ public class InventoryUI : MonoBehaviour
 
     public ItemDetailUI ItemDetailUI;
 
+    [Header("Currency")]
+    public TMP_Text TokenText;
+    public TMP_Text GoldText;
+    public TMP_Text GemText;
+
     public List<BagItemIconUI> BagItemIcons = new();
 
     private void Awake()
@@ -41,6 +47,8 @@ public class InventoryUI : MonoBehaviour
     private void OnEnable()
     {
         Set(ItemCache.Instance.ItemTypeList);
+         
+        SetCurrency(GameState.Instance.CurrentUser.UserProfilePb);
     }
 
     private void OnDisable()
@@ -48,7 +56,15 @@ public class InventoryUI : MonoBehaviour
         if (ItemDetailUI != null)
             ItemDetailUI.gameObject.SetActive(false);
     }
-
+    public void SetCurrency(UserProfilePb p)
+    {
+        Debug.Log($"버그 체크 : TokenText {TokenText == null} ");
+        Debug.Log($"버그 체크 :   Token {p == null}");
+        Debug.Log($"버그 체크 :   Token {GameState.Instance.CurrentUser.UserProfilePb == null}");
+        TokenText.text = p.Token.ToString();
+        GoldText.text = p.Gold.ToString();
+        GemText.text = p.Gem.ToString();
+    }
     public void Set(List<ItemTypeMessage> itemTypeList)
     {
         BuildItemTypeToggles(itemTypeList);

@@ -16,7 +16,7 @@ namespace Game.Data
         public string Nickname { get; private set; }
         public int SoftCurrency { get; private set; }
         public int HardCurrency { get; private set; }
-        public UserData CurrentUser { get; private set; }
+        public UserData CurrentUser { get;  set; }
 
         void Awake()
         {

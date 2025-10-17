@@ -24,10 +24,7 @@ message UserProfilePb {
   int32  token  = 8;
   int32  iconId   = 9; // 없으면 0 
   string iconKey  = 10;   // 예: "hero_0001"
-  int32  iconVersion = 11;
-
-  repeated InventoryItemPb inventory = 30;
-  repeated HeroPb          heroes    = 31;
+  int32  iconVersion = 11; 
 }
 
 message InventoryItemPb {
