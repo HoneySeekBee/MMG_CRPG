@@ -13,15 +13,13 @@ namespace Domain.Entities
 
         // ==== Key ====
         public int CharacterId { get; private set; }
-        public short Tier { get; private set; }          // >= 0
+        public int Tier { get; private set; }          // >= 0
 
         // ==== Data ====
         public short MaxLevel { get; private set; }      // >= 1
         public StatModifier? Bonus { get; private set; } // JSONB 매핑 예정
-
-        // JSONB 매핑 예정(리스트)
-        private readonly List<PromotionMaterial> _materials = new();
-        public IReadOnlyList<PromotionMaterial> Materials => _materials;
+         
+        public ICollection<CharacterPromotionMaterial> Materials { get; } = new List<CharacterPromotionMaterial>();
 
         public int CostGold { get; private set; }        // >= 0
 
@@ -31,7 +29,7 @@ namespace Domain.Entities
         // ==== Factory ====
         public static CharacterPromotion Create(
             int characterId,
-            short tier,
+            int tier,
             short maxLevel,
             int costGold,
             StatModifier? bonus = null,
@@ -49,8 +47,7 @@ namespace Domain.Entities
                 CostGold = costGold,
                 Bonus = bonus
             };
-
-            if (materials != null) p.ReplaceMaterials(materials);
+             
 
             return p;
         }
@@ -69,41 +66,7 @@ namespace Domain.Entities
         }
 
         public void SetBonus(StatModifier? bonus) => Bonus = bonus;
-
-        public void ReplaceMaterials(IEnumerable<PromotionMaterial>? materials)
-        {
-            _materials.Clear();
-            if (materials == null) return;
-
-            // 같은 ItemId는 합산하여 정규화
-            foreach (var group in materials
-                         .Where(m => m.Quantity > 0 && m.ItemId > 0)
-                         .GroupBy(m => m.ItemId))
-            {
-                var qty = group.Sum(g => g.Quantity);
-                if (qty > 0) _materials.Add(new PromotionMaterial(group.Key, qty));
-            }
-        }
-
-        public void AddMaterial(int itemId, int quantity)
-        {
-            if (itemId <= 0) throw new ArgumentOutOfRangeException(nameof(itemId));
-            if (quantity <= 0) throw new ArgumentOutOfRangeException(nameof(quantity));
-
-            var idx = _materials.FindIndex(m => m.ItemId == itemId);
-            if (idx >= 0)
-                _materials[idx] = _materials[idx] with { Quantity = _materials[idx].Quantity + quantity };
-            else
-                _materials.Add(new PromotionMaterial(itemId, quantity));
-        }
-
-        public void RemoveMaterial(int itemId)
-        {
-            var idx = _materials.FindIndex(m => m.ItemId == itemId);
-            if (idx >= 0) _materials.RemoveAt(idx);
-        }
-
-        public void ClearMaterials() => _materials.Clear();
+          
     }
     public sealed record StatModifier(
         int? HP = null,

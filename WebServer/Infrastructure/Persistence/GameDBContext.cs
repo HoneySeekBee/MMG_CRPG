@@ -19,12 +19,13 @@ namespace Infrastructure.Persistence
         public DbSet<Faction> Factions => Set<Faction>();
         public DbSet<Role> Roles => Set<Role>();
         public DbSet<Rarity> Rarities => Set<Rarity>();
-        public DbSet<Skill> Skills => Set<Skill>();
         public DbSet<Portrait> Portraits => Set<Portrait>();
+        public DbSet<Skill> Skills => Set<Skill>();
         public DbSet<SkillLevel> SkillLevels => Set<SkillLevel>();
         public DbSet<Character> Characters => Set<Character>();
         public DbSet<CharacterSkill> CharacterSkills => Set<CharacterSkill>();
         public DbSet<CharacterStatProgression> CharacterStatProgressions => Set<CharacterStatProgression>();
+        public DbSet<CharacterPromotionMaterial> CharacterMaterials => Set<CharacterPromotionMaterial>();
         public DbSet<CharacterPromotion> CharacterPromotions => Set<CharacterPromotion>();
         public DbSet<CombatRecord> Combats => Set<CombatRecord>();
         public DbSet<CombatLogRecord> CombatLogs => Set<CombatLogRecord>();
@@ -86,6 +87,7 @@ namespace Infrastructure.Persistence
             Modeling_Character(modelBuilder);
             Modeling_CharacterSkill(modelBuilder);
             Modeling_CharacterStatProgression(modelBuilder);
+            Modeling_CharacterPromotionMaterial(modelBuilder);
             Modeling_CharacterPromotion(modelBuilder);
 
             Modeling_Combat(modelBuilder);
@@ -292,6 +294,7 @@ namespace Infrastructure.Persistence
                     .HasColumnType("jsonb");
             });
         }
+        #region Character
         public void Modeling_Character(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Character>(e =>
@@ -351,12 +354,10 @@ namespace Infrastructure.Persistence
             {
                 e.ToTable("CharacterStatProgression");
 
-                // 복합 PK
                 e.HasKey(x => new { x.CharacterId, x.Level });
 
-                // 기본 컬럼
-                e.Property(x => x.CharacterId).IsRequired();
-                e.Property(x => x.Level).IsRequired();
+                e.Property(x => x.CharacterId).HasColumnName("CharacterId").IsRequired();
+                e.Property(x => x.Level).HasColumnName("Level").IsRequired();
 
                 e.Property(x => x.HP).IsRequired();
                 e.Property(x => x.ATK).IsRequired();
@@ -365,23 +366,50 @@ namespace Infrastructure.Persistence
 
                 e.Property(x => x.CriRate).HasPrecision(5, 2).HasDefaultValue(5m).IsRequired();
                 e.Property(x => x.CriDamage).HasPrecision(6, 2).HasDefaultValue(150m).IsRequired();
-
-                // FK
+                 
                 e.HasOne(x => x.Character)
-                    .WithMany()
-                    .HasForeignKey(x => x.CharacterId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                 .WithMany(c => c.CharacterStatProgressions)
+                 .HasForeignKey(x => x.CharacterId)
+                 .HasPrincipalKey(c => c.Id)
+                 .OnDelete(DeleteBehavior.Cascade);
 
-                // 체크 제약
                 e.ToTable(t =>
                 {
                     t.HasCheckConstraint("ck_csp_level", "\"Level\" >= 1");
                     t.HasCheckConstraint("ck_csp_stats", "\"HP\" >= 0 AND \"ATK\" >= 0 AND \"DEF\" >= 0 AND \"SPD\" >= 0");
-                    t.HasCheckConstraint("ck_csp_cr", "\"CritRate\" >= 0 AND \"CritRate\" <= 100");
-                    t.HasCheckConstraint("ck_csp_cd", "\"CritDamage\" >= 0 AND \"CritDamage\" <= 1000");
+                    t.HasCheckConstraint("ck_csp_cr", "\"CriRate\" >= 0 AND \"CriRate\" <= 100");
+                    t.HasCheckConstraint("ck_csp_cd", "\"CriDamage\" >= 0 AND \"CriDamage\" <= 1000");
                 });
 
                 e.HasIndex(x => x.CharacterId);
+            });
+        }
+        public static void Modeling_CharacterPromotionMaterial(ModelBuilder b)
+        {
+            b.Entity<CharacterPromotionMaterial>(e =>
+            {
+                e.ToTable("CharacterPromotionMaterials");
+
+                e.Property(x => x.PromotionCharacterId).HasColumnName("CharacterId").IsRequired();
+                e.Property(x => x.PromotionTier).HasColumnName("Tier").IsRequired();
+                e.Property(x => x.ItemId).IsRequired();
+                e.Property(x => x.Count).IsRequired();
+
+                e.HasKey(x => new { x.PromotionCharacterId, x.PromotionTier, x.ItemId });
+
+                e.HasOne(x => x.Promotion)
+   .WithMany(p => p.Materials)
+   .HasForeignKey(x => new { x.PromotionCharacterId, x.PromotionTier })
+   .HasPrincipalKey(p => new { p.CharacterId, p.Tier })
+   .OnDelete(DeleteBehavior.Cascade);
+
+                // Item FK
+                e.HasOne(x => x.Item)
+                 .WithMany()
+                 .HasForeignKey(x => x.ItemId)
+                 .OnDelete(DeleteBehavior.Restrict);
+
+                e.HasIndex(x => x.ItemId);
             });
         }
         public void Modeling_CharacterPromotion(ModelBuilder modelBuilder)
@@ -390,29 +418,21 @@ namespace Infrastructure.Persistence
             {
                 e.ToTable("CharacterPromotion");
 
-                // 복합 PK
                 e.HasKey(x => new { x.CharacterId, x.Tier });
 
                 e.Property(x => x.MaxLevel).IsRequired();
                 e.Property(x => x.CostGold).IsRequired();
 
-                // JSONB 매핑 (값 객체/리스트)
                 e.Property(x => x.Bonus)
                     .HasColumnType("jsonb")
                     .IsRequired(false);
-
-                e.Property<List<PromotionMaterial>>("_materials")
-          .HasColumnName("Materials")
-          .HasColumnType("jsonb")
-          .IsRequired();
-
-                // FK
+                 
                 e.HasOne(x => x.Character)
-                    .WithMany()
-                    .HasForeignKey(x => x.CharacterId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                 .WithMany(c => c.CharacterPromotions)
+                 .HasForeignKey(x => x.CharacterId)
+                 .HasPrincipalKey(c => c.Id)
+                 .OnDelete(DeleteBehavior.Cascade);
 
-                // 체크 제약
                 e.ToTable(t =>
                 {
                     t.HasCheckConstraint("ck_cp_tier", "\"Tier\" >= 0");
@@ -429,45 +449,40 @@ namespace Infrastructure.Persistence
             {
                 e.ToTable("CharacterSkills");
 
-                // 복합 PK: (CharacterId, Slot)
                 e.HasKey(x => new { x.CharacterId, x.Slot });
 
-                e.Property(x => x.CharacterId).IsRequired();
-
+                e.Property(x => x.CharacterId).HasColumnName("CharacterId").IsRequired();
                 e.Property(x => x.Slot).HasConversion<short>().IsRequired();
-
                 e.Property(x => x.SkillId).IsRequired();
-
                 e.Property(x => x.UnlockTier).HasDefaultValue(0);
                 e.Property(x => x.UnlockLevel).HasDefaultValue(0);
 
-                // 고유 제약: 캐릭터 내 동일 스킬 중복 방지
-                e.HasAlternateKey(x => new { x.CharacterId, x.SkillId });
+                // (선택) 캐릭터 내 동일 스킬 중복 방지
+                // e.HasAlternateKey(x => new { x.CharacterId, x.SkillId });
 
-                // FK
                 e.HasOne(x => x.Character)
-                    .WithMany()
-                    .HasForeignKey(x => x.CharacterId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                 .WithMany(c => c.CharacterSkills)            // ← Character 엔티티에 컬렉션 네비게이션 선언 필요
+                 .HasForeignKey(x => x.CharacterId)
+                 .HasPrincipalKey(c => c.Id)                  // ← 주키를 명확히
+                 .OnDelete(DeleteBehavior.Cascade);
 
-                // Skills 테이블과 FK (삭제 제한 권장)
                 e.HasOne<Skill>()
-                    .WithMany()
-                    .HasForeignKey(x => x.SkillId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                 .WithMany()
+                 .HasForeignKey(x => x.SkillId)
+                 .OnDelete(DeleteBehavior.Restrict);
 
-                // 체크 제약 (필요시)
                 e.ToTable(t =>
                 {
                     t.HasCheckConstraint("ck_cs_unlock_tier", "\"UnlockTier\" >= 0");
                     t.HasCheckConstraint("ck_cs_unlock_level", "\"UnlockLevel\" >= 1");
-                    // 슬롯 범위가 1~4라면:
                     t.HasCheckConstraint("ck_cs_slot", "\"Slot\" BETWEEN 1 AND 4");
                 });
 
                 e.HasIndex(x => x.SkillId);
             });
         }
+        #endregion
+
 
         private static void Modeling_Combat(ModelBuilder modelBuilder)
         {
