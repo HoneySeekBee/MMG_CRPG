@@ -16,7 +16,7 @@ namespace Application.Character
         SkillSlot Slot, int SkillId, short UnlockTier, short UnlockLevel);
 
     public sealed record CharacterStatProgressionDto(
-        short Level, int HP, int ATK, int DEF, int SPD, decimal CritRate, decimal CritDamage);
+        short Level, int HP, int ATK, int DEF, int SPD, decimal CriRate, decimal CriDamage);
 
     public sealed record PromotionMaterialDto(int ItemId, int Quantity);
 
@@ -24,7 +24,7 @@ namespace Application.Character
         int? HP, int? ATK, int? DEF, int? SPD, decimal? CritRate, decimal? CritDamage);
 
     public sealed record CharacterPromotionDto(
-        short Tier, short MaxLevel, int CostGold, StatModifierDto? Bonus, IReadOnlyList<PromotionMaterialDto> Materials);
+        int Tier, short MaxLevel, int CostGold, StatModifierDto? Bonus, IReadOnlyList<PromotionMaterialDto> Materials);
 
     public sealed record CharacterDetailDto(
         int Id, string Name,
@@ -60,7 +60,7 @@ namespace Application.Character
                 new CharacterPromotionDto(
                     p.Tier, p.MaxLevel, p.CostGold,
                     p.Bonus is null ? null : new StatModifierDto(p.Bonus.HP, p.Bonus.ATK, p.Bonus.DEF, p.Bonus.SPD, p.Bonus.CritRate, p.Bonus.CritDamage),
-                    p.Materials.Select(m => new PromotionMaterialDto(m.ItemId, m.Quantity)).ToList()
+                    p.Materials.Select(m => new PromotionMaterialDto((int)m.ItemId, m.Count)).ToList()
                 )).ToList();
 
             return new CharacterDetailDto(

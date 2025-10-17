@@ -30,6 +30,10 @@ namespace Domain.Entities
         private readonly List<string> _tags = new();
         public IReadOnlyList<string> Tags => _tags;
 
+
+        public ICollection<CharacterSkill> CharacterSkills { get; } = new List<CharacterSkill>();
+        public ICollection<CharacterStatProgression> CharacterStatProgressions { get; } = new List<CharacterStatProgression>();
+        public ICollection<CharacterPromotion> CharacterPromotions { get; } = new List<CharacterPromotion>();
         public string? MetaJson { get; private set; }
         public static Character Create(
             string name,
