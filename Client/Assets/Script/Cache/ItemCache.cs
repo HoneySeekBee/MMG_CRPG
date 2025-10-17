@@ -2,6 +2,7 @@ using Contracts.Protos;
 using Game.Core;
 using Game.Network;
 using Game.UICommon;
+using Google.Protobuf;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,9 @@ public class ItemCache : MonoBehaviour
     private ListItemTypesResponseMessage _itemTypes;
 
     [Header("Items")]
-    public Dictionary<long, ItemSummaryMessage> ItemDict = new();
+    public Dictionary<long, ItemMessage> ItemDict = new();
+    public Dictionary<long, int> ItemCategoryDict = new();
+
     private ListItemsResponse _items;
     private void Awake()
     {
@@ -62,6 +65,7 @@ public class ItemCache : MonoBehaviour
         int loaded = 0;
 
         ItemDict.Clear();
+        ItemCategoryDict.Clear();
 
         while (true)
         {
@@ -80,7 +84,10 @@ public class ItemCache : MonoBehaviour
                 break;
 
             foreach (var item in _items.Items)
+            {
                 ItemDict[item.Id] = item;
+                ItemCategoryDict[item.Id] = item.TypeId;
+            }
 
             loaded += _items.Items.Count;
             Debug.Log($"[ItemCache] {loaded}/{_items.TotalCount} 불러옴");
@@ -114,7 +121,7 @@ public class ItemCache : MonoBehaviour
             Debug.Log($"[ItemCache] 아이템 상세 로드 완료: {response.Item.Name}");
         }
     }
-    public ItemSummaryMessage? GetSummary(long id)
+    public ItemMessage? GetSummary(long id)
     {
         return ItemDict.TryGetValue(id, out var item) ? item : null;
     }

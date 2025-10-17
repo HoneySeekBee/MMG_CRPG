@@ -101,7 +101,7 @@ message ListItemsRequest {
 }
 
 message ListItemsResponse {
-  repeated ItemSummaryMessage items = 1;
+  repeated ItemMessage items = 1;
   int32 total_count = 2;
 }
 
