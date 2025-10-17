@@ -15,9 +15,14 @@ public class UserData
     public int SoftCurrency { get; private set; }
     public int HardCurrency { get; private set; }
 
+    public UserProfilePb UserProfilePb { get; private set; }
+
     // 인벤토리
     private readonly Dictionary<int, int> _inventory = new(); // ItemId -> Count
     public IReadOnlyDictionary<int, int> Inventory => _inventory;
+
+    private readonly Dictionary<int, List<int>> _inventoryType = new(); // 각 타입 별 인벤토리 Id 
+    public IReadOnlyDictionary<int, List<int>> InventoryType => _inventoryType; 
 
     // 보유 캐릭터
     private readonly HashSet<int> _characters = new(); // CharacterId
@@ -41,10 +46,20 @@ public class UserData
     public void SyncInventory(IEnumerable<UserInventory> items)
     {
         _inventory.Clear();
+        _inventoryType.Clear();
+
         foreach (var i in items)
         {
             _inventory[i.ItemId] = i.Count;
+            
+            int TypeNum = ItemCache.Instance.ItemDict[i.ItemId].TypeId;
+
+            if (!_inventoryType.ContainsKey(TypeNum))
+                _inventoryType[TypeNum] = new List<int>();
+            _inventoryType[TypeNum].Add(i.ItemId);
+            Debug.Log($"유저의 인벤토리 아이템 카테고리 {TypeNum} : 아이디 {i.ItemId} : 갯수 {_inventory.Count}");
         }
+
     }
     public void UpdateInventoryItem(int itemId, int count)
     {
@@ -67,6 +82,9 @@ public class UserData
         _clearedStages.Clear();
         foreach (var id in clearedStageIds) _clearedStages.Add(id);
     }
-
+    public void SetUserProfile(UserProfilePb _userProfile)
+    {
+        UserProfilePb = _userProfile;
+    }
     public void MarkStageCleared(int stageId) => _clearedStages.Add(stageId);
 }

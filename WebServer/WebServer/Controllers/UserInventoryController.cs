@@ -37,6 +37,7 @@ namespace WebServer.Controllers
             var result = await _svc.GetListAsync(query, ct);
             return Ok(result);
         }
+
         [HttpGet("{itemId:int}")]
         public async Task<ActionResult<UserInventoryDto>> GetOne(
            int userId,

@@ -484,6 +484,7 @@
 "Assets/Script/Scenes/Network/ProtoHttpClient.cs"
 "Assets/Script/Scenes/Network/RemoteIconLoader.cs"
 "Assets/Script/UI/ItemType/BagItemIconUI.cs"
+"Assets/Script/UI/ItemType/ItemDetailUI.cs"
 "Assets/Script/UI/ItemType/ItemTypeToggleUI.cs"
 "Assets/Script/UICommon/LoadingSpinner.cs"
 "Assets/Script/UICommon/Popup.cs"

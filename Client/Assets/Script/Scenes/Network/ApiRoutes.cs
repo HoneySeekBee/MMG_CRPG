@@ -24,5 +24,5 @@ public static class ApiRoutes
     public const string Items = "/items";
 
     public static string UserInventoryList(int userId) =>
-        $"/api/users/{userId}/inventory";
+        $"/users/{userId}/inventory";
 }

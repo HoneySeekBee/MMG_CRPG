@@ -1,5 +1,6 @@
 using Contracts.Protos;
 using Game.Core;
+using Game.Data;
 using Game.Lobby;
 using Game.Network;
 using Game.UICommon;
@@ -31,37 +32,12 @@ namespace Game.Scenes.Lobby
 
         private void Start()
         {
-            StartCoroutine(CoInit());
-        }
-
-        private IEnumerator CoInit()
-        {
-            Spinner?.Show(true);
-
-            UserProfilePb profile = null;
-
-            // /api/pb/me/profile 호출
-            yield return Http.Get(ApiRoutes.MeProfile, UserProfilePb.Parser, (ApiResult<UserProfilePb> res) =>
+            Spinner?.gameObject.SetActive(false);
+            if (GameState.Instance.CurrentUser.UserProfilePb != null)
             {
-                if (!res.Ok)
-                {
-                    Popup?.Show($"프로필 불러오기 실패: {res.Message}");
-                    return;
-                }
-                profile = res.Data;
-            });
-
-            if (profile != null)
-            {
-                LobbySet(profile);
-            }
-
-            // 아이템 타입 받아오기 
-            if (ItemCache.Instance != null)
-                ItemTypeUI.Set(ItemCache.Instance.ItemTypeList);
-
-            Spinner?.Show(false);
-        }
+                LobbySet(GameState.Instance.CurrentUser.UserProfilePb);
+            } 
+        } 
 
         private void LobbySet(UserProfilePb profile)
         {

@@ -63,6 +63,7 @@
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\CroakusTheGreatBehavior.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\CharacterStateBase.cs" />
     <Compile Include="Assets\Script\Scenes\Network\Login\RegistAccount.cs" />
+    <Compile Include="Assets\Script\UI\ItemType\ItemDetailUI.cs" />
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\PlayPopupOpener.cs" />
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\TintedButton.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\OscillateScale.cs" />

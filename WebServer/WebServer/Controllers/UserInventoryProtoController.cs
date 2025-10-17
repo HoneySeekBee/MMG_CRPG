@@ -1,6 +1,7 @@
 ﻿
 using Application.UserInventory;
-using Contracts.Protos; 
+using Contracts.Protos;
+using Google.Protobuf;
 using Microsoft.AspNetCore.Mvc;
 using WebServer.Mappers;
 using ConsumeItemRequest = Contracts.Protos.ConsumeItemRequest;
@@ -44,64 +45,39 @@ namespace WebServer.Controllers
             );
 
             var paged = await _svc.GetListAsync(query, ct);
-            return Ok(paged.ToPb()); // PagedResult<UserInventoryDto> → ListUserInventoryResponse
+            var pb = paged.ToPb();
+
+            return File(pb.ToByteArray(), "application/x-protobuf");
         }
-        // GET /api/pb/users/{userId}/inventory/{itemId}
-        [HttpGet("{itemId:int}")]
-        public async Task<ActionResult<GetUserInventoryResponse>> GetOne(
-            int userId,
-            int itemId,
-            CancellationToken ct = default)
-        {
-            var dto = await _svc.GetOneAsync(userId, itemId, ct);
-            if (dto is null) return NotFound();
-            return Ok(dto.ToPbGet()); // UserInventoryDto → GetUserInventoryResponse
-        }
+
         #endregion
 
         #region 
         // POST /api/pb/users/{userId}/inventory/grant
         [HttpPost("grant")]
         [Consumes("application/x-protobuf")]
-        public async Task<ActionResult<GrantItemResponse>> Grant(
-            int userId,
-            [FromBody] Contracts.Protos.GrantItemRequest body,
-            CancellationToken ct = default)
+        public async Task<IActionResult> Grant(int userId, [FromBody] Contracts.Protos.GrantItemRequest body, CancellationToken ct = default)
         {
-            // 경로 우선 적용
-            var req = new Application.UserInventory.GrantItemRequest(
-                UserId: userId,
-                ItemId: body.ItemId,
-                Amount: body.Amount
-            );
-
+            var req = new Application.UserInventory.GrantItemRequest(userId, body.ItemId, body.Amount);
             var dto = await _svc.GrantAsync(req, ct);
-            return Ok(dto.ToPbGrant()); // UserInventoryDto → GrantItemResponse
+            var pb = dto.ToPbGrant();
+            return File(pb.ToByteArray(), "application/x-protobuf");
         }
 
-        // POST /api/pb/users/{userId}/inventory/consume
         [HttpPost("consume")]
         [Consumes("application/x-protobuf")]
-        public async Task<ActionResult<ConsumeItemResponse>> Consume(
-            int userId,
-            [FromBody]  ConsumeItemRequest body,
-            CancellationToken ct = default)
+        public async Task<IActionResult> Consume(int userId, [FromBody] ConsumeItemRequest body, CancellationToken ct = default)
         {
-            var req = new Application.UserInventory.ConsumeItemRequest(
-                UserId: userId,
-                ItemId: body.ItemId,
-                Amount: body.Amount
-            );
-
+            var req = new Application.UserInventory.ConsumeItemRequest(userId, body.ItemId, body.Amount);
             var result = await _svc.ConsumeAsync(req, ct);
-
-            // 매핑(네 서비스의 ConsumeResultDto 구조에 맞춘 버전)
             var pb = result.ToPb();
 
             if (!result.Success)
-                return BadRequest(pb);
+            { 
+                return StatusCode(StatusCodes.Status400BadRequest, File(pb.ToByteArray(), "application/x-protobuf"));
+            }
 
-            return Ok(pb);
+            return File(pb.ToByteArray(), "application/x-protobuf");
         }
 
         // PUT /api/pb/users/{userId}/inventory/{itemId}

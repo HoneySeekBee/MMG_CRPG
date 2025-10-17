@@ -64,7 +64,7 @@ namespace WebServer.Controllers
                 .OrderBy(x => x.Code) // 정렬 기준 필요한 대로
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
-                .Select(x => x.ToSummaryPb(IconUrl))
+                .Select(x => x.ToDetailPb(IconUrl, PortraitUrl))
                 .ToList();
 
             return Ok(new ListItemsResponse

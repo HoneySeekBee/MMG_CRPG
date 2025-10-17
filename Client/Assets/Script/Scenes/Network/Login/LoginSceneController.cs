@@ -184,6 +184,22 @@ namespace Game.Scenes.Login
             GameState.Instance.SaveAuth(playerId, access, refresh);
             Http.SetToken(access);
 
+
+            UserProfilePb profile = null;
+
+            // /api/pb/me/profile 호출
+            yield return Http.Get(ApiRoutes.MeProfile, UserProfilePb.Parser, (ApiResult<UserProfilePb> res) =>
+            {
+                if (!res.Ok)
+                {
+                    Popup?.Show($"프로필 불러오기 실패: {res.Message}");
+                    return;
+                }
+                profile = res.Data;
+                GameState.Instance.CurrentUser.SetUserProfile(profile);
+            });
+
+
             PlayerBootstrap boot = null;
             yield return Http.Get(ApiRoutes.PlayerBootstrap, PlayerBootstrap.Parser, (res) =>
             {
@@ -200,6 +216,7 @@ namespace Game.Scenes.Login
 
             GameState.Instance.SetNickname(boot.Nickname);
             GameState.Instance.SetCurrencies(boot.SoftCurrency, boot.HardCurrency);
+            GameState.Instance.InitUser(int.Parse(GameState.Instance.PlayerId), profile.Nickname, profile.Level);
 
             // 3) 인벤토리 불러오기
             ListUserInventoryResponse invRes = null;
@@ -207,10 +224,17 @@ namespace Game.Scenes.Login
             yield return Http.Get(ApiRoutes.UserInventoryList(int.Parse(GameState.Instance.PlayerId)), ListUserInventoryResponse.Parser,
     (res) =>
     {
-        if (!res.Ok) { Spinner?.Show(false); Popup?.Show($"인벤토리 불러오기 실패: {res.Message}"); return; }
-        invRes = res.Data;
-    });
+        if (!res.Ok)
+        {
+            Spinner?.Show(false);
+            Popup?.Show($"인벤토리 불러오기 실패: {res.Message}");
+            Debug.Log($"status={res.StatusCode}, ");
+            Debug.Log($"err={res.Message}");
+            return;
+        }
 
+        invRes = res.Data;
+    }); 
             if (invRes != null)
             {
                 GameState.Instance.CurrentUser.SyncInventory(invRes.Items);
