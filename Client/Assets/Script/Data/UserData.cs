@@ -85,6 +85,7 @@ public class UserData
     public void SetUserProfile(UserProfilePb _userProfile)
     {
         UserProfilePb = _userProfile;
+        Debug.Log($"[SetUserProfile] {UserProfilePb == null}");
     }
     public void MarkStageCleared(int stageId) => _clearedStages.Add(stageId);
 }

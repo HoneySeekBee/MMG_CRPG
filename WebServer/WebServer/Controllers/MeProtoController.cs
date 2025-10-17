@@ -20,6 +20,7 @@ namespace WebServer.Controllers
                 ?? throw new InvalidOperationException("NO_USER_ID"));
 
         [HttpGet("summary")]
+        [Produces("application/x-protobuf")]
         public async Task<ActionResult<UserSummaryPb>> Summary(CancellationToken ct)
         {
             try
@@ -44,11 +45,13 @@ namespace WebServer.Controllers
 
         // GET /api/pb/me/profile
         [HttpGet("profile")]
+        [Produces("application/x-protobuf")]
         public async Task<ActionResult<UserProfilePb>> Profile(CancellationToken ct)
         {
             try
             {
                 var p = await _users.GetProfileAsync(CurrentUserId(), ct);
+                Console.WriteLine($"Profile 호출  {p.Id} ");
                 return Ok(new UserProfilePb
                 {
                     Id = p.Id,

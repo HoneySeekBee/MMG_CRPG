@@ -184,26 +184,40 @@ namespace Game.Scenes.Login
             GameState.Instance.SaveAuth(playerId, access, refresh);
             Http.SetToken(access);
 
+            Debug.Log($"[PB Runtime] {typeof(Google.Protobuf.MessageParser).Assembly.FullName}");
+
 
             UserProfilePb profile = null;
 
             // /api/pb/me/profile 호출
+            Debug.Log($"[CHECK] UserProfilePb.Parser is null? {(Contracts.Protos.UserProfilePb.Parser == null)}");
             yield return Http.Get(ApiRoutes.MeProfile, UserProfilePb.Parser, (ApiResult<UserProfilePb> res) =>
             {
                 if (!res.Ok)
                 {
+                    Debug.LogError($"[프로필 실패] code={res.StatusCode}, err={res.ErrorCode}\n{res.Message}");
                     Popup?.Show($"프로필 불러오기 실패: {res.Message}");
-                    return;
+                    return;  
                 }
+
+                if (res.Data == null) { Debug.LogError("Data==null"); return; }
+
                 profile = res.Data;
+                GameState.Instance.InitUser(int.Parse(GameState.Instance.PlayerId), profile.Nickname, profile.Level);
+                GameState.Instance.CurrentUser ??= new UserData(int.Parse(playerId), "FailedLogin", 1);
+
+                Debug.Log("프로필 셋팅");
                 GameState.Instance.CurrentUser.SetUserProfile(profile);
             });
-
 
             PlayerBootstrap boot = null;
             yield return Http.Get(ApiRoutes.PlayerBootstrap, PlayerBootstrap.Parser, (res) =>
             {
-                if (!res.Ok) { Spinner?.Show(false); Popup?.Show($"부트스트랩 실패: {res.Message}"); return; }
+                if (!res.Ok) 
+                { Spinner?.Show(false); Popup?.Show($"부트스트랩 실패: {res.Message}");
+
+                    Debug.Log("[ 부트스트랩 실패 ] @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+                    return; }
                 boot = res.Data;
             });
 
@@ -216,7 +230,6 @@ namespace Game.Scenes.Login
 
             GameState.Instance.SetNickname(boot.Nickname);
             GameState.Instance.SetCurrencies(boot.SoftCurrency, boot.HardCurrency);
-            GameState.Instance.InitUser(int.Parse(GameState.Instance.PlayerId), profile.Nickname, profile.Level);
 
             // 3) 인벤토리 불러오기
             ListUserInventoryResponse invRes = null;
