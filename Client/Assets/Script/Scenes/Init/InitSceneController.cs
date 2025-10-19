@@ -52,6 +52,8 @@ namespace Game.Scenes.Init
             
             yield return MasterDataCache.Instance.CoLoadMasterData(Http, Popup);
             yield return ItemCache.Instance.CoLoadItemData(Http, Popup);
+            yield return CharacterCache.Instance.CoLoadCharacterCache(Http, Popup);
+            yield return SkillCache.Instance.CoLoadSkillData(Http, Popup);
 
             Spinner?.Show(false);
 

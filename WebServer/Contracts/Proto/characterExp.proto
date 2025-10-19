@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package game.characters;
+option csharp_namespace = "WebServer.Protos";
+
+message CharacterExpTableResponse {
+  repeated CharacterExpGroupPb groups = 1; // rarityId별로 묶인 레벨 곡선
+  int64 version = 2;                     // 선택: 캐시 버전(유닉스 초)
+}
+
+// rarityId 하나에 대한 레벨 곡선
+message CharacterExpGroupPb {
+  int32 rarity_id = 1;                   // short → int32
+  repeated CharacterExpLevelPb levels = 2; // level 오름차순
+}
+
+// 특정 레벨의 요구 경험치
+message CharacterExpLevelPb {
+  int32 level = 1;                       // short → int32
+  int32 required_exp = 2;
+}
+
+message CharacterExpFlatResponse {
+  repeated CharacterExpRowPb rows = 1;
+  int64 version = 2;
+}
+
+message CharacterExpRowPb {
+  int32 rarity_id   = 1; // short → int32
+  int32 level       = 2; // short → int32
+  int32 required_exp = 3;
+}

@@ -23,6 +23,10 @@ public static class ApiRoutes
     public const string Icons = "/icons";
     public const string Items = "/items";
 
+    public const string Skills = "/skills";
+    public const string CharacterExp = "/character-exp";
+    public const string Character = "/characters";
+
     public static string UserInventoryList(int userId) =>
         $"/users/{userId}/inventory";
 }
