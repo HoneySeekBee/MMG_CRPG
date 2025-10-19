@@ -92,6 +92,7 @@
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\BackgroundMusic.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\BonusSeekerCharacterState.cs" />
     <Compile Include="Assets\Script\Data\UserData.cs" />
+    <Compile Include="Assets\Script\Cache\CharacterCache.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\Movement\MovementStates\Obstacles\TeleportObstacleState.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\Movement\MovementStates\MoveToNavMeshMovementState.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\CroakLandBehavior.cs" />
@@ -165,6 +166,7 @@
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\PatrolByPointsCharacterState.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Obstacle\LadderObstacle.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CandyKing.cs" />
+    <Compile Include="Assets\Script\Cache\SkillCache.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Obstacle\TeleportObstacle.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\FaceManagement\FaceType.cs" />
     <Compile Include="Assets\Script\UI\ItemType\BagItemIconUI.cs" />

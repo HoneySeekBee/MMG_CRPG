@@ -17,7 +17,6 @@ public class MasterDataCache : MonoBehaviour
 {
     public static MasterDataCache Instance { get; private set; }
 
-
     [Header("MasterData - Rarity, Eelement, Role, Faction")]
     public List<RarityMessage> RarityList;
     public List<ElementMessage> ElementList;
