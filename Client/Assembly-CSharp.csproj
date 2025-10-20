@@ -133,6 +133,7 @@
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\CroakWaterBehavior.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Rnd_Animation.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CroakLand.cs" />
+    <Compile Include="Assets\Script\UI\User\UserCharacterUI.cs" />
     <Compile Include="Assets\Script\Scenes\Lobby\UserProfileIUI.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Obstacle\Door\DoorComponent.cs" />
     <Compile Include="Assets\Script\Scenes\Lobby\HeroListUI.cs" />
@@ -151,6 +152,7 @@
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\OnDutyGrummy.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\OscillatePosition.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CroakusTheGreat.cs" />
+    <Compile Include="Assets\Script\Scenes\Lobby\UserCharactersUI.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Obstacle\ObstacleCreateManager.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Obstacle\Door\DoorComponentBase.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\Movement\MovementStates\RotateMovementState.cs" />

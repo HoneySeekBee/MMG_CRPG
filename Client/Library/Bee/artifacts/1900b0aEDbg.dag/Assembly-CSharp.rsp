@@ -479,6 +479,7 @@
 "Assets/Script/Scenes/Lobby/HeroListUI.cs"
 "Assets/Script/Scenes/Lobby/InventoryUI.cs"
 "Assets/Script/Scenes/Lobby/LobbySceneController.cs"
+"Assets/Script/Scenes/Lobby/UserCharactersUI.cs"
 "Assets/Script/Scenes/Lobby/UserProfileIUI.cs"
 "Assets/Script/Scenes/Network/ApiConfig.cs"
 "Assets/Script/Scenes/Network/ApiRoutes.cs"
@@ -489,6 +490,7 @@
 "Assets/Script/UI/ItemType/BagItemIconUI.cs"
 "Assets/Script/UI/ItemType/ItemDetailUI.cs"
 "Assets/Script/UI/ItemType/ItemTypeToggleUI.cs"
+"Assets/Script/UI/User/UserCharacterUI.cs"
 "Assets/Script/UICommon/LoadingSpinner.cs"
 "Assets/Script/UICommon/Popup.cs"
 -langversion:9.0

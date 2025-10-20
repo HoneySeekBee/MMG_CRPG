@@ -12,6 +12,7 @@ using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 
 namespace Game.Scenes.Login
@@ -253,6 +254,39 @@ namespace Game.Scenes.Login
                 GameState.Instance.CurrentUser.SyncInventory(invRes.Items);
             }
 
+            // 4) 캐릭터 불러오기 
+            UserCharacterListPb chaRes = null;
+
+            yield return Http.Get(ApiRoutes.UserCharacterList(int.Parse(GameState.Instance.PlayerId)), UserCharacterListPb.Parser,
+                (res) =>
+                {
+                    if (!res.Ok)
+                    {
+                        chaRes = res.Data ?? new UserCharacterListPb();
+                        return;
+                    }
+                    var isEmptySuccess =
+          res.StatusCode >= 200 && res.StatusCode < 300 &&
+          (res.Data == null || string.Equals(res.Message, "Response body is empty", StringComparison.OrdinalIgnoreCase));
+
+                    if (isEmptySuccess)
+                    {
+                        chaRes = new UserCharacterListPb(); // 빈 characters
+                        return;
+                    }
+
+                    Spinner?.Show(false);
+                    Popup?.Show($"유저 캐릭터 불러오기 실패: {res.Message}");
+                    Debug.Log($"[ERROR] (UserCharacters) status={res.StatusCode}");
+                    Debug.Log($"[ERROR] (UserCharacters) err={res.Message}");
+
+                    chaRes = res.Data;
+                });
+
+            if(chaRes != null)
+            {
+                GameState.Instance.CurrentUser.SyncCharacters(chaRes.Characters);
+            }
 
             Spinner?.Show(false);
             if (GuestLoginButton) GuestLoginButton.interactable = true;

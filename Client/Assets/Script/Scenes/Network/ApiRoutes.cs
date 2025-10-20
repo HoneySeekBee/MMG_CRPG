@@ -29,4 +29,7 @@ public static class ApiRoutes
 
     public static string UserInventoryList(int userId) =>
         $"/users/{userId}/inventory";
+
+    public static string UserCharacterList(int userId) =>
+        $"/userCharacters/{userId}";
 }
