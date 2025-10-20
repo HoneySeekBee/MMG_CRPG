@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package Contracts.Protos;
+
+option csharp_namespace = "Contracts.Protos";
+
+import "google/protobuf/timestamp.proto";
+
+message UserCharacterListPb
+{
+	repeated UserCharacterSummaryPb characters =1;
+}
+   
+message UserCharacterSummaryPb
+{
+	int32 user_id = 1;
+	int32 character_id = 2; 
+	int32 level = 3;
+	int32 exp = 4;
+	int32 breakThrough = 5; 
+    google.protobuf.Timestamp updated_at = 6;
+
+    repeated UserCharacterSkillPb skills = 10;  
+}
+
+message UserCharacterSkillPb {
+  int64 skill_id = 1;
+  uint32 level = 2;
+  google.protobuf.Timestamp updated_at = 3;
+}

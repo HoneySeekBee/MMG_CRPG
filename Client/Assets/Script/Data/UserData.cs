@@ -1,7 +1,10 @@
 
 using Contracts.Protos;
+using Google.Protobuf.WellKnownTypes;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class UserData
@@ -22,16 +25,20 @@ public class UserData
     public IReadOnlyDictionary<int, int> Inventory => _inventory;
 
     private readonly Dictionary<int, List<int>> _inventoryType = new(); // 각 타입 별 인벤토리 Id 
-    public IReadOnlyDictionary<int, List<int>> InventoryType => _inventoryType; 
+    public IReadOnlyDictionary<int, List<int>> InventoryType => _inventoryType;
 
     // 보유 캐릭터
-    private readonly HashSet<int> _characters = new(); // CharacterId
-    public IReadOnlyCollection<int> Characters => _characters;
+    private readonly Dictionary<int, UserCharacterSummaryPb> _userCharacters = new();
+
+    public IReadOnlyDictionary<int, UserCharacterSummaryPb> UserCharacters
+        => _userCharacters.ToDictionary(kv => kv.Key, kv => kv.Value.Clone()); // 외부에 Clone
+
 
     // 스테이지 진행
     private readonly HashSet<int> _clearedStages = new();
     public IReadOnlyCollection<int> ClearedStages => _clearedStages;
 
+   
     public UserData(int userId, string nickname, int level)
     {
         UserId = userId;
@@ -69,13 +76,77 @@ public class UserData
     public int GetItemCount(int itemId)
             => _inventory.TryGetValue(itemId, out var cnt) ? cnt : 0;
 
-    public void SyncCharacters(IEnumerable<int> characterIds)
+    public void SyncCharacters(IEnumerable<UserCharacterSummaryPb> userCharacters)
+    { 
+        var incoming = new Dictionary<int, UserCharacterSummaryPb>();
+
+        Debug.Log($"[UserCharacters] {userCharacters.Count()}");
+
+        foreach (var uc in userCharacters)
+            incoming[uc.CharacterId] = uc;
+
+        // 2) 제거: 서버에 없는 캐릭터는 로컬에서 제거 
+        var toRemove = _userCharacters.Keys.Except(incoming.Keys).ToList();
+        foreach (var key in toRemove)
+            _userCharacters.Remove(key);
+
+        // 3) 추가/업데이트: UpdatedAt이 더 최신인 경우만 덮어쓰기
+        foreach (var (charId, inc) in incoming)
+        {
+            if (_userCharacters.TryGetValue(charId, out var cur))
+            {
+                if (ToDto(inc.UpdatedAt) > ToDto(cur.UpdatedAt))
+                    _userCharacters[charId] = inc.Clone();
+            }
+            else
+            {
+                _userCharacters[charId] = inc.Clone();
+            }
+        }
+
+    }
+     public bool AddOrUpdateCharacter(UserCharacterSummaryPb character)
     {
-        _characters.Clear();
-        foreach (var id in characterIds) _characters.Add(id);
+        var inc = character;
+        if (_userCharacters.TryGetValue(inc.CharacterId, out var cur))
+        {
+            if (ToDto(inc.UpdatedAt) <= ToDto(cur.UpdatedAt))
+                return false; // 구버전이면 무시
+        }
+        _userCharacters[inc.CharacterId] = inc.Clone();
+        return true;
     }
 
-    public void AddCharacter(int charId) => _characters.Add(charId);
+    public bool RemoveCharacter(int characterId) => _userCharacters.Remove(characterId);
+
+    // 스킬 업서트 (필요 시 스킬 딕셔너리 캐시 추가 고려)
+    public bool UpsertSkill(int characterId, UserCharacterSkillPb skill)
+    {
+        if (!_userCharacters.TryGetValue(characterId, out var ch)) return false;
+
+        var list = ch.Skills;
+        var idx = list.ToList().FindIndex(s => s.SkillId == skill.SkillId);
+
+        if (idx >= 0)
+        {
+            // 최신 것만 반영
+            var cur = list[idx];
+            if (ToDto(skill.UpdatedAt) <= ToDto(cur.UpdatedAt)) return false;
+
+            list[idx] = skill.Clone();
+        }
+        else
+        {
+            list.Add(skill.Clone());
+        }
+
+        // 캐릭터 UpdatedAt도 갱신(정책에 맞게)
+        ch.UpdatedAt = skill.UpdatedAt;
+        return true;
+    }
+
+    public UserCharacterSummaryPb? TryGetCharacter(int characterId)
+        => _userCharacters.TryGetValue(characterId, out var ch) ? ch.Clone() : null;
 
     public void SyncStages(IEnumerable<int> clearedStageIds)
     {
@@ -88,4 +159,7 @@ public class UserData
         Debug.Log($"[SetUserProfile] {UserProfilePb == null}");
     }
     public void MarkStageCleared(int stageId) => _clearedStages.Add(stageId);
+
+    private static DateTimeOffset ToDto(Timestamp ts)
+        => ts == null ? DateTimeOffset.MinValue : ts.ToDateTimeOffset();
 }
