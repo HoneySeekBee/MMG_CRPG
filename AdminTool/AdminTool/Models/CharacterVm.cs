@@ -13,11 +13,15 @@ namespace AdminTool.Models
 
         public int? ElementId { get; set; }
         public int? RarityId { get; set; }
+        public int? RoleId { get; set; }
+        public int? FactionId { get; set; }
         [DisplayName("검색어")] public string? Search { get; set; }
 
         // 드롭다운
         public IEnumerable<SelectListItem> Elements { get; set; } = Array.Empty<SelectListItem>();
         public IEnumerable<SelectListItem> Rarities { get; set; } = Array.Empty<SelectListItem>();
+        public IEnumerable<SelectListItem> Roles { get; set; } = Array.Empty<SelectListItem>();
+        public IEnumerable<SelectListItem> Factions { get; set; } = Array.Empty<SelectListItem>();
     }
     public sealed class CharacterSummaryVm
     {
@@ -253,8 +257,8 @@ namespace AdminTool.Models
                             ATK = p.ATK,
                             DEF = p.DEF,
                             SPD = p.SPD,
-                            CritRate = p.CritRate,
-                            CritDamage = p.CritDamage
+                            CritRate = p.CriRate,
+                            CritDamage = p.CriDamage
                         }).ToList()
             };
 
@@ -266,7 +270,7 @@ namespace AdminTool.Models
                         .OrderBy(p => p.Tier)
                         .Select(p => new CharacterPromotionRowVm
                         {
-                            Tier = p.Tier,
+                            Tier = (short)p.Tier,
                             MaxLevel = p.MaxLevel,
                             CostGold = p.CostGold,
                             Bonus = p.Bonus is null ? null : new StatModifierVm

@@ -17,11 +17,12 @@ public class MasterDataCache : MonoBehaviour
 {
     public static MasterDataCache Instance { get; private set; }
 
-    [Header("MasterData - Rarity, Eelement, Role, Faction")]
-    public List<RarityMessage> RarityList;
-    public List<ElementMessage> ElementList;
-    public List<RoleMessage> RoleList;
-    public List<FactionMessage> FactionList;
+    [Header("MasterData - Rarity, Eelement, Role, Faction")] 
+
+    public Dictionary<int, RarityMessage> RarityDictionary = new();
+    public Dictionary<int, ElementMessage> ElementDictionary = new();
+    public Dictionary<int, RoleMessage> RoleDictionary = new();
+    public Dictionary<int, FactionMessage> FactionDictionary = new();
 
     [Header("Icons / Portraits")]
     public Dictionary<int, Sprite> IconSprites = new();
@@ -51,17 +52,16 @@ public class MasterDataCache : MonoBehaviour
            }
 
            var data = res.Data;
-
-           RarityList = data.Rarities.ToList();
-           ElementList = data.Elements.ToList();
-           RoleList = data.Roles.ToList();
-           FactionList = data.Factions.ToList();
+           RarityDictionary = data.Rarities.ToDictionary(r => r.RarityId);
+           ElementDictionary = data.Elements.ToDictionary(e => e.ElementId);
+           RoleDictionary = data.Roles.ToDictionary(r => r.RoleId);
+           FactionDictionary = data.Factions.ToDictionary(f => f.FactionId);
 
            Debug.Log($"[MasterDataCache] Loaded: " +
-                     $"Rarity={RarityList.Count}, " +
-                     $"Element={ElementList.Count}, " +
-                     $"Role={RoleList.Count}, " +
-                     $"Faction={FactionList.Count}");
+                     $"Rarity={data.Rarities.Count}, " +
+                     $"Element={data.Elements.Count}, " +
+                     $"Role={data.Roles.Count}, " +
+                     $"Faction={data.Factions.Count}");
        });
 
         
@@ -135,9 +135,4 @@ public class MasterDataCache : MonoBehaviour
         } 
     } 
     #endregion
-    // --- 헬퍼 메서드 (id → 데이터 찾기) ---
-    public RarityMessage GetRarity(int id) => RarityList?.FirstOrDefault(x => x.RarityId == id);
-    public ElementMessage GetElement(int id) => ElementList?.FirstOrDefault(x => x.ElementId == id);
-    public RoleMessage GetRole(int id) => RoleList?.FirstOrDefault(x => x.RoleId == id);
-    public FactionMessage GetFaction(int id) => FactionList?.FirstOrDefault(x => x.FactionId == id);
 }

@@ -41,6 +41,8 @@ namespace AdminTool.Controllers
                 ["pageSize"] = filter.PageSize.ToString(),
                 ["elementId"] = filter.ElementId?.ToString(),
                 ["rarityId"] = filter.RarityId?.ToString(),
+                ["roleId"] = filter.RoleId?.ToString(),
+                ["factionId"] = filter.FactionId?.ToString(),
                 ["search"] = filter.Search
             });
 
@@ -378,7 +380,9 @@ namespace AdminTool.Controllers
         private async Task PopulateListLookupsAsync(CharacterListFilterVm vm, CancellationToken ct)
         {
             vm.Elements = await BuildElementOptionsAsync(vm.ElementId, ct);
-            vm.Rarities = BuildRarityOptions(vm.RarityId);
+            vm.Rarities = await BuildRarityOptionsAsync(vm.RarityId, ct);
+            vm.Roles = await BuildRoleOptionsAsync(vm.RoleId, ct);
+            vm.Factions = await BuildFactionOptionsAsync(vm.FactionId, ct);
         }
         private async Task PopulateEditLookupsAsync(CharacterFormVm vm, CancellationToken ct)
         {
@@ -499,15 +503,43 @@ namespace AdminTool.Controllers
                            .Select(e => new SelectListItem(e.Label, e.ElementId.ToString(), e.ElementId == selectedId))
                            .ToList();
         }
-
-        private IEnumerable<SelectListItem> BuildRarityOptions(int? selected)
+        private async Task<IEnumerable<SelectListItem>> BuildRoleOptionsAsync(int? selectedId, CancellationToken ct)
         {
-            // 임시: 1~6 고정. 실제로는 /api/rarities 같은 API 있으면 그걸로 교체
-            return Enumerable.Range(1, 6)
-                             .Select(v => new SelectListItem($"★{v}", v.ToString(), v == selected))
-                             .ToList();
+            var client = _http.CreateClient("GameApi");
+            // 예: /api/roles  -> [{ id, name, sortOrder }]
+            var roles = await client.GetFromJsonAsync<List<RoleDto>>("/api/roles", ct) ?? new();
+            return roles
+                .OrderBy(r => r.SortOrder) // 없으면 .OrderBy(r => r.Name)
+                .Select(r => new SelectListItem(r.Label, r.RoleId.ToString(), r.RoleId == selectedId))
+                .ToList();
         }
+        private async Task<IEnumerable<SelectListItem>> BuildFactionOptionsAsync(int? selectedId, CancellationToken ct)
+        {
+            var client = _http.CreateClient("GameApi");
+            // 예: /api/factions -> [{ id, name, sortOrder }]
+            var factions = await client.GetFromJsonAsync<List<FactionDto>>("/api/factions", ct) ?? new();
+            return factions
+                .OrderBy(f => f.SortOrder) // 없으면 .OrderBy(f => f.Name)
+                .Select(f => new SelectListItem(f.Label, f.FactionId.ToString(), f.FactionId == selectedId))
+                .ToList();
+        } 
+        private async Task<IEnumerable<SelectListItem>> BuildRarityOptionsAsync(int? selectedId, CancellationToken ct)
+        {
+            var client = _http.CreateClient("GameApi");
 
+            // 예시 API 엔드포인트: /api/rarities
+            var rarities = await client.GetFromJsonAsync<List<RarityVm>>("/api/rarities", ct)
+                            ?? new();
+
+            return rarities
+                .OrderBy(r => r.SortOrder)
+                .Select(r => new SelectListItem(
+                    $"★{r.Stars}",               // 표시용 텍스트
+                    r.RarityId.ToString(),       // 실제 값
+                    r.RarityId == selectedId     // 선택 여부
+                ))
+                .ToList();
+        }
         private async Task<IEnumerable<SelectListItem>> GetAllSkillsAsync(CancellationToken ct)
         {
             var client = _http.CreateClient("GameApi");

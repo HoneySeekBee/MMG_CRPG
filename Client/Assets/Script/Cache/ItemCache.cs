@@ -121,7 +121,7 @@ public class ItemCache : MonoBehaviour
             Debug.Log($"[ItemCache] 아이템 상세 로드 완료: {response.Item.Name}");
         }
     }
-    public ItemMessage? GetSummary(long id)
+    public ItemMessage GetSummary(long id)
     {
         return ItemDict.TryGetValue(id, out var item) ? item : null;
     }

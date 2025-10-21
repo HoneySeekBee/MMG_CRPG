@@ -58,9 +58,6 @@ public class InventoryUI : MonoBehaviour
     }
     public void SetCurrency(UserProfilePb p)
     {
-        Debug.Log($"버그 체크 : TokenText {TokenText == null} ");
-        Debug.Log($"버그 체크 :   Token {p == null}");
-        Debug.Log($"버그 체크 :   Token {GameState.Instance.CurrentUser.UserProfilePb == null}");
         TokenText.text = p.Token.ToString();
         GoldText.text = p.Gold.ToString();
         GemText.text = p.Gem.ToString();

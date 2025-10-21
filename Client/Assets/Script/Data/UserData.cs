@@ -27,11 +27,11 @@ public class UserData
     private readonly Dictionary<int, List<int>> _inventoryType = new(); // 각 타입 별 인벤토리 Id 
     public IReadOnlyDictionary<int, List<int>> InventoryType => _inventoryType;
 
-    // 보유 캐릭터
-    private readonly Dictionary<int, UserCharacterSummaryPb> _userCharacters = new();
+    // 보유 캐릭터 
+    private readonly Dictionary<int, UserCharacterSummaryPb> _userCharactersDict = new();
 
-    public IReadOnlyDictionary<int, UserCharacterSummaryPb> UserCharacters
-        => _userCharacters.ToDictionary(kv => kv.Key, kv => kv.Value.Clone()); // 외부에 Clone
+    public IReadOnlyDictionary<int, UserCharacterSummaryPb> UserCharactersDict
+        => _userCharactersDict.ToDictionary(kv => kv.Key, kv => kv.Value.Clone()); // 외부에 Clone
 
 
     // 스테이지 진행
@@ -83,24 +83,24 @@ public class UserData
         Debug.Log($"[UserCharacters] {userCharacters.Count()}");
 
         foreach (var uc in userCharacters)
-            incoming[uc.CharacterId] = uc;
-
+            incoming[uc.CharacterId] = uc; 
+        
         // 2) 제거: 서버에 없는 캐릭터는 로컬에서 제거 
-        var toRemove = _userCharacters.Keys.Except(incoming.Keys).ToList();
+        var toRemove = _userCharactersDict.Keys.Except(incoming.Keys).ToList();
         foreach (var key in toRemove)
-            _userCharacters.Remove(key);
+            _userCharactersDict.Remove(key);
 
         // 3) 추가/업데이트: UpdatedAt이 더 최신인 경우만 덮어쓰기
         foreach (var (charId, inc) in incoming)
         {
-            if (_userCharacters.TryGetValue(charId, out var cur))
+            if (_userCharactersDict.TryGetValue(charId, out var cur))
             {
                 if (ToDto(inc.UpdatedAt) > ToDto(cur.UpdatedAt))
-                    _userCharacters[charId] = inc.Clone();
+                    _userCharactersDict[charId] = inc.Clone();
             }
             else
             {
-                _userCharacters[charId] = inc.Clone();
+                _userCharactersDict[charId] = inc.Clone();
             }
         }
 
@@ -108,21 +108,21 @@ public class UserData
      public bool AddOrUpdateCharacter(UserCharacterSummaryPb character)
     {
         var inc = character;
-        if (_userCharacters.TryGetValue(inc.CharacterId, out var cur))
+        if (_userCharactersDict.TryGetValue(inc.CharacterId, out var cur))
         {
             if (ToDto(inc.UpdatedAt) <= ToDto(cur.UpdatedAt))
                 return false; // 구버전이면 무시
         }
-        _userCharacters[inc.CharacterId] = inc.Clone();
+        _userCharactersDict[inc.CharacterId] = inc.Clone();
         return true;
     }
 
-    public bool RemoveCharacter(int characterId) => _userCharacters.Remove(characterId);
+    public bool RemoveCharacter(int characterId) => _userCharactersDict.Remove(characterId);
 
     // 스킬 업서트 (필요 시 스킬 딕셔너리 캐시 추가 고려)
     public bool UpsertSkill(int characterId, UserCharacterSkillPb skill)
     {
-        if (!_userCharacters.TryGetValue(characterId, out var ch)) return false;
+        if (!_userCharactersDict.TryGetValue(characterId, out var ch)) return false;
 
         var list = ch.Skills;
         var idx = list.ToList().FindIndex(s => s.SkillId == skill.SkillId);
@@ -145,9 +145,13 @@ public class UserData
         return true;
     }
 
-    public UserCharacterSummaryPb? TryGetCharacter(int characterId)
-        => _userCharacters.TryGetValue(characterId, out var ch) ? ch.Clone() : null;
-
+    public List<UserCharacterSummaryPb> GetAllUserCharacters()
+    => _userCharactersDict.Values
+                         .Select(x => x.Clone())
+                         .ToList();
+    public UserCharacterSummaryPb TryGetCharacter(int characterId)
+        => _userCharactersDict.TryGetValue(characterId, out var ch) ? ch.Clone() : null; 
+    
     public void SyncStages(IEnumerable<int> clearedStageIds)
     {
         _clearedStages.Clear();
