@@ -24,8 +24,6 @@ message CharacterSummaryPb {
   google.protobuf.Timestamp release_date = 8; 
 }
 
-
-
 message CharacterDetailPb {
   int32 id = 1;
   string name = 2;

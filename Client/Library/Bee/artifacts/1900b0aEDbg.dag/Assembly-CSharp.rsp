@@ -479,7 +479,7 @@
 "Assets/Script/Scenes/Lobby/HeroListUI.cs"
 "Assets/Script/Scenes/Lobby/InventoryUI.cs"
 "Assets/Script/Scenes/Lobby/LobbySceneController.cs"
-"Assets/Script/Scenes/Lobby/UserCharactersUI.cs"
+"Assets/Script/Scenes/Lobby/UserCharactersListUI.cs"
 "Assets/Script/Scenes/Lobby/UserProfileIUI.cs"
 "Assets/Script/Scenes/Network/ApiConfig.cs"
 "Assets/Script/Scenes/Network/ApiRoutes.cs"

@@ -31,6 +31,16 @@
         </select>
     </div>
     <div class="col-md-2">
+        <select asp-for="Filter.RoleId" asp-items="Model.Filter.Roles" class="form-select">
+            <option value="">-- Role --</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <select asp-for="Filter.FactionId" asp-items="Model.Filter.Factions" class="form-select">
+            <option value="">-- Faction --</option>
+        </select>
+    </div>
+    <div class="col-md-2">
         <input asp-for="Filter.PageSize" class="form-control" type="number" min="1" max="200" />
     </div>
     <div class="col-md-3 d-flex gap-2">
@@ -67,14 +77,17 @@ else
                     // 선택 목록에서 표시용 이름 가져오기(있으면)
                     string ElementName = Model.Filter.Elements.FirstOrDefault(e => e.Value == x.ElementId.ToString())?.Text ?? x.ElementId.ToString();
                     string RarityName = Model.Filter.Rarities.FirstOrDefault(r => r.Value == x.RarityId.ToString())?.Text ?? x.RarityId.ToString();
+                    string RoleName = Model.Filter.Roles.FirstOrDefault(r => r.Value == x.RoleId.ToString())?.Text ?? x.RoleId.ToString();
+                    string FactionName = Model.Filter.Factions.FirstOrDefault(f => f.Value == x.FactionId.ToString())?.Text ?? x.FactionId.ToString();
+
 
                     <tr>
                         <td>@x.Id</td>
                         <td class="fw-semibold">@x.Name</td>
                         <td>@RarityName</td>
                         <td>@ElementName</td>
-                        <td>@x.RoleId</td>
-                        <td>@x.FactionId</td>
+                        <td>@RoleName</td>
+                        <td>@FactionName</td>
                         <td>@(x.IsLimited ? "Yes" : "No")</td>
                         <td>@(x.ReleaseDate?.ToString("yyyy-MM-dd") ?? "-")</td>
                         <td class="text-nowrap">
