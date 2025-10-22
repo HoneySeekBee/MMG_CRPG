@@ -17,8 +17,9 @@ namespace Domain.Entities.User
         public DateTimeOffset UpdatedAt { get; private set; }
 
         private readonly List<UserCharacterSkill> _skills = new();
+        private readonly List<UserCharacterEquip> _equip = new(); 
         public IReadOnlyCollection<UserCharacterSkill> Skills => _skills.AsReadOnly();
-
+        public IReadOnlyCollection<UserCharacterEquip> Equips => _equip.AsReadOnly();
         private UserCharacter() { }
         public static UserCharacter Create(int userId, int cid, DateTimeOffset now)
            => new UserCharacter
