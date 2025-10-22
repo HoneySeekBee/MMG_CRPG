@@ -14,6 +14,13 @@ public class UserCharacterUI : MonoBehaviour
     public Image RoleIconImage;
     public TMP_Text NameText;
 
+    public Button thisBtn;
+
+    private void Awake()
+    {
+        thisBtn = GetComponent<Button>();
+    }
+
     public void Set(UserCharacterSummaryPb characterData)
     {
         CharacterDetailPb ThisCharacter = CharacterCache.Instance.DetailById[characterData.CharacterId];
@@ -24,5 +31,14 @@ public class UserCharacterUI : MonoBehaviour
         ElementIconImage.sprite = MasterData.IconSprites[MasterData.ElementDictionary[ThisCharacter.ElementId].IconId];
         RoleIconImage.sprite = MasterData.IconSprites[MasterData.RoleDictionary[ThisCharacter.RoleId].IconId];
         NameText.text = ThisCharacter.Name;
+
+        thisBtn.onClick.RemoveAllListeners();
+        thisBtn.onClick.AddListener(() =>
+        {
+            UserCharactersListUI.Instance.UserCharacterDeatailScript.gameObject.SetActive(true);
+            UserCharactersListUI.Instance.UserCharacterDeatailScript.Set(characterData);
+        });
     }
+
+
 }
