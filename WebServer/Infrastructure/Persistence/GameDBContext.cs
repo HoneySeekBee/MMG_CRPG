@@ -67,6 +67,7 @@ namespace Infrastructure.Persistence
 
         public DbSet<UserCharacter> UserCharacters => Set<UserCharacter>();
         public DbSet<UserCharacterSkill> UserCharacterSkills => Set<UserCharacterSkill>();
+        public DbSet<UserCharacterEquip> UserCharacterEquips => Set<UserCharacterEquip>();
         public DbSet<CharacterExp> CharacterExps => Set<CharacterExp>();
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -858,6 +859,7 @@ namespace Infrastructure.Persistence
             Modeling_UserInventory(b);
             Modeling_UserCharacter(b);
             Modeling_UserCharacterSkill(b);
+            Modeling_UserCharacterEquip(b);
             Modeling_CharacterExp(b);
 
         }
@@ -1016,6 +1018,19 @@ namespace Infrastructure.Persistence
                 e.HasIndex(x => x.CharacterId);
                 e.HasIndex(x => x.UpdatedAt);
             });
+        }
+        private static void Modeling_UserCharacterEquip(ModelBuilder b)
+        {
+            b.Entity<UserCharacterEquip>(e =>
+            {
+                e.ToTable("UserCharacterEquip");
+
+                e.HasKey(x => new { x.UserId, x.CharacterId, x.SlotId });
+                e.Property(x => x.UserId).HasColumnName("UserId");
+                e.Property(x=>x.CharacterId).HasColumnName("CharacterId");
+                e.Property(x => x.SlotId).HasColumnName("SlotId");
+                e.Property(x => x.ItemId).HasColumnName("ItemId"); 
+            }); 
         }
         private static void Modeling_UserCharacterSkill(ModelBuilder b)
         {
