@@ -54,7 +54,7 @@ namespace Game.Scenes.Init
             yield return ItemCache.Instance.CoLoadItemData(Http, Popup);
             yield return CharacterCache.Instance.CoLoadCharacterCache(Http, Popup);
             yield return SkillCache.Instance.CoLoadSkillData(Http, Popup);
-
+            yield return UIImageCache.Instance.PreloadAllUISprites();
             Spinner?.Show(false);
 
             SceneController.Instance.Go("Login");

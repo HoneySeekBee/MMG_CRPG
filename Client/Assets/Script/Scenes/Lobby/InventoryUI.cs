@@ -7,7 +7,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
-using static UnityEditor.Progress;
 using TMPro;
 using Toggle = UnityEngine.UI.Toggle;
 public class InventoryUI : MonoBehaviour

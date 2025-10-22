@@ -9,10 +9,14 @@ public class UserCharactersListUI : MonoBehaviour
 {
     public static UserCharactersListUI Instance { get; private set; }
 
-    public RectTransform IconRectTransform;
-    public UserCharacterUI UserCharacterPrefab;
+    public RectTransform iconParent;
+    public UserCharacterUI prefab;
+    [SerializeField] private UserCharacterListController controller;
 
-    [HideInInspector] public List<UserCharacterUI> UserCharacterUIList = new();
+    private readonly List<UserCharacterUI> uiPool = new();
+
+    public UserCharacterDeatailUI UserCharacterDeatailScript;
+
 
     private void Awake()
     {
@@ -22,21 +26,35 @@ public class UserCharactersListUI : MonoBehaviour
             return;
         }
         Instance = this;
+        controller.OnListChanged += UpdateUI;
     }
     private void OnEnable()
     {
-        Set();
+        controller.RefreshList();
     }
 
-    private void Set()
+    private void UpdateUI(List<UserCharacterSummaryPb> characters)
     {
-        List<UserCharacterSummaryPb> userCharacterList = GameState.Instance.CurrentUser.GetAllUserCharacters();
+        foreach (var ui in uiPool)
+            ui.gameObject.SetActive(false);
 
-        foreach (var userCharacter in userCharacterList)
+        for (int i = 0; i < characters.Count; i++)
         {
-            UserCharacterUI eachCharacter = Instantiate(UserCharacterPrefab.gameObject).GetComponent<UserCharacterUI>();
-            UserCharacterUIList.Add(eachCharacter);
-            eachCharacter.Set(userCharacter);
+            UserCharacterUI ui;
+            if (i < uiPool.Count)
+            {
+                ui = uiPool[i];
+            }
+            else
+            {
+                ui = Instantiate(prefab, iconParent);
+                uiPool.Add(ui);
+            }
+
+            ui.Set(characters[i]);
+            ui.gameObject.SetActive(true);
         }
     }
+
+
 }

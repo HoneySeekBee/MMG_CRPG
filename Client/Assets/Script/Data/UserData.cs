@@ -80,17 +80,12 @@ public class UserData
     { 
         var incoming = new Dictionary<int, UserCharacterSummaryPb>();
 
-        Debug.Log($"[UserCharacters] {userCharacters.Count()}");
+        Debug.Log($"1 [UserCharacters] {userCharacters.Count()}");
 
         foreach (var uc in userCharacters)
             incoming[uc.CharacterId] = uc; 
         
-        // 2) 제거: 서버에 없는 캐릭터는 로컬에서 제거 
-        var toRemove = _userCharactersDict.Keys.Except(incoming.Keys).ToList();
-        foreach (var key in toRemove)
-            _userCharactersDict.Remove(key);
-
-        // 3) 추가/업데이트: UpdatedAt이 더 최신인 경우만 덮어쓰기
+        // 추가/업데이트: UpdatedAt이 더 최신인 경우만 덮어쓰기
         foreach (var (charId, inc) in incoming)
         {
             if (_userCharactersDict.TryGetValue(charId, out var cur))
@@ -104,6 +99,7 @@ public class UserData
             }
         }
 
+        Debug.Log($"2 [UserCharacters] {incoming.Count()}");
     }
      public bool AddOrUpdateCharacter(UserCharacterSummaryPb character)
     {
@@ -166,4 +162,4 @@ public class UserData
 
     private static DateTimeOffset ToDto(Timestamp ts)
         => ts == null ? DateTimeOffset.MinValue : ts.ToDateTimeOffset();
-}
+ }
