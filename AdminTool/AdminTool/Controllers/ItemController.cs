@@ -4,6 +4,7 @@ using Application.Items;
 using Application.Rarities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Options;
 using System.Net;
 using static AdminTool.Controllers.IconsController;
 using static AdminTool.Controllers.PortraitsController;
@@ -13,9 +14,22 @@ namespace AdminTool.Controllers
     public sealed class ItemsController : Controller
     {
         private readonly IHttpClientFactory _http;
-        public ItemsController(IHttpClientFactory http) => _http = http;
+        private readonly string _assetsBaseUrl;
+        private readonly string _assetsPhysicalRoot;
+        private readonly string _iconsSubdir;
+        private sealed record EquipSlotDto(short Id, string Code, string Name, short SortOrder, int IconId, DateTimeOffset UpdatedAt);
+        public ItemsController(IHttpClientFactory http, IConfiguration cfg)
+        {
+            _http = http;
+            _assetsBaseUrl = cfg["PublicBaseUrl"]!.TrimEnd('/');
+            _assetsPhysicalRoot = cfg["Assets:PhysicalRoot"]!
+                ?? throw new InvalidOperationException("Assets:PhysicalRoot 설정이 필요합니다.");
+
+            _iconsSubdir = cfg["Assets:IconsSubdir"] ?? "icons";
+        }
 
         private HttpClient Api => _http.CreateClient("GameApi");
+
 
         // =============== Index (List + Filter) ===============
         [HttpGet("/admin/items")]
@@ -47,11 +61,21 @@ namespace AdminTool.Controllers
                 return new List<T>();
             }
         }
+
         [HttpGet("/admin/items/new")]
         public async Task<IActionResult> New(CancellationToken ct)
         {
             await PopulateLookups(ct);
-            return View("Create", new ItemEditVm());
+
+            var vm = new ItemEditVm
+            {
+                Stackable = true,
+                MaxStack = 99,
+                IsActive = true,
+                Icons = await LoadIconGridAsync(ct)
+            };
+
+            return View("Create", vm);
         }
         private async Task<List<T>> GetPagedItemsOrEmpty<T>(HttpClient client, string url, CancellationToken ct)
         {
@@ -72,15 +96,19 @@ namespace AdminTool.Controllers
         private sealed record CurrencyDto(short Id, string Code, string Name);
         private sealed record StatTypeDto(int Id, string Code, string Name, bool IsPercent);
         private sealed record ItemTypeDto(int Id, string Code, string Name);
-        
+
         [HttpPost("/admin/items/new")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> New(ItemEditVm vm, CancellationToken ct)
         {
+            if (vm.TypeId == 17 && vm.EquipType is null)
+                ModelState.AddModelError(nameof(vm.EquipType), "장비(TypeId=17)는 EquipType(슬롯) 선택이 필요합니다.");
+
             if (!ModelState.IsValid)
             {
-                await PopulateLookups(ct);      
-                return View("Create", vm);            
+                await PopulateLookups(ct);
+                vm.Icons = await LoadIconGridAsync(ct);
+                return View("Create", vm);
             }
 
             var req = vm.ToCreateRequest(User?.Identity?.Name ?? "admin");
@@ -90,6 +118,7 @@ namespace AdminTool.Controllers
             {
                 var body = await resp.Content.ReadAsStringAsync(ct);
                 await PopulateLookups(ct);
+                vm.Icons = await LoadIconGridAsync(ct);
                 TempData["Error"] = $"생성 실패: {(int)resp.StatusCode} {resp.ReasonPhrase} - {body}";
                 return View("Create", vm);
             }
@@ -107,7 +136,8 @@ namespace AdminTool.Controllers
             var portraitsTask = GetListOrEmpty<PortraitApiDto>(client, "/api/portraits", ct);
             var statsTask = GetListOrEmpty<StatTypeDto>(client, "/api/stattypes", ct);
             var currenciesTask = GetListOrEmpty<CurrencyDto>(client, "/api/currencies", ct);
-            await Task.WhenAll(typesTask, raritiesTask, iconsTask, portraitsTask, statsTask, currenciesTask);
+            var equipSlotsTask = GetListOrEmpty<EquipSlotDto>(client, "/api/equipslots", ct);
+            await Task.WhenAll(typesTask, raritiesTask, iconsTask, portraitsTask, statsTask, currenciesTask, equipSlotsTask);
 
             ViewBag.TypeOptions = (typesTask.Result ?? new())
                 .OrderBy(x => x.Name)
@@ -141,6 +171,24 @@ namespace AdminTool.Controllers
                 .OrderBy(c => c.Code)
                 .Select(c => new SelectListItem($"{c.Code} - {c.Name}", c.Id.ToString()))
                 .ToList();
+
+            ViewBag.EquipSlotOptions = (equipSlotsTask.Result ?? new())
+        .OrderBy(x => x.SortOrder).ThenBy(x => x.Name)
+        .Select(x => new SelectListItem(x.Name, x.Id.ToString()))
+        .ToList();
+        }
+        private async Task<List<IconPickItem>> LoadIconGridAsync(CancellationToken ct)
+        {
+            var client = _http.CreateClient("GameApi");
+            var apiIcons = await client.GetFromJsonAsync<List<IconApiDto>>("/api/icons", ct) ?? new();
+            string BuildIconUrl(string key, int version) => $"{_assetsBaseUrl}/icons/{Uri.EscapeDataString(key)}.png?v={version}";
+            return apiIcons.Select(x => new IconPickItem
+            {
+                IconId = x.IconId,
+                Key = x.Key,
+                Version = x.Version,
+                Url = BuildIconUrl(x.Key, x.Version)
+            }).ToList();
         }
 
         // =============== Edit (기본정보) ===============

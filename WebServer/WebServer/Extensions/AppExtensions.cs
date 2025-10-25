@@ -29,6 +29,7 @@ using Application.SkillLevels;
 using Application.Skills;
 using Application.Synergy;
 using Microsoft.OpenApi.Models;
+using Application.EquipSlots;
 
 namespace WebServer.Extensions
 {
@@ -74,6 +75,7 @@ namespace WebServer.Extensions
             s.AddSingleton<ISkillCache, SkillCache>();
             s.AddSingleton<ICharacterCache, CharacterCache>();
             s.AddSingleton<ICharacterExpCache, CharacterExpCache>();
+            s.AddSingleton<IEquipSlotCache, EquipSlotCache>();
 
             // 도메인/리포지토리/서비스 (Scoped)
 
@@ -125,7 +127,8 @@ namespace WebServer.Extensions
             s.AddScoped<IItemService, ItemService>();
             s.AddScoped<IItemTypeRepository, EFItemTypeRepository>();
             s.AddScoped<IItemTypeService, ItemTypeService>();
-
+            s.AddScoped<IEquipSlotsRepository, EquipSlotsRepository>();
+            s.AddScoped<IEquipSlotsService, EquipSlotsService>();
 
             // 통화/지갑
             s.AddScoped<IUserCurrencyRepository, UserCurrencyRepository>();

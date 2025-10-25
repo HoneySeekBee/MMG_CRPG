@@ -41,6 +41,7 @@ namespace Application.Items
         [Range(0, int.MaxValue)] public int? DurabilityMax { get; init; }
         [Range(0, int.MaxValue)] public int Weight { get; init; } = 0;
 
+        public int? EquipType { get; set; }
         // 상태/메타
         public string[]? Tags { get; init; }
         public bool IsActive { get; init; } = true;
@@ -67,6 +68,7 @@ namespace Application.Items
         public int? IconId { get; init; }
         public int? PortraitId { get; init; }
 
+        public int? EquipType { get; set; }
         public bool? Stackable { get; init; }
         [Range(1, int.MaxValue)] public int? MaxStack { get; init; }
         public BindType? BindType { get; init; }

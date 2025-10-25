@@ -10,12 +10,12 @@ namespace Domain.Entities.User
     {
         public int UserId{ get; private set; }
         public int CharacterId{ get; private set; }
-        public short SlotId { get; private set; }
+        public int EquipId { get; private set; }
         public int? ItemId { get; private set; }
         private UserCharacterEquip(){ }
 
-        public static UserCharacterEquip Create(int uesrId, int characterId, short slotId, int? itemId)
-            => new() { UserId = uesrId, CharacterId = characterId, SlotId = slotId, ItemId = itemId };
+        public static UserCharacterEquip Create(int uesrId, int characterId, int equipId, int? itemId)
+            => new() { UserId = uesrId, CharacterId = characterId, EquipId = equipId, ItemId = itemId };
 
 
         public void Equip(int itemId) => ItemId = itemId;

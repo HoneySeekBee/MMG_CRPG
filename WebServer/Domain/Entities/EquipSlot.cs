@@ -12,6 +12,7 @@ namespace Domain.Entities
         public string Code { get; private set; } = "";
         public string Name { get; private set; } = "";
         public short SortOrder { get; private set; }
+        public int IconId { get; private set; }
         public DateTimeOffset CreatedAt { get; private set; }
         public DateTimeOffset UpdatedAt { get; private set; }
         private EquipSlot() { }

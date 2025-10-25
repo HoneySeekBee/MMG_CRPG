@@ -79,6 +79,7 @@ namespace AdminTool.Models
         [Range(1, short.MaxValue)] public int TypeId { get; set; }
         [Range(1, short.MaxValue)] public int RarityId { get; set; }
         public int? IconId { get; set; }
+        public List<IconPickItem> Icons { get; set; } = new();
         public int? PortraitId { get; set; }
 
         public bool Stackable { get; set; } = true;
@@ -88,6 +89,8 @@ namespace AdminTool.Models
         [Range(0, 999999)] public int? DurabilityMax { get; set; }
         [Range(0, 999999)] public int Weight { get; set; } = 0;
 
+        [Range(1, short.MaxValue)]
+        public int? EquipType { get; set; }
         /// <summary>UI에서는 콤마/공백 구분 문자열 입력</summary>
         public string Tags { get; set; } = "";
         public bool IsActive { get; set; } = true;
@@ -122,7 +125,8 @@ namespace AdminTool.Models
             MetaJson = d.Meta?.RootElement.GetRawText(),
             Stats = (d.Stats ?? Array.Empty<ItemStatDto>()).Select(ItemStatVm.From).ToList(),
             Effects = (d.Effects ?? Array.Empty<ItemEffectDto>()).Select(ItemEffectVm.From).ToList(),
-            Prices = (d.Prices ?? Array.Empty<ItemPriceDto>()).Select(ItemPriceVm.From).ToList()
+            Prices = (d.Prices ?? Array.Empty<ItemPriceDto>()).Select(ItemPriceVm.From).ToList(),
+            EquipType = d.EquipType
         };
 
         public CreateItemRequest ToCreateRequest(string createdBy)
@@ -148,7 +152,8 @@ namespace AdminTool.Models
                 CreatedBy = createdBy,
                 Stats = Stats.Select(s => s.ToRequest()).ToList(),
                 Effects = Effects.Select(e => e.ToAddRequest()).ToList(),
-                Prices = Prices.Select(p => p.ToRequest()).ToList()
+                Prices = Prices.Select(p => p.ToRequest()).ToList(),
+                EquipType = (TypeId == 17 ? EquipType : null),
             };
         }
 
@@ -172,7 +177,8 @@ namespace AdminTool.Models
                 Weight = Weight,
                 Tags = ParseTags(Tags),
                 IsActive = IsActive,
-                Meta = TryParseJson(MetaJson)
+                Meta = TryParseJson(MetaJson),
+                EquipType = (TypeId == 17 ? EquipType : null)
             };
         }
 

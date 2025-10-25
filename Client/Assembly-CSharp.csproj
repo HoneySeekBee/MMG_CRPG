@@ -83,6 +83,7 @@
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Character_Controller\CharacterMover.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterBase.cs" />
     <Compile Include="Assets\Script\Scenes\Network\RemoteIconLoader.cs" />
+    <Compile Include="Assets\Script\UI\User\UserCharacterEquipUI.cs" />
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\ColorSwapper.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\Movement\MovementStates\Obstacles\LadderObstacleState.cs" />
     <Compile Include="Assets\Script\Scenes\Lobby\UserCharactersListUI.cs" />
@@ -189,6 +190,7 @@
     <Compile Include="Assets\Script\Scenes\Network\ProtoHttpClient.cs" />
     <Compile Include="Assets\Script\UICommon\Popup.cs" />
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\PopupOpener.cs" />
+    <Compile Include="Assets\Script\UI\User\EquipSlotUI.cs" />
     <Compile Include="Assets\Script\UICommon\LoadingSpinner.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -54,7 +54,8 @@ namespace Infrastructure.Caching
                     x.Meta,        // jsonb → JsonDocument
                     x.CreatedBy,
                     x.CreatedAt,
-                    x.UpdatedAt
+                    x.UpdatedAt,
+                    x.EquipType
                 })
                 .ToListAsync(ct);
 
@@ -122,7 +123,8 @@ namespace Infrastructure.Caching
                     i.UpdatedAt,
                     statsByItem.GetValueOrDefault(i.Id) ?? Array.Empty<ItemStatDto>(),
                     effectsByItem.GetValueOrDefault(i.Id) ?? Array.Empty<ItemEffectDto>(),
-                    pricesByItem.GetValueOrDefault(i.Id) ?? Array.Empty<ItemPriceDto>()
+                    pricesByItem.GetValueOrDefault(i.Id) ?? Array.Empty<ItemPriceDto>(),
+                    i.EquipType
                 ))
                 .ToList();
 
