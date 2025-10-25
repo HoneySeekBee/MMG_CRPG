@@ -10,7 +10,8 @@ namespace Application.UserCharacter
     public sealed record UserCharacterDto(
     int UserId, int CharacterId, int Level, int Exp, int BreakThrough, DateTimeOffset UpdatedAt,
     IReadOnlyList<UserCharacterSkillDto> Skills,
-    IReadOnlyList<UserCharacterEquipDto> equips);
+    IReadOnlyList<UserCharacterEquipDto> equips 
+        );
 
     public sealed record UserCharacterSkillDto(int SkillId, int Level, DateTimeOffset UpdatedAt);
 
