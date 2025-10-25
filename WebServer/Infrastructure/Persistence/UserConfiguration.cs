@@ -98,12 +98,22 @@ namespace Infrastructure.Persistence
             e.Property(x => x.UpdatedAt).HasColumnName("UpdatedAt").IsRequired();
             e.Property(x => x.UpdatedAt).IsConcurrencyToken();
 
-            // 백킹필드 내비 사용
-            var nav = e.Metadata.FindNavigation(nameof(UserCharacter.Skills));
-            nav!.SetField("_skills");
-            nav.SetPropertyAccessMode(PropertyAccessMode.Field);
+            var skillsNav = e.Metadata.FindNavigation(nameof(UserCharacter.Skills));
+            skillsNav!.SetField("_skills");
+            skillsNav.SetPropertyAccessMode(PropertyAccessMode.Field);
 
-            // (선택) 인덱스
+            e.HasMany(uc => uc.Skills)
+    .WithOne(s => s.UserCharacter)
+    .HasForeignKey(s => new { s.UserId, s.CharacterId })
+    .HasPrincipalKey(uc => new { uc.UserId, uc.CharacterId })
+    .OnDelete(DeleteBehavior.Cascade);
+
+            e.HasMany(uc => uc.Equips)
+             .WithOne(eq => eq.UserCharacter)
+             .HasForeignKey(eq => new { eq.UserId, eq.CharacterId })
+             .HasPrincipalKey(uc => new { uc.UserId, uc.CharacterId })
+             .OnDelete(DeleteBehavior.Cascade);
+             
             e.HasIndex(x => x.UserId);
             e.HasIndex(x => x.CharacterId);
             e.HasIndex(x => x.UpdatedAt);
@@ -115,8 +125,16 @@ namespace Infrastructure.Persistence
             e.HasKey(x => new { x.UserId, x.CharacterId, x.EquipId });
             e.Property(x => x.UserId).HasColumnName("UserId");
             e.Property(x => x.CharacterId).HasColumnName("CharacterId");
-            e.Property(x => x.EquipId).HasColumnName("SlotId");
+            e.Property(x => x.EquipId).HasColumnName("EquipId");
             e.Property(x => x.ItemId).HasColumnName("ItemId");
+
+            e.HasOne(x => x.UserCharacter)
+    .WithMany(uc => uc.Equips)
+    .HasForeignKey(x => new { x.UserId, x.CharacterId })
+    .HasPrincipalKey(uc => new { uc.UserId, uc.CharacterId })
+    .OnDelete(DeleteBehavior.Cascade);
+
+
         }
 
         void IEntityTypeConfiguration<UserCharacterSkill>.Configure(EntityTypeBuilder<UserCharacterSkill> e)

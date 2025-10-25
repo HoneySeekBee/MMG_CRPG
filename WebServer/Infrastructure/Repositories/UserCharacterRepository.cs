@@ -17,8 +17,9 @@ namespace Infrastructure.Repositories
 
         public Task<UserCharacter?> GetAsync(int userId, int characterId, CancellationToken ct = default)
             => _db.UserCharacters
-                  .FirstOrDefaultAsync(
-                        x => x.UserId == userId && x.CharacterId == characterId, ct);
+            .Include(x => x.Skills)
+            .Include(x => x.Equips)
+            .FirstOrDefaultAsync(x => x.UserId == userId && x.CharacterId == characterId, ct);
 
         public Task AddAsync(UserCharacter entity, CancellationToken ct = default)
             => _db.UserCharacters.AddAsync(entity, ct).AsTask();
@@ -28,8 +29,10 @@ namespace Infrastructure.Repositories
             var q = _db.UserCharacters
                        .AsNoTracking()
                        .Include(x => x.Skills)
+                       .Include(x => x.Equips)
                        .Where(x => x.UserId == userId)
-                       .OrderBy(x => x.CharacterId);
+                       .OrderBy(x => x.CharacterId)
+                       .AsSplitQuery();
 
             var total = await q.CountAsync(ct);
             var items = await q.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(ct);

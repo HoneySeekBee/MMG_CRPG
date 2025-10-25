@@ -21,10 +21,17 @@ message UserCharacterSummaryPb
     google.protobuf.Timestamp updated_at = 6;
 
     repeated UserCharacterSkillPb skills = 10;  
+	repeated UserCharacterEquipPb euqips = 11; 
 }
 
 message UserCharacterSkillPb {
   int64 skill_id = 1;
   uint32 level = 2;
   google.protobuf.Timestamp updated_at = 3;
+}
+
+message UserCharacterEquipPb
+{ 
+	int32 equipId = 1; 
+	int32 itemId = 2;  
 }

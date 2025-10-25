@@ -12,6 +12,7 @@ namespace Domain.Entities.User
         public int CharacterId{ get; private set; }
         public int EquipId { get; private set; }
         public int? ItemId { get; private set; }
+        public UserCharacter UserCharacter { get; private set; } = default!;
         private UserCharacterEquip(){ }
 
         public static UserCharacterEquip Create(int uesrId, int characterId, int equipId, int? itemId)
