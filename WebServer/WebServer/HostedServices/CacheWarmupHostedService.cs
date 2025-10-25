@@ -1,5 +1,6 @@
 ﻿using Application.Character;
 using Application.Elements;
+using Application.EquipSlots;
 using Application.Factions;
 using Application.Icons;
 using Application.Items;
@@ -34,6 +35,8 @@ namespace WebServer.HostedServices
 
             await scope.ServiceProvider.GetRequiredService<ICharacterCache>().ReloadAsync(ct);
             await scope.ServiceProvider.GetRequiredService<ICharacterExpCache>().ReloadAsync(ct);
+
+            await scope.ServiceProvider.GetRequiredService<IEquipSlotCache>().ReloadAsync(ct);
 
 
 

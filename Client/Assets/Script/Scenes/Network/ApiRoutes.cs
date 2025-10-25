@@ -18,6 +18,7 @@ public static class ApiRoutes
     public const string MeChangePassword = "/me/change-password";
 
     public const string ItemTypes = "/itemtypes";
+    public const string EquipSlots = "/equipslots";
     public const string MasterData = "/masterdata";
     public const string Portraits = "/portraits";
     public const string Icons = "/icons";

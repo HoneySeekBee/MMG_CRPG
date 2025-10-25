@@ -14,7 +14,7 @@ namespace Application.UserCharacter
 
     public sealed record UserCharacterSkillDto(int SkillId, int Level, DateTimeOffset UpdatedAt);
 
-    public sealed record UserCharacterEquipDto(int UserId, int Characterid, short slotId, int? ItemId);
+    public sealed record UserCharacterEquipDto(int UserId, int Characterid, int equipId, int? ItemId);
 
     public static class UserCharacterMappings
     {
@@ -22,7 +22,7 @@ namespace Application.UserCharacter
             new(
                 e.UserId, e.CharacterId, e.Level, e.Exp, e.BreakThrough, e.UpdatedAt,
                 e.Skills.Select(s => new UserCharacterSkillDto(s.SkillId, s.Level, s.UpdatedAt)).ToList(), 
-                e.Equips.Select(s => new UserCharacterEquipDto(s.UserId, s.CharacterId, s.SlotId, s.ItemId)).ToList()
+                e.Equips.Select(s => new UserCharacterEquipDto(s.UserId, s.CharacterId, s.EquipId, s.ItemId)).ToList()
             );
     }
 

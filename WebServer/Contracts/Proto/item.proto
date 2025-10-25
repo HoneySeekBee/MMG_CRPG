@@ -60,6 +60,7 @@ message ItemSummaryMessage {
   int32 rarity_id = 5;
   int32 icon_id   = 6;  // 0 = null
   bool  is_active = 7;
+  int32 euqip_type = 8;
   string icon_url = 20; // 선택
 }
 message ItemMessage {
@@ -86,6 +87,7 @@ message ItemMessage {
   repeated ItemStatMessage   stats   = 21;
   repeated ItemEffectMessage effects = 22;
   repeated ItemPriceMessage  prices  = 23;
+  int32 euqip_type = 24;
   string icon_url     = 30;  // 선택
   string portrait_url = 31;  // 선택
 }

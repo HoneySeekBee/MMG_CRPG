@@ -62,9 +62,9 @@
             <div class="row g-3">
                 <div class="col-md-3">
                     <label class="form-label">Type</label>
-                    <select asp-for="TypeId"
-                            class="form-select"
-                            asp-items="(IEnumerable<SelectListItem>)ViewBag.TypeOptions"></select>
+                    <select asp-for="TypeId" class="form-select"
+                            asp-items="(IEnumerable<SelectListItem>)ViewBag.TypeOptions"
+                            id="TypeId"></select>
                     <span asp-validation-for="TypeId" class="text-danger"></span>
                 </div>
 
@@ -75,13 +75,31 @@
                             asp-items="(IEnumerable<SelectListItem>)ViewBag.RarityOptions"></select>
                     <span asp-validation-for="RarityId" class="text-danger"></span>
                 </div>
-
                 <div class="col-md-3">
-                    <label class="form-label">Icon</label>
-                    <select asp-for="IconId"
-                            class="form-select"
-                            asp-items="(IEnumerable<SelectListItem>)ViewBag.IconOptions"></select>
-                    <small class="text-muted d-block">선택 안 하면 빈 값으로 전송 → null</small>
+                    <label class="form-label d-block">Icon</label>
+
+                    <!-- 실제 값 -->
+                    <input asp-for="IconId" id="IconId" type="hidden" />
+
+                    <!-- 미리보기 + 버튼 -->
+                    <div class="d-flex align-items-center gap-2">
+                        <img id="iconPreviewImg" src=""
+                             alt="icon" style="width:32px;height:32px;border:1px solid #eee;border-radius:6px;object-fit:contain" />
+                        <button type="button" class="btn btn-outline-primary btn-sm"
+                                data-bs-toggle="modal" data-bs-target="#iconPickerModal">
+                            아이콘 선택
+                        </button>
+                    </div>
+
+                    @await Html.PartialAsync("~/Views/Elements/PickIconModal.cshtml",
+                             new PickIconModalVm
+                    {
+                        ModalId = "iconPickerModal",
+                        Icons = Model.Icons,     
+                        TargetHiddenId = "IconId",
+                        TargetPreviewImgId = "iconPreviewImg"
+                    })
+                    <small class="text-muted d-block mt-1">선택 안 하면 빈 값 → null</small>
                 </div>
 
                 <div class="col-md-3">
@@ -135,6 +153,17 @@
                     <label class="form-label">Weight</label>
                     <input asp-for="Weight" type="number" class="form-control" />
                     <span asp-validation-for="Weight" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row g-3 mt-2" id="equipTypeRow" style="display:none">
+                <div class="col-md-3">
+                    <label class="form-label">EquipType (Slot)</label>
+                    <select asp-for="EquipType" class="form-select"
+                            asp-items="(IEnumerable<SelectListItem>)ViewBag.EquipSlotOptions"
+                            id="EquipType"></select>
+                    <span asp-validation-for="EquipType" class="text-danger"></span>
+                    <small class="text-muted">TypeId가 17(장비)일 때만 필요</small>
                 </div>
             </div>
 
@@ -395,4 +424,24 @@
             });
         }
     </script>
-}
+    <script>
+        (function(){
+            const TYPE_EQUIPMENT = 17;
+            const typeSel = document.getElementById('TypeId');
+            const equipRow = document.getElementById('equipTypeRow');
+            const equipSel = document.getElementById('EquipType');
+
+            function toggleEquip() {
+                const isEquip = String(typeSel.value) === String(TYPE_EQUIPMENT);
+                equipRow.style.display = isEquip ? '' : 'none';
+                if (!isEquip) {
+                    // 장비가 아니면 값 초기화(서버에서 null로 처리하긴 하지만 프런트도 정리)
+                    if (equipSel) equipSel.value = '';
+                }
+            }
+            typeSel?.addEventListener('change', toggleEquip);
+            // 초기 진입 시도 반영 (수정/검증 실패 재출력)
+            toggleEquip();
+        })();
+    </script>
+} 

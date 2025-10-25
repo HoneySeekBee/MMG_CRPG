@@ -40,6 +40,7 @@ namespace Domain.Entities
         public string? CreatedBy { get; private set; }
         public DateTimeOffset CreatedAt { get; private set; } = DateTimeOffset.UtcNow;
         public DateTimeOffset UpdatedAt { get; private set; } = DateTimeOffset.UtcNow;
+        public int? EquipType { get; private set; }
 
         // [하위 엔티티 컬렉션]
         private readonly List<ItemStat> _stats = new();
@@ -71,7 +72,8 @@ namespace Domain.Entities
             bool isActive = true,
              JsonDocument? meta = null,
             string? createdBy = null,
-            DateTimeOffset? createdAt = null
+            DateTimeOffset? createdAt = null,
+            int? equipType  = null 
         )
         {
             if (string.IsNullOrWhiteSpace(code)) throw new ArgumentException("Code is required.", nameof(code));
@@ -100,6 +102,9 @@ namespace Domain.Entities
 
             CreatedBy = createdBy;
             CreatedAt = createdAt ?? DateTimeOffset.UtcNow;
+
+            EquipType = equipType;
+
             Touch();
 
             EnforceInvariants();

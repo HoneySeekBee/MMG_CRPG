@@ -32,7 +32,8 @@ namespace Application.Items
         DateTimeOffset UpdatedAt,
         IReadOnlyList<ItemStatDto> Stats,
         IReadOnlyList<ItemEffectDto> Effects,
-        IReadOnlyList<ItemPriceDto> Prices
+        IReadOnlyList<ItemPriceDto> Prices,
+        int? EquipType
     );
 
     public sealed record ItemStatDto(

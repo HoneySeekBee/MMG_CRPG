@@ -29,10 +29,10 @@ public class UserCharacterStatusUI : MonoBehaviour
     [SerializeField] private Image[] star_imgs;
 
     const string YellowStarKey = "StarYellow";
-    const string GrayStarKey = "StarGray";
-
-    public void Set(UserCharacterSummaryPb thisCharacter)
+    const string GrayStarKey = "StarGray"; 
+    public void Set()
     {
+        UserCharacterSummaryPb thisCharacter = UserCharacterDeatailUI.Instance.status;
         CharacterDetailPb characterDetail = CharacterCache.Instance.DetailById[thisCharacter.CharacterId];
         MasterDataCache masterData = MasterDataCache.Instance;
 

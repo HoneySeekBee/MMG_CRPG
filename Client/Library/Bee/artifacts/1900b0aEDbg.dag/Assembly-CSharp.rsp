@@ -498,6 +498,8 @@
 "Assets/Script/UI/ItemType/BagItemIconUI.cs"
 "Assets/Script/UI/ItemType/ItemDetailUI.cs"
 "Assets/Script/UI/ItemType/ItemTypeToggleUI.cs"
+"Assets/Script/UI/User/EquipSlotUI.cs"
+"Assets/Script/UI/User/UserCharacterEquipUI.cs"
 "Assets/Script/UI/User/UserCharacterStatusUI.cs"
 "Assets/Script/UI/User/UserCharacterUI.cs"
 "Assets/Script/UICommon/LoadingSpinner.cs"

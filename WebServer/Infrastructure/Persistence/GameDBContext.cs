@@ -35,9 +35,9 @@ namespace Infrastructure.Persistence
         public DbSet<ItemEffect> ItemEffects => Set<ItemEffect>();
         public DbSet<ItemPrice> ItemPrices => Set<ItemPrice>();
 
+        public DbSet<ItemType> ItemTypes => Set<ItemType>();
         public DbSet<StatType> StatTypes => Set<StatType>();
 
-        public DbSet<ItemType> ItemTypes => Set<ItemType>();
         public DbSet<EquipSlot> EquipSlots => Set<EquipSlot>();
         public DbSet<Currency> Currencies => Set<Currency>();
         public DbSet<GachaBanner> GachaBanners => Set<GachaBanner>();
@@ -72,33 +72,17 @@ namespace Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             Console.WriteLine("OnModelCreateing");
-            Modeling_Icon(modelBuilder);
-            Modeling_Portrait(modelBuilder);
-            Modeling_Element(modelBuilder);
-            Modeling_ElementAffinity(modelBuilder);
-            Modeling_Faction(modelBuilder);
-            Modeling_Role(modelBuilder);
-            Modeling_Rarity(modelBuilder);
+ 
             Modeling_Skill(modelBuilder);
             Modeling_SkillLevel(modelBuilder);
 
             modelBuilder.Ignore<StatModifier>();
             modelBuilder.Ignore<PromotionMaterial>();
-
-            Modeling_Character(modelBuilder);
-            Modeling_CharacterSkill(modelBuilder);
-            Modeling_CharacterStatProgression(modelBuilder);
-            Modeling_CharacterPromotionMaterial(modelBuilder);
-            Modeling_CharacterPromotion(modelBuilder);
-
+             
             Modeling_Combat(modelBuilder);
             Modeling_CombatLog(modelBuilder);
 
-
-            Modeling_Item(modelBuilder);
-            Modeling_ItemStat(modelBuilder);
-            Modeling_ItemEffect(modelBuilder);
-            Modeling_ItemPrice(modelBuilder);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(GameDBContext).Assembly);
 
             Modeling_StatTypes(modelBuilder);
             Modeling_ItemType(modelBuilder);
@@ -112,116 +96,7 @@ namespace Infrastructure.Persistence
 
             OnModelCreating_Stage(modelBuilder);
         }
-
-        private void Modeling_Icon(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Icon>(e =>
-            {
-                e.ToTable("Icons"); // 테이블 명
-                e.HasKey(x => x.IconId);
-                e.Property(x => x.Key).IsRequired();
-                e.HasIndex(x => x.Key).IsUnique();
-            });
-        }
-        private void Modeling_Portrait(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Portrait>(e =>
-            {
-                e.ToTable("Portraits");                 // 테이블명
-                e.HasKey(x => x.PortraitId);
-                e.Property(x => x.PortraitId).ValueGeneratedOnAdd();
-
-                e.Property(x => x.Key).IsRequired();    // 파일 키(유니크 권장)
-                e.HasIndex(x => x.Key).IsUnique();
-
-                // 스프라이트 좌표/아틀라스(없으면 NULL 허용)
-                e.Property(x => x.Atlas).IsRequired(false);
-                e.Property(x => x.X).IsRequired(false);
-                e.Property(x => x.Y).IsRequired(false);
-                e.Property(x => x.W).IsRequired(false);
-                e.Property(x => x.H).IsRequired(false);
-
-                // 캐시 무효화를 위한 버전
-                e.Property(x => x.Version).HasDefaultValue(1);
-            });
-        }
-        private void Modeling_Element(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Element>(e =>
-            {
-                e.ToTable("Element");
-                e.HasKey(x => x.ElementId);
-                e.Property(x => x.Key).IsRequired();
-                e.Property(x => x.Label).IsRequired();
-                e.Property(x => x.ColorHex).IsRequired();
-                e.Property(x => x.SortOrder).HasColumnType("smallint");
-                e.Property(x => x.Meta).HasColumnType("jsonb"); // PostgreSQL
-                e.HasIndex(x => new { x.IsActive, x.SortOrder });
-                e.HasIndex(x => x.Key).IsUnique();
-            });
-        }
-        public void Modeling_ElementAffinity(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<ElementAffinity>(e =>
-            {
-                e.ToTable("ElementAffinity");
-                e.HasKey(x => new { x.AttackerElementId, x.DefenderElementId });
-                e.Property(x => x.Multiplier)
-                .HasColumnType("numeric(4,2)")
-                .HasDefaultValue(1.00m);
-            });
-        }
-
-        public void Modeling_Faction(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Faction>(e =>
-            {
-                e.ToTable("Faction");
-                e.HasKey(x => x.FactionId);
-                e.Property(x => x.FactionId).ValueGeneratedOnAdd();
-                e.Property(x => x.Key).IsRequired();
-                e.Property(x => x.Label).IsRequired();
-                e.Property(x => x.ColorHex);
-                e.Property(x => x.Meta).HasColumnType("jsonb");      // pg jsonb
-                e.Property(x => x.IsActive).HasDefaultValue(true);
-
-                e.HasIndex(x => x.Key).IsUnique();
-            });
-        }
-        public void Modeling_Role(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Role>(e =>
-            {
-                e.ToTable("Role");
-                e.HasKey(x => x.RoleId);
-                e.Property(x => x.RoleId).ValueGeneratedOnAdd();
-                e.Property(x => x.Key).IsRequired();
-                e.Property(x => x.Label).IsRequired();
-                e.Property(x => x.ColorHex);
-                e.Property(x => x.Meta).HasColumnType("jsonb");
-                e.Property(x => x.IsActive).HasDefaultValue(true);
-
-                e.HasIndex(x => x.Key).IsUnique();
-            });
-        }
-
-        public void Modeling_Rarity(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Rarity>(e =>
-            {
-                e.ToTable("Rarity");
-                e.HasKey(x => x.RarityId);
-                e.Property(x => x.RarityId).ValueGeneratedOnAdd();
-                e.Property(x => x.Stars).IsRequired();
-                e.Property(x => x.Key).IsRequired();
-                e.Property(x => x.Label).IsRequired();
-                e.Property(x => x.ColorHex);
-                e.Property(x => x.Meta).HasColumnType("jsonb");
-                e.Property(x => x.IsActive).HasDefaultValue(true);
-
-                e.HasIndex(x => x.Key).IsUnique();
-            });
-        }
+        
         public void Modeling_Skill(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Skill>(e =>
@@ -294,195 +169,7 @@ namespace Infrastructure.Persistence
                 e.Property(x => x.Materials)
                     .HasColumnType("jsonb");
             });
-        }
-        #region Character
-        public void Modeling_Character(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Character>(e =>
-            {
-                e.ToTable("Characters");
-
-                e.HasKey(x => x.Id);
-                e.Property(x => x.Id)
-                    .HasColumnName("CharacterId")
-                    .ValueGeneratedOnAdd();
-
-                // 기본
-                e.Property(x => x.Name).IsRequired().HasMaxLength(100);
-                e.Property(x => x.RarityId).IsRequired();
-                e.Property(x => x.FactionId).IsRequired();
-                e.Property(x => x.RoleId).IsRequired();
-                e.Property(x => x.ElementId).IsRequired();
-
-                // 선택
-                e.Property(x => x.IconId).IsRequired(false);
-                e.Property(x => x.PortraitId).IsRequired(false);
-
-                var utcConverter = new ValueConverter<DateTimeOffset?, DateTimeOffset?>(
-                    v => v.HasValue ? v.Value.ToUniversalTime() : v,  // Save: UTC로
-                    v => v                                            // Read: 그대로(이미 UTC)
-                );
-                e.Property(x => x.ReleaseDate)
-       .HasConversion(utcConverter)
-       .IsRequired(false);
-                e.Property(x => x.IsLimited).IsRequired().HasDefaultValue(false);
-
-                // Tags: IReadOnlyList<string> → 백필드 _tags 를 text[]로 매핑
-                e.Property<List<string>>("_tags")
-                    .HasColumnName("Tags")
-                    .HasColumnType("text[]")
-                    .HasDefaultValueSql("'{}'::text[]")
-                    .IsRequired();
-
-                // Meta: JSON 문자열을 jsonb 로 저장
-                e.Property(x => x.MetaJson)
-                    .HasColumnName("Meta")
-                    .HasColumnType("jsonb")
-                    .IsRequired(false);
-
-                // 인덱스
-                e.HasIndex(x => x.Name);
-                e.HasIndex(x => x.ElementId);
-                e.HasIndex(x => x.RarityId);
-                e.HasIndex(x => x.RoleId);
-                e.HasIndex(x => x.FactionId);
-                e.HasIndex(x => x.IsLimited);
-            });
-        }
-        public void Modeling_CharacterStatProgression(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<CharacterStatProgression>(e =>
-            {
-                e.ToTable("CharacterStatProgression");
-
-                e.HasKey(x => new { x.CharacterId, x.Level });
-
-                e.Property(x => x.CharacterId).HasColumnName("CharacterId").IsRequired();
-                e.Property(x => x.Level).HasColumnName("Level").IsRequired();
-
-                e.Property(x => x.HP).IsRequired();
-                e.Property(x => x.ATK).IsRequired();
-                e.Property(x => x.DEF).IsRequired();
-                e.Property(x => x.SPD).IsRequired();
-
-                e.Property(x => x.CriRate).HasPrecision(5, 2).HasDefaultValue(5m).IsRequired();
-                e.Property(x => x.CriDamage).HasPrecision(6, 2).HasDefaultValue(150m).IsRequired();
-                 
-                e.HasOne(x => x.Character)
-                 .WithMany(c => c.CharacterStatProgressions)
-                 .HasForeignKey(x => x.CharacterId)
-                 .HasPrincipalKey(c => c.Id)
-                 .OnDelete(DeleteBehavior.Cascade);
-
-                e.ToTable(t =>
-                {
-                    t.HasCheckConstraint("ck_csp_level", "\"Level\" >= 1");
-                    t.HasCheckConstraint("ck_csp_stats", "\"HP\" >= 0 AND \"ATK\" >= 0 AND \"DEF\" >= 0 AND \"SPD\" >= 0");
-                    t.HasCheckConstraint("ck_csp_cr", "\"CriRate\" >= 0 AND \"CriRate\" <= 100");
-                    t.HasCheckConstraint("ck_csp_cd", "\"CriDamage\" >= 0 AND \"CriDamage\" <= 1000");
-                });
-
-                e.HasIndex(x => x.CharacterId);
-            });
-        }
-        public static void Modeling_CharacterPromotionMaterial(ModelBuilder b)
-        {
-            b.Entity<CharacterPromotionMaterial>(e =>
-            {
-                e.ToTable("CharacterPromotionMaterials");
-
-                e.Property(x => x.PromotionCharacterId).HasColumnName("CharacterId").IsRequired();
-                e.Property(x => x.PromotionTier).HasColumnName("Tier").IsRequired();
-                e.Property(x => x.ItemId).IsRequired();
-                e.Property(x => x.Count).IsRequired();
-
-                e.HasKey(x => new { x.PromotionCharacterId, x.PromotionTier, x.ItemId });
-
-                e.HasOne(x => x.Promotion)
-   .WithMany(p => p.Materials)
-   .HasForeignKey(x => new { x.PromotionCharacterId, x.PromotionTier })
-   .HasPrincipalKey(p => new { p.CharacterId, p.Tier })
-   .OnDelete(DeleteBehavior.Cascade);
-
-                // Item FK
-                e.HasOne(x => x.Item)
-                 .WithMany()
-                 .HasForeignKey(x => x.ItemId)
-                 .OnDelete(DeleteBehavior.Restrict);
-
-                e.HasIndex(x => x.ItemId);
-            });
-        }
-        public void Modeling_CharacterPromotion(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<CharacterPromotion>(e =>
-            {
-                e.ToTable("CharacterPromotion");
-
-                e.HasKey(x => new { x.CharacterId, x.Tier });
-
-                e.Property(x => x.MaxLevel).IsRequired();
-                e.Property(x => x.CostGold).IsRequired();
-
-                e.Property(x => x.Bonus)
-                    .HasColumnType("jsonb")
-                    .IsRequired(false);
-                 
-                e.HasOne(x => x.Character)
-                 .WithMany(c => c.CharacterPromotions)
-                 .HasForeignKey(x => x.CharacterId)
-                 .HasPrincipalKey(c => c.Id)
-                 .OnDelete(DeleteBehavior.Cascade);
-
-                e.ToTable(t =>
-                {
-                    t.HasCheckConstraint("ck_cp_tier", "\"Tier\" >= 0");
-                    t.HasCheckConstraint("ck_cp_maxlevel", "\"MaxLevel\" >= 1");
-                    t.HasCheckConstraint("ck_cp_gold", "\"CostGold\" >= 0");
-                });
-
-                e.HasIndex(x => x.CharacterId);
-            });
-        }
-        public void Modeling_CharacterSkill(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<CharacterSkill>(e =>
-            {
-                e.ToTable("CharacterSkills");
-
-                e.HasKey(x => new { x.CharacterId, x.Slot });
-
-                e.Property(x => x.CharacterId).HasColumnName("CharacterId").IsRequired();
-                e.Property(x => x.Slot).HasConversion<short>().IsRequired();
-                e.Property(x => x.SkillId).IsRequired();
-                e.Property(x => x.UnlockTier).HasDefaultValue(0);
-                e.Property(x => x.UnlockLevel).HasDefaultValue(0);
-
-                // (선택) 캐릭터 내 동일 스킬 중복 방지
-                // e.HasAlternateKey(x => new { x.CharacterId, x.SkillId });
-
-                e.HasOne(x => x.Character)
-                 .WithMany(c => c.CharacterSkills)            // ← Character 엔티티에 컬렉션 네비게이션 선언 필요
-                 .HasForeignKey(x => x.CharacterId)
-                 .HasPrincipalKey(c => c.Id)                  // ← 주키를 명확히
-                 .OnDelete(DeleteBehavior.Cascade);
-
-                e.HasOne<Skill>()
-                 .WithMany()
-                 .HasForeignKey(x => x.SkillId)
-                 .OnDelete(DeleteBehavior.Restrict);
-
-                e.ToTable(t =>
-                {
-                    t.HasCheckConstraint("ck_cs_unlock_tier", "\"UnlockTier\" >= 0");
-                    t.HasCheckConstraint("ck_cs_unlock_level", "\"UnlockLevel\" >= 1");
-                    t.HasCheckConstraint("ck_cs_slot", "\"Slot\" BETWEEN 1 AND 4");
-                });
-
-                e.HasIndex(x => x.SkillId);
-            });
-        }
-        #endregion
+        }  
 
 
         private static void Modeling_Combat(ModelBuilder modelBuilder)
@@ -569,101 +256,7 @@ namespace Infrastructure.Persistence
         // 2) ValueConverter는 래퍼를 호출만 함 (Expression에 금지 요소 없음)
         private static readonly ValueConverter<JsonNode?, string?> JsonNodeConverter =
             new(v => JsonNodeToString(v), v => StringToJsonNode(v));
-
-        private void Modeling_Item(ModelBuilder mb)
-        {
-            mb.Entity<Item>(e =>
-            {
-                e.ToTable("Item");
-                e.HasKey(x => x.Id);
-
-                e.Property(x => x.Code).IsRequired();
-                e.HasIndex(x => x.Code).IsUnique();
-
-                e.Property(x => x.Name).IsRequired();
-                e.Property(x => x.Description).HasDefaultValue("");
-
-                // FK 값들: (참조 테이블은 다른 모델에서 구성되어 있다고 가정)
-                e.Property(x => x.TypeId).IsRequired();
-                e.Property(x => x.RarityId).IsRequired();
-
-                e.Property(x => x.Stackable).HasDefaultValue(true);
-                e.Property(x => x.MaxStack).HasDefaultValue(99);
-                e.Property(x => x.Tradable).HasDefaultValue(true);
-                e.Property(x => x.Weight).HasDefaultValue(0);
-
-                // string[] -> text[] (Npgsql이 자동 매핑)
-                e.Property(x => x.Tags).HasColumnType("text[]").HasDefaultValue(new string[] { });
-
-                // JsonNode -> jsonb
-                e.Property(x => x.Meta).HasColumnType("jsonb");
-
-
-
-                e.Property(x => x.CreatedAt).HasColumnType("timestamptz");
-                e.Property(x => x.UpdatedAt).HasColumnType("timestamptz");
-
-
-                e.HasMany(i => i.Stats)
-                 .WithOne()
-                 .HasForeignKey(x => x.ItemId)
-                 .OnDelete(DeleteBehavior.Cascade);
-                e.Navigation(i => i.Stats).HasField("_stats")
-                                           .UsePropertyAccessMode(PropertyAccessMode.Field);
-
-
-                e.HasMany(i => i.Effects)
-  .WithOne()
-  .HasForeignKey(x => x.ItemId)
-  .OnDelete(DeleteBehavior.Cascade);
-                e.Navigation(i => i.Effects).HasField("_effects")
-                                             .UsePropertyAccessMode(PropertyAccessMode.Field);
-
-
-                e.HasMany(i => i.Prices)
-                 .WithOne()
-                 .HasForeignKey(x => x.ItemId)
-                 .OnDelete(DeleteBehavior.Cascade);
-                e.Navigation(i => i.Prices).HasField("_prices")
-                                .UsePropertyAccessMode(PropertyAccessMode.Field);
-            });
-        }
-        private void Modeling_ItemStat(ModelBuilder mb)
-        {
-            mb.Entity<ItemStat>(e =>
-            {
-                e.ToTable("ItemStat");
-                e.HasKey(x => x.Id);
-                e.Property(x => x.Value).HasColumnType("numeric(12,4)");
-                e.HasIndex(x => new { x.ItemId, x.StatId }).IsUnique();
-            });
-        }
-
-        private void Modeling_ItemEffect(ModelBuilder mb)
-        {
-            mb.Entity<ItemEffect>(e =>
-            {
-                e.ToTable("ItemEffect");
-                e.HasKey(x => x.Id);
-
-                e.Property(x => x.Payload).HasColumnType("jsonb");
-                e.Property(x => x.SortOrder).HasDefaultValue((short)0);
-
-                // Scope는 enum → text 저장을 원하면 컨버터 추가 가능
-                // e.Property(x => x.Scope).HasConversion<string>();
-            });
-        }
-
-        private void Modeling_ItemPrice(ModelBuilder mb)
-        {
-            mb.Entity<ItemPrice>(e =>
-            {
-                e.ToTable("ItemPrice");
-                e.HasKey(x => x.Id);
-                e.Property(x => x.Price).HasColumnType("bigint");
-                e.HasIndex(x => new { x.ItemId, x.CurrencyId, x.PriceType }).IsUnique();
-            });
-        }
+         
         private static void Modeling_StatTypes(ModelBuilder mb)
         {
             var e = mb.Entity<StatType>();
@@ -686,6 +279,7 @@ namespace Infrastructure.Persistence
                 e.Property(x => x.Name).IsRequired();
                 e.Property(x => x.SortOrder).HasDefaultValue((short)0);
                 e.HasIndex(x => x.Code).IsUnique();
+                e.HasIndex(x => x.IconId);
             });
         }
 
@@ -850,216 +444,12 @@ namespace Infrastructure.Persistence
 
 
         private void OnModelCreating_User(ModelBuilder b)
-        {
-            Modeling_User(b);
-            Modeling_UserProfile(b);
+        { 
             Modeling_Session(b);
-            Modeling_SecurityEvent(b);
-            Modeling_UserCurrency(b);
-            Modeling_UserInventory(b);
-            Modeling_UserCharacter(b);
-            Modeling_UserCharacterSkill(b);
-            Modeling_UserCharacterEquip(b);
-            Modeling_CharacterExp(b);
-
+            Modeling_SecurityEvent(b); 
+            Modeling_CharacterExp(b); 
         }
-        private static void Modeling_UserCurrency(ModelBuilder b)
-        {
-            b.Entity<UserCurrency>(b =>
-            {
-                b.ToTable("UserCurrency");
-                b.HasKey(x => new { x.UserId, x.CurrencyId });
-                b.HasOne<User>().WithMany().HasForeignKey(x => x.UserId);
-                b.HasOne<Currency>().WithMany().HasForeignKey(x => x.CurrencyId);
-            });
-        }
-
-        // ---------- User ----------
-        private static void Modeling_User(ModelBuilder b)
-        {
-            // Users
-            b.Entity<User>(e =>
-            {
-                e.ToTable("Users");
-                e.HasKey(x => x.Id);
-                e.Property(x => x.Id).HasColumnName("Id").ValueGeneratedOnAdd();
-
-                e.Property(x => x.Account).HasColumnName("Account").HasMaxLength(64).IsRequired();
-                e.HasIndex(x => x.Account).IsUnique();
-
-                e.Property(x => x.PasswordHash).HasColumnName("PasswordHash").IsRequired();
-                e.Property(x => x.Status).HasColumnName("Status").HasConversion<short>();
-
-                e.Property(x => x.CreatedAt).HasColumnName("CreatedAt");
-                e.Property(x => x.LastLoginAt)
- .HasColumnName("LastLoginAt")
- .IsRequired(false);
-
-                // 1:1 Profile (FK: UserProfile.UserId)
-                e.HasOne(x => x.Profile)
-                 .WithOne()
-                 .HasForeignKey<UserProfile>(p => p.UserId)
-                 .OnDelete(DeleteBehavior.Cascade);
-            });
-
-            // UsersProfiles
-            b.Entity<UserProfile>(e =>
-            {
-                e.ToTable("UsersProfiles");
-
-                e.HasKey(x => x.UserId);
-                e.Property(x => x.UserId).HasColumnName("UserId");
-
-                e.Property(x => x.NickName).HasColumnName("NickName").HasMaxLength(100).IsRequired();
-                e.Property(x => x.Level).HasColumnName("Level").IsRequired();
-                e.Property(x => x.Exp).HasColumnName("Exp").IsRequired();
-                e.Property(x => x.Gold).HasColumnName("Gold").IsRequired();
-                e.Property(x => x.Gem).HasColumnName("Gem").IsRequired();
-                e.Property(x => x.Token).HasColumnName("Token").IsRequired();
-                e.Property(x => x.IconId).HasColumnName("IconId").IsRequired(false);
-
-                e.HasOne<User>()
-         .WithOne(u => u.Profile)
-         .HasForeignKey<UserProfile>(p => p.UserId)
-         .OnDelete(DeleteBehavior.Cascade);
-
-                e.HasIndex(x => x.UserId).IsUnique(); // 1:1 보장
-            });
-        }
-        private static void Modeling_UserInventory(ModelBuilder b)
-        {
-            b.Entity<UserInventory>(e =>
-            {
-                e.ToTable("UserInventory");
-
-                e.HasKey(x => new { x.UserId, x.ItemId });
-
-                e.Property(x => x.UserId).HasColumnName("UserId");
-                e.Property(x => x.ItemId).HasColumnName("ItemId");
-                e.Property(x => x.Count).HasColumnName("Count");
-                e.Property(x => x.UpdatedAt).IsRequired();
-
-                e.HasIndex(x => x.UserId);
-                e.HasIndex(x => x.ItemId);
-                e.HasIndex(x => x.UpdatedAt);
-            });
-        }
-        private static void ConfigureUser(EntityTypeBuilder<User> e)
-        {
-            e.ToTable("Users");
-            e.HasKey(x => x.Id);
-            e.Property(x => x.Id).HasColumnName("UserId").ValueGeneratedOnAdd();
-
-            e.Property(x => x.Account).IsRequired().HasMaxLength(64);
-            e.HasIndex(x => x.Account).IsUnique();
-
-            e.Property(x => x.PasswordHash).IsRequired();
-
-            e.Property(x => x.Status).IsRequired(); // enum → 기본 매핑 (smallint 권하면 .HasConversion<short>())
-            e.Property(x => x.CreatedAt).IsRequired();
-            e.Property(x => x.LastLoginAt)
- .HasColumnName("LastLoginAt")
- .IsRequired(false);
-
-            // 1:1 Profile
-            e.HasOne(x => x.Profile)
-             .WithOne()
-             .HasForeignKey<UserProfile>(p => p.UserId)
-             .OnDelete(DeleteBehavior.Cascade);
-        }
-
-        // ---------- UserProfile ----------
-        private void Modeling_UserProfile(ModelBuilder b)
-        {
-            b.Entity<UserProfile>(ConfigureUserProfile);
-        }
-
-        private static void ConfigureUserProfile(EntityTypeBuilder<UserProfile> e)
-        {
-            e.ToTable("UsersProfiles");
-            e.HasKey(x => x.Id);
-            e.Property(x => x.Id).HasColumnName("ProfileId").ValueGeneratedOnAdd();
-
-            e.Property(x => x.UserId).IsRequired();
-            e.HasIndex(x => x.UserId).IsUnique();
-
-            e.Property(x => x.NickName).IsRequired().HasMaxLength(100);
-            e.Property(x => x.Level).IsRequired();
-            e.Property(x => x.Exp).IsRequired();
-
-            e.Property(x => x.Gold).IsRequired();
-            e.Property(x => x.Gem).IsRequired();
-            e.Property(x => x.Token).IsRequired();
-
-            e.Property(x => x.IconId).IsRequired(false);
-        }
-        private static void Modeling_UserCharacter(ModelBuilder b)
-        {
-            b.Entity<UserCharacter>(e =>
-            {
-                e.ToTable("UserCharacters");               // 실제 테이블명과 일치
-                e.HasKey(x => new { x.UserId, x.CharacterId });
-
-                e.Property(x => x.UserId).HasColumnName("UserId");
-                e.Property(x => x.CharacterId).HasColumnName("CharacterId");
-                e.Property(x => x.Level).HasColumnName("Level");
-                e.Property(x => x.Exp).HasColumnName("Exp");
-                e.Property(x => x.BreakThrough).HasColumnName("BreakThrough");
-                e.Property(x => x.UpdatedAt).HasColumnName("UpdatedAt").IsRequired();
-                e.Property(x => x.UpdatedAt).IsConcurrencyToken();
-
-                // 백킹필드 내비 사용
-                var nav = e.Metadata.FindNavigation(nameof(UserCharacter.Skills));
-                nav!.SetField("_skills");
-                nav.SetPropertyAccessMode(PropertyAccessMode.Field);
-
-                // (선택) 인덱스
-                e.HasIndex(x => x.UserId);
-                e.HasIndex(x => x.CharacterId);
-                e.HasIndex(x => x.UpdatedAt);
-            });
-        }
-        private static void Modeling_UserCharacterEquip(ModelBuilder b)
-        {
-            b.Entity<UserCharacterEquip>(e =>
-            {
-                e.ToTable("UserCharacterEquip");
-
-                e.HasKey(x => new { x.UserId, x.CharacterId, x.SlotId });
-                e.Property(x => x.UserId).HasColumnName("UserId");
-                e.Property(x=>x.CharacterId).HasColumnName("CharacterId");
-                e.Property(x => x.SlotId).HasColumnName("SlotId");
-                e.Property(x => x.ItemId).HasColumnName("ItemId"); 
-            }); 
-        }
-        private static void Modeling_UserCharacterSkill(ModelBuilder b)
-        {
-            b.Entity<UserCharacterSkill>(e =>
-            {
-                e.ToTable("UserCharacterSkill");          // 실제 테이블명 (복수 추천)
-                e.HasKey(x => new { x.UserId, x.CharacterId, x.SkillId });
-
-                e.Property(x => x.UserId).HasColumnName("UserId");
-                e.Property(x => x.CharacterId).HasColumnName("CharacterId");
-                e.Property(x => x.SkillId).HasColumnName("SkillId");
-                e.Property(x => x.Level).HasColumnName("Level");
-                e.Property(x => x.UpdatedAt).HasColumnName("UpdatedAt").IsRequired();
-                e.Property(x => x.UpdatedAt).IsConcurrencyToken();
-
-                //  
-                e.HasOne(s => s.UserCharacter)
- .WithMany(uc => uc.Skills)
- .HasForeignKey(s => new { s.UserId, s.CharacterId })
- .HasPrincipalKey(uc => new { uc.UserId, uc.CharacterId })
- .OnDelete(DeleteBehavior.Cascade);
-
-                // (선택) 인덱스
-                e.HasIndex(x => x.UserId);
-                e.HasIndex(x => x.CharacterId);
-                e.HasIndex(x => x.SkillId);
-                e.HasIndex(x => x.UpdatedAt);
-            });
-        }
+         
         private static void Modeling_CharacterExp(ModelBuilder b)
         {
             b.Entity<CharacterExp>(e =>

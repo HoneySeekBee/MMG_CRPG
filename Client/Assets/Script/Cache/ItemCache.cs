@@ -1,3 +1,4 @@
+using Contracts.EquipSlots;
 using Contracts.Protos;
 using Game.Core;
 using Game.Network;
@@ -17,6 +18,11 @@ public class ItemCache : MonoBehaviour
     public List<ItemTypeMessage> ItemTypeList;
     private ListItemTypesResponseMessage _itemTypes;
 
+    [Header("EquipSlots")]
+    public List<EquipSlotPb> EquipSlotList;
+    private EquipSlotListPb _euqipSlots;
+    public Dictionary<string, EquipSlotPb> EquipSlotDic = new();
+
     [Header("Items")]
     public Dictionary<long, ItemMessage> ItemDict = new();
     public Dictionary<long, int> ItemCategoryDict = new();
@@ -32,9 +38,10 @@ public class ItemCache : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
-    public IEnumerator CoLoadItemData(  ProtoHttpClient http, Popup popup)
+    public IEnumerator CoLoadItemData(ProtoHttpClient http, Popup popup)
     {
         yield return CoLoadItemType(http, popup);
+        yield return CoLoadEquipSlot(http, popup);
 
         yield return CoLoadItems(http, popup);
     }
@@ -56,6 +63,29 @@ public class ItemCache : MonoBehaviour
         {
             ItemTypeList = _itemTypes.Items.Where(x => x.Active).ToList();
             Debug.Log($"아이템 타입을 불러옴 {ItemTypeList.Count}");
+        }
+    }
+    private IEnumerator CoLoadEquipSlot(ProtoHttpClient http, Popup popup)
+    {
+        yield return http.Get(ApiRoutes.EquipSlots, EquipSlotListPb.Parser,
+            (ApiResult<EquipSlotListPb> res) =>
+            {
+                if (!res.Ok)
+                {
+                    popup?.Show($"장비 슬롯 불러오기 실패: {res.Message}");
+                    return;
+                }
+                _euqipSlots = res.Data;
+            });
+
+        if (_euqipSlots != null)
+        {
+            EquipSlotList = _euqipSlots.EquipSlots.ToList();
+            foreach (var item in EquipSlotList)
+            {
+                EquipSlotDic[item.Code] = item;
+            }
+            Debug.Log($"장비 슬롯 불러옴 {EquipSlotList.Count}");
         }
     }
 

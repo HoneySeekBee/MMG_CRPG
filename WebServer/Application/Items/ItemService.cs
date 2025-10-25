@@ -299,7 +299,8 @@ namespace Application.Items
                 i.Tags, i.IsActive, i.Meta, i.CreatedBy, i.CreatedAt, i.UpdatedAt,
                 i.Stats.Select(s => new ItemStatDto(s.Id, s.StatId, s.Value)).ToList(),
                 i.Effects.Select(e => new ItemEffectDto(e.Id, e.Scope, e.Payload, e.SortOrder)).ToList(),
-                i.Prices.Select(p => new ItemPriceDto(p.Id, p.CurrencyId, p.PriceType, p.Price)).ToList()
+                i.Prices.Select(p => new ItemPriceDto(p.Id, p.CurrencyId, p.PriceType, p.Price)).ToList(), 
+                i.EquipType
             );
         }
     }
