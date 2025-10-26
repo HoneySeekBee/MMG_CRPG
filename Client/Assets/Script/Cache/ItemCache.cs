@@ -17,6 +17,7 @@ public class ItemCache : MonoBehaviour
     [Header("ItemType")]
     public List<ItemTypeMessage> ItemTypeList;
     private ListItemTypesResponseMessage _itemTypes;
+    public Dictionary<string, ItemTypeMessage> ItemTypeDictionary = new();
 
     [Header("EquipSlots")]
     public List<EquipSlotPb> EquipSlotList;
@@ -63,6 +64,8 @@ public class ItemCache : MonoBehaviour
         {
             ItemTypeList = _itemTypes.Items.Where(x => x.Active).ToList();
             Debug.Log($"아이템 타입을 불러옴 {ItemTypeList.Count}");
+            ItemTypeDictionary.Clear();
+            ItemTypeDictionary = ItemTypeList.ToDictionary(x => x.Code, x => x);
         }
     }
     private IEnumerator CoLoadEquipSlot(ProtoHttpClient http, Popup popup)

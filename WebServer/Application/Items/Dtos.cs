@@ -39,7 +39,8 @@ namespace Application.Items
     public sealed record ItemStatDto(
         long Id,
         int StatId,
-        decimal Value
+        decimal Value,
+        string code
     );
 
     public sealed record ItemEffectDto(

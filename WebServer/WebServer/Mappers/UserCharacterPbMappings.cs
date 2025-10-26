@@ -37,6 +37,15 @@ namespace WebServer.Mappers
                     }));
                 }
 
+                if(dto.equips is not null)
+                {
+                    summary.Equips.AddRange(dto.equips.Select(s => new UserCharacterEquipPb
+                    {
+                        EquipId = s.equipId,
+                        InventoryId = s.inventoryId?? 0,
+                    }));
+                }
+
                 result.Characters.Add(summary);
             }
             return result;

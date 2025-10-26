@@ -65,7 +65,7 @@ namespace Infrastructure.Caching
             var stats = await db.ItemStats
                 .AsNoTracking()
                 .Where(s => ids.Contains(s.ItemId))
-                .Select(s => new { s.Id, s.ItemId, s.StatId, s.Value })
+                .Select(s => new { s.Id, s.ItemId, s.StatId, s.Value, s.StatType.Code })
                 .ToListAsync(ct);
 
             var effects = await db.ItemEffects
@@ -83,7 +83,7 @@ namespace Infrastructure.Caching
             var statsByItem = stats.GroupBy(s => s.ItemId)
                                      .ToDictionary(g => g.Key,
                                                    g => (IReadOnlyList<ItemStatDto>)g
-                                                        .Select(x => new ItemStatDto(x.Id, x.StatId, x.Value))
+                                                        .Select(x => new ItemStatDto(x.Id, x.StatId, x.Value, x.Code))
                                                         .ToList());
 
             var effectsByItem = effects.GroupBy(e => e.ItemId)

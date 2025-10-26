@@ -191,7 +191,7 @@ namespace Domain.Entities
                 return existing;
             }
 
-            var created = new ItemStat(Id, statId, value);
+            var created = new ItemStat(Id, statId, value );
             _stats.Add(created);
             Touch();
             return created;
@@ -274,16 +274,17 @@ namespace Domain.Entities
         public long Id { get; private set; }           // DB bigserial (도메인에선 0으로 시작 가능)
         public long ItemId { get; private set; }
         public int StatId { get; private set; }        // FK -> StatTypes
-        public decimal Value { get; private set; }     // NUMERIC(12,4)
-
+        public decimal Value { get; private set; }     // NUMERIC(12,4) 
+        public StatType StatType { get; private set; }
         private ItemStat() { }
-
         public ItemStat(long itemId, int statId, decimal value)
         {
             ItemId = itemId;
             StatId = statId;
             Update(value);
         }
+        public ItemStat(long itemId, int statId, decimal value, StatType statType) : this(itemId, statId, value)
+       => StatType = statType;
 
         public void Update(decimal value)
         {

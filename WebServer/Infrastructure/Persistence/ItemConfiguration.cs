@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,6 +79,11 @@ namespace Infrastructure.Persistence
             e.HasKey(x => x.Id);
             e.Property(x => x.Value).HasColumnType("numeric(12,4)");
             e.HasIndex(x => new { x.ItemId, x.StatId }).IsUnique();
+
+            e.HasOne(x => x.StatType)
+                .WithMany()
+                .HasForeignKey(x => x.StatId)
+                .HasPrincipalKey(t => t.Id);
         }
         void IEntityTypeConfiguration<ItemEffect>.Configure(EntityTypeBuilder<ItemEffect> e)
         {

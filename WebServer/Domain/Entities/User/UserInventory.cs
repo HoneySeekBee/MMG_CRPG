@@ -9,7 +9,7 @@ namespace Domain.Entities.User
     public sealed class UserInventory
     {
         private UserInventory() { }
-
+        public long Id { get; set; }
         public int UserId { get; set; }
         public int ItemId { get; set; }
         public int Count { get; set; }

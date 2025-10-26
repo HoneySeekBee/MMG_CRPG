@@ -1,4 +1,5 @@
 using Contracts.Protos;
+using MMG_CRPG.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,7 @@ public class UserCharacterDeatailUI : MonoBehaviour
     public static UserCharacterDeatailUI Instance { get; private set; }
 
     [SerializeField] private UserCharacterStatusUI StatusUI;
+   public UserCharacterEquipUI EquipUI;
     public UserCharacterSummaryPb status;
     [SerializeField] private Toggle[] CategoryToggles;
     private void Awake()

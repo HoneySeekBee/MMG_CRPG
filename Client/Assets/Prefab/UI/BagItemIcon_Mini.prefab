@@ -92,6 +92,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c1c901186248c441b9f103453caeb57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isEquip: 1
   countText: {fileID: 5622742155631798163}
   IconImage: {fileID: 5206342577510093229}
 --- !u!114 &227389935506141284

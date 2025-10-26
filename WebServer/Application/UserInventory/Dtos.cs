@@ -3,6 +3,7 @@
 namespace Application.UserInventory
 {
     public sealed record UserInventoryDto(
+        long Id,
         int UserId,
         int ItemId,
         int Count,
@@ -15,7 +16,7 @@ namespace Application.UserInventory
     public static class UserInventoryMapping
     {
         public static UserInventoryDto ToDto(this UserInven entity)
-            => new(entity.UserId, entity.ItemId, entity.Count, entity.UpdatedAt);
+            => new(entity.Id, entity.UserId, entity.ItemId, entity.Count, entity.UpdatedAt);
 
         public static IReadOnlyList<UserInventoryDto> ToDtoList(this IEnumerable<UserInven> entities)
             => entities.Select(e => e.ToDto()).ToList();
