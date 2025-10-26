@@ -9,6 +9,7 @@ message UserInventory {
   int32 item_id = 2;
   int32 count   = 3;
   google.protobuf.Timestamp updated_at = 4;
+  int64 id = 5; 
 }
 
 // 페이지네이션 공통
@@ -21,7 +22,7 @@ message PageInfo {
 // GET: 목록 응답
 message ListUserInventoryResponse {
   PageInfo page_info = 1;
-  repeated UserInventory items = 2;
+  repeated UserInventory items = 2; 
 }
 
 // GET: 단건 응답

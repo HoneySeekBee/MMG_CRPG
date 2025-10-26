@@ -8,7 +8,7 @@ namespace Domain.Entities
 {
     public sealed class StatType
     {
-        public short Id { get; private set; }          // PostgreSQL smallint ↔ C# short
+        public int Id { get; private set; }          // PostgreSQL smallint ↔ C# short
         public string Code { get; private set; } = ""; // UNIQUE
         public string Name { get; private set; } = "";
         public bool IsPercent { get; private set; }

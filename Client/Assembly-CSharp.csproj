@@ -95,10 +95,12 @@
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\BackgroundMusic.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\BonusSeekerCharacterState.cs" />
     <Compile Include="Assets\Script\Data\UserData.cs" />
+    <Compile Include="Assets\Script\UI\User\StatUI.cs" />
     <Compile Include="Assets\Script\Cache\CharacterCache.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\Movement\MovementStates\Obstacles\TeleportObstacleState.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\Movement\MovementStates\MoveToNavMeshMovementState.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\CroakLandBehavior.cs" />
+    <Compile Include="Assets\Script\UI\User\EquipItemWindowUI.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Obstacle\ObstacleBase.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\CharacterSoundController.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\KingsGrummy.cs" />

@@ -55,8 +55,9 @@ namespace Infrastructure.Persistence
         {
             e.ToTable("UserInventory");
 
-            e.HasKey(x => new { x.UserId, x.ItemId });
+            e.HasKey(x => new { x.Id });
 
+            e.Property(x => x.Id).HasColumnName("Id");
             e.Property(x => x.UserId).HasColumnName("UserId");
             e.Property(x => x.ItemId).HasColumnName("ItemId");
             e.Property(x => x.Count).HasColumnName("Count");
@@ -126,7 +127,7 @@ namespace Infrastructure.Persistence
             e.Property(x => x.UserId).HasColumnName("UserId");
             e.Property(x => x.CharacterId).HasColumnName("CharacterId");
             e.Property(x => x.EquipId).HasColumnName("EquipId");
-            e.Property(x => x.ItemId).HasColumnName("ItemId");
+            e.Property(x => x.InventoryId).HasColumnName("InventoryId");
 
             e.HasOne(x => x.UserCharacter)
     .WithMany(uc => uc.Equips)

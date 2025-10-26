@@ -25,6 +25,7 @@ namespace WebServer.Mappers
                 IconId = x.IconId ?? 0,
                 IsActive = x.IsActive,
                 IconUrl = iconUrlFactory(x.IconId) ?? string.Empty,
+                EuqipType = x.EquipType?? 0,
             };
 
         // 상세 변환 (확장 메서드)
@@ -55,6 +56,7 @@ namespace WebServer.Mappers
                 UpdatedAtMs = x.UpdatedAt.ToUnixTimeMilliseconds(),
                 IconUrl = iconUrlFactory(x.IconId) ?? string.Empty,
                 PortraitUrl = portraitUrlFactory(x.PortraitId) ?? string.Empty,
+                EuqipType = x.EquipType?? 0,
             };
 
             if (x.Tags?.Length > 0) m.Tags.AddRange(x.Tags);
@@ -64,7 +66,8 @@ namespace WebServer.Mappers
                 {
                     Id = s.Id,
                     StatId = s.StatId,
-                    Value = (double)s.Value
+                    Value = (double)s.Value,
+                    Code = s.code
                 }));
 
             if (x.Effects is { Count: > 0 })

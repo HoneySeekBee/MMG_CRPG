@@ -86,7 +86,7 @@ namespace Application.Items
                 weight: req.Weight,
                 tags: req.Tags,
                 isActive: req.IsActive,
-        meta: metaNode,
+                meta: metaNode,
                 createdBy: req.CreatedBy
             );
 
@@ -297,7 +297,7 @@ namespace Application.Items
                 i.Id, i.Code, i.Name, i.Description, i.TypeId, i.RarityId, i.IconId, i.PortraitId,
                 i.Stackable, i.MaxStack, i.BindType, i.Tradable, i.DurabilityMax, i.Weight,
                 i.Tags, i.IsActive, i.Meta, i.CreatedBy, i.CreatedAt, i.UpdatedAt,
-                i.Stats.Select(s => new ItemStatDto(s.Id, s.StatId, s.Value)).ToList(),
+                i.Stats.Select(s => new ItemStatDto(s.Id, s.StatId, s.Value, s.StatType.Code)).ToList(),
                 i.Effects.Select(e => new ItemEffectDto(e.Id, e.Scope, e.Payload, e.SortOrder)).ToList(),
                 i.Prices.Select(p => new ItemPriceDto(p.Id, p.CurrencyId, p.PriceType, p.Price)).ToList(), 
                 i.EquipType

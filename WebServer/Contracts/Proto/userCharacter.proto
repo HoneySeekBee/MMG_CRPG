@@ -21,7 +21,7 @@ message UserCharacterSummaryPb
     google.protobuf.Timestamp updated_at = 6;
 
     repeated UserCharacterSkillPb skills = 10;  
-	repeated UserCharacterEquipPb euqips = 11; 
+	repeated UserCharacterEquipPb equips = 11; 
 }
 
 message UserCharacterSkillPb {
@@ -33,5 +33,6 @@ message UserCharacterSkillPb {
 message UserCharacterEquipPb
 { 
 	int32 equipId = 1; 
-	int32 itemId = 2;  
+	int64 inventoryId = 2;  
 }
+ 

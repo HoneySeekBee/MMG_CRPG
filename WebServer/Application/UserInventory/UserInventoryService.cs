@@ -35,7 +35,7 @@ namespace Application.UserInventory
             var (rows, total) = await _invQuery.GetPagedAsync(query, ct);
 
 
-            var items = rows.Select(e => new UserInventoryDto(e.UserId, e.ItemId, e.Count, e.UpdatedAt)).ToList();
+            var items = rows.Select(e => new UserInventoryDto( e.Id, e.UserId, e.ItemId, e.Count, e.UpdatedAt)).ToList();
             return new UserInvenPagedResult(items, total, query.Page, query.PageSize);
         }
         public async Task<UserInventoryDto?> GetOneAsync(int userId, int itemId, CancellationToken ct)
@@ -45,7 +45,7 @@ namespace Application.UserInventory
             var e = await _inv.GetByKeyAsync(userId, itemId, ct);
             if (e is null) return null;
 
-            return new UserInventoryDto(e.UserId, e.ItemId, e.Count, e.UpdatedAt);
+            return new UserInventoryDto(e.Id, e.UserId, e.ItemId, e.Count, e.UpdatedAt);
         }
         public async Task<UserInvenPagedResult> GetOwnersAsync(ItemOwnershipQuery query, CancellationToken ct)
         {
@@ -54,7 +54,7 @@ namespace Application.UserInventory
             if (query.PageSize <= 0) throw new ArgumentOutOfRangeException(nameof(query.PageSize));
 
             var (rows, total) = await _invQuery.GetOwnersPagedAsync(query, ct);
-            var items = rows.Select(e => new UserInventoryDto(e.UserId, e.ItemId, e.Count, e.UpdatedAt)).ToList();
+            var items = rows.Select(e => new UserInventoryDto(e.Id, e.UserId, e.ItemId, e.Count, e.UpdatedAt)).ToList();
             return new UserInvenPagedResult(items, total, query.Page, query.PageSize);
         }
         public async Task<UserInventoryDto> GrantAsync(GrantItemRequest req, CancellationToken ct)
@@ -82,7 +82,7 @@ namespace Application.UserInventory
             // 3) 저장
             await _inv.SaveChangesAsync(ct);
 
-            return new UserInventoryDto(e.UserId, e.ItemId, e.Count, e.UpdatedAt);
+            return new UserInventoryDto(e.Id, e.UserId, e.ItemId, e.Count, e.UpdatedAt);
         }
 
         public async Task<ConsumeResultDto> ConsumeAsync(ConsumeItemRequest req, CancellationToken ct)
@@ -126,7 +126,7 @@ namespace Application.UserInventory
             }
 
             await _inv.SaveChangesAsync(ct);
-            return new UserInventoryDto(e.UserId, e.ItemId, e.Count, e.UpdatedAt);
+            return new UserInventoryDto(e.Id, e.UserId, e.ItemId, e.Count, e.UpdatedAt);
         }
 
         public async Task DeleteAsync(DeleteItemRequest req, CancellationToken ct)

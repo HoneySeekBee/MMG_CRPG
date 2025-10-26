@@ -263,7 +263,8 @@ namespace Infrastructure.Persistence
             e.ToTable("StatTypes");
             e.HasKey(x => x.Id);
             e.Property(x => x.Id)
-                .ValueGeneratedOnAdd(); // smallserial과 매칭
+                .ValueGeneratedOnAdd()
+                .HasColumnType("integer");
             e.Property(x => x.Code).IsRequired();
             e.HasIndex(x => x.Code).IsUnique();
             e.Property(x => x.Name).IsRequired();

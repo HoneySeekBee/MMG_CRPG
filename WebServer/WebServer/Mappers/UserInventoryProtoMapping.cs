@@ -13,6 +13,7 @@ namespace WebServer.Mappers
         public static UserInventory ToPb(this UserInventoryDto dto)
         => new UserInventory
         {
+            Id = dto.Id,
             UserId = dto.UserId,
             ItemId = dto.ItemId,
             Count = dto.Count,
@@ -32,6 +33,7 @@ namespace WebServer.Mappers
             };
 
             resp.Items.AddRange(paged.Items.Select(i => i.ToPb()));
+
             return resp;
         }
 

@@ -4,21 +4,32 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Contracts.Protos;
+using UnityEngine.Events;
 public class BagItemIconUI : MonoBehaviour
 {
-    private Button BagItemIconBtn; 
+    [SerializeField] private bool isEquip = false;
+    private Button BagItemIconBtn;
     public ItemMessage ItemData;
     public TMP_Text countText;
     public Image IconImage;
 
-    public void Set(ItemMessage _itemData , int count)
+    public void Set(ItemMessage _itemData, int count)
     {
         ItemData = _itemData;
         IconImage.sprite = MasterDataCache.Instance.IconSprites[ItemData.IconId];
-        countText.text = count.ToString();
+        if (countText != null && countText.gameObject.activeSelf)
+            countText.text = count.ToString();
         BagItemIconBtn = this.GetComponent<Button>();
         BagItemIconBtn.onClick.RemoveAllListeners();
-        BagItemIconBtn.onClick.AddListener(ShowDetail);
+        
+        if (isEquip == false)
+            BagItemIconBtn.onClick.AddListener(ShowDetail);
+
+    }
+
+    public void AddClickEvent(UnityAction<ItemMessage> action)
+    {
+        BagItemIconBtn.onClick.AddListener(() =>  action?.Invoke(ItemData));
     }
 
     public void ShowDetail()

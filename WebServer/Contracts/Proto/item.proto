@@ -36,6 +36,7 @@ message ItemStatMessage {
   int64 id     = 1;
   int32 stat_id = 2;
   double value = 3;  
+  string code = 4; 
   // StatOpPb op = 4;
 }
 

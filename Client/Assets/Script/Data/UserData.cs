@@ -21,16 +21,16 @@ public class UserData
     public UserProfilePb UserProfilePb { get; private set; }
 
     // 인벤토리
-    private readonly Dictionary<int, int> _inventory = new(); // ItemId -> Count
-    public IReadOnlyDictionary<int, int> Inventory => _inventory;
+    private readonly Dictionary<int, UserInventory> _inventory = new(); // ItemId -> UserInventory
+    public Dictionary<int, UserInventory> Inventory => _inventory;
 
-    private readonly Dictionary<int, List<int>> _inventoryType = new(); // 각 타입 별 인벤토리 Id 
-    public IReadOnlyDictionary<int, List<int>> InventoryType => _inventoryType;
+    private readonly Dictionary<int, List<UserInventory>> _inventoryType = new(); // 각 타입 별 인벤토리 Id 
+    public IReadOnlyDictionary<int, List<UserInventory>> InventoryType => _inventoryType;
 
     // 보유 캐릭터 
     private readonly Dictionary<int, UserCharacterSummaryPb> _userCharactersDict = new();
 
-    public IReadOnlyDictionary<int, UserCharacterSummaryPb> UserCharactersDict
+    public Dictionary<int, UserCharacterSummaryPb> UserCharactersDict
         => _userCharactersDict.ToDictionary(kv => kv.Key, kv => kv.Value.Clone()); // 외부에 Clone
 
 
@@ -57,13 +57,13 @@ public class UserData
 
         foreach (var i in items)
         {
-            _inventory[i.ItemId] = i.Count;
+            _inventory[i.ItemId] = i;
             
             int TypeNum = ItemCache.Instance.ItemDict[i.ItemId].TypeId;
 
             if (!_inventoryType.ContainsKey(TypeNum))
-                _inventoryType[TypeNum] = new List<int>();
-            _inventoryType[TypeNum].Add(i.ItemId);
+                _inventoryType[TypeNum] = new List<UserInventory>();
+            _inventoryType[TypeNum].Add(i);
             Debug.Log($"유저의 인벤토리 아이템 카테고리 {TypeNum} : 아이디 {i.ItemId} : 갯수 {_inventory.Count}");
         }
 
@@ -71,10 +71,10 @@ public class UserData
     public void UpdateInventoryItem(int itemId, int count)
     {
         if (count <= 0) _inventory.Remove(itemId);
-        else _inventory[itemId] = count;
+        else _inventory[itemId].Count = count;
     }
     public int GetItemCount(int itemId)
-            => _inventory.TryGetValue(itemId, out var cnt) ? cnt : 0;
+            => _inventory.TryGetValue(itemId, out var cnt) ? cnt.Count : 0;
 
     public void SyncCharacters(IEnumerable<UserCharacterSummaryPb> userCharacters)
     { 

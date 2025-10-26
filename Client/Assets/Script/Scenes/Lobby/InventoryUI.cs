@@ -125,10 +125,10 @@ public class InventoryUI : MonoBehaviour
 
         for (int i = 0; i < idList.Count; i++)
         {
-            int itemId = idList[i];
+            int itemId = idList[i].ItemId;
 
             // [1] 보유 수량 확인
-            if (!user.Inventory.TryGetValue(itemId, out int count) || count <= 0)
+            if (!user.Inventory.TryGetValue(itemId, out UserInventory inven) || inven.Count <= 0)
                 continue;
 
             // [2] 아이템 메타 정보 (ItemCache에서)
@@ -139,7 +139,7 @@ public class InventoryUI : MonoBehaviour
             var icon = GetOrCreateIcon(visible);
 
             // [4] 데이터 바인딩 + 활성화
-            icon.Set(itemMeta, count);
+            icon.Set(itemMeta, inven.Count);
             icon.gameObject.SetActive(true);
 
             visible++;
