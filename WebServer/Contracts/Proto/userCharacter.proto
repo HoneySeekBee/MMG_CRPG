@@ -35,4 +35,43 @@ message UserCharacterEquipPb
 	int32 equipId = 1; 
 	int64 inventoryId = 2;  
 }
- 
+ message SetEquipmentRequest {
+  int32 equip_id = 1;          // 슬롯 ID 
+  optional int64 inventory_id = 2; // 장착할 인벤토리ID, 없으면 해제 
+}
+
+message EquipmentSlotStatePb {
+  int32 equip_id = 1;
+  optional int64 inventory_id = 2;
+}
+
+message SetEquipmentResponse {
+  int32 user_id = 1;
+  int32 character_id = 2;
+
+  EquipmentSlotStatePb slot = 3;                // 방금 바뀐 슬롯 상태
+  repeated UserCharacterEquipPb equips = 4;     // 캐릭터 전체 장비 스냅샷(선택)
+  uint64 revision = 5;                          // 서버권위 버전
+  google.protobuf.Timestamp updated_at = 6;
+}
+
+message SetEquipmentBatchRequest {
+  repeated EquipmentSlotStatePb slots = 1;      // 각 슬롯의 최종 상태
+  optional uint64 if_match_revision = 2;        // (선택)
+}
+
+message SetEquipmentBatchResponse {
+  int32 user_id = 1;
+  int32 character_id = 2;
+  repeated UserCharacterEquipPb equips = 3;     // 최종 스냅샷
+  uint64 revision = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+message GetCharacterEquipmentResponse {
+  int32 user_id = 1;
+  int32 character_id = 2;
+  repeated UserCharacterEquipPb equips = 3;
+  uint64 revision = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}

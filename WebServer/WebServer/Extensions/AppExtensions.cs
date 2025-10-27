@@ -30,6 +30,7 @@ using Application.Skills;
 using Application.Synergy;
 using Microsoft.OpenApi.Models;
 using Application.EquipSlots;
+using Application.UserCharacterEquips;
 
 namespace WebServer.Extensions
 {
@@ -171,7 +172,7 @@ namespace WebServer.Extensions
             s.AddScoped<ISessionRepository, SessionRepository>();
             s.AddScoped<ISessionQueryRepository, SessionQueryRepository>();
             s.AddScoped<ISecurityEventRepository, SecurityEventRepository>();
-            s.AddScoped<ISecurityEventSink, SecurityEventSink>();
+            s.AddScoped<IUserCharacterEquipRepository, UserCharacterEquipRepository>();
 
             // 유저 인벤토리
             s.AddScoped<IUserInventoryRepository, UserInventoryRepository>();
@@ -181,9 +182,12 @@ namespace WebServer.Extensions
             // 유저 캐릭터
             s.AddScoped<IUserCharacterRepository, UserCharacterRepository>();
             s.AddScoped<IUserCharacterService, UserCharacterService>();
+            s.AddScoped<ICharacterEquipmentService, CharacterEquipmentService>();
 
             // UoW
             s.AddScoped<IUnitOfWork, EfUnitOfWork>();
+
+            s.AddScoped<ISecurityEventSink, SecurityEventSink>();
 
             // 순수 싱글턴들
             s.AddSingleton<IClock, SystemClock>();

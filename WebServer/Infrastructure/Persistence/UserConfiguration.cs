@@ -124,6 +124,7 @@ namespace Infrastructure.Persistence
             e.ToTable("UserCharacterEquip");
 
             e.HasKey(x => new { x.UserId, x.CharacterId, x.EquipId });
+
             e.Property(x => x.UserId).HasColumnName("UserId");
             e.Property(x => x.CharacterId).HasColumnName("CharacterId");
             e.Property(x => x.EquipId).HasColumnName("EquipId");

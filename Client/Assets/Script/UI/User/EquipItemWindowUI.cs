@@ -7,6 +7,14 @@ using System.Linq;
 using Contracts.EquipSlots;
 using Game.Data;
 using Contracts.Protos;
+using Game.Core;
+using Game.MasterData;
+using Google.Protobuf.WellKnownTypes;
+using static System.Net.WebRequestMethods;
+using Game.Scenes.Lobby;
+using UnityEngine.TextCore.Text;
+using Game.Network;
+using Unity.VisualScripting;
 
 namespace MMG_CRPG.UI
 {
@@ -22,24 +30,42 @@ namespace MMG_CRPG.UI
         [SerializeField] private BagItemIconUI prefab;
         [SerializeField] private RectTransform parents;
 
+        [Header("Equip")]
+        [SerializeField] private Button equipBtn;
+        [SerializeField] private TMP_Text equipBtnText;
+        private bool isEquip;
+        private UserInventory currentInventoryItem;
+        private UserInventory equipedInventoryItem;
+        private EquipSlotPb slotData;
+
+
         private readonly List<BagItemIconUI> _pool = new();
         private readonly List<BagItemIconUI> _activeItems = new();
 
         private EquipType equipType;
 
 
-        private void Start()
+        private void Awake()
         {
             ItemStats.Clear();
             ItemStats = _itemStats
                 .ToDictionary(x => x.type.ToString(), x => x);
-        }
-        private void InitDetail()
+
+            equipBtn.onClick.AddListener(EquipItem);
+        } 
+        private void InitDetail(ItemMessage item = null, UserInventory inv = null)
         {
             iconImage.sprite = null;
             NameText.text = "";
             foreach (var itemStatScript in _itemStats)
                 itemStatScript.gameObject.SetActive(false);
+            currentInventoryItem = null;
+
+            if (item != null && inv != null)
+            {
+                ShowDetail(item, inv);
+                currentInventoryItem = inv;
+            }
         }
         private List<UserInventory> GetTypeItem(EquipSlotPb slot)
         {
@@ -51,69 +77,53 @@ namespace MMG_CRPG.UI
             var inventories = user.InventoryType[equipTypeId] ?? new List<UserInventory>();
 
             // 전체 장착 목록
-            var allEquippedIds = user.UserCharactersDict.Values
-                .SelectMany(c => c.Equips ?? Enumerable.Empty<UserCharacterEquipPb>())
-                .Select(e => e.InventoryId)
-                .Distinct()
-                .ToHashSet();
+            var allEquippedIds = EquipmentQuery.GetAllEquippedInventoryIds(user);
 
             // 현재 캐릭이 이 슬롯에 낀 인벤토리 ID
-            long? currentInvId = user.UserCharactersDict.Values
-                .FirstOrDefault(c => c.CharacterId == nowCharId)?
-                .Equips?.FirstOrDefault(e => e.EquipId == slot.Id)?
-                .InventoryId;
+            long? currentInvId = EquipmentQuery.GetEquippedInventoryId(user, nowCharId, slot.Id);
 
-            bool IsSameSlotType(UserInventory inv)
-                => itemCache.ItemDict[(long)inv.ItemId].EuqipType == slot.Id;
+            Debug.Log($"{nowCharId} {slot.Name} {slot.Id} 현재 장착 중인 Id " + (currentInvId ?? 0).ToString());
+            if (currentInvId != null)
+            {
+                equipedInventoryItem = user.Inventory.Where(x => x.Value.Id == currentInvId).Select(x => x.Value).FirstOrDefault();
+                if (equipedInventoryItem != null)
+                    Debug.Log($"장착된 아이템이 있다. {equipedInventoryItem.Id}");
+            }
+            else
+                equipedInventoryItem = null;
 
             bool IsOtherCharacterEquipped(UserInventory inv)
                 => allEquippedIds.Contains(inv.Id) && inv.Id != currentInvId;
 
             //  정리된 필터링
             var filtered = inventories
-                .Where(inv => IsSameSlotType(inv) && !IsOtherCharacterEquipped(inv))
+                .Where(inv => EquipmentQuery.CheckSameSlot(inv, slot) && EquipmentQuery.IsEquippedByOthers(inv.Id, currentInvId, allEquippedIds) == false)
                 .ToList();
 
-            //  현재 장착한 장비 맨 앞에
-            if (currentInvId is long cid)
-            {
-                var idx = filtered.FindIndex(inv => inv.Id == cid);
-                if (idx > 0)
-                {
-                    var cur = filtered[idx];
-                    filtered.RemoveAt(idx);
-                    filtered.Insert(0, cur);
-                }
-            }
-
-            return filtered;
+            return EquipmentQuery.Filter_FirstEquippedId(currentInvId, filtered);
         }
 
         public void Set(EquipSlotPb equipSlotData)
         {
+            slotData = equipSlotData;
             int typeNum = ItemCache.Instance.ItemTypeDictionary["EQUIP"].Id;
             // User 보유 Equip 타입 ItemId List
-            UserData userData = GameState.Instance.CurrentUser; 
+            UserData userData = GameState.Instance.CurrentUser;
             ItemCache itemCache = ItemCache.Instance;
 
             List<UserInventory> invenItems = GetTypeItem(equipSlotData);
-            
 
-            List<(ItemMessage, int)> EachTypeItem = invenItems    // 아이템 정보와 보유 갯수 
+            List<(ItemMessage, UserInventory)> EachTypeItem = invenItems    // 아이템 정보와 보유 갯수 
                 .Where(x => itemCache.ItemDict[x.ItemId].EuqipType == equipSlotData.Id)
                 .Select(x => (
                 itemCache.ItemDict[x.ItemId],
-                x.Count
+                x
                 ))
-                .ToList();
+                .ToList(); 
 
+            bool checkHaveItem = (EachTypeItem == null || EachTypeItem.Count == 0);
+            InitDetail(checkHaveItem ? null : EachTypeItem[0].Item1, checkHaveItem ? null : EachTypeItem[0].Item2);
 
-            InitDetail();
-
-            foreach (var item in userData.Inventory)
-            {
-                Debug.Log($"아이템 {item.Key} 타입 {itemCache.ItemDict[(long)item.Key].EuqipType} || Id {item.Value.Id}");
-            }
 
             foreach (Transform child in parents)
                 child.gameObject.SetActive(false);
@@ -138,20 +148,92 @@ namespace MMG_CRPG.UI
             _pool.Add(instance);
             return instance;
         }
-        public void ShowDetail(ItemMessage itemMessage)
+        private void SetEquipButton(long invId)
         {
+            if (equipedInventoryItem != null && invId == equipedInventoryItem.Id)
+            {
+                Debug.Log($"이미 장착된 놈 클릭한 아이템 {invId}, 장착된 아이템 {equipedInventoryItem.Id}");
+                equipBtnText.text = "해제";
+                isEquip = false;
+            }
+            else
+            {
+                Debug.Log($"이미 장착된 놈 클릭한 아이템 {invId}, ");
+                isEquip = true;
+                equipBtnText.text = "장착";
+            }
+        }
+
+        public void ShowDetail(ItemMessage itemMessage, UserInventory inv)
+        { 
+
             iconImage.sprite = MasterDataCache.Instance.IconSprites[itemMessage.IconId];
             NameText.text = itemMessage.Name;
+
+            currentInventoryItem = inv;
+            SetEquipButton(inv.Id);
 
             foreach (var itemStatScript in _itemStats)
                 itemStatScript.gameObject.SetActive(false);
             foreach (var stat in itemMessage.Stats)
             {
-                Debug.Log($"{stat.Code} ");
                 ItemStats[stat.Code].gameObject.SetActive(true);
                 ItemStats[stat.Code].SetValue((int)stat.Value);
             }
         }
-    }
+        public void EquipItem() // 아이템 장착 
+        {
+            var req = new SetEquipmentRequest
+            {
+                EquipId = slotData.Id,
+                InventoryId = currentInventoryItem.Id
+            };
+            if(isEquip == false)
+            {
+                req = new SetEquipmentRequest
+                {
+                    EquipId = slotData.Id,
+                };
+            }
 
+
+            UserCharacterDeatailUI detailUI = UserCharacterDeatailUI.Instance;
+            string path = ApiRoutes.UserCharacterEquip(GameState.Instance.CurrentUser.UserId, detailUI.EquipUI.currentCharacter.Id, slotData.Id);
+            Debug.Log($"장착 : {path}");
+            StartCoroutine(ProtoHttpClient.Instance.Put(path, req, SetEquipmentResponse.Parser, OnEquipResponse));
+        } 
+
+        private void OnEquipResponse(ApiResult<SetEquipmentResponse> result)
+        {
+            if (!result.Ok)
+            {
+                Debug.LogError("장착 실패: " + result.Message);
+                return;
+            }
+
+            var res = result.Data;
+            Debug.Log($"장착 성공! equip={res.Slot.EquipId}, inv={res.Slot.InventoryId}");
+            var user = GameState.Instance.CurrentUser;
+            var itemCache = ItemCache.Instance;
+            var nowCharId = UserCharacterDeatailUI.Instance.status.CharacterId;
+            long? currentInvId = EquipmentQuery.GetEquippedInventoryId(user, nowCharId, slotData.Id); 
+            equipedInventoryItem = GameState.Instance.CurrentUser.Inventory.Select(x => x.Value).Where(x => x.Id == currentInvId).FirstOrDefault();
+            if (res.Slot.InventoryId == 0)
+                equipedInventoryItem = null;
+            Set(slotData);  
+
+            RefreshSlotUI(res);
+        }
+        private void RefreshSlotUI(SetEquipmentResponse res)
+        {
+            UserData user = GameState.Instance.CurrentUser;
+
+            // 캐릭터에 아이템 최신화 
+            user.ApplyEquipmentSnapshot(res);
+            // UI 반영하기 : UserCharacterEquipUI에 해당 아이템으로 바꾸기 
+            UserCharacterDeatailUI.Instance.EquipUI.RefreshEquipIcon();
+            this.gameObject.SetActive(false);
+        }
+
+    }
 }
