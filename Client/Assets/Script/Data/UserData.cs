@@ -21,8 +21,8 @@ public class UserData
     public UserProfilePb UserProfilePb { get; private set; }
 
     // 인벤토리
-    private readonly Dictionary<int, UserInventory> _inventory = new(); // ItemId -> UserInventory
-    public Dictionary<int, UserInventory> Inventory => _inventory;
+    private readonly Dictionary<long, UserInventory> _inventory = new(); // ItemId -> UserInventory
+    public Dictionary<long, UserInventory> Inventory => _inventory;
 
     private readonly Dictionary<int, List<UserInventory>> _inventoryType = new(); // 각 타입 별 인벤토리 Id 
     public IReadOnlyDictionary<int, List<UserInventory>> InventoryType => _inventoryType;
@@ -57,7 +57,7 @@ public class UserData
 
         foreach (var i in items)
         {
-            _inventory[i.ItemId] = i;
+            _inventory[i.Id] = i;
             
             int TypeNum = ItemCache.Instance.ItemDict[i.ItemId].TypeId;
 
@@ -67,12 +67,7 @@ public class UserData
             Debug.Log($"유저의 인벤토리 아이템 카테고리 {TypeNum} : 아이디 {i.ItemId} : 갯수 {_inventory.Count}");
         }
 
-    }
-    public void UpdateInventoryItem(int itemId, int count)
-    {
-        if (count <= 0) _inventory.Remove(itemId);
-        else _inventory[itemId].Count = count;
-    }
+    } 
     public int GetItemCount(int itemId)
             => _inventory.TryGetValue(itemId, out var cnt) ? cnt.Count : 0;
 
@@ -101,7 +96,26 @@ public class UserData
 
         Debug.Log($"2 [UserCharacters] {incoming.Count()}");
     }
-     public bool AddOrUpdateCharacter(UserCharacterSummaryPb character)
+    public void ApplyEquipmentSnapshot(SetEquipmentResponse res)
+    {
+        if (!UserCharactersDict.TryGetValue(res.CharacterId, out var ch))
+        {
+            Debug.LogError($"Character {res.CharacterId} not found in UserData");
+            return;
+        }
+
+        // Clone일 가능성이 있으므로 새로운 객체 생성
+        var updated = ch.Clone();
+
+        // 기존 equips 다 비우고, 서버 스냅샷으로 덮어씌움
+        updated.Equips.Clear();
+        updated.Equips.AddRange(res.Equips);
+
+        // dict에 다시 반영 (기억: 기존 프로퍼티는 Clone을 반환하므로 set은 직접 해야 함)
+        _userCharactersDict[res.CharacterId] = updated;
+    }
+
+    public bool AddOrUpdateCharacter(UserCharacterSummaryPb character)
     {
         var inc = character;
         if (_userCharactersDict.TryGetValue(inc.CharacterId, out var cur))

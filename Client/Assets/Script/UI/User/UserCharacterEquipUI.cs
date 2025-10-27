@@ -13,21 +13,26 @@ namespace MMG_CRPG.UI
         [SerializeField] private EquipSlotUI[] EquipSlots;
         [SerializeField] private Image ProfileImage;
         public EquipItemWindowUI EquipItemWindowUI;
+        [HideInInspector] public CharacterDetailPb currentCharacter;
 
         private void OnEnable()
         {
             if(EquipItemWindowUI != null && EquipItemWindowUI.gameObject.activeSelf)
                 EquipItemWindowUI.gameObject.SetActive(false);
+            RefreshEquipIcon();
+            UserCharacterSummaryPb characterSummary = UserCharacterDeatailUI.Instance.status;
+            currentCharacter = CharacterCache.Instance.DetailById[characterSummary.CharacterId];
+            ProfileImage.sprite = MasterDataCache.Instance.PortraitSprites[currentCharacter.PortraitId ?? 0];
+        }
 
+        public void RefreshEquipIcon()
+        {
             foreach (var slot in EquipSlots)
             {
                 slot.Set();
             }
-            UserCharacterSummaryPb characterSummary = UserCharacterDeatailUI.Instance.status;
-            CharacterDetailPb characterDetail = CharacterCache.Instance.DetailById[characterSummary.CharacterId];
-            ProfileImage.sprite = MasterDataCache.Instance.PortraitSprites[characterDetail.PortraitId ?? 0];
         }
-
+        
     }
 
 }

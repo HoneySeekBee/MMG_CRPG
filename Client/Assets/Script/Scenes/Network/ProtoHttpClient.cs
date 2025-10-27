@@ -11,22 +11,26 @@ namespace Game.Network
     {
         public static ProtoHttpClient Instance { get; private set; }
         [SerializeField] private ApiConfig config; [SerializeField] private string authToken;
-        void Awake() 
-        { 
-            if (Instance != null && Instance != this) 
-            { 
-                Destroy(gameObject); 
-                return; 
-            } 
-            Instance = this; 
-            DontDestroyOnLoad(gameObject); 
+        void Awake()
+        {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         public void SetToken(string token) => authToken = token;
 
 
         public IEnumerator Get<T>(string path, MessageParser<T> parser, Action<ApiResult<T>> cb) where T : IMessage<T>
         => Send<T>(UnityWebRequest.kHttpVerbGET, path, null, parser, cb);
-
+        public IEnumerator Put<TReq, TRes>(string path, TReq msg, MessageParser<TRes> parser, Action<ApiResult<TRes>> cb) where TReq : IMessage where TRes : IMessage<TRes>
+        {
+            var bytes = msg.ToByteArray();
+            return Send(UnityWebRequest.kHttpVerbPUT, path, bytes, parser, cb);
+        }
 
         public IEnumerator Post<TReq, TRes>(string path, TReq msg, MessageParser<TRes> parser, Action<ApiResult<TRes>> cb)
         where TReq : IMessage where TRes : IMessage<TRes>

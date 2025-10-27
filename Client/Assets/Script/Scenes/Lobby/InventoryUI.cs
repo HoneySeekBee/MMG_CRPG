@@ -139,7 +139,7 @@ public class InventoryUI : MonoBehaviour
             var icon = GetOrCreateIcon(visible);
 
             // [4] 데이터 바인딩 + 활성화
-            icon.Set(itemMeta, inven.Count);
+            icon.Set(itemMeta, inven);
             icon.gameObject.SetActive(true);
 
             visible++;

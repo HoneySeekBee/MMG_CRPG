@@ -193,6 +193,7 @@
     <Compile Include="Assets\Script\UICommon\Popup.cs" />
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\PopupOpener.cs" />
     <Compile Include="Assets\Script\UI\User\EquipSlotUI.cs" />
+    <Compile Include="Assets\Script\UI\User\EquipmentQuery.cs" />
     <Compile Include="Assets\Script\UICommon\LoadingSpinner.cs" />
   </ItemGroup>
   <ItemGroup>

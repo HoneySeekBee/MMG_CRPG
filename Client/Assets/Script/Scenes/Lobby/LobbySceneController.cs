@@ -15,6 +15,8 @@ namespace Game.Scenes.Lobby
 {
     public class LobbySceneController : MonoBehaviour
     {
+        public static LobbySceneController Instance;
+
         [Header("UI Refs")]
         public UserProfileIUI ProfileUI;
         public CurrencyUI CurrencyUI;
@@ -28,6 +30,14 @@ namespace Game.Scenes.Lobby
         private void Awake()
         {
             if (Http == null) Http = ProtoHttpClient.Instance ?? FindObjectOfType<ProtoHttpClient>();
+
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            Instance = this;
+
         }
 
         private void Start()

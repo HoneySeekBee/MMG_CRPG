@@ -33,4 +33,7 @@ public static class ApiRoutes
 
     public static string UserCharacterList(int userId) =>
         $"/userCharacters/{userId}";
+
+    public static string UserCharacterEquip(int userId, int characterId, int equipId)
+        => $"/users/{userId}/characters/{characterId}/equipment/{equipId}";
 }

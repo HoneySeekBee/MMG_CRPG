@@ -23,6 +23,11 @@ public class UserCharacterDeatailUI : MonoBehaviour
 
         Instance = this;
     }
+    private void Start()
+    {
+        if(EquipUI.gameObject.activeSelf) 
+            EquipUI.gameObject.SetActive(false);
+    }
     public void Set(UserCharacterSummaryPb status)
     {
         this.status = status;
