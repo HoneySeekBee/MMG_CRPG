@@ -541,28 +541,28 @@ namespace Infrastructure.Persistence
         {
             e.ToTable("Stages");
             e.HasKey(x => x.Id);
-            e.Property(x => x.Id).HasColumnName("Id").ValueGeneratedOnAdd();
+            e.Property(x => x.Id).HasColumnName("stage_id").ValueGeneratedOnAdd();
 
-            e.Property(x => x.Chapter).HasColumnName("Chapter").IsRequired();
-            e.Property(x => x.Order).HasColumnName("Order").IsRequired();
+            e.Property(x => x.Chapter).HasColumnName("chapter_id").IsRequired();
+            e.Property(x => x.Order).HasColumnName("stage_num").IsRequired();
 
             e.Property(x => x.Name)
-             .HasColumnName("Name")
+             .HasColumnName("name")
              .HasMaxLength(64)            // 요구 시 50으로 줄여도 OK
              .IsRequired(false);
 
             e.Property(x => x.RecommendedPower)
-             .HasColumnName("RecommendedPower")
+             .HasColumnName("recommended_power")
              .HasColumnType("smallint")
              .IsRequired();
 
             e.Property(x => x.StaminaCost)
-             .HasColumnName("StaminaCost")
+             .HasColumnName("stamina_cost")
              .HasColumnType("smallint")
              .IsRequired();
 
             e.Property(x => x.IsActive)
-             .HasColumnName("IsActive")
+             .HasColumnName("is_active")
              .HasDefaultValue(true)
              .IsRequired();
 
@@ -601,10 +601,10 @@ namespace Infrastructure.Persistence
         {
             e.ToTable("StageWaves");
             e.HasKey(x => x.Id);
-            e.Property(x => x.Id).ValueGeneratedOnAdd();
+            e.Property(x => x.Id).HasColumnName("id").ValueGeneratedOnAdd();
 
-            e.Property(x => x.StageId).HasColumnName("StageId").IsRequired();
-            e.Property(x => x.Index).HasColumnName("Index").HasColumnType("smallint").IsRequired();
+            e.Property(x => x.StageId).HasColumnName("stage_id").IsRequired();
+            e.Property(x => x.Index).HasColumnName("index").HasColumnType("smallint").IsRequired();
 
             e.HasIndex(x => new { x.StageId, x.Index }).IsUnique(); // 웨이브 순번 중복 방지
 
@@ -624,13 +624,13 @@ namespace Infrastructure.Persistence
         {
             e.ToTable("StageWaveEnemies");
             e.HasKey(x => x.Id);
-            e.Property(x => x.Id).ValueGeneratedOnAdd();
+            e.Property(x => x.Id).HasColumnName("id").ValueGeneratedOnAdd();
 
-            e.Property(x => x.StageWaveId).HasColumnName("StageWaveId").IsRequired();
-            e.Property(x => x.EnemyCharacterId).HasColumnName("EnemyCharacterId").IsRequired();
-            e.Property(x => x.Level).HasColumnName("Level").HasColumnType("smallint").IsRequired();
-            e.Property(x => x.Slot).HasColumnName("Slot").HasColumnType("smallint").IsRequired();
-            e.Property(x => x.AiProfile).HasColumnName("AiProfile").IsRequired(false);
+            e.Property(x => x.StageWaveId).HasColumnName("stage_wave_id").IsRequired();
+            e.Property(x => x.EnemyCharacterId).HasColumnName("enemy_character_id").IsRequired();
+            e.Property(x => x.Level).HasColumnName("level").HasColumnType("smallint").IsRequired();
+            e.Property(x => x.Slot).HasColumnName("slot").HasColumnType("smallint").IsRequired();
+            e.Property(x => x.AiProfile).HasColumnName("ai_profile").IsRequired(false);
 
             e.HasIndex(x => x.StageWaveId);
             e.HasIndex(x => new { x.StageWaveId, x.Slot }).IsUnique(); // 슬롯 중복 방지
@@ -648,21 +648,21 @@ namespace Infrastructure.Persistence
         {
             e.ToTable("StageDrops");
             e.HasKey(x => x.Id);
-            e.Property(x => x.Id).ValueGeneratedOnAdd();
+            e.Property(x => x.Id).HasColumnName("id").ValueGeneratedOnAdd();
 
-            e.Property(x => x.StageId).HasColumnName("StageId").IsRequired();
-            e.Property(x => x.ItemId).HasColumnName("ItemId").IsRequired();
+            e.Property(x => x.StageId).HasColumnName("stage_id").IsRequired();
+            e.Property(x => x.ItemId).HasColumnName("item_id").IsRequired();
 
             e.Property(x => x.Rate)
-             .HasColumnName("Rate")
+             .HasColumnName("rate")
              .HasColumnType("numeric(6,5)")    // 또는 .HasPrecision(6,5)
              .IsRequired();
 
-            e.Property(x => x.MinQty).HasColumnName("MinQty").HasColumnType("smallint").IsRequired();
-            e.Property(x => x.MaxQty).HasColumnName("MaxQty").HasColumnType("smallint").IsRequired();
+            e.Property(x => x.MinQty).HasColumnName("min_qty").HasColumnType("smallint").IsRequired();
+            e.Property(x => x.MaxQty).HasColumnName("max_qty").HasColumnType("smallint").IsRequired();
 
             e.Property(x => x.FirstClearOnly)
-             .HasColumnName("FirstClearOnly")
+             .HasColumnName("first_clear_only")
              .HasDefaultValue(false)
              .IsRequired();
 
@@ -681,11 +681,11 @@ namespace Infrastructure.Persistence
         {
             e.ToTable("StageFirstClearRewards");
             e.HasKey(x => x.Id);
-            e.Property(x => x.Id).ValueGeneratedOnAdd();
+            e.Property(x => x.Id).HasColumnName("id").ValueGeneratedOnAdd();
 
-            e.Property(x => x.StageId).HasColumnName("StageId").IsRequired();
-            e.Property(x => x.ItemId).HasColumnName("ItemId").IsRequired();
-            e.Property(x => x.Qty).HasColumnName("Qty").HasColumnType("smallint").IsRequired();
+            e.Property(x => x.StageId).HasColumnName("stage_id").IsRequired();
+            e.Property(x => x.ItemId).HasColumnName("item_id").IsRequired();
+            e.Property(x => x.Qty).HasColumnName("qty").HasColumnType("smallint").IsRequired();
 
             e.HasIndex(x => x.StageId);
             e.HasIndex(x => x.ItemId);
@@ -702,11 +702,11 @@ namespace Infrastructure.Persistence
         {
             e.ToTable("StageRequirements");
             e.HasKey(x => x.Id);
-            e.Property(x => x.Id).ValueGeneratedOnAdd();
+            e.Property(x => x.Id).HasColumnName("id").ValueGeneratedOnAdd();
 
-            e.Property(x => x.StageId).HasColumnName("StageId").IsRequired();
-            e.Property(x => x.RequiredStageId).HasColumnName("RequiredStageId").IsRequired(false);
-            e.Property(x => x.MinAccountLevel).HasColumnName("MinAccountLevel").HasColumnType("smallint").IsRequired(false);
+            e.Property(x => x.StageId).HasColumnName("stage_id").IsRequired();
+            e.Property(x => x.RequiredStageId).HasColumnName("required_stage_id").IsRequired(false);
+            e.Property(x => x.MinAccountLevel).HasColumnName("min_account_level").HasColumnType("smallint").IsRequired(false);
 
             e.HasIndex(x => x.StageId);
             e.HasIndex(x => x.RequiredStageId);
