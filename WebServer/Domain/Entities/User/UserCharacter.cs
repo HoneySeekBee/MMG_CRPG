@@ -9,6 +9,7 @@ namespace Domain.Entities.User
 {
     public sealed class UserCharacter
     {
+        public int UserCharacterId { get; private set; }
         public int UserId { get; private set; }
         public int CharacterId { get; private set; }
         public int Level { get; private set; }
