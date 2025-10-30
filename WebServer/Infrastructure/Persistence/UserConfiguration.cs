@@ -16,7 +16,9 @@ namespace Infrastructure.Persistence
         IEntityTypeConfiguration<UserProfile>,
         IEntityTypeConfiguration<UserCharacter>,
         IEntityTypeConfiguration<UserCharacterEquip>,
-        IEntityTypeConfiguration<UserCharacterSkill>
+        IEntityTypeConfiguration<UserCharacterSkill>,
+        IEntityTypeConfiguration<UserParty>,
+        IEntityTypeConfiguration<UserPartySlot>
     {
         public void Configure(EntityTypeBuilder<User> e)
         {
@@ -89,8 +91,8 @@ namespace Infrastructure.Persistence
         void IEntityTypeConfiguration<UserCharacter>.Configure(EntityTypeBuilder<UserCharacter> e)
         {
             e.ToTable("UserCharacters");               // 실제 테이블명과 일치
-            e.HasKey(x => new { x.UserId, x.CharacterId });
-
+            e.HasKey(x => x.UserCharacterId);
+            e.Property(x => x.UserCharacterId).HasColumnName("user_character_id");
             e.Property(x => x.UserId).HasColumnName("UserId");
             e.Property(x => x.CharacterId).HasColumnName("CharacterId");
             e.Property(x => x.Level).HasColumnName("Level");
@@ -114,7 +116,7 @@ namespace Infrastructure.Persistence
              .HasForeignKey(eq => new { eq.UserId, eq.CharacterId })
              .HasPrincipalKey(uc => new { uc.UserId, uc.CharacterId })
              .OnDelete(DeleteBehavior.Cascade);
-             
+
             e.HasIndex(x => x.UserId);
             e.HasIndex(x => x.CharacterId);
             e.HasIndex(x => x.UpdatedAt);
@@ -165,5 +167,52 @@ namespace Infrastructure.Persistence
             e.HasIndex(x => x.UpdatedAt);
         }
 
+        void IEntityTypeConfiguration<UserParty>.Configure(EntityTypeBuilder<UserParty> e)
+        {  // table & keys
+            e.ToTable("user_party");
+            e.HasKey(x => x.PartyId);
+
+            // columns
+            e.Property(x => x.PartyId).HasColumnName("party_id");
+            e.Property(x => x.UserId).HasColumnName("user_id");
+            e.Property(x => x.BattleId).HasColumnName("battle_id");
+            e.Property(x => x.CreatedAt).HasColumnName("created_at");
+            e.Property(x => x.UpdatedAt).HasColumnName("updated_at");
+
+            // index for frequent lookup
+            e.HasIndex(x => new { x.UserId, x.BattleId })
+             .HasDatabaseName("ix_party_user_battle");
+
+            // 관계: UserParty 1 ── * UserPartySlot
+            e.HasMany<UserPartySlot>(nameof(UserParty.Slots))
+             .WithOne()
+             .HasForeignKey(s => s.PartyId)
+             .HasPrincipalKey(p => p.PartyId)
+             .OnDelete(DeleteBehavior.Cascade);
+
+            // Slots는 읽기 전용 컬렉션(백킹필드 _slots) → 필드 접근
+            e.Navigation(p => p.Slots)
+             .UsePropertyAccessMode(PropertyAccessMode.Field);
+        }
+        void IEntityTypeConfiguration<UserPartySlot>.Configure(EntityTypeBuilder<UserPartySlot> e)
+        {
+            e.ToTable("user_party_character");
+            e.HasKey(x => new { x.PartyId, x.SlotId });
+
+            // columns
+            e.Property(x => x.PartyId).HasColumnName("party_id");
+            e.Property(x => x.SlotId).HasColumnName("slot_id");
+            e.Property(x => x.UserCharacterId).HasColumnName("user_character_id");
+
+            // created_at / updated_at 는 도메인에 프로퍼티가 없으므로 Shadow Property로 매핑
+            e.Property<DateTime>("created_at");
+            e.Property<DateTime>("updated_at");
+
+            // 같은 파티에서 같은 캐릭터 중복 금지 (NULL 제외 = 부분 유니크)
+            e.HasIndex(x => new { x.PartyId, x.UserCharacterId })
+             .HasDatabaseName("ux_upc_unique_char")
+             .HasFilter("\"user_character_id\" IS NOT NULL")
+             .IsUnique();
+        }
     }
 }

@@ -173,6 +173,7 @@ namespace WebServer.Extensions
             s.AddScoped<ISessionQueryRepository, SessionQueryRepository>();
             s.AddScoped<ISecurityEventRepository, SecurityEventRepository>();
             s.AddScoped<IUserCharacterEquipRepository, UserCharacterEquipRepository>();
+            s.AddScoped<IUserPartyRepository, UserPartyRepository>();
 
             // 유저 인벤토리
             s.AddScoped<IUserInventoryRepository, UserInventoryRepository>();

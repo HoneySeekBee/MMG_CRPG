@@ -69,6 +69,8 @@ namespace Infrastructure.Persistence
         public DbSet<UserCharacterSkill> UserCharacterSkills => Set<UserCharacterSkill>();
         public DbSet<UserCharacterEquip> UserCharacterEquips => Set<UserCharacterEquip>();
         public DbSet<CharacterExp> CharacterExps => Set<CharacterExp>();
+        public DbSet<UserParty> UserParties => Set<UserParty>();
+        public DbSet<UserPartySlot> UserPartySlots => Set<UserPartySlot>();
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             Console.WriteLine("OnModelCreateing");
