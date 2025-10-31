@@ -1,0 +1,1388 @@
+Using pre-set license
+Built from '2022.3/release' branch; Version is '2022.3.48f1 (8bf49c377ebf) revision 9172124'; Using compiler version '192829333'; Build Type 'Release'
+OS: 'Windows 11  (10.0.26100) 64bit Professional' Language: 'ko' Physical Memory: 65239 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 1
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\2022.3.48f1\Editor\Unity.exe
+-adb2
+-batchMode
+-noUpm
+-name
+AssetImportWorker1
+-projectPath
+C:/Dev/MMG_CRPG/MMG_CRPG/Client
+-logFile
+Logs/AssetImportWorker1.log
+-srvPort
+59132
+Successfully changed project path to: C:/Dev/MMG_CRPG/MMG_CRPG/Client
+C:/Dev/MMG_CRPG/MMG_CRPG/Client
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gfx=262144"
+Player connection [35540]  Target information:
+
+Player connection [35540]  * "[IP] 10.48.100.201 [Port] 0 [Flags] 2 [Guid] 1767461515 [EditorId] 1767461515 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-ON7T0LI) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [35540] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [35540] Host joined alternative multi-casting on [225.0.0.222:34997]...
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+Refreshing native plugins compatible for Editor in 14.33 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 2022.3.48f1 (8bf49c377ebf)
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2022.3.48f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path C:/Dev/MMG_CRPG/MMG_CRPG/Client/Assets
+GfxDevice: creating device client; threaded=0; jobified=0
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: NVIDIA GeForce RTX 4060 Laptop GPU (ID=0x28a0)
+    Vendor:   NVIDIA
+    VRAM:     7957 MB
+    Driver:   32.0.15.6614
+Initialize mono
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/2022.3.48f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/2022.3.48f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/2022.3.48f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56108
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/2022.3.48f1/Editor/Data/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
+Register platform support module: C:/Program Files/Unity/Hub/Editor/2022.3.48f1/Editor/Data/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll
+Register platform support module: C:/Program Files/Unity/Hub/Editor/2022.3.48f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.010219 seconds.
+- Loaded All Assemblies, in  0.278 seconds
+Native extension for WindowsStandalone target not found
+Native extension for Android target not found
+Android Extension - Scanning For ADB Devices 397 ms
+Native extension for WebGL target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.613 seconds
+Domain Reload Profiling: 889ms
+	BeginReloadAssembly (88ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (0ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (1ms)
+	RebuildCommonClasses (26ms)
+	RebuildNativeTypeToScriptingClass (7ms)
+	initialDomainReloadingComplete (48ms)
+	LoadAllAssembliesAndSetupDomain (107ms)
+		LoadAssemblies (87ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (104ms)
+			TypeCache.Refresh (103ms)
+				TypeCache.ScanAssembly (93ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (0ms)
+	FinalizeReload (613ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (581ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (457ms)
+			SetLoadedEditorAssemblies (4ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (2ms)
+			ProcessInitializeOnLoadAttributes (83ms)
+			ProcessInitializeOnLoadMethodAttributes (35ms)
+			AfterProcessingInitializeOnLoad (0ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (0ms)
+========================================================================
+Worker process is ready to serve import requests
+Caller must complete domain reload
+Begin MonoManager ReloadAssembly
+- Loaded All Assemblies, in  0.592 seconds
+Native extension for WindowsStandalone target not found
+Native extension for Android target not found
+Native extension for WebGL target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.656 seconds
+Domain Reload Profiling: 1245ms
+	BeginReloadAssembly (118ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (3ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (15ms)
+	RebuildCommonClasses (24ms)
+	RebuildNativeTypeToScriptingClass (7ms)
+	initialDomainReloadingComplete (32ms)
+	LoadAllAssembliesAndSetupDomain (407ms)
+		LoadAssemblies (327ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (155ms)
+			TypeCache.Refresh (135ms)
+				TypeCache.ScanAssembly (123ms)
+			ScanForSourceGeneratedMonoScriptInfo (14ms)
+			ResolveRequiredComponents (5ms)
+	FinalizeReload (657ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (544ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (18ms)
+			SetLoadedEditorAssemblies (4ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (93ms)
+			ProcessInitializeOnLoadAttributes (404ms)
+			ProcessInitializeOnLoadMethodAttributes (19ms)
+			AfterProcessingInitializeOnLoad (6ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (9ms)
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.04 seconds
+Refreshing native plugins compatible for Editor in 4.18 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 4358 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 36 unused Assets / (1.9 MB). Loaded Objects now: 4820.
+Memory consumption went from 177.9 MB to 176.0 MB.
+Total: 2.708400 ms (FindLiveObjects: 0.188400 ms CreateObjectMapping: 0.081200 ms MarkObjects: 2.172700 ms  DeleteObjects: 0.265300 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-codec-MediaFoundation-h265: 746d11721c4dcdbdad8f713fa42b33f4 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:CustomObjectIndexerAttribute: 9a22284fe3817be447336de3de66b15e -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:SearchIndexIgnoredProperties: e643bd26f0fe6173181afceb89e7c659 -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 1116763.238722 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC04_ShortEars.prefab
+  artifactKey: Guid(460c107a6258b1646ac7a43949177a2b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC04_ShortEars.prefab using Guid(460c107a6258b1646ac7a43949177a2b) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'c7670ef4302b76a6f00354fbb8c2067f') in 0.251346 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000024 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Hair06.prefab
+  artifactKey: Guid(2beba919c3a702e40b4f07ecdf452568) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Hair06.prefab using Guid(2beba919c3a702e40b4f07ecdf452568) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'dbe97243ed95fc8ea99b713f4addb280') in 0.025419 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000023 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/HeadArmor04.prefab
+  artifactKey: Guid(fa971766313fde5489216f383977199f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/HeadArmor04.prefab using Guid(fa971766313fde5489216f383977199f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '4fe0fc6416d81100c6811deea6298627') in 0.019914 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000021 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Hair11.prefab
+  artifactKey: Guid(a6b5c87ea4a548d4f9e040d6bdc242f0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Hair11.prefab using Guid(a6b5c87ea4a548d4f9e040d6bdc242f0) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '40bd1e6c8ff24dbae549edf5a5d065c1') in 0.031815 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000015 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Mouth01.prefab
+  artifactKey: Guid(69d10aab74b5f82458b26547db4a3e25) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Mouth01.prefab using Guid(69d10aab74b5f82458b26547db4a3e25) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'afd21140974db6dcf7a56be8a98947e1') in 0.020440 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000020 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC10_Mustache05.prefab
+  artifactKey: Guid(cbb8df0ac61f524468fc5cc6157e5a99) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC10_Mustache05.prefab using Guid(cbb8df0ac61f524468fc5cc6157e5a99) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'c1226a77db3e4e88a2c01bbedc425094') in 0.021629 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000021 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Eyebrow01.prefab
+  artifactKey: Guid(21ca235158cf74b47a2d00ec67a52ac6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Eyebrow01.prefab using Guid(21ca235158cf74b47a2d00ec67a52ac6) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '32de1a9ea9e11a615b6dcf782ac4a2cc') in 0.022601 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000017 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/HeadArmor02.prefab
+  artifactKey: Guid(63edd0ad55d207e44b1f71ed5b534b47) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/HeadArmor02.prefab using Guid(63edd0ad55d207e44b1f71ed5b534b47) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'c936a34ba91b6bc8e553a7358cba98c1') in 0.030458 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000021 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/HeadArmor01.prefab
+  artifactKey: Guid(1e52fac9ca7e16447af5e50cfa7e9340) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/HeadArmor01.prefab using Guid(1e52fac9ca7e16447af5e50cfa7e9340) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'f776da3aa09331484d3efa1bd69bc3f6') in 0.025431 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000017 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/BackPack02.prefab
+  artifactKey: Guid(9bb165b823a0a2647a739fe3b67e9bb9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/BackPack02.prefab using Guid(9bb165b823a0a2647a739fe3b67e9bb9) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '22b8e0ab81ae746efad43906705152a7') in 0.025181 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000023 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC11_Mustache02.prefab
+  artifactKey: Guid(e60a99f2b921f724fb4f95174b6bf8c2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC11_Mustache02.prefab using Guid(e60a99f2b921f724fb4f95174b6bf8c2) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'd9ea209e931b6fb4eb11e0b0f49de1b7') in 0.028108 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000022 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Hat04.prefab
+  artifactKey: Guid(6b492edb5a0e9864b831e70d041bb726) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Hat04.prefab using Guid(6b492edb5a0e9864b831e70d041bb726) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '71c24014f053140a445fdce876c44396') in 0.031080 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000017 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Eye01.prefab
+  artifactKey: Guid(3a091c1e0a6a2f842813bcb103372726) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Eye01.prefab using Guid(3a091c1e0a6a2f842813bcb103372726) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'ba2610d73a692ae2e5229a7aa988fec6') in 0.026574 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Eye09.prefab
+  artifactKey: Guid(d7ccfcc7f85de9340911dcc8e2930834) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Eye09.prefab using Guid(d7ccfcc7f85de9340911dcc8e2930834) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '816fdee91523707e8c2df808b4b599cf') in 0.025346 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000018 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Mouth04.prefab
+  artifactKey: Guid(4a530b1d015bfa946a7682fd4223eb75) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Mouth04.prefab using Guid(4a530b1d015bfa946a7682fd4223eb75) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '7b67ca26df302ca5c6a3a830be89a7e6') in 0.023880 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000017 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Hair07.prefab
+  artifactKey: Guid(1b5bf0a105de483459d48a01d3352464) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Hair07.prefab using Guid(1b5bf0a105de483459d48a01d3352464) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'b507ffb1807c59bd9b2e4b8203ce5d3a') in 0.025249 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC08_NinjaMask02.prefab
+  artifactKey: Guid(92f84190e039fbf4094c5c604e717541) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC08_NinjaMask02.prefab using Guid(92f84190e039fbf4094c5c604e717541) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'd3b20a4e331ba2177614c04af4dea84d') in 0.027349 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000015 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Eye12.prefab
+  artifactKey: Guid(c6452b767c032ba46b7d55abff98c838) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Eye12.prefab using Guid(c6452b767c032ba46b7d55abff98c838) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '4e799839bffe04707c9b2dac39d0bf81') in 0.027472 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000021 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/BackPack01.prefab
+  artifactKey: Guid(ac361e78bb7bacd45a58402c81b239d9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/BackPack01.prefab using Guid(ac361e78bb7bacd45a58402c81b239d9) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '44599c674b26ce1bb3e9595c05ae4b30') in 0.023655 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000020 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Head02_Female.prefab
+  artifactKey: Guid(4ed72f84ef2394b45a6b28f5eec35861) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Head02_Female.prefab using Guid(4ed72f84ef2394b45a6b28f5eec35861) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '1b3ed07bb131c9f06e56767f856d0234') in 0.039281 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000027 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Mouth03.prefab
+  artifactKey: Guid(591e7d8e92dba8c44ae5fdd8737f2a03) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Mouth03.prefab using Guid(591e7d8e92dba8c44ae5fdd8737f2a03) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '6d93b0805d8832ff77f79da9ee54268e') in 0.028218 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000015 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Eye11.prefab
+  artifactKey: Guid(5b35fa830378b454abafd91aa497b520) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Eye11.prefab using Guid(5b35fa830378b454abafd91aa497b520) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'a03ff77387471920bccc2e9cea812486') in 0.026880 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Head04_Blue.prefab
+  artifactKey: Guid(e6fcceb7c1367194aab9c820e54e7874) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Head04_Blue.prefab using Guid(e6fcceb7c1367194aab9c820e54e7874) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'fb0e5948ea5bc6798546bcdbc1ae1186') in 0.024045 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Hair01.prefab
+  artifactKey: Guid(c293b7cbb0629744fbc875d361507ac1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Hair01.prefab using Guid(c293b7cbb0629744fbc875d361507ac1) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'd0a4866910772b98c6ad55745728af67') in 0.021353 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Eye10.prefab
+  artifactKey: Guid(eed0cc93c8de9414baf263f199a114d7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Eye10.prefab using Guid(eed0cc93c8de9414baf263f199a114d7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'fe360efaed98766d7ae78649681f7d54') in 0.023919 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Hair04.prefab
+  artifactKey: Guid(71742d6dfc5a1b64387cfb4751203a19) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Hair04.prefab using Guid(71742d6dfc5a1b64387cfb4751203a19) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '14d8a422dbd4576d9c012b26070a5325') in 0.028256 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000015 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Head04_Grey.prefab
+  artifactKey: Guid(6d454226ec0667d459fba2b889440b25) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Head04_Grey.prefab using Guid(6d454226ec0667d459fba2b889440b25) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'a03d57686d986373af66324f6a6ec3a7') in 0.025516 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC06_Crown02.prefab
+  artifactKey: Guid(75a4bcc53a9937845a40e4da19deabd1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC06_Crown02.prefab using Guid(75a4bcc53a9937845a40e4da19deabd1) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'eed4cf7093d8f0b03fbd209d88011ff5') in 0.030091 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000022 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC11_Mustache01.prefab
+  artifactKey: Guid(5147b35b75a5ee943ace8ca0be40edfb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC11_Mustache01.prefab using Guid(5147b35b75a5ee943ace8ca0be40edfb) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '91124612e81690e004f9b33b3b854143') in 0.023663 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000025 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC03_NightVision.prefab
+  artifactKey: Guid(c060d37057ab8f14e8fbce1547c3ce5a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC03_NightVision.prefab using Guid(c060d37057ab8f14e8fbce1547c3ce5a) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'f4f381bd38ae0d38e32205397e0a3b2b') in 0.022384 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000018 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Hair03.prefab
+  artifactKey: Guid(e6d3c81f66d98194b87bfe13ae6f2e1d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Hair03.prefab using Guid(e6d3c81f66d98194b87bfe13ae6f2e1d) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '3bff06237e098a23f5e71bfcb90d4599') in 0.028606 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000021 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC10_Mustache03.prefab
+  artifactKey: Guid(12a757233e0212548b7b1a80caa3bcda) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC10_Mustache03.prefab using Guid(12a757233e0212548b7b1a80caa3bcda) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '4716a5113617a5af4e111fedca6651c5') in 0.027779 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Eye07.prefab
+  artifactKey: Guid(c0c6d1de065040c4ba3dc087d6388c3d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Eye07.prefab using Guid(c0c6d1de065040c4ba3dc087d6388c3d) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '90589cdb6aa3d42713c9991f12ab55a7') in 0.024285 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC03_BlackGlass.prefab
+  artifactKey: Guid(c91e15b789a11df4a920d157cf0e138c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC03_BlackGlass.prefab using Guid(c91e15b789a11df4a920d157cf0e138c) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '0a6816ddf498c9ca9014b20f02eff0d4') in 0.023373 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000017 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Hat14.prefab
+  artifactKey: Guid(9bf43ed7c056611469e48e3fd1bd566d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Hat14.prefab using Guid(9bf43ed7c056611469e48e3fd1bd566d) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'f65e2bd0744db8ce6130750810c585a7') in 0.022159 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000017 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC07_PiratePatch.prefab
+  artifactKey: Guid(ea3483e1b629bd94989f7e622948f984) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC07_PiratePatch.prefab using Guid(ea3483e1b629bd94989f7e622948f984) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'e7c7a703db712af564a0f4936e3f90fc') in 0.026664 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000014 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Mouth07.prefab
+  artifactKey: Guid(2116874ce2b01154784b05cc3ad854d0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Mouth07.prefab using Guid(2116874ce2b01154784b05cc3ad854d0) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '2b69156c9261048de352660140c3d352') in 0.021947 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000021 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Eye03.prefab
+  artifactKey: Guid(0fdf02ce20da6614c89517189eb8c2ad) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Eye03.prefab using Guid(0fdf02ce20da6614c89517189eb8c2ad) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '5f8456c78d24b4d613269a87c949c2eb') in 0.020130 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000025 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC03_NerdGlass.prefab
+  artifactKey: Guid(c36fdd77d2d0a0544b415041d8f686fe) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC03_NerdGlass.prefab using Guid(c36fdd77d2d0a0544b415041d8f686fe) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '974ecd144bde6718c52ca756bddab348') in 0.020622 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000017 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Hat02.prefab
+  artifactKey: Guid(eb0a1f0184664bc43a8df262ecbbb75d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Hat02.prefab using Guid(eb0a1f0184664bc43a8df262ecbbb75d) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'a637fc3f9612868c4e101423a871a045') in 0.021457 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Eye05.prefab
+  artifactKey: Guid(1d637e02b58134a4094b330f24869f8a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Eye05.prefab using Guid(1d637e02b58134a4094b330f24869f8a) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '760b6dc50e233d3190ccd2c0bf68b866') in 0.023421 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000021 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Head03_Purple.prefab
+  artifactKey: Guid(a276118eb69bf6a43a9dfd2ddade1c48) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Head03_Purple.prefab using Guid(a276118eb69bf6a43a9dfd2ddade1c48) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '6e4d673dd87bc40e747655a6b4adae06') in 0.021833 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000021 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Head03_Brown.prefab
+  artifactKey: Guid(08f8697d2581eea41b5c398f765cbe55) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Head03_Brown.prefab using Guid(08f8697d2581eea41b5c398f765cbe55) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '5b87125be284e5e66a1fdc8a805ee1ea') in 0.016873 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Hat03.prefab
+  artifactKey: Guid(8a4f1e0f099eded4dab5c52af4727c9b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Hat03.prefab using Guid(8a4f1e0f099eded4dab5c52af4727c9b) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '79f1af8727107ff2b57f2aa775ea0859') in 0.021398 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000021 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC08_NinjaMask05.prefab
+  artifactKey: Guid(d569fd2b185aead48805f597646cb510) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC08_NinjaMask05.prefab using Guid(d569fd2b185aead48805f597646cb510) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'c04f71df6a946e3399b11bee44ca06d9') in 0.028547 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000020 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC08_NinjaMask08.prefab
+  artifactKey: Guid(465ff7d566222334daf6d3d740dd08ab) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC08_NinjaMask08.prefab using Guid(465ff7d566222334daf6d3d740dd08ab) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '854e81b6308061f2ea34640bd8f4f126') in 0.025461 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000092 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Head03_Yellow.prefab
+  artifactKey: Guid(92843ed046bbfd048bc285bb565f6ba2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Head03_Yellow.prefab using Guid(92843ed046bbfd048bc285bb565f6ba2) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '057f1376f0168f683e22883b7c0bcde8') in 0.027577 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000018 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC08_NinjaMask01.prefab
+  artifactKey: Guid(319bd7b9345fe814cb1fbdad3ae7705c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC08_NinjaMask01.prefab using Guid(319bd7b9345fe814cb1fbdad3ae7705c) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '47a11427b75b81bf213b6a5acb323348') in 0.026945 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000033 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC02_Leaf.prefab
+  artifactKey: Guid(ebfaa0da77f00ab468c9d6130fd57477) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC02_Leaf.prefab using Guid(ebfaa0da77f00ab468c9d6130fd57477) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '4e8aeb670d34647efe29e7e46dbe1c11') in 0.027104 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000017 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Hair05.prefab
+  artifactKey: Guid(57c91c79031e3b24e9eed0eaac06bc6b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Hair05.prefab using Guid(57c91c79031e3b24e9eed0eaac06bc6b) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '34c86b565e1b61abd84fce036e832cb2') in 0.027676 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC10_Mustache01.prefab
+  artifactKey: Guid(99984dc5900fd6d41add448382febc9c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC10_Mustache01.prefab using Guid(99984dc5900fd6d41add448382febc9c) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '584b27c2d0dd58eb4e26e00c46c7dcc2') in 0.026998 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC06_Crown03.prefab
+  artifactKey: Guid(543d9dc8f76a4b845ae88e212286ca9d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/AC06_Crown03.prefab using Guid(543d9dc8f76a4b845ae88e212286ca9d) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '62a5da42886712233d5818668c7c241f') in 0.025064 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000024 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Hair09.prefab
+  artifactKey: Guid(08e139a2f96c1eb4abffa6dc354762b7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Hair09.prefab using Guid(08e139a2f96c1eb4abffa6dc354762b7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '426786d3526458754ef4591b10c6f7bd') in 0.028986 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000023 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Hat07.prefab
+  artifactKey: Guid(a17cf5239850fef4b9ee5d61826e1325) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/HeadParts/Hat07.prefab using Guid(a17cf5239850fef4b9ee5d61826e1325) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '5b4cdaa3ac780d95e8ee4295a9477da6') in 0.025208 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 8.256680 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/ModularCharacters/MC04.prefab
+  artifactKey: Guid(435bb8e3cb367524788cbb43c18e476c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/ModularCharacters/MC04.prefab using Guid(435bb8e3cb367524788cbb43c18e476c) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '73e60f54a2af03f5e5cfc26609b1a268') in 0.371077 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 2464
+========================================================================
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/ModularCharacters/MC22.prefab
+  artifactKey: Guid(8d89ada5f8847c44389ce35d4ea4612d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/ModularCharacters/MC22.prefab using Guid(8d89ada5f8847c44389ce35d4ea4612d) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '68ae31416504b02a12969a989c8bb190') in 0.408047 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 2461
+========================================================================
+Received Import Request.
+  Time since last request: 0.000033 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/ModularCharacters/MC15.prefab
+  artifactKey: Guid(0b33bf0809790354a814c2c4b1704449) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/ModularCharacters/MC15.prefab using Guid(0b33bf0809790354a814c2c4b1704449) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '2b74ae4b0de8cabb7163370141ba4205') in 0.177048 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 1363
+========================================================================
+Received Import Request.
+  Time since last request: 0.000021 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/ModularCharacters/MC11.prefab
+  artifactKey: Guid(ff9d1c6a188ff3644bc59bacb9537ff4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/ModularCharacters/MC11.prefab using Guid(ff9d1c6a188ff3644bc59bacb9537ff4) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '1d9593422866e5c98a5c8d393293925f') in 0.166320 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 1363
+========================================================================
+Received Import Request.
+  Time since last request: 0.000021 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/ModularCharacters/MC16.prefab
+  artifactKey: Guid(cb00758158fa6c44a9935b6c0084f2c8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/ModularCharacters/MC16.prefab using Guid(cb00758158fa6c44a9935b6c0084f2c8) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'ae26e2cec19247aa765e2dca1b1a54db') in 0.183329 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 1363
+========================================================================
+Received Import Request.
+  Time since last request: 0.000028 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/ModularCharacters/MC19.prefab
+  artifactKey: Guid(4f21ee0205523164fa839920b23fa38c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/ModularCharacters/MC19.prefab using Guid(4f21ee0205523164fa839920b23fa38c) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '59c71210b07635f24eba78cbf6738b4c') in 0.170269 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 1363
+========================================================================
+Received Import Request.
+  Time since last request: 2.800231 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/Weapons/OHS01_Stick.prefab
+  artifactKey: Guid(d74d166bac1266b45b0fec2f2c95fe9b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/Weapons/OHS01_Stick.prefab using Guid(d74d166bac1266b45b0fec2f2c95fe9b) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '7460f446669a9b6833f6313bb87d800e') in 0.084126 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000022 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/Weapons/Shield03.prefab
+  artifactKey: Guid(e46f7b99ad2a1294bbf48a790b57fbbb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/Weapons/Shield03.prefab using Guid(e46f7b99ad2a1294bbf48a790b57fbbb) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'ba6c919e2d4877a1529b17fe7a1712b5') in 0.042965 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000023 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/Weapons/OHS09_Sword.prefab
+  artifactKey: Guid(97a81ef93f40fd44d97c853fb7565bee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/Weapons/OHS09_Sword.prefab using Guid(97a81ef93f40fd44d97c853fb7565bee) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '66a6705803fd14bd093fd552bb4c1f61') in 0.032245 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000017 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/Weapons/Shield09.prefab
+  artifactKey: Guid(1f95bf1c903595848ad17a3df565c829) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/Weapons/Shield09.prefab using Guid(1f95bf1c903595848ad17a3df565c829) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'a287dada69dfa0b2236ef1c7b3f69e00') in 0.027681 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/Weapons/OHS05_Sword.prefab
+  artifactKey: Guid(2fa60857586233043ab8a3235b6166d4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/Weapons/OHS05_Sword.prefab using Guid(2fa60857586233043ab8a3235b6166d4) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '95af6097ed7a63e69b17ced1695be098') in 0.026335 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000020 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/Weapons/Shield02.prefab
+  artifactKey: Guid(f27ad0bae5252f649abbfbeffc9585f2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/Weapons/Shield02.prefab using Guid(f27ad0bae5252f649abbfbeffc9585f2) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'dd01c9d72a03171a5c2aa7ae3f3945c8') in 0.027782 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.000015 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/Weapons/Shield01.prefab
+  artifactKey: Guid(de7626e0a015a774cb24dc99db7f6d22) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Prefab/Weapons/Shield01.prefab using Guid(de7626e0a015a774cb24dc99db7f6d22) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'bd407258d04042f4e019d023f0183f3e') in 0.033406 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 11
+========================================================================
+Received Import Request.
+  Time since last request: 0.634800 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/AC03_HeavyMetalGlass.fbx
+  artifactKey: Guid(7805913367f717442ba6c9d82f0c6561) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/AC03_HeavyMetalGlass.fbx using Guid(7805913367f717442ba6c9d82f0c6561) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'ed53ad2db2aeb0ee23cd16da770ce242') in 0.089146 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.000029 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/AC08_NinjaMask04.fbx
+  artifactKey: Guid(e503731bf4f07fa49937a9eb191a15d4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/AC08_NinjaMask04.fbx using Guid(e503731bf4f07fa49937a9eb191a15d4) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '0fbfdff25213cd68fb23715a6f05b857') in 0.045877 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.000036 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/AC05_Horn02.fbx
+  artifactKey: Guid(c0a4e1137e6797143926a1a05dcb3916) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/AC05_Horn02.fbx using Guid(c0a4e1137e6797143926a1a05dcb3916) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'a0442207ddcf4b99645f33c40ece72dd') in 0.043761 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.000075 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/AC08_NinjaMask07.fbx
+  artifactKey: Guid(971360cf4520e8443a9aa1e56d570ebd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/AC08_NinjaMask07.fbx using Guid(971360cf4520e8443a9aa1e56d570ebd) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '0692a04c2dd151d57824b0fdece3c787') in 0.034968 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.000015 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/AC08_NinjaMask08.fbx
+  artifactKey: Guid(b47432f26953e5940b514a21b75583a0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/AC08_NinjaMask08.fbx using Guid(b47432f26953e5940b514a21b75583a0) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '85c73c2834e65f08535114e07a7f7ed1') in 0.032436 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.000022 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/AC04_AngelEars.fbx
+  artifactKey: Guid(274fad43b3b876946a84a78472aea5e9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/AC04_AngelEars.fbx using Guid(274fad43b3b876946a84a78472aea5e9) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'b0c07d005f682c3abbcc0d551d17810d') in 0.019641 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 1.554317 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/AC10_Mustache04.fbx
+  artifactKey: Guid(42c394367f139df47b64b26b2339236c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/AC10_Mustache04.fbx using Guid(42c394367f139df47b64b26b2339236c) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '50a5c305934a44fd610e7183b8671b27') in 0.025898 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.000014 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/AC11_Mustache01.fbx
+  artifactKey: Guid(388feccada8d39c42941f6086a937380) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/AC11_Mustache01.fbx using Guid(388feccada8d39c42941f6086a937380) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '0331b74d18d19012fd15f6005e92636e') in 0.029628 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.239756 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/BackPack01.fbx
+  artifactKey: Guid(cc0b73a00a05a5d4ca23d74fedb419bc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/BackPack01.fbx using Guid(cc0b73a00a05a5d4ca23d74fedb419bc) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '2606194f2e41f1890f4f01914c318ef2') in 0.115976 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.000033 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Eye06.fbx
+  artifactKey: Guid(37a770b18b30c3e46afba734187d170c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Eye06.fbx using Guid(37a770b18b30c3e46afba734187d170c) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '165aaaf84604a34013ee78d19ac8e466') in 0.047062 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.000029 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Eye05.fbx
+  artifactKey: Guid(d76dac72f73230e4e99e4ec7b3789c9b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Eye05.fbx using Guid(d76dac72f73230e4e99e4ec7b3789c9b) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '02600bf490897b6537e80ebbb2a0c48c') in 0.025361 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.112404 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Eye10.fbx
+  artifactKey: Guid(93d09019c283e6647b97d0a4075ee311) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Eye10.fbx using Guid(93d09019c283e6647b97d0a4075ee311) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '4d18bc08ba31ee3090ef639038cd40ff') in 0.047607 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.000017 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Hair02.fbx
+  artifactKey: Guid(85f01738b91ac674ca0b440b11698714) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Hair02.fbx using Guid(85f01738b91ac674ca0b440b11698714) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '97baf52dc93cc610a060bffca4a1959a') in 0.033922 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.005634 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Hair04.fbx
+  artifactKey: Guid(583d2e9645163b040ae2c76ccbd93ba1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Hair04.fbx using Guid(583d2e9645163b040ae2c76ccbd93ba1) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'e540dd9477910a404b33b97e472e77d1') in 0.038324 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.455374 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Hair08.fbx
+  artifactKey: Guid(13f17bad1b755194b8504370c89360e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Hair08.fbx using Guid(13f17bad1b755194b8504370c89360e6) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '6b38065747f5f143351d49f8b0f72cc8') in 0.049927 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.000036 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Hat03.fbx
+  artifactKey: Guid(c7383e858d117c74f88151e35c0dd81c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Hat03.fbx using Guid(c7383e858d117c74f88151e35c0dd81c) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'dde2932d066af50dda9bd77a05a3886d') in 0.043387 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.000021 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Hair10.fbx
+  artifactKey: Guid(631a0a179f660ff45adac1a03dff0d43) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Hair10.fbx using Guid(631a0a179f660ff45adac1a03dff0d43) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'd25e5542b08c1ee9a299e1a3efa3cac2') in 0.034922 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.239443 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Hat07.fbx
+  artifactKey: Guid(c9645fa8b15407643a57750c99b39732) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Hat07.fbx using Guid(c9645fa8b15407643a57750c99b39732) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '110b9084031ff5d653f6515bb7448e08') in 0.086317 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Head02_Female.fbx
+  artifactKey: Guid(b0474317296d62c4e9168d21234c8509) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Head02_Female.fbx using Guid(b0474317296d62c4e9168d21234c8509) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '8d90e5340dd32251e4c08063bc94ef99') in 0.026087 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Hat14.fbx
+  artifactKey: Guid(8cf34860f1b31234d821d7e6ea130d42) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Hat14.fbx using Guid(8cf34860f1b31234d821d7e6ea130d42) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '2105f2077d8d392afe5632b3f6ca8f8f') in 0.028204 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.000017 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Head03_Blue.fbx
+  artifactKey: Guid(b9705fdf2f34b574dadb788c7bb3f42f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Head03_Blue.fbx using Guid(b9705fdf2f34b574dadb788c7bb3f42f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '6827cfec3de2b298ac583a7241605b76') in 0.022388 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.991921 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Head03_Yellow.fbx
+  artifactKey: Guid(6385b36b3b1605443ad4507bfd09ce46) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Head03_Yellow.fbx using Guid(6385b36b3b1605443ad4507bfd09ce46) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '46281a415da4affcca69dd03b7db8981') in 0.027648 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.041436 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Head04_Grey.fbx
+  artifactKey: Guid(15e71a0c5982b80429da44ed3341ad89) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Head04_Grey.fbx using Guid(15e71a0c5982b80429da44ed3341ad89) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '35a96aea103adfb38846f2817df1b809') in 0.026399 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.507410 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Head04_Yellow.fbx
+  artifactKey: Guid(826e1f1a40e9abd40805fa39403c8e0f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Head04_Yellow.fbx using Guid(826e1f1a40e9abd40805fa39403c8e0f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'b828f1356f4153e905214de743102f8b') in 0.031332 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.002403 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/HeadArmor02.fbx
+  artifactKey: Guid(8f021e93e5759e7479cd85c81218facc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/HeadArmor02.fbx using Guid(8f021e93e5759e7479cd85c81218facc) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'a354d01154020f72de7aa860f16488d6') in 0.030198 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.352547 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/HeadArmor05.fbx
+  artifactKey: Guid(b23656e5f9e91604ea73eab423783480) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/HeadArmor05.fbx using Guid(b23656e5f9e91604ea73eab423783480) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '17765d5ffe96d2e2dab8254d3724377b') in 0.046905 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.063370 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Mouth06.fbx
+  artifactKey: Guid(23cfe5f96948d3442a504207aabe51b9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Mouth06.fbx using Guid(23cfe5f96948d3442a504207aabe51b9) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'e583c6d4f08c6a7c24b75694a293a112') in 0.024075 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.176505 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Mouth09.fbx
+  artifactKey: Guid(989bd3bb25c32be48b7f5e313b3617ce) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Mouth09.fbx using Guid(989bd3bb25c32be48b7f5e313b3617ce) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'e50baa70dca42aba779239c9d943fb91') in 0.026876 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Mouth11.fbx
+  artifactKey: Guid(5817887ffbe6ccb4c82bfeb7626c08a1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/HeadParts/Mouth11.fbx using Guid(5817887ffbe6ccb4c82bfeb7626c08a1) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '6a8d9cce14cb63c70112069baf6002bd') in 0.031034 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 1.319099 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/Weapons/Shield20.fbx
+  artifactKey: Guid(f255f533b00c7b1409849b7cf41a522b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/Weapons/Shield20.fbx using Guid(f255f533b00c7b1409849b7cf41a522b) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'f350f6c22e8cb379fe721a804931ae53') in 0.035519 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.000028 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/Weapons/THS07_Sword.fbx
+  artifactKey: Guid(496aec94e52a67c48b99b5922382d90c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/Weapons/THS07_Sword.fbx using Guid(496aec94e52a67c48b99b5922382d90c) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'df6c70bfa5ab11f34e715c309240a2bc') in 0.026580 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/Weapons/Spear03.fbx
+  artifactKey: Guid(0fcc28b382d786244b1c7c4ebe53f18e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/Weapons/Spear03.fbx using Guid(0fcc28b382d786244b1c7c4ebe53f18e) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'df5577803196f0007d2493e054367369') in 0.025786 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.000014 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/Weapons/THS04_Sword.fbx
+  artifactKey: Guid(2c519990b5ffad24583063ed210a0ede) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/Weapons/THS04_Sword.fbx using Guid(2c519990b5ffad24583063ed210a0ede) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '3050c1344816471b7b311113e1126303') in 0.028321 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 0.000015 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/Weapons/Wand03.fbx
+  artifactKey: Guid(2b15f4dd54735d249a9481c632075e09) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Mesh/Weapons/Wand03.fbx using Guid(2b15f4dd54735d249a9481c632075e09) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '92574dadc67266fc131e931055e41a5a') in 0.044259 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 7
+========================================================================
+Received Import Request.
+  Time since last request: 1.366418 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Material/Skybox_Mat.mat
+  artifactKey: Guid(353466c49cf019540bf2ac95815b7c1e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Material/Skybox_Mat.mat using Guid(353466c49cf019540bf2ac95815b7c1e) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'ea77a27f91f179f78275ad256d292387') in 0.115031 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 1
+========================================================================
+Received Import Request.
+  Time since last request: 407.608882 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Texture/MaskTint/SAM.png
+  artifactKey: Guid(5c5cb4382128e544e8162e5a1b92d2f4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Texture/MaskTint/SAM.png using Guid(5c5cb4382128e544e8162e5a1b92d2f4) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '7a6d0fdde2414de419bd1ef78c705b9c') in 0.040295 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 2
+========================================================================
+Received Import Request.
+  Time since last request: 0.000021 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Texture/MaskTint/Mask01.png
+  artifactKey: Guid(c537304dae934574c83263b8935bf6fa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Texture/MaskTint/Mask01.png using Guid(c537304dae934574c83263b8935bf6fa) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '0ca7eae9a135254f632d6b2f580421d3') in 0.026415 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 2
+========================================================================
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Texture/MaskTint/Mask02.png
+  artifactKey: Guid(8221dc44e70c0db4ab060ab03ad5ed9a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Texture/MaskTint/Mask02.png using Guid(8221dc44e70c0db4ab060ab03ad5ed9a) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '1bb0d92973388214a083b9e2295ea340') in 0.028860 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 2
+========================================================================
+Received Import Request.
+  Time since last request: 659.190270 seconds.
+  path: Assets/ExternalAsset/ithappy/Cute_Characters/Materials/Emission.mat
+  artifactKey: Guid(32fbf3258d698d54ba6f8eee9cd3195f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/ithappy/Cute_Characters/Materials/Emission.mat using Guid(32fbf3258d698d54ba6f8eee9cd3195f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'a98dbad529305f6546a5407cf5a21add') in 0.022833 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 2
+========================================================================
+Received Import Request.
+  Time since last request: 0.000181 seconds.
+  path: Assets/ExternalAsset/ithappy/Cute_Characters/Materials/Glass.mat
+  artifactKey: Guid(086d3e4fefc029442989fd37e2c655fa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/ithappy/Cute_Characters/Materials/Glass.mat using Guid(086d3e4fefc029442989fd37e2c655fa) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '1af162b6f51b5c1fe8361f18388a02db') in 0.008492 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 2
+========================================================================
+Received Import Request.
+  Time since last request: 85.544696 seconds.
+  path: Assets/ExternalAsset/ithappy/Cute_Characters/Animations/Animation.fbx
+  artifactKey: Guid(7d41d6310cc3f2e48aa067dbe08ab7d7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/ithappy/Cute_Characters/Animations/Animation.fbx using Guid(7d41d6310cc3f2e48aa067dbe08ab7d7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'efe088fb505b18d5d732391885c67d47') in 0.074784 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 159
+========================================================================
+Received Import Request.
+  Time since last request: 50.924716 seconds.
+  path: Assets/ExternalAsset/ithappy/Cute_Characters/Materials/Emission.mat
+  artifactKey: Guid(32fbf3258d698d54ba6f8eee9cd3195f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/ithappy/Cute_Characters/Materials/Emission.mat using Guid(32fbf3258d698d54ba6f8eee9cd3195f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '8b540e97c26afd279a49da72858155c7') in 0.055277 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 2
+========================================================================
+Received Import Request.
+  Time since last request: 0.000018 seconds.
+  path: Assets/ExternalAsset/ithappy/Cute_Characters/Materials/Floor.mat
+  artifactKey: Guid(d320cd3cc58cce04e98061cdbc9d88c0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/ithappy/Cute_Characters/Materials/Floor.mat using Guid(d320cd3cc58cce04e98061cdbc9d88c0) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '3af7bfa1b092b6d3c9866f387a28a820') in 0.034402 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 1
+========================================================================
+Received Import Request.
+  Time since last request: 58.417219 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Scene/MainScene/ReflectionProbe-0.exr
+  artifactKey: Guid(e8d50a37e68a39147b627f1fea9d09b6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Scene/MainScene/ReflectionProbe-0.exr using Guid(e8d50a37e68a39147b627f1fea9d09b6) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '356fddb5b3729ad508f1763ea0b14f1d') in 0.051720 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 1
+========================================================================
+Received Import Request.
+  Time since last request: 1.270333 seconds.
+  path: Assets/Fonts/Maplestory Bold SDF.asset
+  artifactKey: Guid(f2fc11938283f5448b04b315670c5163) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Fonts/Maplestory Bold SDF.asset using Guid(f2fc11938283f5448b04b315670c5163) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '170830dbabc05d9a1b95be58196d167b') in 0.181271 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 6
+========================================================================
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/Fonts/netmarbleL.ttf
+  artifactKey: Guid(2848c6e856d53d846994260ee28b4f61) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Fonts/netmarbleL.ttf using Guid(2848c6e856d53d846994260ee28b4f61) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'a8c87be9ec4b961bdd146bf50f32af06') in 0.012979 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 4
+========================================================================
+Received Import Request.
+  Time since last request: 0.000015 seconds.
+  path: Assets/Fonts/netmarbleB SDF.asset
+  artifactKey: Guid(b4b9ee183e9d5d24d94ff6813f8b5cb6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Fonts/netmarbleB SDF.asset using Guid(b4b9ee183e9d5d24d94ff6813f8b5cb6) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'd9d05cf9baf10c857ebef93b4c8492e7') in 0.127391 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 6
+========================================================================
+Received Import Request.
+  Time since last request: 0.000025 seconds.
+  path: Assets/Fonts/netmarbleL SDF.asset
+  artifactKey: Guid(1816a6f2749b5c7458faff309288e838) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Fonts/netmarbleL SDF.asset using Guid(1816a6f2749b5c7458faff309288e838) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '069a758473bb4a46bcb4bf5eea2b29e7') in 0.115647 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 6
+========================================================================
+Received Import Request.
+  Time since last request: 20.499570 seconds.
+  path: Assets/ExternalAsset/RPGTinyHeroWavePBR/Texture/DefaultPBR/Metallic-Smoothness.png
+  artifactKey: Guid(2b33ecf7ab8baf5488638fd4a2fab00b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ExternalAsset/RPGTinyHeroWavePBR/Texture/DefaultPBR/Metallic-Smoothness.png using Guid(2b33ecf7ab8baf5488638fd4a2fab00b) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '4142ed220a3cacf96e069ffe4846a479') in 0.039089 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 2

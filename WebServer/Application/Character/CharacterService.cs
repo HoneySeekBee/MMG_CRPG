@@ -1,5 +1,5 @@
 ﻿using Application.Repositories;
-using Domain.Entities;
+using Domain.Entities.Characters;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -51,7 +51,7 @@ namespace Application.Character
                 var meta = NormalizeJsonOrNull(req.MetaJson);   // ← 여기서도 예외 가능
 
                 Console.WriteLine("[API] before Character.Create");
-                var entity = Domain.Entities.Character.Create(
+                var entity = Domain.Entities.Characters.Character.Create(
                     name: req.Name.Trim(),
                     rarityId: req.RarityId,
                     factionId: req.FactionId,
@@ -99,10 +99,10 @@ namespace Application.Character
 
             entity.Rename(req.Name);
             // 단순 세터 사용
-            if (entity.RarityId != req.RarityId) typeof(Domain.Entities.Character).GetProperty("RarityId")!.SetValue(entity, req.RarityId);
-            if (entity.FactionId != req.FactionId) typeof(Domain.Entities.Character).GetProperty("FactionId")!.SetValue(entity, req.FactionId);
-            if (entity.RoleId != req.RoleId) typeof(Domain.Entities.Character).GetProperty("RoleId")!.SetValue(entity, req.RoleId);
-            if (entity.ElementId != req.ElementId) typeof(Domain.Entities.Character).GetProperty("ElementId")!.SetValue(entity, req.ElementId);
+            if (entity.RarityId != req.RarityId) typeof(Domain.Entities.Characters.Character).GetProperty("RarityId")!.SetValue(entity, req.RarityId);
+            if (entity.FactionId != req.FactionId) typeof(Domain.Entities.Characters.Character).GetProperty("FactionId")!.SetValue(entity, req.FactionId);
+            if (entity.RoleId != req.RoleId) typeof(Domain.Entities.Characters.Character).GetProperty("RoleId")!.SetValue(entity, req.RoleId);
+            if (entity.ElementId != req.ElementId) typeof(Domain.Entities.Characters.Character).GetProperty("ElementId")!.SetValue(entity, req.ElementId);
 
             entity.SetIcon(req.IconId);
             entity.SetPortrait(req.PortraitId);
@@ -112,7 +112,7 @@ namespace Application.Character
 
             entity.SetMeta(NormalizeJsonOrNull(req.MetaJson));
             // 태그 전체 교체
-            var tagField = typeof(Domain.Entities.Character).GetField("_tags", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var tagField = typeof(Domain.Entities.Characters.Character).GetField("_tags", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             if (tagField != null)
             {
                 var list = (List<string>)tagField.GetValue(entity)!;

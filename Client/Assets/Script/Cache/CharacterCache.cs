@@ -1,3 +1,4 @@
+using Contracts.CharacterModel;
 using Game.Core;
 using Game.Network;
 using Game.UICommon;
@@ -48,6 +49,11 @@ public class CharacterCache : MonoBehaviour
 
     private CharactersResponsePb _characters;
 
+    [Header("CharacterModel")]
+    public List<CharacterModelPb> CharacterModels = new();
+    public Dictionary<int, CharacterModelPb> CharacterModelById = new();
+    private ListCharacterModelsResponsePb _characterModels;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -58,15 +64,78 @@ public class CharacterCache : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
+    public IEnumerator CoLoadCharacterModelCache(ProtoHttpClient http, Popup popup, float timeoutSeconds = 0f)
+    {
+
+        // 초기화
+        CharacterModels.Clear();
+        CharacterModelById.Clear();
+        _characterModels = null;
+
+        // 요청 바디: 비우면 전체 (서버 컨트롤러 주석 참고)
+        var req = new ListCharacterModelsRequestPb();
+        bool done = false;
+
+        // POST (proto)
+        yield return http.Post(
+            ApiRoutes.CharacterModel_List,
+            req,
+            ListCharacterModelsResponsePb.Parser,
+            (ApiResult<ListCharacterModelsResponsePb> res) =>
+            {
+                if (!res.Ok || res.Data == null)
+                {
+                    popup?.Show("캐릭터 모델 불러오기 실패");
+                    Debug.LogError("[FAILED] Load CharacterModel Cache");
+                    done = true;
+                    return;
+                }
+                _characterModels = res.Data;
+                done = true;
+            });
+
+        // 타임아웃(optional)
+        if (!done && timeoutSeconds > 0f)
+        {
+            float start = Time.time;
+            while (!done && (Time.time - start) < timeoutSeconds)
+                yield return null;
+
+            if (!done)
+            {
+                Debug.LogWarning("[CharacterCache] CharacterModel load timeout");
+                yield break;
+            }
+        }
+
+        if (_characterModels == null || _characterModels.Models.Count == 0)
+            yield break;
+          
+        int n = _characterModels.Models.Count;
+        CharacterModels = new List<CharacterModelPb>(n);
+        CharacterModelById = new Dictionary<int, CharacterModelPb>(n);
+
+        foreach (var m in _characterModels.Models)
+        { 
+            CharacterModelById[m.CharacterId] = m;
+            CharacterModels.Add(m);
+        }
+         
+        CharacterModels.Sort((a, b) => a.CharacterId.CompareTo(b.CharacterId));
+
+        Debug.Log($"Cache - 캐릭터 모델 {_characterModels.Models.Count}");
+    }
     public IEnumerator CoLoadCharacterCache(ProtoHttpClient http, Popup popup, float timeoutSeconds = 0f)
     {
         // 완료 플래그
         bool expDone = false;
         bool charDone = false;
+        bool modelDone = false;
 
         // (선택) 실패 여부를 따로 보고 싶다면 이 플래그 사용
         bool expFailed = false;
         bool charFailed = false;
+        bool modelFailed = false;
 
         // 래퍼 코루틴: target이 끝나면 onDone 호출
         IEnumerator Wrap(IEnumerator target, System.Action onDone, System.Action? onFail = null)
@@ -76,6 +145,7 @@ public class CharacterCache : MonoBehaviour
         }
 
         // 동시에 시작
+        StartCoroutine(Wrap(CoLoadCharacterModelCache(http, popup), () => modelDone = true, () => modelFailed = true));
         StartCoroutine(Wrap(CoLoadCharacterExp(http, popup), () => expDone = true, () => expFailed = true));
         StartCoroutine(Wrap(CoLoadCharacter(http, popup), () => charDone = true, () => charFailed = true));
 

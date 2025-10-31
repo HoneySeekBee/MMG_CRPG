@@ -1,5 +1,5 @@
 ﻿using Application.Repositories;
-using Domain.Entities;
+using Domain.Entities.Characters;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -18,7 +18,7 @@ namespace Infrastructure.Repositories
 
         // ===== Reads =====
 
-        public async Task<(IReadOnlyList<Domain.Entities.Character> Items, int TotalCount)>
+        public async Task<(IReadOnlyList<Character> Items, int TotalCount)>
             GetPagedAsync(int page, int pageSize, int? elementId, int? rarityId, string? search, CancellationToken ct)
         {
             var query = _db.Characters.AsQueryable();
@@ -44,10 +44,10 @@ namespace Infrastructure.Repositories
             return (items, total);
         }
 
-        public Task<Domain.Entities.Character?> GetByIdAsync(int id, CancellationToken ct) =>
+        public Task<Character?> GetByIdAsync(int id, CancellationToken ct) =>
             _db.Characters.FirstOrDefaultAsync(x => x.Id == id, ct);
 
-        public async Task<(Domain.Entities.Character? Character,
+        public async Task<(Character? Character,
                            IReadOnlyList<CharacterSkill> Skills,
                            IReadOnlyList<CharacterStatProgression> Progressions,
                            IReadOnlyList<CharacterPromotion> Promotions)>
@@ -84,7 +84,7 @@ namespace Infrastructure.Repositories
             _db.Characters.Add(e);
             return Task.CompletedTask;
         }
-        public Task RemoveAsync(Domain.Entities.Character entity, CancellationToken ct)
+        public Task RemoveAsync(Character entity, CancellationToken ct)
         {
             _db.Characters.Remove(entity);
             return Task.CompletedTask;

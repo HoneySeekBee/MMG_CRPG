@@ -1,4 +1,4 @@
-﻿using Domain.Entities;
+﻿using Domain.Entities.Characters;
 using Domain.Enum;
 using System;
 using System.Collections.Generic;
@@ -41,11 +41,11 @@ namespace Application.Character
     // ===== Mapping =====
     public static class CharacterMappings
     {
-        public static CharacterSummaryDto ToSummaryDto(this Domain.Entities.Character c) =>
+        public static CharacterSummaryDto ToSummaryDto(this Domain.Entities.Characters.Character c) =>
             new(c.Id, c.Name, c.RarityId, c.ElementId, c.RoleId, c.FactionId, c.IsLimited, c.ReleaseDate);
 
         public static CharacterDetailDto ToDetailDto(
-            this Domain.Entities.Character c,
+            this Domain.Entities.Characters.Character c,
             IEnumerable<CharacterSkill> skills,
             IEnumerable<CharacterStatProgression> progressions,
             IEnumerable<CharacterPromotion> promotions)
