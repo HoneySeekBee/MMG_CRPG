@@ -1,5 +1,5 @@
 ﻿using Application.Character;
-using Domain.Entities;
+using Domain.Entities.Characters;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System;

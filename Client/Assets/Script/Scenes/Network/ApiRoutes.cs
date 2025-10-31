@@ -27,7 +27,9 @@ public static class ApiRoutes
     public const string Skills = "/skills";
     public const string CharacterExp = "/character-exp";
     public const string Character = "/characters";
-
+    public const string CharacterModel_List = "/character-model/list";
+    public const string CharacterModel_Parts = "/character-model/parts";
+    public const string CharacterModel_Weapons = "/character-model/weapons";
     public static string UserInventoryList(int userId) =>
         $"/users/{userId}/inventory";
 

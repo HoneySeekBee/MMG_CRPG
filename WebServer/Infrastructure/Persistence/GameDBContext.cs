@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Entities.Characters;
 using Domain.Entities.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -27,6 +28,11 @@ namespace Infrastructure.Persistence
         public DbSet<CharacterStatProgression> CharacterStatProgressions => Set<CharacterStatProgression>();
         public DbSet<CharacterPromotionMaterial> CharacterMaterials => Set<CharacterPromotionMaterial>();
         public DbSet<CharacterPromotion> CharacterPromotions => Set<CharacterPromotion>();
+
+        public DbSet<CharacterModel> CharacterModels => Set<CharacterModel>();
+        public DbSet<CharacterModelPart> CharacterModelParts => Set<CharacterModelPart>();
+        public DbSet<CharacterModelWeapon> CharacterModelWeapons => Set<CharacterModelWeapon>();
+
         public DbSet<CombatRecord> Combats => Set<CombatRecord>();
         public DbSet<CombatLogRecord> CombatLogs => Set<CombatLogRecord>();
 
@@ -83,6 +89,10 @@ namespace Infrastructure.Persistence
              
             Modeling_Combat(modelBuilder);
             Modeling_CombatLog(modelBuilder);
+
+            modelBuilder.HasPostgresEnum<Domain.Enum.Characters.BodySize>("BodySize");
+            modelBuilder.HasPostgresEnum<Domain.Enum.Characters.PartType>("PartType");
+            modelBuilder.HasPostgresEnum<Domain.Enum.Characters.CharacterAnimationType>("CharacterAnimationType");
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(GameDBContext).Assembly);
 

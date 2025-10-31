@@ -31,6 +31,7 @@ using Application.Synergy;
 using Microsoft.OpenApi.Models;
 using Application.EquipSlots;
 using Application.UserCharacterEquips;
+using Application.CharacterModels;
 
 namespace WebServer.Extensions
 {
@@ -77,6 +78,7 @@ namespace WebServer.Extensions
             s.AddSingleton<ICharacterCache, CharacterCache>();
             s.AddSingleton<ICharacterExpCache, CharacterExpCache>();
             s.AddSingleton<IEquipSlotCache, EquipSlotCache>();
+            s.AddSingleton<ICharacterModelCache, CharacterModelCache>();
 
             // 도메인/리포지토리/서비스 (Scoped)
 
@@ -122,6 +124,8 @@ namespace WebServer.Extensions
             // 캐릭터
             s.AddScoped<ICharacterRepository, CharacterRepository>();
             s.AddScoped<ICharacterService, CharacterService>();
+            s.AddScoped<ICharacterModelRepository, CharacterModelRepository>();
+            s.AddScoped<ICharacterModelService, CharacterModelService>();
 
             // 아이템 / 아이템 타입
             s.AddScoped<IItemRepository, ItemRepository>();
