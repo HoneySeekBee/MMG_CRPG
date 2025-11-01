@@ -3,40 +3,12 @@ using Domain.Entities.Characters;
 using Domain.Enum.Characters;
 using Google.Protobuf.WellKnownTypes;
 using Application.CharacterModels;
+using Google.Protobuf.WellKnownTypes;
 
 namespace WebServer.Mappers
 {
     public static class CharacterModelProtoMapper
-    {
-        public static BodySizePb ToPb(this BodySize v) => v switch
-        {
-            BodySize.Small => BodySizePb.Small,
-            BodySize.Normal => BodySizePb.Normal,
-            BodySize.Big => BodySizePb.Big,
-            _ => BodySizePb.BodySizeUnspecified
-        };
-        public static PartTypePb ToPb(this PartType v) => v switch
-        {
-            PartType.Head => PartTypePb.Head,
-            PartType.Hair => PartTypePb.Hair,
-            PartType.Mouth => PartTypePb.Mouth,
-            PartType.Eye => PartTypePb.Eye,
-            PartType.Acc => PartTypePb.Acc,
-            PartType.WeaponL => PartTypePb.WeaponL,
-            PartType.WeaponR => PartTypePb.WeaponR,
-            _ => PartTypePb.PartTypeUnspecified
-        };
-        public static AnimationTypePb ToPb(this CharacterAnimationType v) => v switch
-        {
-            CharacterAnimationType.Bow => AnimationTypePb.Bow,
-            CharacterAnimationType.OneHandSword => AnimationTypePb.OneHandSword,
-            CharacterAnimationType.Wand => AnimationTypePb.Wand,
-            CharacterAnimationType.Fist => AnimationTypePb.Fist,
-            CharacterAnimationType.TwoHandSword => AnimationTypePb.TwoHandSword,
-            CharacterAnimationType.SwordShield => AnimationTypePb.SwordShield,
-            CharacterAnimationType.Spear => AnimationTypePb.Spear,
-            _ => AnimationTypePb.AnimTypeUnspecified
-        };
+    { 
         public static BodySizePb ToBodyPb(this string s) => s switch
         {
             "Small" => BodySizePb.Small,
@@ -62,8 +34,8 @@ namespace WebServer.Mappers
         public static CharacterModelPb ToProto(this Application.CharacterModels.CharacterModelDto d) => new()
         {
             CharacterId = d.CharacterId,
-            BodySize = d.BodyType.ToPb(),
-            Animation = d.AnimationType.ToPb(),
+            BodySize = d.BodyType.ToBodyPb(),
+            Animation = d.AnimationType.ToAnimPb(),
             WeaponLId = d.WeaponLId.ToW(),
             WeaponRId = d.WeaponRId.ToW(),
             PartHeadId = d.PartHeadId.ToW(),
@@ -92,7 +64,7 @@ namespace WebServer.Mappers
         {
             PartId = p.PartId,
             PartKey = p.PartKey,
-            PartType = p.PartType.ToPb() 
+            PartType = (PartTypePb)System.Enum.Parse(typeof(PartTypePb), p.PartType)
         };
 
         public static CharacterModelWeaponPb ToProto(this Application.CharacterModels.CharacterModelWeaponDto w) => new()
