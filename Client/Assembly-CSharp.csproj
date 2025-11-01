@@ -99,8 +99,8 @@
     <Compile Include="Assets\Script\Cache\CharacterCache.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\Movement\MovementStates\Obstacles\TeleportObstacleState.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\Movement\MovementStates\MoveToNavMeshMovementState.cs" />
-    <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\CroakLandBehavior.cs" />
     <Compile Include="Assets\Script\Managers\AddressableManager.cs" />
+    <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\CroakLandBehavior.cs" />
     <Compile Include="Assets\Script\UI\User\EquipItemWindowUI.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Obstacle\ObstacleBase.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\CharacterSoundController.cs" />

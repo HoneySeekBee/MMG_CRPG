@@ -11,8 +11,8 @@ namespace Domain.Entities.Characters
     {
         public int CharacterId { get; private set; }
 
-        public BodySize BodyType { get; private set; }
-        public CharacterAnimationType AnimationType { get; private set; }
+        public string BodyType { get; private set; }
+        public string AnimationType { get; private set; }
 
         // 무기 슬롯 (양손 검 등은 L만 세팅하고 R은 null)
         public int? WeaponLId { get; private set; }
@@ -33,8 +33,8 @@ namespace Domain.Entities.Characters
         private CharacterModel(int characterId, BodySize body, CharacterAnimationType anim)
         {
             CharacterId = characterId;
-            BodyType = body;
-            AnimationType = anim;
+            BodyType = body.ToString();
+            AnimationType = anim.ToString();
             CreatedAt = DateTime.UtcNow;
             UpdatedAt = CreatedAt;
         }
@@ -44,13 +44,13 @@ namespace Domain.Entities.Characters
 
         public void SetBody(BodySize body)
         {
-            BodyType = body;
+            BodyType = body.ToString();
             Touch();
         }
 
         public void SetAnimation(CharacterAnimationType type)
         {
-            AnimationType = type;
+            AnimationType = type.ToString();
             Touch();
         }
 
@@ -77,8 +77,8 @@ namespace Domain.Entities.Characters
         }
         public void Update(BodySize body, CharacterAnimationType anim, int? weaponLId, int? weaponRId, int? partHeadId, int? partHairId, int? partMouthId, int? partEyeId, int? partAccId)
         {
-            BodyType = body;
-            AnimationType = anim;
+            BodyType = body.ToString();
+            AnimationType = anim.ToString();
 
             // 무기 장착 갱신
             WeaponLId = weaponLId;

@@ -1,3 +1,6 @@
+using Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using WebServer;
 using WebServer.Extensions; // 위 확장 메서드 네임스페이스들
 
@@ -15,6 +18,9 @@ public class Program
             .AddApplicationServices(builder.Configuration) // DI 묶음
             .AddHostedWorkers();                     // 캐시 워밍업 등
         builder.Services.AddHealthChecks();
+         
+
+
         var app = builder.Build();
 
         // 2) 미들웨어

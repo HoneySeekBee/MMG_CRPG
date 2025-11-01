@@ -1,9 +1,14 @@
 ﻿using Domain.Entities;
 using Domain.Entities.Characters;
 using Domain.Entities.User;
+using Infrastructure.Persistence.Configurations.Characters;
+using Infrastructure.Persistence.Configurations.Items;
+using Infrastructure.Persistence.Configurations.MasterData;
+using Infrastructure.Persistence.Configurations.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql;
 using System.Reflection.Emit;
 using System.Text.Json.Nodes;
 
@@ -79,8 +84,53 @@ namespace Infrastructure.Persistence
         public DbSet<UserPartySlot> UserPartySlots => Set<UserPartySlot>();
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // 스키마를 꼭 넣기! (public)
+            modelBuilder.HasPostgresEnum<Domain.Enum.Characters.BodySize>("public", "BodySize");
+            modelBuilder.HasPostgresEnum<Domain.Enum.Characters.PartType>("public", "PartType");
+            modelBuilder.HasPostgresEnum<Domain.Enum.Characters.CharacterAnimationType>("public", "CharacterAnimationType");
+
+            modelBuilder.ApplyConfiguration(new CharacterConfiguration());
+
+            modelBuilder.ApplyConfiguration(new CharacterModelConfiguration());
+            modelBuilder.ApplyConfiguration(new CharacterModelPartConfiguration());
+            modelBuilder.ApplyConfiguration(new CharacterModelWeaponConfiguration());
+
+            modelBuilder.ApplyConfiguration(new CharacterPromotionConfiguration());
+            modelBuilder.ApplyConfiguration(new CharacterPromotionMaterialConfiguration());
+
+            modelBuilder.ApplyConfiguration(new CharacterSkillConfiguration());
+            modelBuilder.ApplyConfiguration(new CharacterStatProgressionConfiguration());
+
+            modelBuilder.ApplyConfiguration(new RarityConfiguration());
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
+            modelBuilder.ApplyConfiguration(new FactionConfiguration());
+            modelBuilder.ApplyConfiguration(new ElementConfiguration());
+            modelBuilder.ApplyConfiguration(new ElementAffinityConfiguration());
+            modelBuilder.ApplyConfiguration(new PortraitConfiguration());
+            modelBuilder.ApplyConfiguration(new IconConfiguration());
+
+            modelBuilder.ApplyConfiguration(new ItemConfiguration());
+            modelBuilder.ApplyConfiguration(new ItemStatConfiguration());
+            modelBuilder.ApplyConfiguration(new ItemEffectConfiguration());
+            modelBuilder.ApplyConfiguration(new ItemPriceConfiguration());
+
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new UserCurrencyConfiguration());
+            modelBuilder.ApplyConfiguration(new UserInventoryConfiguration());
+            modelBuilder.ApplyConfiguration(new UserProfileConfiguration());
+            modelBuilder.ApplyConfiguration(new UserCharacterConfiguration());
+            modelBuilder.ApplyConfiguration(new UserCharacterEquipConfiguration());
+            modelBuilder.ApplyConfiguration(new UserPartyConfiguration());
+            modelBuilder.ApplyConfiguration(new UserPartySlotConfiguration());
+            modelBuilder.ApplyConfiguration(new UserCharacterSkillConfiguration());
+
+
+            var et = modelBuilder.Model.FindEntityType(typeof(CharacterModel))!;
+            var prop = et.FindProperty(nameof(CharacterModel.BodyType))!;
+            Console.WriteLine($"BodyType column type = {prop.GetColumnType()}");
             Console.WriteLine("OnModelCreateing");
- 
+
+
             Modeling_Skill(modelBuilder);
             Modeling_SkillLevel(modelBuilder);
 
@@ -89,13 +139,7 @@ namespace Infrastructure.Persistence
              
             Modeling_Combat(modelBuilder);
             Modeling_CombatLog(modelBuilder);
-
-            modelBuilder.HasPostgresEnum<Domain.Enum.Characters.BodySize>("BodySize");
-            modelBuilder.HasPostgresEnum<Domain.Enum.Characters.PartType>("PartType");
-            modelBuilder.HasPostgresEnum<Domain.Enum.Characters.CharacterAnimationType>("CharacterAnimationType");
-
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(GameDBContext).Assembly);
-
+             
             Modeling_StatTypes(modelBuilder);
             Modeling_ItemType(modelBuilder);
             Modeling_EquipSlot(modelBuilder);
@@ -107,6 +151,10 @@ namespace Infrastructure.Persistence
             OnModelCreating_User(modelBuilder);
 
             OnModelCreating_Stage(modelBuilder);
+
+             
+            var p = et.FindProperty(nameof(Domain.Entities.Characters.CharacterModel.BodyType))!;
+            Console.WriteLine($"ClrType={p.ClrType}, ProviderClrType={p.GetProviderClrType()}, ColumnType={p.GetColumnType()}, Converter={(p.GetValueConverter() is null ? "null" : p.GetValueConverter()!.GetType().Name)}");
         }
         
         public void Modeling_Skill(ModelBuilder modelBuilder)
@@ -771,5 +819,16 @@ namespace Infrastructure.Persistence
              .HasForeignKey(x => x.UserId)
              .OnDelete(DeleteBehavior.Cascade);
         }
+        public override async Task<int> SaveChangesAsync(CancellationToken ct = default)
+        {
+            LogDataSourceHash("[SaveChanges]");
+            return await base.SaveChangesAsync(ct);
+        }
+        private void LogDataSourceHash(string tag)
+        {
+            var conn = (NpgsqlConnection)Database.GetDbConnection();
+            Console.WriteLine($"[Ctx {tag}] DS Hash = {conn.DataSource?.GetHashCode()}");
+        }
+
     }
 }

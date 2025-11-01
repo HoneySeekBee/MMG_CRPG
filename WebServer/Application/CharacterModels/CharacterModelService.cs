@@ -77,8 +77,8 @@ namespace Application.CharacterModels
         private static CharacterModelDto ToDto(CharacterModel entity) => new()
         {
             CharacterId = entity.CharacterId,
-            BodyType = entity.BodyType,
-            AnimationType = entity.AnimationType,
+            BodyType = entity.BodyType.ToString(),
+            AnimationType = entity.AnimationType.ToString(),
             WeaponLId = entity.WeaponLId,
             WeaponRId = entity.WeaponRId,
             PartHeadId = entity.PartHeadId,

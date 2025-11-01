@@ -22,25 +22,24 @@ namespace WebServer.HostedServices
         public async Task StartAsync(CancellationToken ct)
         {
             using var scope = _sp.CreateScope();
-            await scope.ServiceProvider.GetRequiredService<IItemTypeCache>().ReloadAsync(ct);
-            await scope.ServiceProvider.GetRequiredService<IIconCache>().ReloadAsync(ct);
-            await scope.ServiceProvider.GetRequiredService<IPortraitsCache>().ReloadAsync(ct);
-            await scope.ServiceProvider.GetRequiredService<IItemCache>().ReloadAsync(ct);
+            var sp = scope.ServiceProvider;
+            await sp.GetRequiredService<IItemTypeCache>().ReloadAsync(ct);
+            await sp.GetRequiredService<IIconCache>().ReloadAsync(ct);
+            await sp.GetRequiredService<IPortraitsCache>().ReloadAsync(ct);
+            await sp.GetRequiredService<IItemCache>().ReloadAsync(ct);
 
-            await scope.ServiceProvider.GetRequiredService<IRarityCache>().ReloadAsync(ct);
-            await scope.ServiceProvider.GetRequiredService<IElementCache>().ReloadAsync(ct);
-            await scope.ServiceProvider.GetRequiredService<IRoleCache>().ReloadAsync(ct);
-            await scope.ServiceProvider.GetRequiredService<IFactionCache>().ReloadAsync(ct);
+            await sp.GetRequiredService<IRarityCache>().ReloadAsync(ct);
+            await sp.GetRequiredService<IElementCache>().ReloadAsync(ct);
+            await sp.GetRequiredService<IRoleCache>().ReloadAsync(ct);
+            await sp.GetRequiredService<IFactionCache>().ReloadAsync(ct);
             
-            await scope.ServiceProvider.GetRequiredService<ISkillCache>().ReloadAsync(ct);
+            await sp.GetRequiredService<ISkillCache>().ReloadAsync(ct);
 
-            await scope.ServiceProvider.GetRequiredService<ICharacterCache>().ReloadAsync(ct);
-            await scope.ServiceProvider.GetRequiredService<ICharacterExpCache>().ReloadAsync(ct);
-            await scope.ServiceProvider.GetRequiredService<ICharacterModelCache>().ReloadAsync(ct);
+            await sp.GetRequiredService<ICharacterCache>().ReloadAsync(ct);
+            await sp.GetRequiredService<ICharacterExpCache>().ReloadAsync(ct);
+            await sp.GetRequiredService<ICharacterModelCache>().ReloadAsync(ct);
 
-            await scope.ServiceProvider.GetRequiredService<IEquipSlotCache>().ReloadAsync(ct);
-
-
+            await sp.GetRequiredService<IEquipSlotCache>().ReloadAsync(ct);
 
         }
 

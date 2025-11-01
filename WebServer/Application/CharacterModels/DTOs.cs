@@ -10,8 +10,8 @@ namespace Application.CharacterModels
     public sealed class CharacterModelDto
     {
         public int CharacterId { get; set; }
-        public Domain.Enum.Characters.BodySize BodyType { get; set; }
-        public Domain.Enum.Characters.CharacterAnimationType AnimationType { get; set; }
+        public string BodyType { get; set; }
+        public string AnimationType { get; set; }
         public int? WeaponLId { get; set; }
         public int? WeaponRId { get; set; }
         public int? PartHeadId { get; set; }
@@ -24,7 +24,7 @@ namespace Application.CharacterModels
     {
         public int PartId { get; init; }
         public string PartKey { get; init; } = "";
-        public PartType PartType { get; init; } 
+        public string PartType { get; init; } 
     }
     public sealed class CharacterModelWeaponDto
     {

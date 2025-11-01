@@ -1,23 +1,33 @@
 ﻿using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 
 public static class PersistenceExtensions
 {
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration cfg)
     {
-        var connString = cfg.GetConnectionString("GameDb")!;
-        var dsb = new NpgsqlDataSourceBuilder(connString);
+        var cs = cfg.GetConnectionString("GameDb")!;
+
+        // (A) DataSource 구성 (enum/json/opt-in)
+
+        var dsb = new NpgsqlDataSourceBuilder(cs);
+        dsb.MapEnum<Domain.Enum.Characters.BodySize>("public.BodySize");
+        dsb.MapEnum<Domain.Enum.Characters.PartType>("public.PartType");
+        dsb.MapEnum<Domain.Enum.Characters.CharacterAnimationType>("public.CharacterAnimationType");
         dsb.EnableDynamicJson();
+        //dsb.EnableUnmappedTypes(); // 디버깅 혼란만 줌. 끄는 걸 권장.
+
         var dataSource = dsb.Build();
+        services.AddSingleton(dataSource);
 
-        services.AddDbContextPool<GameDBContext>(opt =>
-            opt.UseNpgsql(dataSource, npg => npg.EnableRetryOnFailure())
-               .EnableSensitiveDataLogging(false));
-
-        services.AddPooledDbContextFactory<GameDBContext>(opt =>
-            opt.UseNpgsql(dataSource, npg => npg.EnableRetryOnFailure())
-               .EnableSensitiveDataLogging(false));
+        // (C) DbContextFactory가 반드시 그 DataSource를 쓰도록 연결
+        services.AddDbContextFactory<GameDBContext>((sp, opt) =>
+        {
+            var ds = sp.GetRequiredService<NpgsqlDataSource>();
+            Console.WriteLine($"[Startup] DataSource hash = {ds.GetHashCode()}");
+            opt.UseNpgsql(ds);
+        });
 
         return services;
     }
