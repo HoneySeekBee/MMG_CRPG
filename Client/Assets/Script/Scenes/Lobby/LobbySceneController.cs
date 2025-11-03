@@ -1,3 +1,5 @@
+
+using Client.Systems;
 using Contracts.Protos;
 using Game.Core;
 using Game.Data;
@@ -29,7 +31,7 @@ namespace Game.Scenes.Lobby
 
         private void Awake()
         {
-            if (Http == null) Http = ProtoHttpClient.Instance ?? FindObjectOfType<ProtoHttpClient>();
+            if (Http == null) Http = AppBootstrap.Instance.Http ?? FindObjectOfType<AppBootstrap>().Http;
 
             if (Instance != null && Instance != this)
             {

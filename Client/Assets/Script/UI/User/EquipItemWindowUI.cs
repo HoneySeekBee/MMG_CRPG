@@ -15,6 +15,7 @@ using Game.Scenes.Lobby;
 using UnityEngine.TextCore.Text;
 using Game.Network;
 using Unity.VisualScripting;
+using Client.Systems;
 
 namespace MMG_CRPG.UI
 {
@@ -200,7 +201,7 @@ namespace MMG_CRPG.UI
             UserCharacterDeatailUI detailUI = UserCharacterDeatailUI.Instance;
             string path = ApiRoutes.UserCharacterEquip(GameState.Instance.CurrentUser.UserId, detailUI.EquipUI.currentCharacter.Id, slotData.Id);
             Debug.Log($"ÀåÂø : {path}");
-            StartCoroutine(ProtoHttpClient.Instance.Put(path, req, SetEquipmentResponse.Parser, OnEquipResponse));
+            StartCoroutine(AppBootstrap.Instance.Http.Put(path, req, SetEquipmentResponse.Parser, OnEquipResponse));
         } 
 
         private void OnEquipResponse(ApiResult<SetEquipmentResponse> result)
