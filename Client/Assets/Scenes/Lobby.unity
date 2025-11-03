@@ -3782,7 +3782,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 229438217}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &229438219
 Camera:
   m_ObjectHideFlags: 0
@@ -12861,7 +12861,6 @@ MonoBehaviour:
   ItemTypeUI: {fileID: 1765822454}
   Spinner: {fileID: 536088564}
   Popup: {fileID: 527495891}
-  Http: {fileID: 0}
 --- !u!1 &907270121
 GameObject:
   m_ObjectHideFlags: 0

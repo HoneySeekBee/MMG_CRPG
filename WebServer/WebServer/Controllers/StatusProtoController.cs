@@ -1,4 +1,5 @@
 ﻿using Contracts.Protos;
+using Google.Protobuf;
 using Microsoft.AspNetCore.Mvc;
 namespace WebServer.Controllers
 {
@@ -8,17 +9,18 @@ namespace WebServer.Controllers
     public sealed class StatusProtoController : ControllerBase
     {
         [HttpGet]
-        public ActionResult<Status> Get()
+        public IActionResult Get()
         {
-            // 실제 운영 로직 연결 전, 최소 형태
-            var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-            return Ok(new Status
+            var res = new StatusPb
             {
                 Maintenance = false,
                 ForceUpdate = false,
-                Message = "",
-                ServerUnixMs = now
-            });
+                Message = "상태에 대해서 알려줄게요",
+                ServerUnixMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
+            };
+
+            Console.WriteLine($"[StatusReq] - 누군가 서버에 상태 확인 {res.Message} : ");
+            return File(res.ToByteArray(), "application/x-protobuf");  
         }
     }
 }

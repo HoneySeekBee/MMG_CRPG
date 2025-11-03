@@ -20,7 +20,7 @@ message PlayerBootstrap {
   int64  server_unix_ms = 5;
 }
 
-message Status {
+message StatusPb {
   bool maintenance = 1;
   bool force_update = 2;
   string message = 3;

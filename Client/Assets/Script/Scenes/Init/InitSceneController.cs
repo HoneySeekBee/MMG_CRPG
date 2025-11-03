@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Contracts.Protos;
+using Client.Systems;
 
 namespace Game.Scenes.Init
 {
@@ -18,14 +19,14 @@ namespace Game.Scenes.Init
 
         private IEnumerator Start()
         {
-            if (Http == null) Http = FindObjectOfType<ProtoHttpClient>();
+            if (Http == null) Http = FindObjectOfType<AppBootstrap>().Http;
             if (SceneController.Instance == null) new GameObject("SceneController").AddComponent<Game.Managers.SceneController>();
             if (GameState.Instance == null) new GameObject("GameState").AddComponent<Game.Data.GameState>();
 
             Spinner?.Show(true);
 
             // JSON: Http.Get<StatusDto>(...)  ¡æ  PROTO: Http.Get<Status>(..., Status.Parser, ...)
-            yield return Http.Get(StatusRoute(), Status.Parser, (res) =>
+            yield return Http.Get(StatusRoute(), StatusPb.Parser, (res) =>
             {
                 if (!res.Ok)
                 {
