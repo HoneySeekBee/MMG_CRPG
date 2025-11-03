@@ -3,6 +3,7 @@ using Game.Auth;
 using Game.Data;
 using Game.Managers;
 using Game.Network;
+using System;
 using System.Collections; 
 using UnityEngine;
 
@@ -41,6 +42,11 @@ namespace Client.Systems
 
         IEnumerator Start()
         {
+            Debug.Log("테스트용 로그인 기록 삭제");
+            PlayerPrefs.DeleteKey("refresh_token");
+            PlayerPrefs.Save();
+
+
             Debug.Log("=== [AppBootstrap] Start: Boot Begin ===");
             Spinner?.Show(true);
 
@@ -85,17 +91,20 @@ namespace Client.Systems
         IEnumerator LoadCaches()
         {
             Debug.Log("[AppBootstrap] 캐시 로드 시작");
-            yield return new WaitForSeconds(0.15f);
-            Debug.Log("[TODO] MasterDataCache.Instance.CoLoadMasterData(Http, Popup)");
-            yield return new WaitForSeconds(0.15f);
-            Debug.Log("[TODO] ItemCache.Instance.CoLoadItemData(Http, Popup)");
-            yield return new WaitForSeconds(0.15f);
-            Debug.Log("[TODO] CharacterCache.Instance.CoLoadCharacterCache(Http, Popup)");
-            yield return new WaitForSeconds(0.15f);
-            Debug.Log("[TODO] SkillCache.Instance.CoLoadSkillData(Http, Popup)");
-            yield return new WaitForSeconds(0.15f);
-            Debug.Log("[TODO] UIImageCache.Instance.PreloadAllUISprites()");
+            bool done1 = false, done2 = false, done3 = false, done4 = false, done5 = false;
+            StartCoroutine(Wrap(MasterDataCache.Instance.CoLoadMasterData(Http, Popup), () => done1 = true));
+            StartCoroutine(Wrap(ItemCache.Instance.CoLoadItemData(Http, Popup), () => done2 = true));
+            StartCoroutine(Wrap(CharacterCache.Instance.CoLoadCharacterCache(Http, Popup), () => done3 = true));
+            StartCoroutine(Wrap(SkillCache.Instance.CoLoadSkillData(Http, Popup), () => done4 = true));
+            StartCoroutine(Wrap(UIImageCache.Instance.PreloadAllUISprites(), () => done5 = true));
+            yield return new WaitUntil(() => done1 && done2 && done3 && done4 && done5); 
             Debug.Log("[AppBootstrap] 캐시 로드 완료");
+        }
+        // 각 코루틴 끝났을 때 콜백 호출하도록 래핑
+        IEnumerator Wrap(IEnumerator routine, Action onDone)
+        {
+            yield return routine;
+            onDone?.Invoke();
         }
         IEnumerator TryAutoLogin()
         {

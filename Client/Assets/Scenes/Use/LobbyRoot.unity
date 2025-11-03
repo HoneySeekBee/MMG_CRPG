@@ -721,7 +721,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Login
+  m_text: Main
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f2fc11938283f5448b04b315670c5163, type: 2}
   m_sharedMaterial: {fileID: 4758080039170421286, guid: f2fc11938283f5448b04b315670c5163, type: 2}
@@ -855,7 +855,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Main
+  m_text: Loggin
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f2fc11938283f5448b04b315670c5163, type: 2}
   m_sharedMaterial: {fileID: 4758080039170421286, guid: f2fc11938283f5448b04b315670c5163, type: 2}
@@ -1919,7 +1919,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8cfd3b9ddedc571449bb9504afbe4aaf, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e8a1458e6c0233f45836f48e244a8ed6, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2919,7 +2919,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2755516192515038566, guid: 758131cc978604ada8dc526080f4acdf, type: 3}
       propertyPath: m_Name
-      value: Canvas
+      value: LobbyRootCanvas
       objectReference: {fileID: 0}
     - target: {fileID: 7500047228102365272, guid: 758131cc978604ada8dc526080f4acdf, type: 3}
       propertyPath: m_ReferenceResolution.y
@@ -2942,6 +2942,12 @@ PrefabInstance:
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 2558707949007190388, guid: 758131cc978604ada8dc526080f4acdf, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 1668729800}
+    - targetCorrespondingSourceObject: {fileID: 2558707949007190388, guid: 758131cc978604ada8dc526080f4acdf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 622753769}
+    - targetCorrespondingSourceObject: {fileID: 2558707949007190388, guid: 758131cc978604ada8dc526080f4acdf, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 1985618361}
     - targetCorrespondingSourceObject: {fileID: 2558707949007190388, guid: 758131cc978604ada8dc526080f4acdf, type: 3}
       insertIndex: -1
@@ -2957,17 +2963,14 @@ PrefabInstance:
       addedObject: {fileID: 149345990}
     - targetCorrespondingSourceObject: {fileID: 2558707949007190388, guid: 758131cc978604ada8dc526080f4acdf, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1668729800}
-    - targetCorrespondingSourceObject: {fileID: 2558707949007190388, guid: 758131cc978604ada8dc526080f4acdf, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 622753769}
-    - targetCorrespondingSourceObject: {fileID: 2558707949007190388, guid: 758131cc978604ada8dc526080f4acdf, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1903412888}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2755516192515038566, guid: 758131cc978604ada8dc526080f4acdf, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1495939543}
+    - targetCorrespondingSourceObject: {fileID: 2755516192515038566, guid: 758131cc978604ada8dc526080f4acdf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1495939544}
   m_SourcePrefab: {fileID: 100100000, guid: 758131cc978604ada8dc526080f4acdf, type: 3}
 --- !u!224 &1495939541 stripped
 RectTransform:
@@ -3001,6 +3004,19 @@ MonoBehaviour:
   panelBattle: {fileID: 926508014}
   panelAdventure: {fileID: 502386193}
   panelShop: {fileID: 149345989}
+  popupRoot: {fileID: 1495939541}
+--- !u!114 &1495939544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495939542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5284992c748a5843b56474a26b0eaf0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1668729799
 GameObject:
   m_ObjectHideFlags: 0

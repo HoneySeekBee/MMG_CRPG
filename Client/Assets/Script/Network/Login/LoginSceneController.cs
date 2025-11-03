@@ -53,21 +53,6 @@ namespace Game.Scenes.Login
             if (!isActiveAndEnabled) return;
             StartCoroutine(CoGuestLogin());
         }
-        private void OnClickLogin()
-        {
-            if (!isActiveAndEnabled) return;
-
-            var account = AccountInput != null ? AccountInput.text?.Trim() : "";
-            var password = PasswordInput != null ? PasswordInput.text : "";
-
-            if (string.IsNullOrEmpty(account) || string.IsNullOrEmpty(password))
-            {
-                Popup?.Show("아이디/비밀번호를 입력하세요.");
-                return;
-            }
-            StartCoroutine(CoPasswordLogin(account, password));
-        }
-
         private IEnumerator CoGuestLogin()
         {
             // 버튼 중복 입력 방지
@@ -142,6 +127,21 @@ namespace Game.Scenes.Login
             // 5) 로비로 전환
             SceneController.Instance.Go("Lobby");
         }
+        private void OnClickLogin()
+        {
+            if (!isActiveAndEnabled) return;
+
+            var account = AccountInput != null ? AccountInput.text?.Trim() : "";
+            var password = PasswordInput != null ? PasswordInput.text : "";
+
+            if (string.IsNullOrEmpty(account) || string.IsNullOrEmpty(password))
+            {
+                Popup?.Show("아이디/비밀번호를 입력하세요.");
+                return;
+            }
+            StartCoroutine(CoPasswordLogin(account, password));
+        }
+
         private IEnumerator CoPasswordLogin(string account, string password)
         {
             if (GuestLoginButton) GuestLoginButton.interactable = false;

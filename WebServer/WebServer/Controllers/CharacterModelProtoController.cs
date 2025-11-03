@@ -9,7 +9,6 @@ namespace WebServer.Controllers
     [ApiController]
     [Route("api/pb/character-model")]
     [Produces("application/x-protobuf")]
-    [Consumes("application/x-protobuf")]
     public sealed class CharacterModelProtoController : ControllerBase
     {
         private readonly ICharacterModelRepository _repo;
@@ -32,9 +31,11 @@ namespace WebServer.Controllers
             };
         }
         [HttpPost("list")]
-        public async Task<ListCharacterModelsResponsePb> List([FromBody] ListCharacterModelsRequestPb req, CancellationToken ct)
+        [Consumes("application/x-protobuf")]
+        public async Task<ListCharacterModelsResponsePb> List(  [FromBody] ListCharacterModelsRequestPb? req,  CancellationToken ct)
         {
             await Task.CompletedTask;
+            req ??= new ListCharacterModelsRequestPb();
 
             IEnumerable<CharacterModelDto> src;
             if (req.CharacterIds == null || req.CharacterIds.Count == 0)
@@ -47,6 +48,8 @@ namespace WebServer.Controllers
 
             var res = new ListCharacterModelsResponsePb();
             res.Models.AddRange(src.Select(m => m.ToProto()));
+
+            Console.WriteLine($"[Request] CharacterModel Proto {src.Count()}");
             return res;
         }
 

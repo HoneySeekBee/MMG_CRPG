@@ -997,6 +997,18 @@ PrefabInstance:
       propertyPath: LoginSceneScript
       value: 
       objectReference: {fileID: 2065302397}
+    - target: {fileID: 6528439033343242758, guid: 086b594206f2a074c93cf03a6d9c747a, type: 3}
+      propertyPath: LoginButton
+      value: 
+      objectReference: {fileID: 4123720345862169352}
+    - target: {fileID: 6528439033343242758, guid: 086b594206f2a074c93cf03a6d9c747a, type: 3}
+      propertyPath: AccountInput
+      value: 
+      objectReference: {fileID: 4123720345862169354}
+    - target: {fileID: 6528439033343242758, guid: 086b594206f2a074c93cf03a6d9c747a, type: 3}
+      propertyPath: PasswordInput
+      value: 
+      objectReference: {fileID: 4123720345862169353}
     - target: {fileID: 7269935801128658057, guid: 086b594206f2a074c93cf03a6d9c747a, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
