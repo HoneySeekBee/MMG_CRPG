@@ -40,8 +40,7 @@ namespace Game.Data
             PlayerId = PlayerPrefs.GetString(Constants.PlayerPrefs_PlayerId, "");
 
         }
-
-
+         
         public void SaveAuth(string playerId, string accessToken, string refreshToken)
         {
             PlayerId = playerId; AccessToken = accessToken; RefreshToken = refreshToken;

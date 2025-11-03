@@ -16,6 +16,11 @@ namespace WebServer.Controllers
         {
             _cache = cache;
         }
+        [HttpGet]  
+        public IActionResult GetDefault()
+        {
+            return GetGrouped(); // 기본적으로 grouped 형태 리턴
+        }
 
         [HttpGet("grouped")]
         public IActionResult GetGrouped()

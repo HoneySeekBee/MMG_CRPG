@@ -82,6 +82,7 @@
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\StaticCharacter.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Character_Controller\CharacterMover.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterBase.cs" />
+    <Compile Include="Assets\Script\UI\Popup\LobbyPopup.cs" />
     <Compile Include="Assets\Script\UI\User\UserCharacterEquipUI.cs" />
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\ColorSwapper.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\Movement\MovementStates\Obstacles\LadderObstacleState.cs" />
@@ -103,8 +104,8 @@
     <Compile Include="Assets\Script\UI\User\EquipItemWindowUI.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Obstacle\ObstacleBase.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\CharacterSoundController.cs" />
-    <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\KingsGrummy.cs" />
     <Compile Include="Assets\Script\Network\ApiConfig.cs" />
+    <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\KingsGrummy.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\Movement\MovementStates\IdleMovementState.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\CandyKingBehavior.cs" />
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\Transition.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="Assets\Script\Network\RemoteIconLoader.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\Movement\MovementStates\LadderMovementState.cs" />
     <Compile Include="Assets\Script\Scenes\Init\InitSceneController.cs" />
+    <Compile Include="Assets\Script\UI\UIPopup.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\NuttyKnight.cs" />
     <Compile Include="Assets\Script\Scenes\Lobby\CurrencyUI.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\CharacterAnimator.cs" />
@@ -177,8 +179,10 @@
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Obstacle\ObstacleGroup.cs" />
     <Compile Include="Assets\Script\Network\ApiRoutes.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\PatrolByPointsCharacterState.cs" />
+    <Compile Include="Assets\Script\UI\UIPrefabPool.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Obstacle\LadderObstacle.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CandyKing.cs" />
+    <Compile Include="Assets\Script\UI\UIPopupPool.cs" />
     <Compile Include="Assets\Script\Cache\SkillCache.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Obstacle\TeleportObstacle.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\FaceManagement\FaceType.cs" />

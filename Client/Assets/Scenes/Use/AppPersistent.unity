@@ -455,6 +455,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1942113640}
   - component: {fileID: 1942113642}
+  - component: {fileID: 1942113647}
+  - component: {fileID: 1942113646}
+  - component: {fileID: 1942113645}
+  - component: {fileID: 1942113644}
+  - component: {fileID: 1942113643}
   m_Layer: 0
   m_Name: AppSystem
   m_TagString: Untagged
@@ -492,6 +497,69 @@ MonoBehaviour:
   ApiConfig: {fileID: 11400000, guid: d379a6b8416ec444da21a58e1270e732, type: 2}
   Spinner: {fileID: 1012458842}
   Popup: {fileID: 0}
+--- !u!114 &1942113643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1942113639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29e2a05cab7b5754cb789750bdcafa2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiSpriteLabel: UISprite
+--- !u!114 &1942113644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1942113639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffcd3df25d37ec3499ef8078e669dba5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1942113645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1942113639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fab715c0577b7934a9e3e1ecdf88d857, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ExpVersion: 0
+  CharacterVersion: 0
+--- !u!114 &1942113646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1942113639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18ab795acb7d2584e8d3622a408d7229, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1942113647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1942113639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1587f22cfe2bb374faf6daa3503fadf9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

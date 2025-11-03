@@ -38,8 +38,7 @@ namespace Game.Scenes.Lobby
                 Destroy(gameObject);
                 return;
             }
-            Instance = this;
-
+            Instance = this; 
         }
 
         private void Start()
