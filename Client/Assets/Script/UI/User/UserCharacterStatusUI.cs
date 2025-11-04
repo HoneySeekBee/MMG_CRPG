@@ -27,9 +27,7 @@ public class UserCharacterStatusUI : MonoBehaviour
     [SerializeField] private TMP_Text criRate_text;
     [SerializeField] private TMP_Text criDamage_text;
     [SerializeField] private Image[] star_imgs;
-
-    const string YellowStarKey = "StarYellow";
-    const string GrayStarKey = "StarGray"; 
+     
     public void Set()
     {
         UserCharacterSummaryPb thisCharacter = UserCharacterDeatailUI.Instance.status;
@@ -54,8 +52,8 @@ public class UserCharacterStatusUI : MonoBehaviour
         criRate_text.text = thisStat.CritRate.ToString();
         criDamage_text.text = thisStat.CritDamage.ToString();
 
-        Sprite yellowStar = UIImageCache.Instance.Get(YellowStarKey);
-        Sprite grayStar = UIImageCache.Instance.Get(GrayStarKey);
+        Sprite yellowStar = UIImageCache.Instance.Get(UIImageCache.YellowStarKey);
+        Sprite grayStar = UIImageCache.Instance.Get(UIImageCache.GrayStarKey);
 
         Debug.Log($"³ë¶õ º° {yellowStar == null}");
         for(int i = 0; i < star_imgs.Length; i++)

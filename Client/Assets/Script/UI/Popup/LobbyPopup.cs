@@ -5,6 +5,7 @@ using Game.Lobby;
 using Game.Network;
 using Game.UICommon;
 using Lobby;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -35,7 +36,6 @@ public class LobbyPopup : UIPopup
     [SerializeField] private Transform hiddenRoot;       // 미리 만들어둘 숨김용
 
     private UIPopupPool _popupPool;
-    private bool _initialized;
 
     private void Awake()
     {
@@ -135,9 +135,6 @@ public class LobbyPopup : UIPopup
     public override void Initialize()
     {
         base.Initialize();
-        if (_initialized) return;
-        _initialized = true;
-
         // 스피너 기본 꺼두기
         if (Spinner) Spinner.gameObject.SetActive(false);
     }
@@ -176,5 +173,16 @@ public class LobbyPopup : UIPopup
             Spinner.gameObject.SetActive(on);
             Spinner.Show(on);
         }
+    }
+    public void Set_BattleLobbyBtn(Action onBattleLobbyClicked)
+    {
+        // 혹시 중복 리스너 방지
+        AdventureBtn.onClick.RemoveAllListeners();
+
+        // 인자로 받은 Action을 리스너로 연결
+        AdventureBtn.onClick.AddListener(() =>
+        {
+            onBattleLobbyClicked?.Invoke();
+        });
     }
 }
