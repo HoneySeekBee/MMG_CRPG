@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Contracts.Protos;
-using Contracts.EquipSlots;
-using OpenCover.Framework.Model;
+using Contracts.EquipSlots; 
 
 namespace MMG_CRPG.UI
 {

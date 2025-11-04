@@ -10,6 +10,10 @@ public class UIImageCache : MonoBehaviour
     public static UIImageCache Instance { get; private set; }
 
     [SerializeField] private string uiSpriteLabel = "UISprite";
+    public const string YellowStarKey = "StarYellow";
+    public const string GrayStarKey = "StarGray";
+    public const string ButtonGreenKey = "Green";
+    public const string ButtonGrayKey = "Gray";
 
     private readonly Dictionary<string, AsyncOperationHandle<Sprite>> _cache = new();
     private AsyncOperationHandle<IList<IResourceLocation>> _locationsHandle;

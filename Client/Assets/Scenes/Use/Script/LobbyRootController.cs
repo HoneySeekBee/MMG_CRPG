@@ -39,7 +39,7 @@ public class LobbyRootController : MonoBehaviour
         {
             ["Login"] = OpenLoginPopup,
             ["Main"] = () => OpenLobbyPopup(),
-            // ["Shop"] = () => ShowShopTips(),
+            ["Battle"] = () => OpenBattleLobbyPopup(),
         };
 
         btnLogin.onClick.AddListener(() => Show("Login"));
@@ -109,7 +109,27 @@ public class LobbyRootController : MonoBehaviour
         }
 
         var popup = await popupPool.ShowPopupAsync<LobbyPopup>(key, popupRoot);
-        if (popup == null) { Debug.LogError("LoginPopup open failed"); return; }
-         
+        if (popup == null) { Debug.LogError("LobbyPopup open failed"); return; }
+
+
+        popup.Set_BattleLobbyBtn(() => Show("Battle"));
+    }
+    private async void OpenBattleLobbyPopup()
+    {
+        // Addressables 키 이름은 프로젝트에 맞게
+        const string key = "BattleLobbyPopup";
+        // 풀에서 열기
+        var popupPool = UIPrefabPool.Instance as UIPopupPool;
+        if (popupPool == null)
+        {
+            // 혹시 베이스만 살아있거나 초기화 순서 꼬였을 때 대비
+            popupPool = FindObjectOfType<UIPopupPool>();
+            if (popupPool == null) { Debug.LogError("UIPopupPool not found"); return; }
+        }
+
+        var popup = await popupPool.ShowPopupAsync<BattleLobbyPopup>(key, popupRoot);
+        if (popup == null) { Debug.LogError("BattleLobbyPopup open failed"); return; }
+
+        popup.Set_AdventureBtn(() => Show("Adventure"));
     }
 }

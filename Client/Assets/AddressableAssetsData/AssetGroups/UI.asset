@@ -27,6 +27,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 256809b7a1f153d44b34ab2c8bad9321
+    m_Address: BattleLobbyPopup
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 525f1731c1d54734ca0dfb0470abe634
     m_Address: LobbyPopupUI
     m_ReadOnly: 0
