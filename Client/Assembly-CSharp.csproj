@@ -170,6 +170,7 @@
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CroakusTheGreat.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Obstacle\ObstacleCreateManager.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Obstacle\Door\DoorComponentBase.cs" />
+    <Compile Include="Assets\Script\Data\ChapterProgressInfo.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\Movement\MovementStates\RotateMovementState.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Obstacle\ObstacleType.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\Movement\MovementBase.cs" />
@@ -184,6 +185,7 @@
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\PatrolByPointsCharacterState.cs" />
     <Compile Include="Assets\Script\UI\UIPrefabPool.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Obstacle\LadderObstacle.cs" />
+    <Compile Include="Assets\Script\Cache\BattleContentsCache.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CandyKing.cs" />
     <Compile Include="Assets\Script\UI\UIPopupPool.cs" />
     <Compile Include="Assets\Script\Cache\SkillCache.cs" />
@@ -198,6 +200,7 @@
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\Movement\MovementStates\IMovementState.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Manager\CharacterManager.cs" />
     <Compile Include="Assets\Script\Scenes\Lobby\UserCharacterDeatailUI.cs" />
+    <Compile Include="Assets\Script\Data\StageProgressManager.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\Movement\MovementStates\Obstacles\IObstacleMovementState.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\FaceManagement\FaceMesh.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\Movement\Movement.cs" />

@@ -26,7 +26,8 @@ MonoBehaviour:
   - m_GUID: 30d6a0d6f3b32405da9ff113866c34ac
     m_Address: Green
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - UISprite
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 77f356499436245caab55dafd6a3006b
     m_Address: StarGray
@@ -37,7 +38,8 @@ MonoBehaviour:
   - m_GUID: ebd4078abdc1e4038961aa1423bb18bf
     m_Address: Gray
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - UISprite
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 70aef510b6431584d83ab967b21d913a, type: 2}

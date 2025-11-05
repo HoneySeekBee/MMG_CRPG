@@ -40,6 +40,7 @@ public class LobbyRootController : MonoBehaviour
             ["Login"] = OpenLoginPopup,
             ["Main"] = () => OpenLobbyPopup(),
             ["Battle"] = () => OpenBattleLobbyPopup(),
+            ["Adventure"] = () => OpenAdventureLobbyPopup(),
         };
 
         btnLogin.onClick.AddListener(() => Show("Login"));
@@ -131,5 +132,23 @@ public class LobbyRootController : MonoBehaviour
         if (popup == null) { Debug.LogError("BattleLobbyPopup open failed"); return; }
 
         popup.Set_AdventureBtn(() => Show("Adventure"));
+    }
+    private async void OpenAdventureLobbyPopup()
+    {
+        // Addressables 키 이름은 프로젝트에 맞게
+        const string key = "AdventureLobbyPopup";
+        // 풀에서 열기
+        var popupPool = UIPrefabPool.Instance as UIPopupPool;
+        if (popupPool == null)
+        {
+            // 혹시 베이스만 살아있거나 초기화 순서 꼬였을 때 대비
+            popupPool = FindObjectOfType<UIPopupPool>();
+            if (popupPool == null) { Debug.LogError("UIPopupPool not found"); return; }
+        }
+
+        var popup = await popupPool.ShowPopupAsync<AdventureLobbyPopup>(key, popupRoot);
+        if (popup == null) { Debug.LogError("BattleLobbyPopup open failed"); return; }
+
+        popup.Set();
     }
 }

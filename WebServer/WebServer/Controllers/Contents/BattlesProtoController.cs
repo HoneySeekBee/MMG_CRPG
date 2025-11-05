@@ -6,7 +6,8 @@ using WebServer.Mappers.Contents;
 namespace WebServer.Controllers.Contents
 {
     [ApiController]
-    [Route("api/pb/[controller]")]
+    [Route("api/pb/battles")]
+    [Produces("application/x-protobuf")]
     public class BattlesProtoController : ControllerBase
     {
         private readonly IBattlesCache _battlesCache;

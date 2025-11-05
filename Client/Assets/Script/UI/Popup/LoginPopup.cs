@@ -144,7 +144,6 @@ public class LoginPopup : UIPopup
         Http.SetToken(access);
          
         UserProfilePb profile = null;
-
         // /api/pb/me/profile 호출 
         yield return Http.Get(ApiRoutes.MeProfile, UserProfilePb.Parser, (ApiResult<UserProfilePb> res) =>
         {
@@ -161,6 +160,37 @@ public class LoginPopup : UIPopup
             GameState.Instance.InitUser(pid, profile.Nickname, profile.Level);
             GameState.Instance.CurrentUser ??= new UserData(pid, "Unknown", 1);
             GameState.Instance.CurrentUser.SetUserProfile(profile);
+        }); 
+        yield return Http.Get(ApiRoutes.UserStageProgress, MyStageProgressListPb.Parser, (ApiResult<MyStageProgressListPb> res) =>
+        {
+            if (!res.Ok)
+            {
+                Debug.LogError($"[UserStageProgress] 요청 실패: {res.Message}");
+                Popup?.Show($"스테이지 불러오기 실패: {res.Message}");
+                return;
+            }
+
+            if (res.Data == null)
+            {
+                Debug.LogWarning("[UserStageProgress] Data가 null입니다 (서버 응답 없음)");
+                return;
+            }
+
+            // 진행 데이터가 없는 경우 = 신규 유저
+            if (res.Data.Progresses.Count == 0)
+            {
+                Debug.Log("[UserStageProgress] 진행 데이터 없음 (신규 유저)");
+                var user = GameState.Instance.CurrentUser;
+                if (user != null)
+                    user.StageProgress.Sync(res.Data);
+                return;
+            }
+
+            // 정상 데이터 있을 때만 싱크
+            Debug.Log($"[UserStageProgress] {res.Data.Progresses.Count}개 스테이지 진행 데이터 로드됨");
+            GameState.Instance.CurrentUser?.SyncStageProgress(res.Data);
+            // GameState에 싱크
+            GameState.Instance.CurrentUser?.SyncStageProgress(res.Data);
         });
         if (profile == null)
         {

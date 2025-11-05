@@ -33,12 +33,10 @@ public class UserData
     public Dictionary<int, UserCharacterSummaryPb> UserCharactersDict
         => _userCharactersDict.ToDictionary(kv => kv.Key, kv => kv.Value.Clone()); // 외부에 Clone
 
+    public StageProgressManager StageProgress { get; } = new StageProgressManager();
 
-    // 스테이지 진행
-    private readonly HashSet<int> _clearedStages = new();
-    public IReadOnlyCollection<int> ClearedStages => _clearedStages;
 
-   
+
     public UserData(int userId, string nickname, int level)
     {
         UserId = userId;
@@ -161,19 +159,35 @@ public class UserData
                          .ToList();
     public UserCharacterSummaryPb TryGetCharacter(int characterId)
         => _userCharactersDict.TryGetValue(characterId, out var ch) ? ch.Clone() : null; 
-    
-    public void SyncStages(IEnumerable<int> clearedStageIds)
-    {
-        _clearedStages.Clear();
-        foreach (var id in clearedStageIds) _clearedStages.Add(id);
-    }
+     
     public void SetUserProfile(UserProfilePb _userProfile)
     {
         UserProfilePb = _userProfile;
         Debug.Log($"[SetUserProfile] {UserProfilePb == null}");
     }
-    public void MarkStageCleared(int stageId) => _clearedStages.Add(stageId);
-
     private static DateTimeOffset ToDto(Timestamp ts)
         => ts == null ? DateTimeOffset.MinValue : ts.ToDateTimeOffset();
- }
+
+    public void SyncStageProgress(MyStageProgressListPb pb)
+    { 
+        StageProgress.Sync(pb);
+    }
+    public bool TryGetStageProgress(int stageId, out UserStageProgressPb progress)
+    {
+        var p = StageProgress.GetProgress(stageId);
+        progress = p;
+        return p != null;
+    }
+
+    public int GetStars(int stageId)
+    {
+        var p = StageProgress.GetProgress(stageId);
+        return p == null ? 0 : (int)p.Stars;
+    }
+
+    public bool IsStageCleared(int stageId)
+    {
+        var p = StageProgress.GetProgress(stageId);
+        return p != null && p.Cleared;
+    }
+}
