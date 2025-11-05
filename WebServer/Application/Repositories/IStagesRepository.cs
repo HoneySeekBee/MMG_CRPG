@@ -1,11 +1,11 @@
-﻿using Application.Stages;
-using Domain.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Application.Common.Models;
+using Domain.Entities.Contents;
+using Application.Contents.Stages;
 
 namespace Application.Repositories
 {

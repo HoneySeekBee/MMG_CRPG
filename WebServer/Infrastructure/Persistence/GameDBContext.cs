@@ -1,7 +1,9 @@
 ﻿using Domain.Entities;
 using Domain.Entities.Characters;
+using Domain.Entities.Contents;
 using Domain.Entities.User;
 using Infrastructure.Persistence.Configurations.Characters;
+using Infrastructure.Persistence.Configurations.Contents;
 using Infrastructure.Persistence.Configurations.Items;
 using Infrastructure.Persistence.Configurations.MasterData;
 using Infrastructure.Persistence.Configurations.Users;
@@ -72,6 +74,9 @@ namespace Infrastructure.Persistence
         public DbSet<StageDrop> StageDrops => Set<StageDrop>();
         public DbSet<StageFirstClearReward> StageFirstClearRewards => Set<StageFirstClearReward>();
         public DbSet<StageRequirement> StageRequirements => Set<StageRequirement>();
+        public DbSet<StageBatch> StageBatches => Set<StageBatch>();
+
+
         public DbSet<UserStageProgress> UserStageProgresses => Set<UserStageProgress>();
         public DbSet<UserCurrency> UserCurrencies => Set<UserCurrency>();
         public DbSet<UserInventory> UserInventories => Set<UserInventory>();
@@ -82,6 +87,11 @@ namespace Infrastructure.Persistence
         public DbSet<CharacterExp> CharacterExps => Set<CharacterExp>();
         public DbSet<UserParty> UserParties => Set<UserParty>();
         public DbSet<UserPartySlot> UserPartySlots => Set<UserPartySlot>();
+        #region Contents
+        public DbSet<Battle> Battles => Set<Battle>();
+        public DbSet<Chapter> Chapters => Set<Chapter>();
+
+        #endregion
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // 스키마를 꼭 넣기! (public)
@@ -123,6 +133,21 @@ namespace Infrastructure.Persistence
             modelBuilder.ApplyConfiguration(new UserPartyConfiguration());
             modelBuilder.ApplyConfiguration(new UserPartySlotConfiguration());
             modelBuilder.ApplyConfiguration(new UserCharacterSkillConfiguration());
+            modelBuilder.ApplyConfiguration(new UserStageProgressConfiguration());
+
+            #region Contents
+            modelBuilder.ApplyConfiguration(new BattlesConfiguration());
+            modelBuilder.ApplyConfiguration(new ChapterConfiguration());
+
+            modelBuilder.ApplyConfiguration(new StageConfiguration());
+            modelBuilder.ApplyConfiguration(new StageDropConfiguration());
+            modelBuilder.ApplyConfiguration(new StageFirstClearRewardConfiguration());
+            modelBuilder.ApplyConfiguration(new StageRequirementsConfiguration());
+            modelBuilder.ApplyConfiguration(new StageWaveConfiguration());
+            modelBuilder.ApplyConfiguration(new StageWaveEnemiesConfiguration());
+            modelBuilder.ApplyConfiguration(new StageBatchConfiguration());
+
+            #endregion
 
 
             var et = modelBuilder.Model.FindEntityType(typeof(CharacterModel))!;
@@ -149,8 +174,7 @@ namespace Infrastructure.Persistence
 
             Modeling_Synergy(modelBuilder);
             OnModelCreating_User(modelBuilder);
-
-            OnModelCreating_Stage(modelBuilder);
+             
 
              
             var p = et.FindProperty(nameof(Domain.Entities.Characters.CharacterModel.BodyType))!;
@@ -578,247 +602,8 @@ namespace Infrastructure.Persistence
             e.Property(x => x.CreatedAt).IsRequired();
 
             e.HasIndex(x => new { x.UserId, x.CreatedAt });
-        }
-        private void OnModelCreating_Stage(ModelBuilder b)
-        {
-            Modeling_Stage(b);
-            Modeling_StageWave(b);
-            Modeling_StageWaveEnemy(b);
-            Modeling_StageDrop(b);
-            Modeling_StageFirstClearReward(b);
-            Modeling_StageRequirement(b);
-            Modeling_UserStageProgress(b);
-            // SecurityEvents는 기존 Modeling_SecurityEvent 사용
-        }
+        } 
 
-        // ---------- Stage ----------
-        private static void Modeling_Stage(ModelBuilder b)
-        {
-            b.Entity<Stage>(ConfigureStage);
-        }
-
-        private static void ConfigureStage(EntityTypeBuilder<Stage> e)
-        {
-            e.ToTable("Stages");
-            e.HasKey(x => x.Id);
-            e.Property(x => x.Id).HasColumnName("stage_id").ValueGeneratedOnAdd();
-
-            e.Property(x => x.Chapter).HasColumnName("chapter_id").IsRequired();
-            e.Property(x => x.Order).HasColumnName("stage_num").IsRequired();
-
-            e.Property(x => x.Name)
-             .HasColumnName("name")
-             .HasMaxLength(64)            // 요구 시 50으로 줄여도 OK
-             .IsRequired(false);
-
-            e.Property(x => x.RecommendedPower)
-             .HasColumnName("recommended_power")
-             .HasColumnType("smallint")
-             .IsRequired();
-
-            e.Property(x => x.StaminaCost)
-             .HasColumnName("stamina_cost")
-             .HasColumnType("smallint")
-             .IsRequired();
-
-            e.Property(x => x.IsActive)
-             .HasColumnName("is_active")
-             .HasDefaultValue(true)
-             .IsRequired();
-
-            // 유니크: (Chapter, Order)
-            e.HasIndex(x => new { x.Chapter, x.Order }).IsUnique();
-
-            // 관계 (Cascade)
-            e.HasMany(x => x.Waves)
-             .WithOne()
-             .HasForeignKey(w => w.StageId)
-             .OnDelete(DeleteBehavior.Cascade);
-
-            e.HasMany(x => x.Drops)
-             .WithOne()
-             .HasForeignKey(d => d.StageId)
-             .OnDelete(DeleteBehavior.Cascade);
-
-            e.HasMany(x => x.FirstRewards)
-             .WithOne()
-             .HasForeignKey(r => r.StageId)
-             .OnDelete(DeleteBehavior.Cascade);
-
-            e.HasMany(x => x.Requirements)
-             .WithOne()
-             .HasForeignKey(r => r.StageId)
-             .OnDelete(DeleteBehavior.Cascade);
-        }
-
-        // ---------- StageWaves ----------
-        private static void Modeling_StageWave(ModelBuilder b)
-        {
-            b.Entity<StageWave>(ConfigureStageWave);
-        }
-
-        private static void ConfigureStageWave(EntityTypeBuilder<StageWave> e)
-        {
-            e.ToTable("StageWaves");
-            e.HasKey(x => x.Id);
-            e.Property(x => x.Id).HasColumnName("id").ValueGeneratedOnAdd();
-
-            e.Property(x => x.StageId).HasColumnName("stage_id").IsRequired();
-            e.Property(x => x.Index).HasColumnName("index").HasColumnType("smallint").IsRequired();
-
-            e.HasIndex(x => new { x.StageId, x.Index }).IsUnique(); // 웨이브 순번 중복 방지
-
-            e.HasMany(x => x.Enemies)
-             .WithOne()
-             .HasForeignKey(en => en.StageWaveId)
-             .OnDelete(DeleteBehavior.Cascade);
-        }
-
-        // ---------- StageWaveEnemies ----------
-        private static void Modeling_StageWaveEnemy(ModelBuilder b)
-        {
-            b.Entity<StageWaveEnemy>(ConfigureStageWaveEnemy);
-        }
-
-        private static void ConfigureStageWaveEnemy(EntityTypeBuilder<StageWaveEnemy> e)
-        {
-            e.ToTable("StageWaveEnemies");
-            e.HasKey(x => x.Id);
-            e.Property(x => x.Id).HasColumnName("id").ValueGeneratedOnAdd();
-
-            e.Property(x => x.StageWaveId).HasColumnName("stage_wave_id").IsRequired();
-            e.Property(x => x.EnemyCharacterId).HasColumnName("enemy_character_id").IsRequired();
-            e.Property(x => x.Level).HasColumnName("level").HasColumnType("smallint").IsRequired();
-            e.Property(x => x.Slot).HasColumnName("slot").HasColumnType("smallint").IsRequired();
-            e.Property(x => x.AiProfile).HasColumnName("ai_profile").IsRequired(false);
-
-            e.HasIndex(x => x.StageWaveId);
-            e.HasIndex(x => new { x.StageWaveId, x.Slot }).IsUnique(); // 슬롯 중복 방지
-
-            // FK는 상단 StageWave에서 Cascade 설정 이미 수행됨
-        }
-
-        // ---------- StageDrops ----------
-        private static void Modeling_StageDrop(ModelBuilder b)
-        {
-            b.Entity<StageDrop>(ConfigureStageDrop);
-        }
-
-        private static void ConfigureStageDrop(EntityTypeBuilder<StageDrop> e)
-        {
-            e.ToTable("StageDrops");
-            e.HasKey(x => x.Id);
-            e.Property(x => x.Id).HasColumnName("id").ValueGeneratedOnAdd();
-
-            e.Property(x => x.StageId).HasColumnName("stage_id").IsRequired();
-            e.Property(x => x.ItemId).HasColumnName("item_id").IsRequired();
-
-            e.Property(x => x.Rate)
-             .HasColumnName("rate")
-             .HasColumnType("numeric(6,5)")    // 또는 .HasPrecision(6,5)
-             .IsRequired();
-
-            e.Property(x => x.MinQty).HasColumnName("min_qty").HasColumnType("smallint").IsRequired();
-            e.Property(x => x.MaxQty).HasColumnName("max_qty").HasColumnType("smallint").IsRequired();
-
-            e.Property(x => x.FirstClearOnly)
-             .HasColumnName("first_clear_only")
-             .HasDefaultValue(false)
-             .IsRequired();
-
-            e.HasIndex(x => x.StageId);
-            e.HasIndex(x => x.ItemId);
-            // 옵션: e.HasIndex(x => new { x.StageId, x.ItemId, x.FirstClearOnly }).IsUnique();
-        }
-
-        // ---------- StageFirstClearRewards ----------
-        private static void Modeling_StageFirstClearReward(ModelBuilder b)
-        {
-            b.Entity<StageFirstClearReward>(ConfigureStageFirstClearReward);
-        }
-
-        private static void ConfigureStageFirstClearReward(EntityTypeBuilder<StageFirstClearReward> e)
-        {
-            e.ToTable("StageFirstClearRewards");
-            e.HasKey(x => x.Id);
-            e.Property(x => x.Id).HasColumnName("id").ValueGeneratedOnAdd();
-
-            e.Property(x => x.StageId).HasColumnName("stage_id").IsRequired();
-            e.Property(x => x.ItemId).HasColumnName("item_id").IsRequired();
-            e.Property(x => x.Qty).HasColumnName("qty").HasColumnType("smallint").IsRequired();
-
-            e.HasIndex(x => x.StageId);
-            e.HasIndex(x => x.ItemId);
-            // 옵션: e.HasIndex(x => new { x.StageId, x.ItemId }).IsUnique();
-        }
-
-        // ---------- StageRequirements ----------
-        private static void Modeling_StageRequirement(ModelBuilder b)
-        {
-            b.Entity<StageRequirement>(ConfigureStageRequirement);
-        }
-
-        private static void ConfigureStageRequirement(EntityTypeBuilder<StageRequirement> e)
-        {
-            e.ToTable("StageRequirements");
-            e.HasKey(x => x.Id);
-            e.Property(x => x.Id).HasColumnName("id").ValueGeneratedOnAdd();
-
-            e.Property(x => x.StageId).HasColumnName("stage_id").IsRequired();
-            e.Property(x => x.RequiredStageId).HasColumnName("required_stage_id").IsRequired(false);
-            e.Property(x => x.MinAccountLevel).HasColumnName("min_account_level").HasColumnType("smallint").IsRequired(false);
-
-            e.HasIndex(x => x.StageId);
-            e.HasIndex(x => x.RequiredStageId);
-
-            e.HasOne<Stage>()                      // self-ref: RequiredStageId
-             .WithMany()
-             .HasForeignKey(x => x.RequiredStageId)
-             .OnDelete(DeleteBehavior.SetNull);    // 운영 중 삭제 안전
-
-            // 부모 Stage와의 관계는 Stage에서 Cascade already
-        }
-
-        // ---------- UserStageProgresses ----------
-        private static void Modeling_UserStageProgress(ModelBuilder b)
-        {
-            b.Entity<UserStageProgress>(ConfigureUserStageProgress);
-        }
-
-        private static void ConfigureUserStageProgress(EntityTypeBuilder<UserStageProgress> e)
-        {
-            e.ToTable("UserStageProgresses");
-            e.HasKey(x => new { x.UserId, x.StageId });
-
-            e.Property(x => x.UserId).HasColumnName("UserId").IsRequired();
-            e.Property(x => x.StageId).HasColumnName("StageId").IsRequired();
-
-            e.Property(x => x.Cleared)
-             .HasColumnName("Cleared")
-             .HasDefaultValue(false)
-             .IsRequired();
-
-            e.Property(x => x.Stars)
-             .HasColumnName("Stars")
-             .HasColumnType("smallint")
-             .IsRequired();
-
-            e.Property(x => x.ClearedAt)
-             .HasColumnName("ClearedAt")
-             .IsRequired(false);
-
-            e.HasIndex(x => x.StageId);
-
-            e.HasOne<Stage>()
-             .WithMany()
-             .HasForeignKey(x => x.StageId)
-             .OnDelete(DeleteBehavior.Restrict); // 유저 데이터 보호
-
-            e.HasOne<User>()
-             .WithMany()
-             .HasForeignKey(x => x.UserId)
-             .OnDelete(DeleteBehavior.Cascade);
-        }
         public override async Task<int> SaveChangesAsync(CancellationToken ct = default)
         {
             LogDataSourceHash("[SaveChanges]");

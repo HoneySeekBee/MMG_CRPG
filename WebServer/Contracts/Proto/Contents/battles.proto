@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package contracts.assets;
+option csharp_namespace = "Contracts.Protos";
+import "google/protobuf/timestamp.proto";
+
+// 단일 Battle
+message BattlePb {
+  int32 id = 1;
+  string name = 2;
+  bool active = 3;
+  string scene_key = 4;
+  bool check_multi = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
+}
+
+// 여러 개 묶어서 줄 때
+message BattlesPb {
+  repeated BattlePb battles = 1;
+}

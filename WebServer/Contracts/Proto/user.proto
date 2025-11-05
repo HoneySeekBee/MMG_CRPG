@@ -50,3 +50,22 @@ message ChangePasswordPb {
   string oldPassword = 1;
   string newPassword = 2;
 }
+enum StageStarsPb {
+  STAGE_STARS_ZERO  = 0;
+  STAGE_STARS_ONE   = 1;
+  STAGE_STARS_TWO   = 2;
+  STAGE_STARS_THREE = 3;
+}
+
+// 유저 한 명의 스테이지 진행도
+message UserStageProgressPb {
+  int32 stage_id = 1;
+  bool cleared = 2;
+  StageStarsPb stars = 3;
+  int64 cleared_at_utc = 4; 
+}
+
+// 여러 개 한 번에 주기
+message MyStageProgressListPb {
+  repeated UserStageProgressPb progresses = 1;
+}

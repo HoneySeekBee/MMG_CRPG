@@ -48,4 +48,33 @@ project.fragment.lock.json
 *.lock.json
 
 # ---- Unity ----
-# 빌드/라이브러리
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+UserSettings/
+
+# Bee 빌드 시스템 캐시 (Unity 2021+)
+[Bb]ee/
+
+# Memory / Recordings / Profiler
+MemoryCaptures/
+Recordings/
+
+# Auto-generated solution/project files
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+
+# 기타 Unity 자동 생성 파일
+sysinfo.txt
+*.pidb
+*.booproj
+*.svd
+*.mdb

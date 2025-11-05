@@ -1,5 +1,5 @@
-﻿using Application.Repositories;
-using Application.Stages;
+﻿using Application.Contents.Stages;
+using Application.Repositories;
 using Domain.Entities;
 using Domain.Enum;
 using Infrastructure.Persistence;

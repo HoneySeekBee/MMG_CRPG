@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package contracts.assets;
+option csharp_namespace = "Contracts.Protos";
+import "google/protobuf/timestamp.proto";
+
+message StagePb {
+  int32 id = 1;
+  int32 chapter = 2;
+  int32 order = 3;
+  string name = 4;
+  int32 recommended_power = 5;
+  int32 stamina_cost = 6;
+  bool is_active = 7;
+
+  repeated WavePb waves = 10;
+  repeated DropPb drops = 11;
+  repeated RewardPb first_rewards = 12;
+  repeated RequirementPb requirements = 13;
+  repeated BatchPb batches = 14;
+}
+// 웨이브
+message WavePb {
+  int32 index = 1;
+  repeated EnemyPb enemies = 2;
+}
+
+// 웨이브 안 적
+message EnemyPb {
+  int32 enemy_character_id = 1;
+  int32 level = 2;
+  int32 slot = 3;
+  string ai_profile = 4;
+}
+
+// 드랍
+message DropPb {
+  int32 item_id = 1;
+  double rate = 2;      // decimal 대신 double
+  int32 min_qty = 3;
+  int32 max_qty = 4;
+  bool first_clear_only = 5;
+}
+
+// 첫 클리어 보상
+message RewardPb {
+  int32 item_id = 1;
+  int32 qty = 2;
+}
+
+// 입장 조건
+message RequirementPb {
+  int32 required_stage_id = 1;  // 0이면 없음
+  int32 min_account_level = 2;  // 0이면 없음
+}
+
+// 배치(스폰 묶음)
+message BatchPb {
+  int32 batch_num = 1;
+  string asset_key = 2;
+}
+
+// 여러 개 한 번에 보낼 때
+message StageListPb {
+  repeated StagePb stages = 1;
+}
