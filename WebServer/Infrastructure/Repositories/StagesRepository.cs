@@ -1,5 +1,5 @@
 ﻿using Application.Repositories;
-using Domain.Entities;
+using Domain.Entities.Contents;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -38,11 +38,11 @@ namespace Infrastructure.Repositories
                   {
                       Id = s.Id,
                       Chapter = s.Chapter,
-                      Order = s.Order,
+                      StageNumber = s.StageNumber,
                       Name = EF.Property<string?>(s, "Name") // 존재 시만 가져옴
                   })
                   .Where(s => s.Id == id)
-                  .Select(p => new Stage(p.Chapter, p.Order, default, default, true) // 최소 생성자
+                  .Select(p => new Stage(p.Chapter, p.StageNumber, default, default, true, null) // 최소 생성자
                   {
                       // Id를 세팅하려면 EF 프록시 대신 실제 엔티티를 로드해야 하지만,
                       // 여기서는 존재 확인용이라 null/값 체크만 충분.
@@ -52,9 +52,9 @@ namespace Infrastructure.Repositories
         /// <summary>
         /// (Chapter, Order) 유니크 중복 체크
         /// </summary>
-        public Task<bool> ExistsChapterOrderAsync(int chapter, int order, int? excludeId, CancellationToken ct)
+        public Task<bool> ExistsChapterOrderAsync(int chapter, int stageNumber, int? excludeId, CancellationToken ct)
         {
-            var q = _db.Stages.AsNoTracking().Where(s => s.Chapter == chapter && s.Order == order);
+            var q = _db.Stages.AsNoTracking().Where(s => s.Chapter == chapter && s.StageNumber == stageNumber);
             if (excludeId.HasValue) q = q.Where(s => s.Id != excludeId.Value);
             return q.AnyAsync(ct);
         }
@@ -100,7 +100,7 @@ namespace Infrastructure.Repositories
         {
             public int Id { get; set; }
             public int Chapter { get; set; }
-            public int Order { get; set; }
+            public int StageNumber { get; set; }
             public string? Name { get; set; }
         }
     }

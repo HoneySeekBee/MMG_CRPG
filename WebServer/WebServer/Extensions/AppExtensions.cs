@@ -1,7 +1,6 @@
 ﻿using Application.Items;
 using Application.ItemTypes;
 using Application.Users;
-using Application.Stages;
 using Application.UserInventory;
 using Application.UserCharacter;
 using Application.UserCurrency;
@@ -32,6 +31,11 @@ using Microsoft.OpenApi.Models;
 using Application.EquipSlots;
 using Application.UserCharacterEquips;
 using Application.CharacterModels;
+using Infrastructure.Caching.Contents;
+using Application.Repositories.Contents;
+using Application.Contents.Battles;
+using Application.Contents.Chapters;
+using Application.Contents.Stages;
 
 namespace WebServer.Extensions
 {
@@ -79,6 +83,9 @@ namespace WebServer.Extensions
             s.AddSingleton<ICharacterExpCache, CharacterExpCache>();
             s.AddSingleton<IEquipSlotCache, EquipSlotCache>();
             s.AddSingleton<ICharacterModelCache, CharacterModelCache>();
+            s.AddSingleton<IBattlesCache, BattlesCache>();
+            s.AddSingleton<IChapterCache, ChapterCache>();
+            s.AddSingleton<IStagesCache, StagesCache>();
 
             // 도메인/리포지토리/서비스 (Scoped)
 
@@ -140,11 +147,16 @@ namespace WebServer.Extensions
             s.AddScoped<IWalletService, WalletService>();
             s.AddScoped<ICurrencyRepository, EFCurrencyRepository>();
             s.AddScoped<ICurrencyService, CurrencyService>();
-
-            // 전투
+             
+            #region Contents 
             s.AddScoped<ICombatService, CombatService>();
             s.AddScoped<ICombatRepository, EfCombatRepository>();
             s.AddScoped<IMasterDataProvider, FakeMasterDataProvider>();
+            s.AddScoped<IBattlesService, BattlesService>();
+            s.AddScoped<IBattlesRepository, BattlesRepository>();
+            s.AddScoped<IChapterService, ChapterService>();
+            s.AddScoped<IChapterRepository, ChapterRepository>();
+            #endregion
 
             // 전투 엔진
             s.AddSingleton<ICombatEngine, SimpleCombatEngine>();
@@ -183,6 +195,8 @@ namespace WebServer.Extensions
             s.AddScoped<IUserInventoryRepository, UserInventoryRepository>();
             s.AddScoped<IUserInventoryQueryRepository, UserInventoryQueryRepository>();
             s.AddScoped<IUserInventoryService, UserInventoryService>();
+            s.AddScoped<IUserStageProgressRepository, UserStageProgressRepository>();
+            s.AddScoped<IUserStageProgressService, UserStageProgressService>();
 
             // 유저 캐릭터
             s.AddScoped<IUserCharacterRepository, UserCharacterRepository>();

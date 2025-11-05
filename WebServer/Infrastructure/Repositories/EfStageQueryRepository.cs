@@ -1,5 +1,5 @@
-﻿using Application.Repositories;
-using Application.Stages;
+﻿using Application.Contents.Stages;
+using Application.Repositories;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -34,7 +34,7 @@ namespace Infrastructure.Repositories
                 var term = filter.Search.Trim().ToLower();
                 q = q.Where(s =>
                     ((EF.Property<string?>(s, "Name") ?? "").ToLower()).Contains(term) ||
-                    (s.Chapter.ToString() + "-" + s.Order.ToString()).ToLower().Contains(term));
+                    (s.Chapter.ToString() + "-" + s.StageNumber.ToString()).ToLower().Contains(term));
             }
 
             var total = await q.CountAsync(ct);
@@ -43,13 +43,13 @@ namespace Infrastructure.Repositories
             var size = filter.PageSize <= 0 ? 20 : filter.PageSize;
 
             var items = await q
-                .OrderBy(s => s.Chapter).ThenBy(s => s.Order).ThenBy(s => s.Id)
+                .OrderBy(s => s.Chapter).ThenBy(s => s.StageNumber).ThenBy(s => s.Id)
                 .Skip((page - 1) * size)
                 .Take(size)
                 .Select(s => new StageSummaryDto(
                     s.Id,
                     s.Chapter,
-                    s.Order,
+                    s.StageNumber,
                     EF.Property<string?>(s, "Name"),
                     s.RecommendedPower,
                     s.StaminaCost,
@@ -82,7 +82,7 @@ namespace Infrastructure.Repositories
                 q = q.Where(s => s.Chapter == chapter.Value);
 
             var entities = await q
-                .OrderBy(s => s.Chapter).ThenBy(s => s.Order).ThenBy(s => s.Id)
+                .OrderBy(s => s.Chapter).ThenBy(s => s.StageNumber).ThenBy(s => s.Id)
                 .Include(s => s.Waves).ThenInclude(w => w.Enemies)
                 .Include(s => s.Drops)
                 .Include(s => s.FirstRewards)

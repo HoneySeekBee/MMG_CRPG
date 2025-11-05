@@ -14,6 +14,10 @@
 		<Protobuf Include="Proto\**\*.proto" ProtoRoot="Proto" GrpcServices="None" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Proto\Contents\" />
+	</ItemGroup>
+
 	<Target Name="CopyContractsToUnity" AfterTargets="Build">
 		<PropertyGroup>
 			<UnityPluginsDir>..\..\Client\Assets\Plugins\</UnityPluginsDir>

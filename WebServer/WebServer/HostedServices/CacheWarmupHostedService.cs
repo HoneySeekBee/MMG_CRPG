@@ -1,5 +1,8 @@
 ﻿using Application.Character;
 using Application.CharacterModels;
+using Application.Contents.Battles;
+using Application.Contents.Chapters;
+using Application.Contents.Stages;
 using Application.Elements;
 using Application.EquipSlots;
 using Application.Factions;
@@ -40,6 +43,10 @@ namespace WebServer.HostedServices
             await sp.GetRequiredService<ICharacterModelCache>().ReloadAsync(ct);
 
             await sp.GetRequiredService<IEquipSlotCache>().ReloadAsync(ct);
+
+            await sp.GetRequiredService<IBattlesCache>().ReloadAsync(ct);
+            await sp.GetRequiredService<IChapterCache>().ReloadAsync(ct);
+            await sp.GetRequiredService<IStagesCache>().ReloadAsync(ct);
 
         }
 
