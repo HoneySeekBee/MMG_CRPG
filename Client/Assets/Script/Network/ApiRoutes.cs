@@ -14,6 +14,7 @@ public static class ApiRoutes
 
     public const string MeSummary = "/me/summary";
     public const string MeProfile = "/me/profile";
+    public const string UserStageProgress = "/me/stages";
     public const string MeProfileUpdate = "/me/profile";
     public const string MeChangePassword = "/me/change-password";
 
@@ -30,6 +31,11 @@ public static class ApiRoutes
     public const string CharacterModel_List = "/character-model/list";
     public const string CharacterModel_Parts = "/character-model/parts";
     public const string CharacterModel_Weapons = "/character-model/weapons";
+
+
+    public const string BattlesProto = "/battles";
+    public const string ChaptersProto = "/chapters";
+    public const string StagesProto = "/stages";
     public static string UserInventoryList(int userId) =>
         $"/users/{userId}/inventory";
 

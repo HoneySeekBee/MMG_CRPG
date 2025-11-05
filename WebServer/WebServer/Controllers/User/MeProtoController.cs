@@ -1,5 +1,6 @@
 ﻿using Application.Users;
 using Contracts.Protos;
+using Domain.Entities.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -117,10 +118,11 @@ namespace WebServer.Controllers.User
         {
             var userId = CurrentUserId();
             var progresses = await _progress.GetMyProgressAsync(userId, ct);
-            var pb = progresses.ToListProto();   // 우리가 방금 만든 매퍼
+
+            // null이면 빈 리스트 반환 (새 유저 대비)
+            var pb = (progresses ?? new List<UserStageProgress>()).ToListProto();
             return Ok(pb);
         }
-
         // POST /api/pb/me/change-password
         [HttpPost("change-password")]
         [Consumes("application/x-protobuf")]

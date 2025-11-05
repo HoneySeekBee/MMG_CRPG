@@ -1,5 +1,6 @@
 <linker>
   <assembly fullname="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="AdventureLobbyPopup" preserve="all" />
     <type fullname="BagItemIconUI" preserve="all" />
     <type fullname="BattleLobbyPopup" preserve="all" />
     <type fullname="Game.Lobby.CurrencyUI" preserve="all" />
@@ -15,6 +16,7 @@
     <type fullname="MMG_CRPG.UI.StatUI" preserve="all" />
     <type fullname="MMG_CRPG.UI.UserCharacterEquipUI" preserve="all" />
     <type fullname="Ricimi.Popup" preserve="all" />
+    <type fullname="StageButtonPopup" preserve="all" />
     <type fullname="UserCharacterDeatailUI" preserve="all" />
     <type fullname="UserCharacterListController" preserve="all" />
     <type fullname="UserCharactersListUI" preserve="all" />
@@ -33,12 +35,16 @@
   </assembly>
   <assembly fullname="Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
     <type fullname="TMPro.TextMeshProUGUI" preserve="all" />
+    <type fullname="TMPro.TMP_Dropdown" preserve="all" />
     <type fullname="TMPro.TMP_FontAsset" preserve="all" />
     <type fullname="TMPro.TMP_InputField" preserve="all" />
     <type fullname="TMPro.FaceInfo_Legacy" preserve="nothing" serialized="true" />
     <type fullname="TMPro.FontAssetCreationSettings" preserve="nothing" serialized="true" />
     <type fullname="TMPro.KerningTable" preserve="nothing" serialized="true" />
     <type fullname="TMPro.TMP_Character" preserve="nothing" serialized="true" />
+    <type fullname="TMPro.TMP_Dropdown/DropdownEvent" preserve="nothing" serialized="true" />
+    <type fullname="TMPro.TMP_Dropdown/OptionData" preserve="nothing" serialized="true" />
+    <type fullname="TMPro.TMP_Dropdown/OptionDataList" preserve="nothing" serialized="true" />
     <type fullname="TMPro.TMP_FontFeatureTable" preserve="nothing" serialized="true" />
     <type fullname="TMPro.TMP_FontWeightPair" preserve="nothing" serialized="true" />
     <type fullname="TMPro.TMP_GlyphAdjustmentRecord" preserve="nothing" serialized="true" />

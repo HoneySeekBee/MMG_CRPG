@@ -6,7 +6,8 @@ using WebServer.Mappers.Contents;
 namespace WebServer.Controllers.Contents
 {
     [ApiController]
-    [Route("api/pb/[controller]")]
+    [Route("api/pb/stages")]
+    [Produces("application/x-protobuf")]
     public class StagesProtoController : ControllerBase
     {
         private readonly IStagesCache _cache;
