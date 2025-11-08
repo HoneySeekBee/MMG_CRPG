@@ -1,7 +1,7 @@
-﻿using Application.Stages;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using Application.Contents.Stages;
 
 namespace AdminTool.Models
 {
@@ -87,6 +87,15 @@ namespace AdminTool.Models
         // 선택 리스트
         public IEnumerable<SelectListItem> Stages { get; set; } = Array.Empty<SelectListItem>();
     }
+    public sealed class BatchVm
+    {
+        [DisplayName("선행 스테이지")] public int? RequiredStageId { get; set; }
+        [DisplayName("최소 계정레벨"), Range(1, 999)] public short? MinAccountLevel { get; set; }
+
+        // 선택 리스트
+        public IEnumerable<SelectListItem> Stages { get; set; } = Array.Empty<SelectListItem>();
+    }
+
 
     public sealed class StageFormVm
     {
@@ -105,6 +114,7 @@ namespace AdminTool.Models
         public List<DropRowVm> Drops { get; set; } = new();
         public List<RewardRowVm> FirstRewards { get; set; } = new();
         public List<RequirementRowVm> Requirements { get; set; } = new();
+        public List<BatchVm> Batches { get; set; } = new();
 
         // 드롭다운 데이터
         public IEnumerable<SelectListItem> ChapterOptions { get; set; } = Array.Empty<SelectListItem>();
@@ -124,7 +134,7 @@ namespace AdminTool.Models
             {
                 Id = d.Id,
                 Chapter = d.Chapter,
-                Order = d.Order,
+                Order = d.StageNum,
                 Name = d.Name,
                 RecommendedPower = d.RecommendedPower,
                 StaminaCost = d.StaminaCost,
@@ -199,11 +209,10 @@ namespace AdminTool.Models
         public static CreateStageRequest ToCreateRequest(this StageFormVm vm) =>
             new(
                 Chapter: vm.Chapter,
-                Order: vm.Order,
+                StageNumer: vm.Order,
                 RecommendedPower: vm.RecommendedPower,
                 StaminaCost: vm.StaminaCost,
                 IsActive: vm.IsActive,
-                Name: vm.Name,
                 Waves: vm.Waves
                     .OrderBy(w => w.Index)
                     .Select(w => new WaveCmd(
@@ -212,7 +221,8 @@ namespace AdminTool.Models
                     )).ToList(),
                 Drops: vm.Drops.Select(d => new DropCmd(d.ItemId, d.Rate, d.MinQty, d.MaxQty, d.FirstClearOnly)).ToList(),
                 FirstRewards: vm.FirstRewards.Select(r => new RewardCmd(r.ItemId, r.Qty)).ToList(),
-                Requirements: vm.Requirements.Select(r => new RequirementCmd(r.RequiredStageId, r.MinAccountLevel)).ToList()
+                Requirements: vm.Requirements.Select(r => new RequirementCmd(r.RequiredStageId, r.MinAccountLevel)).ToList(),
+                Batches: vm.Batches.Select(r => new BatchCmd()).ToList() 
             );
 
         // Update
@@ -220,11 +230,12 @@ namespace AdminTool.Models
             new(
                 Id: id,
                 Chapter: vm.Chapter,
-                Order: vm.Order,
+                StageNumer: vm.Order,
                 RecommendedPower: vm.RecommendedPower,
                 StaminaCost: vm.StaminaCost,
                 IsActive: vm.IsActive,
-                Name: vm.Name,
+                
+
                 Waves: vm.Waves
                     .OrderBy(w => w.Index)
                     .Select(w => new WaveCmd(
@@ -233,7 +244,9 @@ namespace AdminTool.Models
                     )).ToList(),
                 Drops: vm.Drops.Select(d => new DropCmd(d.ItemId, d.Rate, d.MinQty, d.MaxQty, d.FirstClearOnly)).ToList(),
                 FirstRewards: vm.FirstRewards.Select(r => new RewardCmd(r.ItemId, r.Qty)).ToList(),
-                Requirements: vm.Requirements.Select(r => new RequirementCmd(r.RequiredStageId, r.MinAccountLevel)).ToList()
+                Requirements: vm.Requirements.Select(r => new RequirementCmd(r.RequiredStageId, r.MinAccountLevel)).ToList(),
+
+                Batches: vm.Batches.Select(r => new BatchCmd()).ToList()
             );
     }
 }

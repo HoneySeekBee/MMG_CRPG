@@ -735,6 +735,7 @@ MonoBehaviour:
   ElementIconImage: {fileID: 758086735981604150}
   RoleIconImage: {fileID: 7713633679377082492}
   NameText: {fileID: 4361084597933038083}
+  thisBtn: {fileID: 0}
 --- !u!114 &5454344202258705011
 MonoBehaviour:
   m_ObjectHideFlags: 0

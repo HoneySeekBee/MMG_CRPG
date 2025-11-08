@@ -14,7 +14,7 @@ message UserPartyPb {
   int64 party_id  = 1;
   int32 user_id   = 2;
   int32 battle_id = 3;
-  repeated UserPartySlotPb slots = 4; // <-- 이름 수정
+  repeated UserPartySlotPb slots = 4; 
 }
 
 message CreateUserPartyRequestPb {
@@ -30,7 +30,7 @@ message GetUserPartyByIdRequestPb {
   int64 party_id = 1;
 }
 message GetUserPartyResponsePb {
-  UserPartyPb party = 1; // <-- 이름 수정
+  UserPartyPb party = 1;  
 }
 
 message GetUserPartyByUserBattleRequestPb {
