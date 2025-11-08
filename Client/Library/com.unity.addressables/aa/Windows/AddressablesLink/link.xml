@@ -1,5 +1,6 @@
 <linker>
   <assembly fullname="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="AdventureDetailPopup" preserve="all" />
     <type fullname="AdventureLobbyPopup" preserve="all" />
     <type fullname="BagItemIconUI" preserve="all" />
     <type fullname="BattleLobbyPopup" preserve="all" />
@@ -8,6 +9,7 @@
     <type fullname="Game.Scenes.Login.RegistAccount" preserve="all" />
     <type fullname="InventoryUI" preserve="all" />
     <type fullname="ItemDetailUI" preserve="all" />
+    <type fullname="ItemSlotUI" preserve="all" />
     <type fullname="ItemTypeToggleUI" preserve="all" />
     <type fullname="LobbyPopup" preserve="all" />
     <type fullname="LoginPopup" preserve="all" />
@@ -15,6 +17,7 @@
     <type fullname="MMG_CRPG.UI.EquipSlotUI" preserve="all" />
     <type fullname="MMG_CRPG.UI.StatUI" preserve="all" />
     <type fullname="MMG_CRPG.UI.UserCharacterEquipUI" preserve="all" />
+    <type fullname="ObjectPool" preserve="all" />
     <type fullname="Ricimi.Popup" preserve="all" />
     <type fullname="StageButtonPopup" preserve="all" />
     <type fullname="UserCharacterDeatailUI" preserve="all" />

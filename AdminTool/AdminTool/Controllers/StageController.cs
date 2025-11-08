@@ -1,10 +1,10 @@
-﻿using AdminTool.Models;
-using Application.Stages;
+﻿using AdminTool.Models; 
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using Application.Common.Models;
 using Application.Items;
+using Application.Contents.Stages;
 
 namespace AdminTool.Controllers
 {
@@ -208,7 +208,7 @@ namespace AdminTool.Controllers
             var stages = await client.GetFromJsonAsync<PagedResult<StageSummaryDto>>(
                 "/api/stages?page=1&pageSize=1000", _json, ct);
             var stageOptions = (stages?.Items ?? Array.Empty<StageSummaryDto>())
-                .Select(s => new SelectListItem($"Ch{s.Chapter}-{s.Order} {s.Name}", s.Id.ToString()))
+                .Select(s => new SelectListItem($"Ch{s.Chapter}-{s.StageNum} {s.Name}", s.Id.ToString()))
                 .ToList();
 
             // 챕터 드롭다운(1~20 기본)

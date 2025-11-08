@@ -187,6 +187,8 @@ public class AdventureLobbyPopup : UIPopup
                 {
                     Debug.Log($"[AdventureLobbyPopup] 스테이지 클릭: {s.Id} ({_currentChapter.ChapterNum}-{s.Order})");
                     // 여기서 실제 입장 로직 호출
+                    if(isActive)
+                        OpenLoginPopup(s);
                 },
                 isActive: isActive,
                 score: stars
@@ -231,5 +233,23 @@ public class AdventureLobbyPopup : UIPopup
         {
             Destroy(t.GetChild(i).gameObject);
         }
+    }
+    private async void OpenLoginPopup(StagePb data)
+    {
+        // Addressables 키 이름은 프로젝트에 맞게
+        const string key = "StageDetailUI";
+
+        // 풀에서 열기
+        var popupPool = UIPrefabPool.Instance as UIPopupPool;
+        if (popupPool == null)
+        {
+            // 혹시 베이스만 살아있거나 초기화 순서 꼬였을 때 대비
+            popupPool = FindObjectOfType<UIPopupPool>();
+            if (popupPool == null) { Debug.LogError("UIPopupPool not found"); return; }
+        }
+
+        var popup = await popupPool.ShowPopupAsync<AdventureDetailPopup>(key, this.transform);
+        if (popup == null) { Debug.LogError("LoginPopup open failed"); return; }
+        popup.Set(data);
     }
 }
