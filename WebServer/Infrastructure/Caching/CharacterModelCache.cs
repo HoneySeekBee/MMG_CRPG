@@ -60,7 +60,9 @@ namespace Infrastructure.Caching
                     PartHairId = m.PartHairId,
                     PartMouthId = m.PartMouthId,
                     PartEyeId = m.PartEyeId,
-                    PartAccId = m.PartAccId
+                    PartAccId = m.PartAccId,
+                    HairColorCode = m.HairColorCode,
+                    SkinColorCode = m.SkinColorCode,
                 })
                 .ToListAsync(ct);
             Console.WriteLine($"[Reload] Models fetched: {models.Count}  ");

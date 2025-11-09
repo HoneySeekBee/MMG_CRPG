@@ -38,7 +38,9 @@ message CharacterModelPb {
 
   BodySizePb body_size = 2;
   AnimationTypePb animation = 3;
-
+  
+  string hair_color_code = 4;
+  string skin_color_code = 5;
   // nullable slots (DB: int? ¡æ proto: Int32Value)
   google.protobuf.Int32Value weapon_l_id  = 10;
   google.protobuf.Int32Value weapon_r_id  = 11;
@@ -48,6 +50,7 @@ message CharacterModelPb {
   google.protobuf.Int32Value part_mouth_id = 22;
   google.protobuf.Int32Value part_eye_id   = 23;
   google.protobuf.Int32Value part_acc_id   = 24;
+
 }
 
 message CharacterModelPartPb {

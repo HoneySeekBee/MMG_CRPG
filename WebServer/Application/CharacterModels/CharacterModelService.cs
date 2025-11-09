@@ -85,7 +85,9 @@ namespace Application.CharacterModels
             PartHairId = entity.PartHairId,
             PartMouthId = entity.PartMouthId,
             PartEyeId = entity.PartEyeId,
-            PartAccId = entity.PartAccId
+            PartAccId = entity.PartAccId,
+            HairColorCode = entity.HairColorCode,
+            SkinColorCode = entity.SkinColorCode,
         };
     }
 } 

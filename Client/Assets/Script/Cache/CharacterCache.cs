@@ -5,7 +5,11 @@ using Game.UICommon;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Build;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceLocations;
 using WebServer.Protos;
 public sealed class ExpCurve
 {
@@ -54,6 +58,19 @@ public class CharacterCache : MonoBehaviour
     public Dictionary<int, CharacterModelPb> CharacterModelById = new();
     private ListCharacterModelsResponsePb _characterModels;
 
+    public List<CharacterModelPartPb> ModelParts = new();
+    public Dictionary<int, CharacterModelPartPb> ModelPartsById = new();
+    private ListCharacterModelPartsResponsePb _modelParts;
+
+
+    public List<CharacterModelWeaponPb> WeaponParts = new();
+    public Dictionary<int, CharacterModelWeaponPb> WeaponPartsById = new();
+    private ListCharacterModelWeaponsResponsePb _weaponParts;
+
+    [Header("CharacterMesh")]
+    public Dictionary<string, AsyncOperationHandle<Mesh>> CharacterMeshByKey = new();
+    public Dictionary<string, AsyncOperationHandle<Mesh>> WeaponMeshByKey = new();
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -64,13 +81,19 @@ public class CharacterCache : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
-    public IEnumerator CoLoadCharacterModelCache(ProtoHttpClient http, Popup popup, float timeoutSeconds = 0f)
+    private void Init_Model()
     {
-
-        // 초기화
         CharacterModels.Clear();
         CharacterModelById.Clear();
         _characterModels = null;
+
+        ModelParts.Clear();
+        ModelPartsById.Clear();
+        _modelParts = null;
+    }
+    public IEnumerator CoLoadCharacterModelCache(ProtoHttpClient http, Popup popup, float timeoutSeconds = 0f)
+    {
+        Init_Model(); // 초기화
 
         // 요청 바디: 비우면 전체 (서버 컨트롤러 주석 참고)
         var req = new ListCharacterModelsRequestPb();
@@ -86,7 +109,7 @@ public class CharacterCache : MonoBehaviour
                 if (!res.Ok || res.Data == null)
                 {
                     popup?.Show("캐릭터 모델 불러오기 실패");
-                    Debug.LogError("[FAILED] Load CharacterModel Cache");
+                    Debug.LogError($"[FAILED] Load CharacterModel Cache {res.Message}");
                     done = true;
                     return;
                 }
@@ -124,6 +147,68 @@ public class CharacterCache : MonoBehaviour
         CharacterModels.Sort((a, b) => a.CharacterId.CompareTo(b.CharacterId));
 
         Debug.Log($"Cache - 캐릭터 모델 {_characterModels.Models.Count}");
+
+        bool partsDone = false;
+        yield return http.Get(
+            ApiRoutes.CharacterModel_Parts,        // 또는 CharacterModel_Parts 상수
+            ListCharacterModelPartsResponsePb.Parser,
+            (ApiResult<ListCharacterModelPartsResponsePb> res) =>
+            {
+                if (!res.Ok || res.Data == null)
+                {
+                    Debug.LogError("[FAILED] Load CharacterModel Parts");
+                    partsDone = true;
+                    return;
+                }
+
+                _modelParts = res.Data;
+                partsDone = true;
+            });
+        if (_modelParts != null && _modelParts.Parts.Count > 0)
+        {
+            int cnt = _modelParts.Parts.Count;
+            ModelParts = new List<CharacterModelPartPb>(cnt);
+            ModelPartsById = new Dictionary<int, CharacterModelPartPb>(cnt);
+
+            foreach (var part in _modelParts.Parts)
+            {
+                ModelParts.Add(part);
+                ModelPartsById[part.PartId] = part;
+            }
+
+            Debug.Log($"[CharacterCache] 캐릭터 모델 파츠 {_modelParts.Parts.Count}개 로드");
+        }
+
+        bool weaponDone = false;
+        yield return http.Get(
+           ApiRoutes.CharacterModel_Weapons,        // 또는 CharacterModel_Parts 상수
+           ListCharacterModelWeaponsResponsePb.Parser,
+           (ApiResult<ListCharacterModelWeaponsResponsePb> res) =>
+           {
+               if (!res.Ok || res.Data == null)
+               {
+                   Debug.LogError("[FAILED] Load CharacterModel Parts");
+                   partsDone = true;
+                   return;
+               }
+
+               _weaponParts = res.Data;
+               partsDone = true;
+           });
+        if (_weaponParts != null && _weaponParts.Weapons.Count > 0)
+        {
+            int cnt = _weaponParts.Weapons.Count;
+            WeaponParts = new List<CharacterModelWeaponPb>(cnt);
+            WeaponPartsById = new Dictionary<int, CharacterModelWeaponPb>(cnt);
+
+            foreach (var part in _weaponParts.Weapons)
+            {
+                WeaponParts.Add(part);
+                WeaponPartsById[part.WeaponId] = part;
+            }
+
+            Debug.Log($"[WeaponCache] 캐릭터 모델 파츠 {_weaponParts.Weapons.Count}개 로드");
+        } 
     }
     public IEnumerator CoLoadCharacterCache(ProtoHttpClient http, Popup popup, float timeoutSeconds = 0f)
     {
@@ -310,5 +395,79 @@ public class CharacterCache : MonoBehaviour
     {
         foreach (var kv in map)
             kv.Value.Sort();
+    }
+    public IEnumerator CoPreloadMeshes()
+    {
+        // 1) 캐릭터 파츠(mesh)들
+        yield return PreloadLabelToDict("model", CharacterMeshByKey);
+
+        // 2) 무기(mesh)들
+        yield return PreloadLabelToDict("weapon", WeaponMeshByKey);
+    }
+
+    private IEnumerator PreloadLabelToDict(string label, Dictionary<string, AsyncOperationHandle<Mesh>> dict)
+    {
+        var locHandle = Addressables.LoadResourceLocationsAsync(label, typeof(Mesh));
+        yield return locHandle;
+
+        if (locHandle.Status != AsyncOperationStatus.Succeeded)
+        {
+            Debug.LogError($"[MeshCache] 라벨 '{label}' 로케이션 로드 실패");
+            yield break;
+        }
+
+        var locations = locHandle.Result;
+        Debug.Log($"[MeshCache] {label} 에서 {locations.Count}개 위치 발견");
+
+        foreach (var loc in locations)
+        {
+            string key = loc.PrimaryKey;
+
+            if (dict.ContainsKey(key))
+                continue;
+
+            var meshHandle = Addressables.LoadAssetAsync<Mesh>(loc);
+            yield return meshHandle;
+
+            if (meshHandle.Status == AsyncOperationStatus.Succeeded)
+            {
+                dict[key] = meshHandle;
+                Debug.Log($"[MeshCache] ({label}) 캐시: {key}");
+            }
+            else
+            {
+                Debug.LogWarning($"[MeshCache] ({label}) {key} 로드 실패");
+            }
+        }
+
+        // 필요시: Addressables.Release(locHandle);
+    }
+
+    // ─── 조회 메서드 ───
+    public Mesh GetCharacterMesh(string key)
+    {
+        if (CharacterMeshByKey.TryGetValue(key, out var handle) &&
+            handle.Status == AsyncOperationStatus.Succeeded)
+            return handle.Result;
+        return null;
+    }
+
+    public Mesh GetWeaponMesh(string key)
+    {
+        if (WeaponMeshByKey.TryGetValue(key, out var handle) &&
+            handle.Status == AsyncOperationStatus.Succeeded)
+            return handle.Result;
+        return null;
+    }
+
+    private void OnDestroy()
+    {
+        foreach (var kv in CharacterMeshByKey)
+            Addressables.Release(kv.Value);
+        CharacterMeshByKey.Clear();
+
+        foreach (var kv in WeaponMeshByKey)
+            Addressables.Release(kv.Value);
+        WeaponMeshByKey.Clear();
     }
 }

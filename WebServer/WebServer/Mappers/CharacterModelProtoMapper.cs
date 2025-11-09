@@ -2,8 +2,7 @@
 using Domain.Entities.Characters;
 using Domain.Enum.Characters;
 using Google.Protobuf.WellKnownTypes;
-using Application.CharacterModels;
-using Google.Protobuf.WellKnownTypes;
+using Application.CharacterModels; 
 
 namespace WebServer.Mappers
 {
@@ -43,6 +42,8 @@ namespace WebServer.Mappers
             PartMouthId = d.PartMouthId.ToW(),
             PartEyeId = d.PartEyeId.ToW(),
             PartAccId = d.PartAccId.ToW(),
+            HairColorCode = d.HairColorCode ?? string.Empty,
+            SkinColorCode = d.SkinColorCode ?? string.Empty
         };
         public static CharacterModelPb ToProto(this Domain.Entities.Characters.CharacterModel e)
         {
@@ -58,6 +59,8 @@ namespace WebServer.Mappers
                 PartMouthId = e.PartMouthId,
                 PartEyeId = e.PartEyeId,
                 PartAccId = e.PartAccId,
+                HairColorCode = e.HairColorCode ?? string.Empty,
+                SkinColorCode = e.SkinColorCode ?? string.Empty
             };
         }
         public static CharacterModelPartPb ToProto(this Application.CharacterModels.CharacterModelPartDto p) => new()
