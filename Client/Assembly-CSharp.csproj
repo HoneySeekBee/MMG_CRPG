@@ -64,6 +64,7 @@
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\CharacterStateBase.cs" />
     <Compile Include="Assets\Script\UI\ItemType\ItemDetailUI.cs" />
     <Compile Include="Assets\Script\UI\Popup\AdventureDetailPopup.cs" />
+    <Compile Include="Assets\Script\UI\Popup\PartySetupPopup.cs" />
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\PlayPopupOpener.cs" />
     <Compile Include="Assets\Script\UI\Popup\StageButtonPopup.cs" />
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\TintedButton.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\Myco.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\CroakWaterBehavior.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Rnd_Animation.cs" />
+    <Compile Include="Assets\Script\GamePlay\BatchSlot.cs" />
     <Compile Include="Assets\Script\GamePlay\Character\CharacterAnimationController.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CroakLand.cs" />
     <Compile Include="Assets\Script\UI\User\UserCharacterUI.cs" />
@@ -194,6 +196,7 @@
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CandyKing.cs" />
     <Compile Include="Assets\Script\UI\UIPopupPool.cs" />
     <Compile Include="Assets\Script\Cache\SkillCache.cs" />
+    <Compile Include="Assets\Script\Network\GamePlay\UserPartyNetwork.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Obstacle\TeleportObstacle.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\FaceManagement\FaceType.cs" />
     <Compile Include="Assets\Script\UI\ItemType\BagItemIconUI.cs" />

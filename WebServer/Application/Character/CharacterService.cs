@@ -57,6 +57,7 @@ namespace Application.Character
                     factionId: req.FactionId,
                     roleId: req.RoleId,
                     elementId: req.ElementId,
+                    formationNum : req.formationNum,
                     iconId: req.IconId,
                     portraitId: req.PortraitId,
                     releaseDate: utc,

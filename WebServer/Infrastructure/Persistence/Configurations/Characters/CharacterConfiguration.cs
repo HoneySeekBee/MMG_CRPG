@@ -33,6 +33,7 @@ namespace Infrastructure.Persistence.Configurations.Characters
             e.Property(x => x.IconId).IsRequired(false);
             e.Property(x => x.PortraitId).IsRequired(false);
 
+            e.Property(x => x.FormationNumber).HasColumnName("formation_position");
             var utcConverter = new ValueConverter<DateTimeOffset?, DateTimeOffset?>(
                 v => v.HasValue ? v.Value.ToUniversalTime() : v,  // Save: UTC로
                 v => v                                            // Read: 그대로(이미 UTC)

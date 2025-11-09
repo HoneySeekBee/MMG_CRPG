@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 717357048701609856}
   - component: {fileID: 375732590130301676}
   - component: {fileID: 5351828073989463835}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: DetailBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39,8 +39,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 250, y: -36}
-  m_SizeDelta: {x: 1024, y: 1024}
+  m_AnchoredPosition: {x: 236, y: -10}
+  m_SizeDelta: {x: 1000, y: 1000}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &375732590130301676
 CanvasRenderer:
@@ -70,9 +70,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 085c500b1ee721a44942a6de35f657d6, type: 3}
-  m_Type: 1
-  m_PreserveAspect: 0
+  m_Sprite: {fileID: 487065543, guid: 085c500b1ee721a44942a6de35f657d6, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 164771551903086954}
   - component: {fileID: 5180294872093095808}
   - component: {fileID: 8947999176241041618}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: 'Title_Text '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -248,7 +248,7 @@ GameObject:
   - component: {fileID: 790388797123928819}
   - component: {fileID: 2720449742197978403}
   - component: {fileID: 8217110782041930716}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Reward_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -403,7 +403,7 @@ GameObject:
   - component: {fileID: 1273350246641838045}
   - component: {fileID: 419861785357179887}
   - component: {fileID: 7065401076271440691}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: StageDetailUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -449,6 +449,7 @@ MonoBehaviour:
   fadeDuration: 0.15
   chapterStageText: {fileID: 1495041317355032439}
   chapterTitleText: {fileID: 5180294872093095808}
+  PlayButton: {fileID: 6395338374833029991}
   slotPool: {fileID: 7065401076271440691}
   slotParent: {fileID: 2512844901388196129}
   blocker: {fileID: 5327596609586813037}
@@ -476,7 +477,7 @@ GameObject:
   - component: {fileID: 2512844901388196129}
   - component: {fileID: 912815193529023822}
   - component: {fileID: 7320323918169090350}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Reward_Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -552,7 +553,7 @@ GameObject:
   - component: {fileID: 8042904833212293883}
   - component: {fileID: 3644472529356009764}
   - component: {fileID: 2590426690285360415}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: blocker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -684,7 +685,7 @@ GameObject:
   - component: {fileID: 9206949332311766938}
   - component: {fileID: 1495041317355032439}
   - component: {fileID: 3957028434126401334}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Stage_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -840,7 +841,7 @@ GameObject:
   - component: {fileID: 7381005836220391984}
   - component: {fileID: 4004352748608782189}
   - component: {fileID: 6395338374833029991}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: StartButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -959,7 +960,7 @@ GameObject:
   - component: {fileID: 8397670819404776073}
   - component: {fileID: 2079918393293311983}
   - component: {fileID: 5210769505192883323}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: dummyImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -22,6 +22,7 @@ message CharacterSummaryPb {
   int32 faction_id = 6;
   bool is_limited = 7;
   google.protobuf.Timestamp release_date = 8; 
+  int32 formation_num = 9;
 }
 
 message CharacterDetailPb {
@@ -50,6 +51,7 @@ message CharacterDetailPb {
    
   string icon_url = 16;
   string portrait_url = 17;
+  int32 formation_num = 18;
 }
  
 message CharacterSkillPb {

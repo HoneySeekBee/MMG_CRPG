@@ -37,6 +37,7 @@ namespace Infrastructure.Caching
                     c.PortraitId,
                     c.IsLimited,
                     c.ReleaseDate,
+                    c.FormationNumber,
                     (IReadOnlyList<string>)(c.Tags ?? new List<string>()),
                     c.MetaJson,
 

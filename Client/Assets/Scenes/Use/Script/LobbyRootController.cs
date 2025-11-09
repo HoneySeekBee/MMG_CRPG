@@ -10,7 +10,7 @@ public class LobbyRootController : MonoBehaviour
     [Header("Tab Buttons")]
     public Button btnLogin, btnMain, btnBattle, btnAdventure, btnShop;
     [Header("Panels (Static)")]
-    public GameObject panelLogin, panelMain, panelBattle, panelAdventure, panelShop;
+    public GameObject panelLogin, panelMain, panelBattle, panelAdventure, panelShop, partySet;
 
     [Header("Popup Root (for Addressable popups)")]
     [SerializeField] private Transform popupRoot;
@@ -33,7 +33,8 @@ public class LobbyRootController : MonoBehaviour
             ["Main"] = panelMain,
             ["Battle"] = panelBattle,
             ["Adventure"] = panelAdventure,
-            ["Shop"] = panelShop
+            ["Shop"] = panelShop,
+            ["PartySet"] = partySet
         }; 
         _onShowActions = new()
         {
@@ -41,6 +42,7 @@ public class LobbyRootController : MonoBehaviour
             ["Main"] = () => OpenLobbyPopup(),
             ["Battle"] = () => OpenBattleLobbyPopup(),
             ["Adventure"] = () => OpenAdventureLobbyPopup(),
+            ["PartySet"] = () => OpenPartySetupPopup(),
         };
 
         btnLogin.onClick.AddListener(() => Show("Login"));
@@ -49,10 +51,6 @@ public class LobbyRootController : MonoBehaviour
         btnAdventure.onClick.AddListener(() => Show("Adventure"));
         btnShop.onClick.AddListener(() => Show("Shop"));
          
-    }
-
-    private void Start()
-    { 
     }
 
     public void Show(string key)
@@ -148,6 +146,20 @@ public class LobbyRootController : MonoBehaviour
 
         var popup = await popupPool.ShowPopupAsync<AdventureLobbyPopup>(key, popupRoot);
         if (popup == null) { Debug.LogError("BattleLobbyPopup open failed"); return; }
+
+        popup.Set();
+    }
+    private async void OpenPartySetupPopup()
+    {
+        const string key = "PartySetupUI";
+        var popupPool = UIPrefabPool.Instance as UIPopupPool;
+        if (popupPool == null)
+        { 
+            popupPool = FindObjectOfType<UIPopupPool>();
+            if (popupPool == null) { Debug.LogError("UIPopupPool not found"); return; }
+        }
+        var popup = await popupPool.ShowPopupAsync<PartySetupPopup>(key, popupRoot);
+        if (popup == null) { Debug.LogError("PartySetupPopup open failed"); return; }
 
         popup.Set();
     }

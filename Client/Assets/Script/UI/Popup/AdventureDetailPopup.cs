@@ -5,12 +5,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Contracts.Protos;
+using Game.Managers;
 public class AdventureDetailPopup : UIPopup
 {
     [Header("UI")]
     [SerializeField] private TMP_Text chapterStageText;
-    [SerializeField] private TMP_Text chapterTitleText;   
-
+    [SerializeField] private TMP_Text chapterTitleText;
+    [SerializeField] private Button PlayButton;
 
     [SerializeField] private ObjectPool slotPool;
     [SerializeField] private Transform slotParent; 
@@ -24,6 +25,9 @@ public class AdventureDetailPopup : UIPopup
         ClearSlots();
         chapterStageText.text = $"{data.Chapter}-{data.Order}";
         chapterTitleText.text = $"{data.Name}";
+
+        PlayButton.onClick.RemoveAllListeners();
+        PlayButton.onClick.AddListener(() => { Play(data); }); 
 
         Debug.Log($"보상 갯수 : {data.FirstRewards.Count}  || {data.Drops.Count}");
         foreach (var item in data.FirstRewards)
@@ -73,5 +77,10 @@ public class AdventureDetailPopup : UIPopup
             slotPool.Return(_spawnedSlots[i]);
         }
         _spawnedSlots.Clear();
+    }
+    private void Play(StagePb data)
+    {
+        Debug.Log($"{data.Chapter}-{data.Order} 실행하기");
+        LobbyRootController.Instance.Show("PartySet");
     }
 }

@@ -26,6 +26,9 @@ public class AdventureLobbyPopup : UIPopup
 
     public void Set()
     {
+        UserPartyNetwork partyNetwork = new UserPartyNetwork();
+        StartCoroutine(partyNetwork.GetPartyAsync(BattleLobbyPopup.BATTLE_ADVENTURE));
+
         var cache = BattleContentsCache.Instance;
         var user = GameState.Instance.CurrentUser;
         var progMgr = user.StageProgress;

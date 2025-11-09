@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5091787130609950797}
   - component: {fileID: 6673763101266772611}
   - component: {fileID: 9040017285626161976}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Star_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 5480631779284714623}
   - component: {fileID: 3643091044683057926}
   - component: {fileID: 7416002916816930690}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -220,7 +220,7 @@ GameObject:
   - component: {fileID: 1501827166004626970}
   - component: {fileID: 3055611585403496630}
   - component: {fileID: 507433246264875316}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: LockImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -296,7 +296,7 @@ GameObject:
   - component: {fileID: 3972149443598267454}
   - component: {fileID: 5133403741633208765}
   - component: {fileID: 298400741231731738}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -416,7 +416,7 @@ GameObject:
   - component: {fileID: 1280030411242554207}
   - component: {fileID: 8050296781885321071}
   - component: {fileID: 6473737051986669650}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Star_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -489,7 +489,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4463698006155748292}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Star
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -528,7 +528,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2282091058864923428}
   - component: {fileID: 3451337434805903892}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: StageButtonUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -592,7 +592,7 @@ GameObject:
   - component: {fileID: 3552480485125666199}
   - component: {fileID: 8974194286179603238}
   - component: {fileID: 4258163565301744458}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Star_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}

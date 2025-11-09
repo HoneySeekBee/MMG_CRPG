@@ -252,6 +252,7 @@ public class LoginPopup : UIPopup
             Popup?.Show($"유저 캐릭터 불러오기 실패: {res.Message}");
         });
 
+
         OnLoginCompleted?.Invoke(new LoginResult
         {
             Ok = true,

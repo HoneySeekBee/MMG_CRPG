@@ -52,8 +52,15 @@ namespace WebServer.Controllers.User
         public async Task<ActionResult<GetUserPartyResponsePb>> GetByUserBattle([FromQuery] int userId, [FromQuery] int battleId, CancellationToken ct)
         {
             var party = await _repo.GetByUserBattleAsync(userId, battleId, ct);
-            if (party == null) return NotFound();
+            if (party == null)
+            { 
+                const int defaultSlotCount = 5;
 
+                var newId = await _repo.CreateAsync(userId, battleId, defaultSlotCount, ct);
+                var created = await _repo.GetByIdAsync(newId, ct);
+
+                return Ok(created.ToGetResponse());
+            }
             return Ok(party.ToGetResponse());
         }
 
@@ -93,7 +100,6 @@ namespace WebServer.Controllers.User
             return NoContent();
         }
 
-        // (선택) 벌크 배치
         [HttpPut("bulk-assign")]
         public async Task<IActionResult> BulkAssign([FromBody] BulkAssignRequestPb req, CancellationToken ct)
         {

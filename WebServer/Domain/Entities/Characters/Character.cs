@@ -25,7 +25,7 @@ namespace Domain.Entities.Characters
         public int? PortraitId { get; private set; }
         public DateTimeOffset? ReleaseDate { get; private set; }
         public bool IsLimited { get; private set; }
-
+        public short FormationNumber { get; private set; }
         // JSONB 매핑 예정: 태그 목록
         private readonly List<string> _tags = new();
         public IReadOnlyList<string> Tags => _tags;
@@ -41,6 +41,7 @@ namespace Domain.Entities.Characters
             int factionId,
             int roleId,
             int elementId,
+            short formationNum,
             int? iconId = null,
             int? portraitId = null,
             DateTimeOffset? releaseDate = null,
@@ -59,6 +60,7 @@ namespace Domain.Entities.Characters
                 RoleId = roleId,
                 ElementId = elementId,
                 IconId = iconId,
+                FormationNumber = formationNum,
                 PortraitId = portraitId,
                 ReleaseDate = releaseDate,
                 IsLimited = isLimited,

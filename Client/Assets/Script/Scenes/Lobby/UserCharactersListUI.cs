@@ -77,7 +77,12 @@ public class UserCharactersListUI : UIPopup
             }
 
             var summary = characters[i];
-            ui.Set(summary);
+            ui.Set(summary, (data) =>
+            {
+                var detailUI = UserCharactersListUI.Instance.UserCharacterDeatailScript;
+                detailUI.gameObject.SetActive(true);
+                detailUI.Set(data);
+            });
             ui.gameObject.SetActive(true);
 
             // 디테일창이 있으면 클릭 콜백 넘겨주기 (UserCharacterUI에 이런 메서드가 있다고 가정)

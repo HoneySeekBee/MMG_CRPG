@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5219039861549163902}
   - component: {fileID: 5244065738691266142}
   - component: {fileID: 7763708753576142310}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: AdventureButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -131,7 +131,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6459091218712917710}
   - component: {fileID: 731956992859885781}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: BattleLobbyPopup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -185,7 +185,7 @@ GameObject:
   - component: {fileID: 8937237116083121085}
   - component: {fileID: 6363946929815318654}
   - component: {fileID: 2187310792599006246}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

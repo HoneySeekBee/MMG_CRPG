@@ -1,5 +1,6 @@
 
 using Contracts.Protos;
+using Contracts.UserParty;
 using Google.Protobuf.WellKnownTypes;
 using System;
 using System.Collections;
@@ -35,6 +36,10 @@ public class UserData
 
     public StageProgressManager StageProgress { get; } = new StageProgressManager();
 
+    // 파티 
+    private readonly Dictionary<int, List<UserPartySlotPb>> _userpartyList = new(); // 각 BattleType별 파티 구성 
+    public IReadOnlyDictionary<int, List<UserPartySlotPb>> UserPartyList => _userpartyList;
+    public GetUserPartyResponsePb PartyProgress { get; } = new GetUserPartyResponsePb();
 
 
     public UserData(int userId, string nickname, int level)
@@ -123,6 +128,15 @@ public class UserData
         }
         _userCharactersDict[inc.CharacterId] = inc.Clone();
         return true;
+    }
+
+   public void SyncUserParty(int partyid, IEnumerable<UserPartySlotPb> userPartys)
+    {
+        _userpartyList[partyid] = new List<UserPartySlotPb>();
+        foreach (var userPartySlot in userPartys)
+        {
+            _userpartyList[partyid].Add(userPartySlot);
+        }
     }
 
     public bool RemoveCharacter(int characterId) => _userCharactersDict.Remove(characterId);
