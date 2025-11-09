@@ -13,7 +13,7 @@ namespace Infrastructure.Persistence.Configurations.Users
     {
         public void Configure(EntityTypeBuilder<UserParty> e) 
         {  // table & keys
-            e.ToTable("user_party");
+            e.ToTable("UserParty");
             e.HasKey(x => x.PartyId);
 
             // columns

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using Contracts.Protos;
 using WebServer.Protos;
+using System;
 
 public class UserCharacterUI : MonoBehaviour
 {
@@ -21,7 +22,7 @@ public class UserCharacterUI : MonoBehaviour
         thisBtn = GetComponent<Button>();
     }
 
-    public void Set(UserCharacterSummaryPb characterData)
+    public void Set(UserCharacterSummaryPb characterData, Action<UserCharacterSummaryPb> onClickAction)
     {
         CharacterDetailPb ThisCharacter = CharacterCache.Instance.DetailById[characterData.CharacterId];
         MasterDataCache MasterData = MasterDataCache.Instance;
@@ -33,11 +34,7 @@ public class UserCharacterUI : MonoBehaviour
         NameText.text = ThisCharacter.Name;
 
         thisBtn.onClick.RemoveAllListeners();
-        thisBtn.onClick.AddListener(() =>
-        {
-            UserCharactersListUI.Instance.UserCharacterDeatailScript.gameObject.SetActive(true);
-            UserCharactersListUI.Instance.UserCharacterDeatailScript.Set(characterData);
-        });
+        thisBtn.onClick.AddListener(() => onClickAction?.Invoke(characterData));
     }
 
 

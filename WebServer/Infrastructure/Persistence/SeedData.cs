@@ -41,8 +41,8 @@ namespace Infrastructure.Persistence
             // ---------- 3) Characters (팩토리 사용) ----------
             if (!db.Characters.Any())
             {
-                var c1 = Character.Create("Agnis", raritySR, facNeutral, roleAtk, fireId);
-                var c2 = Character.Create("Marin", rarityR, facNeutral, roleDef, waterId);
+                var c1 = Character.Create("Agnis", raritySR, facNeutral, roleAtk, fireId, 1);
+                var c2 = Character.Create("Marin", rarityR, facNeutral, roleDef, waterId, 1);
                 db.Characters.AddRange(c1, c2);
                 db.SaveChanges();
             }

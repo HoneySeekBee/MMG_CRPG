@@ -23,5 +23,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Use/LobbyRoot.unity
     guid: 0855054b7841f5e46b3645d91a82da06
+  - enabled: 1
+    path: Assets/Scenes/Use/PartySetupScene.unity
+    guid: bba54ae3196072f4484d4e745ae6c4a4
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 7499c846127df6845995121cf1a81cbf, type: 2}

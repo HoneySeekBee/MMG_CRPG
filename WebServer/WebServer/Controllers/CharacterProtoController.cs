@@ -54,7 +54,8 @@ namespace WebServer.Controllers
                         ? Timestamp.FromDateTime(dto.ReleaseDate.Value.UtcDateTime)
                         : null,
                     IconUrl = dto.IconId.HasValue ? $"{_imageBase}/{_iconsSubdir}/{dto.IconId.Value}.png" : "",
-                    PortraitUrl = dto.PortraitId.HasValue ? $"{_imageBase}/{_portraitsSubdir}/{dto.PortraitId.Value}.png" : ""
+                    PortraitUrl = dto.PortraitId.HasValue ? $"{_imageBase}/{_portraitsSubdir}/{dto.PortraitId.Value}.png" : "",
+                    FormationNum = dto.formationNum
                 };
 
                 // Tags

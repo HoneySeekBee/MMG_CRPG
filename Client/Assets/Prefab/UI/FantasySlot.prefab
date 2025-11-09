@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 889560595941997492}
   - component: {fileID: 7545397238225985738}
   - component: {fileID: 4893727197960624201}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: FantasySlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 3219450201211500039}
   - component: {fileID: 5625333115095039775}
   - component: {fileID: 4340476898990633972}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,7 +177,7 @@ GameObject:
   - component: {fileID: 6589871186530898877}
   - component: {fileID: 9023875004967622221}
   - component: {fileID: 9026072406629526197}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: FantasyMask
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -29,7 +29,7 @@ namespace Application.Character
     public sealed record CharacterDetailDto(
         int Id, string Name,
         int RarityId, int ElementId, int RoleId, int FactionId,
-        int? IconId, int? PortraitId, bool IsLimited, DateTimeOffset? ReleaseDate,
+        int? IconId, int? PortraitId, bool IsLimited, DateTimeOffset? ReleaseDate, short formationNum,
         IReadOnlyList<string> Tags, string? MetaJson,
         IReadOnlyList<CharacterSkillDto> Skills,
         IReadOnlyList<CharacterStatProgressionDto> StatProgressions,
@@ -65,7 +65,7 @@ namespace Application.Character
 
             return new CharacterDetailDto(
                 c.Id, c.Name, c.RarityId, c.ElementId, c.RoleId, c.FactionId,
-                c.IconId, c.PortraitId, c.IsLimited, c.ReleaseDate,
+                c.IconId, c.PortraitId, c.IsLimited, c.ReleaseDate, c.FormationNumber,
                 c.Tags.ToList(), c.MetaJson, skillDtos, progDtos, promoDtos);
         }
     }

@@ -13,7 +13,7 @@ namespace Infrastructure.Persistence.Configurations.Users
     {
         public void Configure(EntityTypeBuilder<UserPartySlot> e) 
         {
-            e.ToTable("user_party_character");
+            e.ToTable("UserPartyCharacter");
             e.HasKey(x => new { x.PartyId, x.SlotId });
 
             // columns

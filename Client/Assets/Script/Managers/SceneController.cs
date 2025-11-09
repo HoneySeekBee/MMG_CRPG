@@ -11,6 +11,8 @@ namespace Game.Managers
 
         private string _current;             // 현재 활성 씬 이름 (AppPersistent 제외)
         private const string PersistentName = "AppPersistent";
+        public const string PartySetupSceneName = "PartySetupScene";
+        private readonly HashSet<string> _loadedAdditives = new HashSet<string>();
 
         void Awake()
         {
@@ -56,6 +58,42 @@ namespace Game.Managers
             _current = sceneName;
             Debug.Log($"[SceneController] 전환 완료: {_current}");
         }
-    }
+        public IEnumerator LoadAdditiveAsync(string sceneName, bool setActive = false)
+        { 
+            if (_loadedAdditives.Contains(sceneName))
+            {
+                Debug.Log($"[SceneController] Additive 이미 로드됨: {sceneName}");
+                yield break;
+            }
 
+            Debug.Log($"[SceneController] Additive 로드: {sceneName}");
+            var load = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+            while (!load.isDone) yield return null;
+
+            var scene = SceneManager.GetSceneByName(sceneName);
+            if (setActive && scene.IsValid())
+            {
+                SceneManager.SetActiveScene(scene);
+            }
+
+            _loadedAdditives.Add(sceneName);
+        }
+
+        // 보조(콘텐츠) 씬 언로드
+        public IEnumerator UnloadAdditiveAsync(string sceneName)
+        {
+            if (!_loadedAdditives.Contains(sceneName))
+            {
+                Debug.Log($"[SceneController] Additive 언로드 요청했지만 목록에 없음: {sceneName}");
+                yield break;
+            }
+
+            Debug.Log($"[SceneController] Additive 언로드: {sceneName}");
+            var unload = SceneManager.UnloadSceneAsync(sceneName);
+            while (unload != null && !unload.isDone) yield return null;
+
+            _loadedAdditives.Remove(sceneName);
+        }
+
+    }
 }

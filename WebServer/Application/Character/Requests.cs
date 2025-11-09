@@ -22,6 +22,7 @@ namespace Application.Character
         int FactionId,
         int RoleId,
         int ElementId,
+        short formationNum,
         int? IconId = null,
         int? PortraitId = null,
         DateTimeOffset? ReleaseDate = null,

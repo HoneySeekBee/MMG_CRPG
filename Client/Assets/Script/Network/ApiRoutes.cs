@@ -1,3 +1,4 @@
+using Contracts.Protos;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,12 +12,11 @@ public static class ApiRoutes
     public const string AuthRefresh = "/auth/refresh";
     public const string PlayerBootstrap = "/player/bootstrap";
 
-
     public const string MeSummary = "/me/summary";
     public const string MeProfile = "/me/profile";
     public const string UserStageProgress = "/me/stages";
     public const string MeProfileUpdate = "/me/profile";
-    public const string MeChangePassword = "/me/change-password";
+    public const string MeChangePassword = "/me/change-password"; 
 
     public const string ItemTypes = "/itemtypes";
     public const string EquipSlots = "/equipslots";
@@ -44,4 +44,7 @@ public static class ApiRoutes
 
     public static string UserCharacterEquip(int userId, int characterId, int equipId)
         => $"/users/{userId}/characters/{characterId}/equipment/{equipId}";
+
+    public static string UserPartyGet(int useId, int partyId) => $"/userparty/by-battle?userId={useId}&battleId={partyId}";
+    public const string UserPartyBulkAssign = "/userparty/bulk-assign";
 }
