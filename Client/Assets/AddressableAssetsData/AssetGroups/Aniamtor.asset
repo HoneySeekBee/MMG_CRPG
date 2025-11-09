@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Aniamtor
+  m_EditorClassIdentifier: 
+  m_GroupName: Aniamtor
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 5474f27affaee9c4ca9e500ff7df3243
+  m_SerializeEntries:
+  - m_GUID: 05ac00675c226c94190cef2b05343229
+    m_Address: TwoHandSword_CONTROLLER
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 250054af9451646429c5262bb6b0c6c8
+    m_Address: Fist_CONTROLLER
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3f0dd36a139c3f2498bbe1332d3faaf2
+    m_Address: Spear_CONTROLLER
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4920ca1523053304e9613fcad41962f1
+    m_Address: AnimTypeUnspecified_CONTROLLER
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6fb6591e2d211fa4595d8c8f62369696
+    m_Address: Wand_CONTROLLER
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 774900f35c49a3e4892292a244b2f118
+    m_Address: OneHandSword_CONTROLLER
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: be0a36a258c1ccf479b1b8826ccf0ef6
+    m_Address: SwordShield_CONTROLLER
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f4c7bbda7d83be540bdf16fa74bdfe1c
+    m_Address: Bow_CONTROLLER
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 70aef510b6431584d83ab967b21d913a, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 7cbf097a162670045b0cd0537655394b, type: 2}
+    - {fileID: 11400000, guid: dbff929722f8bc34a86674ead12280e7, type: 2}

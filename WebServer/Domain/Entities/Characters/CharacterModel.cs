@@ -24,7 +24,8 @@ namespace Domain.Entities.Characters
         public int? PartMouthId { get; private set; }
         public int? PartEyeId { get; private set; }
         public int? PartAccId { get; private set; }
-
+        public string HairColorCode{ get; private set; }
+        public string SkinColorCode{ get; private set; }
         public DateTime CreatedAt { get; private set; }
         public DateTime UpdatedAt { get; private set; }
 

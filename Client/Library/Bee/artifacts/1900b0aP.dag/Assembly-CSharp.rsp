@@ -429,6 +429,7 @@
 "Assets/Script/Data/PlayerState.cs"
 "Assets/Script/Data/StageProgressManager.cs"
 "Assets/Script/Data/UserData.cs"
+"Assets/Script/GamePlay/BatchSlot.cs"
 "Assets/Script/GamePlay/Character/CharacterAnimationController.cs"
 "Assets/Script/GamePlay/Character/CharacterAppearance.cs"
 "Assets/Script/GamePlay/PartySetManager.cs"

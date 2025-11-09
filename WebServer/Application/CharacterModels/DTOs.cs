@@ -19,6 +19,8 @@ namespace Application.CharacterModels
         public int? PartMouthId { get; set; }
         public int? PartEyeId { get; set; }
         public int? PartAccId { get; set; }
+        public string HairColorCode{ get; set; }
+        public string SkinColorCode{ get; set; }
     }
     public sealed class CharacterModelPartDto
     {

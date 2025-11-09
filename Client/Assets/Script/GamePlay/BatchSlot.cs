@@ -54,6 +54,8 @@ public class BatchSlot : MonoBehaviour
         CharacterObject = characterObject;
         CharacterObject.transform.parent = this.transform;
         CharacterObject.transform.position = this.transform.position;
+        CharacterAppearance appearance = CharacterObject.GetComponent<CharacterAppearance>();
+        appearance.Set(CharacterCache.Instance.CharacterModelById[characterId]);
     }
     private void Unassign()
     {
