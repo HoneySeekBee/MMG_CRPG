@@ -79,7 +79,9 @@ public class BattleContentsCache : MonoBehaviour
 
             _stages.Clear();
             foreach (var s in res.Data.Stages)
+            {
                 _stages[s.Id] = s; 
+            } 
         });
 
         BuildLookupMaps();

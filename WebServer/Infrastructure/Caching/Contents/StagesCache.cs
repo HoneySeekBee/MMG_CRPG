@@ -101,7 +101,8 @@ namespace Infrastructure.Caching.Contents
                     .OrderBy(b => b.BatchNum)
                     .Select(b => new BatchDto(
                         b.BatchNum,
-                        b.AssetKey
+                        b.UnitKey,
+                        b.EnvKey
                     ))
                     .ToList()
             );

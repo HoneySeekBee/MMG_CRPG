@@ -57,7 +57,8 @@ message RequirementPb {
 // 배치(스폰 묶음)
 message BatchPb {
   int32 batch_num = 1;
-  string asset_key = 2;
+  string unit_key = 2;
+  string env_key = 3;
 }
 
 // 여러 개 한 번에 보낼 때

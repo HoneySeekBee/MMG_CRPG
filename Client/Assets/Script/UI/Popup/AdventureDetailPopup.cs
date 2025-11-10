@@ -22,6 +22,7 @@ public class AdventureDetailPopup : UIPopup
     {
         if (blocker != null)
             blocker.SetActive(true);
+        LobbyRootController.Instance._currentStage = data;
         ClearSlots();
         chapterStageText.text = $"{data.Chapter}-{data.Order}";
         chapterTitleText.text = $"{data.Name}";
