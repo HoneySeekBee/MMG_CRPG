@@ -29,8 +29,13 @@ namespace Infrastructure.Persistence.Configurations.Contents
                 .HasColumnName("batch_num")
                 .IsRequired();
 
-            b.Property(x => x.AssetKey)
-                .HasColumnName("asset_key")
+            b.Property(x => x.UnitKey)
+                .HasColumnName("unit_key")
+                .HasMaxLength(100)
+                .IsRequired();
+
+            b.Property(x => x.EnvKey)
+                .HasColumnName("env_key")
                 .HasMaxLength(100)
                 .IsRequired();
 
@@ -51,9 +56,7 @@ namespace Infrastructure.Persistence.Configurations.Contents
             // 유니크 인덱스: 같은 Stage 내에서 BatchNum은 고유해야 함
             b.HasIndex(x => new { x.StageId, x.BatchNum })
                 .IsUnique();
-
-            // 추가 인덱스
-            b.HasIndex(x => x.AssetKey);
+             
         }
     }
 } 

@@ -12,24 +12,27 @@ namespace Domain.Entities.Contents
         public int Id { get; private set; }          // stage_batch_id
         public int StageId { get; private set; }
         public int BatchNum { get; private set; }
-        public string AssetKey { get; private set; } = string.Empty;
+        public string UnitKey { get; private set; } = string.Empty;
+        public string EnvKey { get; private set; } = string.Empty;
         public DateTime CreatedAt { get; private set; }
         public DateTime UpdatedAt { get; private set; }
 
         protected StageBatch() { }
 
-        public StageBatch(int batchNum, string assetKey)
+        public StageBatch(int batchNum, string unitKey, string envKey)
         {
             BatchNum = batchNum;
-            AssetKey = assetKey;
+            UnitKey = unitKey;
+            EnvKey = envKey;
             CreatedAt = DateTime.UtcNow;
             UpdatedAt = DateTime.UtcNow;
         }
 
-        public void Update(int batchNum, string assetKey)
+        public void Update(int batchNum, string unitKey, string envKey)
         {
             BatchNum = batchNum;
-            AssetKey = assetKey;
+            UnitKey = unitKey;
+            EnvKey = envKey;
             UpdatedAt = DateTime.UtcNow;
         } 
     } 

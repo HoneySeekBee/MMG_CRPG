@@ -49,11 +49,10 @@ namespace Application.Contents.Stages
     public sealed class BatchCmd
     {
         public int Index { get; set; }        // batch_num
-        public string AssetKey { get; set; } = string.Empty;
+        public string EnvKey { get; set; } = string.Empty;
+        public string UnitKey { get; set; } = string.Empty;
     }
-    // ─────────────────────────────────────────────
     // Create / Update (Commands)
-    // ─────────────────────────────────────────────
     public sealed record CreateStageRequest(
         int Chapter,
         int StageNumer,
