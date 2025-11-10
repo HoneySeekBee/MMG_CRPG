@@ -79,7 +79,8 @@ namespace WebServer.Mappers.Contents
                 p.Batches.Add(new BatchPb
                 {
                     BatchNum = b.BatchNum,
-                    AssetKey = b.AssetKey ?? string.Empty
+                    UnitKey = b.UnitKey ?? string.Empty,
+                    EnvKey = b.EnvKey ?? string.Empty
                 });
             }
 

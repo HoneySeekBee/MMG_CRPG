@@ -12,8 +12,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-using static System.Net.WebRequestMethods;
+using UnityEngine.UI; 
 
 public class LoginPopup : UIPopup
 {

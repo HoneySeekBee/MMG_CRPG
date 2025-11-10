@@ -145,5 +145,7 @@ public class PartySetupPopup : UIPopup
         yield return SceneController.Instance.UnloadAdditiveAsync(SceneController.PartySetupSceneName);
         // 3) ¾À ·Îµå
         yield return SceneController.Instance.LoadAdditiveAsync(SceneController.MapSceneName);
+
+        LobbyRootController.Instance.Show("BattleMap");
     }
 }

@@ -17,7 +17,7 @@ namespace Application.Contents.Stages
     public sealed record DropDto(int ItemId, decimal Rate, short MinQty, short MaxQty, bool FirstClearOnly);
     public sealed record RewardDto(int ItemId, short Qty);
     public sealed record RequirementDto(int? RequiredStageId, short? MinAccountLevel);
-    public sealed record BatchDto(int BatchNum, string AssetKey);
+    public sealed record BatchDto(int BatchNum, string UnitKey, string EnvKey);
     public sealed record StageDetailDto(
         int Id, int Chapter, int Order, string? Name,
         short RecommendedPower, short StaminaCost, bool IsActive,
@@ -58,7 +58,7 @@ namespace Application.Contents.Stages
                  .Select(r => new RequirementDto(r.RequiredStageId, r.MinAccountLevel))
                  .ToList(),
                 s.Batches
-                .Select(r => new BatchDto(r.BatchNum, r.AssetKey))
+                .Select(r => new BatchDto(r.BatchNum, r.UnitKey, r.EnvKey))
                 .ToList()
             );
 

@@ -1,3 +1,4 @@
+using Contracts.Protos;
 using Lobby;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ public class LobbyRootController : MonoBehaviour
     [Header("Tab Buttons")]
     public Button btnLogin, btnMain, btnBattle, btnAdventure, btnShop;
     [Header("Panels (Static)")]
-    public GameObject panelLogin, panelMain, panelBattle, panelAdventure, panelShop, partySet;
+    public GameObject panelLogin, panelMain, panelBattle, panelAdventure, panelShop, partySet, panelBattleMap;
 
     [Header("Popup Root (for Addressable popups)")]
     [SerializeField] private Transform popupRoot;
@@ -18,6 +19,7 @@ public class LobbyRootController : MonoBehaviour
     private Dictionary<string, System.Action> _onShowActions;
      
     [HideInInspector] public int _currentBattleId;
+    [HideInInspector] public StagePb _currentStage;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -34,7 +36,8 @@ public class LobbyRootController : MonoBehaviour
             ["Battle"] = panelBattle,
             ["Adventure"] = panelAdventure,
             ["Shop"] = panelShop,
-            ["PartySet"] = partySet
+            ["PartySet"] = partySet,
+            ["BattleMap"] = panelBattleMap
         }; 
         _onShowActions = new()
         {
@@ -42,7 +45,8 @@ public class LobbyRootController : MonoBehaviour
             ["Main"] = () => OpenLobbyPopup(),
             ["Battle"] = () => OpenBattleLobbyPopup(),
             ["Adventure"] = () => OpenAdventureLobbyPopup(),
-            ["PartySet"] = () => OpenPartySetupPopup(),
+            ["PartySet"] = () => OpenPartySetupPopup(), 
+            ["BattleMap"] = () => OpenBattleMapPopup(), 
         };
 
         btnLogin.onClick.AddListener(() => Show("Login"));
@@ -160,6 +164,20 @@ public class LobbyRootController : MonoBehaviour
         }
         var popup = await popupPool.ShowPopupAsync<PartySetupPopup>(key, popupRoot);
         if (popup == null) { Debug.LogError("PartySetupPopup open failed"); return; }
+
+        popup.Set();
+    }
+    private async void OpenBattleMapPopup()
+    {
+        const string key = "BattleMapPopup";
+        var popupPool = UIPrefabPool.Instance as UIPopupPool;
+        if (popupPool == null)
+        {
+            popupPool = FindObjectOfType<UIPopupPool>();
+            if (popupPool == null) { Debug.LogError("UIPopupPool not found"); return; }
+        }
+        var popup = await popupPool.ShowPopupAsync<BattleMapPopup>(key, popupRoot);
+        if (popup == null) { Debug.LogError("BattleMapPopup open failed"); return; }
 
         popup.Set();
     }
