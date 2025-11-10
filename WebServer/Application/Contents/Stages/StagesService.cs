@@ -115,7 +115,7 @@ namespace Application.Contents.Stages
             foreach (var r in rewards) s.FirstRewards.Add(new StageFirstClearReward(r.ItemId, r.Qty));
             foreach (var r in reqs) s.Requirements.Add(new StageRequirement(r.RequiredStageId, r.MinAccountLevel)); 
             foreach (var b in batches.OrderBy(_ => _.Index))
-                s.Batches.Add(new StageBatch(b.Index, b.AssetKey));
+                s.Batches.Add(new StageBatch(b.Index, b.UnitKey, b.EnvKey));
         }
     }
 }
