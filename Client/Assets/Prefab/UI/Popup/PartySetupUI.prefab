@@ -189,6 +189,7 @@ MonoBehaviour:
   fadeDuration: 0.15
   prefab: {fileID: 2250534668195098892, guid: d74d9b34fa84c4742b8206a805758bc1, type: 3}
   contents: {fileID: 7334503945678577658}
+  startBtn: {fileID: 3395747695697642085}
 --- !u!1 &2927744421057861373
 GameObject:
   m_ObjectHideFlags: 0

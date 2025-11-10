@@ -19,7 +19,7 @@ namespace Infrastructure.Persistence.Configurations.Users
             e.Property(x => x.UserId).HasColumnName("UserId");
             e.Property(x => x.CharacterId).HasColumnName("CharacterId");
             e.Property(x => x.Level).HasColumnName("Level");
-            e.Property(x => x.Exp).HasColumnName("Exp");
+            e.Property(x => x.Exp).HasColumnName("Exp"); 
             e.Property(x => x.BreakThrough).HasColumnName("BreakThrough");
             e.Property(x => x.UpdatedAt).HasColumnName("UpdatedAt").IsRequired();
             e.Property(x => x.UpdatedAt).IsConcurrencyToken();

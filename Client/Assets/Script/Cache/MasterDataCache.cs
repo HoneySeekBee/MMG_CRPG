@@ -93,7 +93,7 @@ public class MasterDataCache : MonoBehaviour
 
             if (req.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError($"아이콘 다운로드 실패: {item.Url} - {req.error}");
+                Debug.Log($"아이콘 다운로드 실패: {item.Url} - {req.error}");
                 continue;
             }
 

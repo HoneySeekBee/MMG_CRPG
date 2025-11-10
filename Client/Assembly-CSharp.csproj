@@ -146,6 +146,7 @@
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\IdleCharacterState.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Character_Controller\ThirdPersonCamera.cs" />
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\SceneTransition.cs" />
+    <Compile Include="Assets\Script\Network\NetworkManager.cs" />
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\InitialPlayerPrefs.cs" />
     <Compile Include="Assets\Script\Scenes\Lobby\UserCharacterListController.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\Myco.cs" />

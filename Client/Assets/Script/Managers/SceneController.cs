@@ -12,6 +12,7 @@ namespace Game.Managers
         private string _current;             // 현재 활성 씬 이름 (AppPersistent 제외)
         private const string PersistentName = "AppPersistent";
         public const string PartySetupSceneName = "PartySetupScene";
+        public const string MapSceneName = "Battle";
         private readonly HashSet<string> _loadedAdditives = new HashSet<string>();
 
         void Awake()

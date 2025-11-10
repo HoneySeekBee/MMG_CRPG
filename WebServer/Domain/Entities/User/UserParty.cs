@@ -61,8 +61,7 @@ namespace Domain.Entities.User
         // 캐릭터 파티 참가
         public void Assign(int slotId, int userCharacterId)
         {
-            EnsureValidSlot(slotId);
-
+            EnsureSlotCapacity(slotId);
             if (_slots.Any(s => s.UserCharacterId == userCharacterId && s.SlotId != slotId))
                 throw new InvalidOperationException($"Character {userCharacterId} already assigned in this party.");
 
@@ -72,15 +71,15 @@ namespace Domain.Entities.User
         // 캐릭터 해제 
         public void Unassign(int slotId)
         {
-            EnsureValidSlot(slotId);
+            EnsureSlotCapacity(slotId);
             _slots[slotId].SetCharacter(null);
             Touch();
         }
         // 교체 
         public void Swap(int slotA, int slotB)
         {
-            EnsureValidSlot(slotA);
-            EnsureValidSlot(slotB);
+            EnsureSlotCapacity(slotA);
+            EnsureSlotCapacity(slotB);
             if (slotA == slotB) return;
 
             var a = _slots[slotA].UserCharacterId;
@@ -95,12 +94,21 @@ namespace Domain.Entities.User
             => _slots.Where(s => s.UserCharacterId.HasValue)
                      .Select(s => s.UserCharacterId!.Value)
                      .ToList();
+        private void EnsureSlotCapacity(int slotId)
+        {
+            if (slotId < 0 )
+                throw new ArgumentOutOfRangeException(nameof(slotId), $"Valid range: 0..{_slots.Count - 1}");
+            while (_slots.Count <= slotId)
+            {
+                _slots.Add(new UserPartySlot(PartyId, _slots.Count, null));
+            } 
+            Touch();
+        }
         private void EnsureValidSlot(int slotId)
         {
             if (slotId < 0 || slotId >= _slots.Count)
                 throw new ArgumentOutOfRangeException(nameof(slotId), $"Valid range: 0..{_slots.Count - 1}");
         }
-         
         private void Touch() => UpdatedAt = DateTime.UtcNow;
     }
 }

@@ -19,6 +19,7 @@ message UserCharacterSummaryPb
 	int32 exp = 4;
 	int32 breakThrough = 5; 
     google.protobuf.Timestamp updated_at = 6;
+	int32 user_character_id = 7;
 
     repeated UserCharacterSkillPb skills = 10;  
 	repeated UserCharacterEquipPb equips = 11; 

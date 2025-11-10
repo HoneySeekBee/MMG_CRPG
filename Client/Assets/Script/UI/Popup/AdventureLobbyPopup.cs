@@ -25,9 +25,9 @@ public class AdventureLobbyPopup : UIPopup
     private readonly List<StageButtonPopup> _activeButtons = new();
 
     public void Set()
-    {
-        UserPartyNetwork partyNetwork = new UserPartyNetwork();
-        StartCoroutine(partyNetwork.GetPartyAsync(BattleLobbyPopup.BATTLE_ADVENTURE));
+    { 
+        UserPartyNetwork partyNetwork = NetworkManager.Instance.PartyNetwork;
+        StartCoroutine(partyNetwork.GetPartyAsync(NetworkManager.BATTLE_ADVENTURE));
 
         var cache = BattleContentsCache.Instance;
         var user = GameState.Instance.CurrentUser;

@@ -14,10 +14,10 @@ public class LobbyRootController : MonoBehaviour
 
     [Header("Popup Root (for Addressable popups)")]
     [SerializeField] private Transform popupRoot;
-
     private Dictionary<string, GameObject> _panels;
-    private Dictionary<string, System.Action> _onShowActions; 
-
+    private Dictionary<string, System.Action> _onShowActions;
+     
+    [HideInInspector] public int _currentBattleId;
     private void Awake()
     {
         if (Instance != null && Instance != this)

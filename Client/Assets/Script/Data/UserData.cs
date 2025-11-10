@@ -39,6 +39,8 @@ public class UserData
     // 파티 
     private readonly Dictionary<int, List<UserPartySlotPb>> _userpartyList = new(); // 각 BattleType별 파티 구성 
     public IReadOnlyDictionary<int, List<UserPartySlotPb>> UserPartyList => _userpartyList;
+    private readonly Dictionary<int, long> _userPartyIdByBattleId = new(); // Battle 타입별 파티 아이디
+    public IReadOnlyDictionary<int, long> UserPartyIdByBattleId => _userPartyIdByBattleId;
     public GetUserPartyResponsePb PartyProgress { get; } = new GetUserPartyResponsePb();
 
 
@@ -130,12 +132,13 @@ public class UserData
         return true;
     }
 
-   public void SyncUserParty(int partyid, IEnumerable<UserPartySlotPb> userPartys)
+   public void SyncUserParty(int battleId, long partyid, IEnumerable<UserPartySlotPb> userPartys)
     {
-        _userpartyList[partyid] = new List<UserPartySlotPb>();
+        _userPartyIdByBattleId[battleId] = partyid;
+        _userpartyList[battleId] = new List<UserPartySlotPb>();
         foreach (var userPartySlot in userPartys)
         {
-            _userpartyList[partyid].Add(userPartySlot);
+            _userpartyList[battleId].Add(userPartySlot);
         }
     }
 

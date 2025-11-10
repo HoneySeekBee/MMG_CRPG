@@ -58,9 +58,32 @@ namespace Infrastructure.Repositories
              
             foreach (var slot in party.Slots)
             {
-                _db.Attach(slot);
-                _db.Entry(slot).Property(x => x.UserCharacterId).IsModified = true;
-                 
+                var entry = _db.Entry(slot);
+                if (entry.State == EntityState.Detached)
+                {
+                    // 존재하는지 확인 
+                    bool exists = await _db.UserPartySlots
+                        .AnyAsync(s => s.PartyId == slot.PartyId && s.SlotId == slot.SlotId, ct);
+
+                    if (!exists)
+                    {
+                        // 새로 생긴 슬롯이니까 INSERT
+                        _db.UserPartySlots.Add(slot);
+                    }
+                    else
+                    {
+                        // DB에는 있는데 컨텍스트에만 없던 경우 → attach 후 수정 표시
+                        _db.Attach(slot);
+                        _db.Entry(slot).Property(x => x.UserCharacterId).IsModified = true;
+                    }
+                }
+                else
+                {
+                    // 이미 트래킹 중이면 값만 수정됐다고 표시
+                    _db.Entry(slot).Property(x => x.UserCharacterId).IsModified = true;
+                }
+
+                // shadow property 업데이트
                 _db.Entry(slot).Property("updated_at").CurrentValue = DateTime.UtcNow;
                 _db.Entry(slot).Property("updated_at").IsModified = true;
             }

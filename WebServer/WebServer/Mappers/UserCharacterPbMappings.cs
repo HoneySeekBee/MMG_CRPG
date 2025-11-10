@@ -24,7 +24,8 @@ namespace WebServer.Mappers
                     Level = dto.Level,
                     Exp = dto.Exp,
                     BreakThrough = dto.BreakThrough,
-                    UpdatedAt = Timestamp.FromDateTimeOffset(dto.UpdatedAt)
+                    UpdatedAt = Timestamp.FromDateTimeOffset(dto.UpdatedAt),
+                    UserCharacterId = dto.UserCharacterId
                 };
 
                 if (dto.Skills is not null)
