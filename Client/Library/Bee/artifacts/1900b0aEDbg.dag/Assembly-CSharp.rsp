@@ -496,6 +496,7 @@
 "Assets/Script/Network/GamePlay/UserPartyNetwork.cs"
 "Assets/Script/Network/Login/LoginSceneController.cs"
 "Assets/Script/Network/Login/RegistAccount.cs"
+"Assets/Script/Network/NetworkManager.cs"
 "Assets/Script/Network/ProtoHttpClient.cs"
 "Assets/Script/Network/RemoteIconLoader.cs"
 "Assets/Script/Scenes/Init/InitSceneController.cs"

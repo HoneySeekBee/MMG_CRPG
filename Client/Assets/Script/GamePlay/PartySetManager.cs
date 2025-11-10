@@ -19,7 +19,7 @@ public class PartySetManager : MonoBehaviour
     [SerializeField] private PartySlot[] partySlots;
     [HideInInspector] public Dictionary<int, BatchSlot> partySlotsDict = new();
 
-    private const int MAX_CHARACTER_COUNT = 6; 
+    public const int MAX_CHARACTER_COUNT = 6; 
     [Header("캐릭터 오브젝트 ")]
     [SerializeField] private GameObject prefab;
     [SerializeField] private Transform poolParent;
@@ -53,20 +53,25 @@ public class PartySetManager : MonoBehaviour
             if (slot.UserCharacterId != null)
             {
                 Debug.Log($"{slot}번 슬롯 : {slot.UserCharacterId}");
+                partySlotsDict[slot.SlotId].BatchCharacter(slot.UserCharacterId?? 0, GetCharacterObject());
             }
             partySlotsDict[slot.SlotId].SetData(slot);
         }
     }
-
-    // [2] 장착하기 
-    public bool BatchCharacter(int formationNum, int characterNum)
+    public int AssignedCount()
     {
-        bool check = false;
         int assignedCount = partySlotsDict.Values
     .Count(slot => slot != null
                 && slot.SlotData != null
                 && slot.SlotData.UserCharacterId > 0);
-        if(assignedCount > MAX_CHARACTER_COUNT)
+        return assignedCount;
+    }
+    // [2] 장착하기 
+    public bool BatchCharacter(int formationNum, int characterNum)
+    {
+        bool check = false;
+        int assignedCount = AssignedCount();
+        if (assignedCount > MAX_CHARACTER_COUNT)
         {
             Debug.Log("배치 할 수 있는 캐릭터가 가득찼어요.");
             return false;
@@ -121,5 +126,30 @@ public class PartySetManager : MonoBehaviour
                 Destroy(obj);
         }
         character_pools.Clear();
+    }
+    public void SaveCurrentBattleParty(Action<bool> onDone = null)
+    {
+        var battleId = LobbyRootController.Instance._currentBattleId; 
+        var partyId = GameState.Instance.CurrentUser.UserPartyIdByBattleId[battleId]; 
+        SaveCurrentParty(partyId, onDone);
+    }
+    public void SaveCurrentParty(long partyId, Action<bool> onDone = null)
+    {
+        // partySlots → (slotId, userCharacterId) 로 변환
+        var pairs = partySlots.Select(ps =>
+        {
+            // batchSlot이나 SlotData가 비어있을 수도 있으니 null 체크
+            int? userCharacterId = ps.batchSlot?.SlotData != null
+                ? (int?)ps.batchSlot.SlotData.UserCharacterId
+                : null;
+            Debug.Log($"[파티 저장] - {userCharacterId}");
+            // 캐릭터 아이디 0? => null 
+            if (userCharacterId == 0)
+                userCharacterId = null;
+
+            return (ps.slotNum, userCharacterId);
+        });
+
+        NetworkManager.Instance.PartyNetwork.SaveParty(partyId, pairs, onDone);
     }
 }

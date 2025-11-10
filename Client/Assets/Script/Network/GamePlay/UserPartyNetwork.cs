@@ -7,9 +7,11 @@ using Game.Data;
 using Game.Network;
 using Game.UICommon;
 using Google.Protobuf.WellKnownTypes;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using UnityEngine;
 using static System.Net.WebRequestMethods;
@@ -52,14 +54,13 @@ public class UserPartyNetwork
 
             // 정상 데이터 있을 때만 싱크
             Debug.Log($"[UserPartyResponsePb] {res.Data.Party.Slots.Count}이 불러짐");
-            GameState.Instance.CurrentUser?.SyncUserParty(battleId, res.Data.Party.Slots);
+            GameState.Instance.CurrentUser?.SyncUserParty(battleId, res.Data.Party.PartyId, res.Data.Party.Slots);
         });
     }
 
     // 2) 저장(완료 시 한 번에)
-    public void SaveParty(long partyId, IEnumerable<(int slotId, int? userCharacterId)> pairs)
+    public void SaveParty(long partyId, IEnumerable<(int slotId, int? userCharacterId)> pairs, Action<bool> onDone = null)
     {
-        // 1) 요청 만들기
         var req = new BulkAssignRequestPb
         {
             PartyId = partyId
@@ -70,28 +71,29 @@ public class UserPartyNetwork
             req.Pairs.Add(new BulkAssignRequestPb.Types.AssignPair
             {
                 SlotId = slotId,
-                UserCharacterId = userCharacterId   
+                UserCharacterId = userCharacterId
             });
         }
 
-        // 2) URL 맞추기 
-        string url = ApiRoutes.UserPartyBulkAssign; 
+        string url = ApiRoutes.UserPartyBulkAssign;
         Debug.Log($"파티 저장 : {url}");
 
-        // 3) 서버는 NoContent() 
-        AppBootstrap.Instance.StartCoroutine(AppBootstrap.Instance.Http.Put(url, req, Empty.Parser, OnSavePartyResponse));
+        // 콜백을 클로저로 캡처
+        AppBootstrap.Instance.StartCoroutine(
+            AppBootstrap.Instance.Http.Put(url, req, Empty.Parser,
+                response => OnSavePartyResponse(response, onDone))
+        );
     }
 
-    // 서버 응답 처리
-    private void OnSavePartyResponse(ApiResult<Empty> res)
+    private void OnSavePartyResponse(ApiResult<Empty> resp, Action<bool> onDone)
     {
-        if (!res.Ok)
+        if (!resp.Ok)
         {
-            Debug.LogError("[UserParty] 파티 저장 실패: " + res.Message);
-            Popup?.Show($"파티 저장 실패: {res.Message}");
+
+            Debug.LogError("[UserParty] 파티 저장 실패: " + resp.Message);
+            Popup?.Show($"파티 저장 실패: {resp.Message}");
             return;
         }
-
-        Debug.Log("[UserParty] 파티 저장 성공"); 
-    }
+        onDone?.Invoke(true);
+    } 
 }

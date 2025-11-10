@@ -55,16 +55,12 @@ namespace Game.Network
                     Debug.Log($"[HTTP] code={req.responseCode}, result={req.result}, error={req.error}, ctype={req.GetResponseHeader("Content-Type")}");
                     var bytes = req.downloadHandler?.data;
                     if (req.result == UnityWebRequest.Result.Success && req.responseCode >= 200 && req.responseCode < 300)
-                    {
-                        if (bytes == null || bytes.Length == 0)
-                        {
-                            last = ApiResult<T>.Fail("EMPTY_BODY", "Response body is empty", (int)req.responseCode);
-                            cb(last); yield break;
-                        }
+                    { 
                         try
                         {
-                            var data = parser.ParseFrom(bytes);
-                            cb(ApiResult<T>.Success(data, (int)req.responseCode)); yield break;
+                            var data = parser.ParseFrom(bytes ?? Array.Empty<byte>());
+                            cb(ApiResult<T>.Success(data, (int)req.responseCode));
+                            yield break;
                         }
                         catch (Exception e)
                         {

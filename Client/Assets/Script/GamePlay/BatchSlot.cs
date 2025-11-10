@@ -38,7 +38,7 @@ public class BatchSlot : MonoBehaviour
     }
     public bool CheckEmpty()
     {
-        return SlotData == null || SlotData.UserCharacterId == 0;
+        return SlotData == null || SlotData.UserCharacterId == 0 || SlotData.UserCharacterId == null;
     }
     public void BatchCharacter(int characterId, GameObject characterObject)
     {

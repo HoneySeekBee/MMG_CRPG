@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Contracts.Assets;
 using Contracts.UserParty;
 using WebServer.Mappers;
+using Google.Protobuf.WellKnownTypes;
 
 namespace WebServer.Controllers.User
 {
@@ -54,7 +55,7 @@ namespace WebServer.Controllers.User
             var party = await _repo.GetByUserBattleAsync(userId, battleId, ct);
             if (party == null)
             { 
-                const int defaultSlotCount = 5;
+                const int defaultSlotCount = 10;
 
                 var newId = await _repo.CreateAsync(userId, battleId, defaultSlotCount, ct);
                 var created = await _repo.GetByIdAsync(newId, ct);
@@ -73,7 +74,7 @@ namespace WebServer.Controllers.User
 
             party.Assign(req.SlotId, req.UserCharacterId);
             await _repo.SaveAsync(party, ct);
-            return NoContent();
+            return Ok(new Empty());
         }
 
         // PUT api/pb/userparty/unassign
@@ -85,7 +86,7 @@ namespace WebServer.Controllers.User
 
             party.Unassign(req.SlotId);
             await _repo.SaveAsync(party, ct);
-            return NoContent();
+            return Ok(new Empty());
         }
 
         // PUT api/pb/userparty/swap
@@ -97,7 +98,7 @@ namespace WebServer.Controllers.User
 
             party.Swap(req.SlotA, req.SlotB);
             await _repo.SaveAsync(party, ct);
-            return NoContent();
+            return Ok(new Empty());
         }
 
         [HttpPut("bulk-assign")]
@@ -105,16 +106,24 @@ namespace WebServer.Controllers.User
         {
             var party = await _repo.GetByIdAsync(req.PartyId, ct);
             if (party == null) return NotFound();
-
             foreach (var p in req.Pairs)
             {
-                if (p.UserCharacterId == null)  // null -> 해제
+                var v = p.UserCharacterId;
+                if (v == null || v.Value == 0)
+                {
                     party.Unassign(p.SlotId);
-                else
-                    party.Assign(p.SlotId, p.UserCharacterId.Value);
+                }
+            }
+            foreach (var p in req.Pairs)
+            {
+                var v = p.UserCharacterId;
+                if (v != null && v.Value != 0)
+                {
+                    party.Assign(p.SlotId, v.Value);
+                }
             }
             await _repo.SaveAsync(party, ct);
-            return NoContent();
+            return Ok(new Empty());
         }
     }
 }
