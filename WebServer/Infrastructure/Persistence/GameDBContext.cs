@@ -1,11 +1,13 @@
 ﻿using Domain.Entities;
 using Domain.Entities.Characters;
 using Domain.Entities.Contents;
+using Domain.Entities.Monsters;
 using Domain.Entities.User;
 using Infrastructure.Persistence.Configurations.Characters;
 using Infrastructure.Persistence.Configurations.Contents;
 using Infrastructure.Persistence.Configurations.Items;
 using Infrastructure.Persistence.Configurations.MasterData;
+using Infrastructure.Persistence.Configurations.Monsters;
 using Infrastructure.Persistence.Configurations.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -40,6 +42,8 @@ namespace Infrastructure.Persistence
         public DbSet<CharacterModelPart> CharacterModelParts => Set<CharacterModelPart>();
         public DbSet<CharacterModelWeapon> CharacterModelWeapons => Set<CharacterModelWeapon>();
 
+        public DbSet<Monster> Monsters => Set<Monster>();
+        public DbSet<MonsterStatProgression> monsterStatProgressions => Set<MonsterStatProgression>();
         public DbSet<CombatRecord> Combats => Set<CombatRecord>();
         public DbSet<CombatLogRecord> CombatLogs => Set<CombatLogRecord>();
 
@@ -110,6 +114,9 @@ namespace Infrastructure.Persistence
 
             modelBuilder.ApplyConfiguration(new CharacterSkillConfiguration());
             modelBuilder.ApplyConfiguration(new CharacterStatProgressionConfiguration());
+
+            modelBuilder.ApplyConfiguration(new MonsterConfiguration());
+            modelBuilder.ApplyConfiguration(new MonsterStatProgressionConfiguration());
 
             modelBuilder.ApplyConfiguration(new RarityConfiguration());
             modelBuilder.ApplyConfiguration(new RoleConfiguration());

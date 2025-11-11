@@ -19,7 +19,7 @@ public class PartySetManager : MonoBehaviour
     [SerializeField] private PartySlot[] partySlots;
     [HideInInspector] public Dictionary<int, BatchSlot> partySlotsDict = new();
 
-    public const int MAX_CHARACTER_COUNT = 6; 
+    public const int MAX_CHARACTER_COUNT = 6;
     [Header("캐릭터 오브젝트 ")]
     [SerializeField] private GameObject prefab;
     [SerializeField] private Transform poolParent;
@@ -49,11 +49,11 @@ public class PartySetManager : MonoBehaviour
         foreach (UserPartySlotPb slot in slots)
         {
             if (slot == null) continue;
-            if(slot.SlotId == 0) continue;
-            if (slot.UserCharacterId != null)
+            if (slot.SlotId == 0) continue;
+            if (slot.UserCharacterId != null && slot.UserCharacterId != 0)
             {
                 Debug.Log($"{slot}번 슬롯 : {slot.UserCharacterId}");
-                partySlotsDict[slot.SlotId].BatchCharacter(slot.UserCharacterId?? 0, GetCharacterObject());
+                partySlotsDict[slot.SlotId].BatchCharacter(slot.UserCharacterId ?? 0, GetCharacterObject());
             }
             partySlotsDict[slot.SlotId].SetData(slot);
         }
@@ -66,6 +66,7 @@ public class PartySetManager : MonoBehaviour
                 && slot.SlotData.UserCharacterId > 0);
         return assignedCount;
     }
+
     // [2] 장착하기 
     public bool BatchCharacter(int formationNum, int characterNum)
     {
@@ -81,7 +82,7 @@ public class PartySetManager : MonoBehaviour
 
         for (int i = formationNum * 3; i < formationNum * 3 + 3; i++)
         {
-            if(partySlotsDict[i].CheckEmpty())
+            if (partySlotsDict[i].CheckEmpty())
             {
                 check = true;
                 batch = partySlotsDict[i];
@@ -89,12 +90,12 @@ public class PartySetManager : MonoBehaviour
             }
         }
 
-        if(check == false)
-        { 
+        if (check == false)
+        {
             return false;
         }
-
-        batch.BatchCharacter(characterNum, GetCharacterObject());
+        if (characterNum != 0)
+            batch.BatchCharacter(characterNum, GetCharacterObject());
         return true;
     }
 
@@ -108,7 +109,7 @@ public class PartySetManager : MonoBehaviour
         }
 
         // 없으면 새로 생성
-        var newObj = Instantiate(prefab , poolParent);
+        var newObj = Instantiate(prefab, poolParent);
         character_pools.Add(newObj);
         return newObj;
     }
@@ -127,10 +128,11 @@ public class PartySetManager : MonoBehaviour
         }
         character_pools.Clear();
     }
+    #region Party 정보 저장 
     public void SaveCurrentBattleParty(Action<bool> onDone = null)
     {
-        var battleId = LobbyRootController.Instance._currentBattleId; 
-        var partyId = GameState.Instance.CurrentUser.UserPartyIdByBattleId[battleId]; 
+        var battleId = LobbyRootController.Instance._currentBattleId;
+        var partyId = GameState.Instance.CurrentUser.UserPartyIdByBattleId[battleId];
         SaveCurrentParty(partyId, onDone);
     }
     public void SaveCurrentParty(long partyId, Action<bool> onDone = null)
@@ -142,7 +144,7 @@ public class PartySetManager : MonoBehaviour
             int? userCharacterId = ps.batchSlot?.SlotData != null
                 ? (int?)ps.batchSlot.SlotData.UserCharacterId
                 : null;
-            Debug.Log($"[파티 저장] - {userCharacterId}");
+            Debug.Log($"[파티 저장] - [{ps.slotNum}] {userCharacterId}");
             // 캐릭터 아이디 0? => null 
             if (userCharacterId == 0)
                 userCharacterId = null;
@@ -152,4 +154,6 @@ public class PartySetManager : MonoBehaviour
 
         NetworkManager.Instance.PartyNetwork.SaveParty(partyId, pairs, onDone);
     }
+    #endregion
+
 }

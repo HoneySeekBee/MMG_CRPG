@@ -1,0 +1,153 @@
+fileFormatVersion: 2
+guid: 261aa4850395ea148bf2519a5d061ca4
+timeCreated: 1533913957
+licenseType: Store
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Bip001
+    100002: Bip001 Back_Fin_01
+    100004: Bip001 Back_Fin_0102
+    100006: Bip001 Back_Fin_02
+    100008: Bip001 Back_Fin_0202
+    100010: Bip001 Back_Fin_03
+    100012: Bip001 Back_Fin_0302
+    100014: Bip001 Back_Fin_04
+    100016: Bip001 Back_Fin_0402
+    100018: Bip001 Back_Fin_05
+    100020: Bip001 Back_Fin_0502
+    100022: Bip001 Head
+    100024: Bip001 L Clavicle
+    100026: Bip001 L Finger0
+    100028: Bip001 L Forearm
+    100030: Bip001 L Hand
+    100032: Bip001 L UpperArm
+    100034: Bip001 Neck
+    100036: Bip001 Pelvis
+    100038: Bip001 Prop1
+    100040: Bip001 Prop2
+    100042: Bip001 R Clavicle
+    100044: Bip001 R Finger0
+    100046: Bip001 R Forearm
+    100048: Bip001 R Hand
+    100050: Bip001 R UpperArm
+    100052: Bip001 Spine
+    100054: Bip001 Spine1
+    100056: Bip001 Spine2
+    100058: Bip001 Tail
+    100060: Bip001 Tail1
+    100062: Bip001 Tail2
+    100064: Bip001 Tail3
+    100066: Bip001 Xtra_Jaw
+    100068: //RootNode
+    100070: Enemy_Fish_Tang_Blue_001
+    400000: Bip001
+    400002: Bip001 Back_Fin_01
+    400004: Bip001 Back_Fin_0102
+    400006: Bip001 Back_Fin_02
+    400008: Bip001 Back_Fin_0202
+    400010: Bip001 Back_Fin_03
+    400012: Bip001 Back_Fin_0302
+    400014: Bip001 Back_Fin_04
+    400016: Bip001 Back_Fin_0402
+    400018: Bip001 Back_Fin_05
+    400020: Bip001 Back_Fin_0502
+    400022: Bip001 Head
+    400024: Bip001 L Clavicle
+    400026: Bip001 L Finger0
+    400028: Bip001 L Forearm
+    400030: Bip001 L Hand
+    400032: Bip001 L UpperArm
+    400034: Bip001 Neck
+    400036: Bip001 Pelvis
+    400038: Bip001 Prop1
+    400040: Bip001 Prop2
+    400042: Bip001 R Clavicle
+    400044: Bip001 R Finger0
+    400046: Bip001 R Forearm
+    400048: Bip001 R Hand
+    400050: Bip001 R UpperArm
+    400052: Bip001 Spine
+    400054: Bip001 Spine1
+    400056: Bip001 Spine2
+    400058: Bip001 Tail
+    400060: Bip001 Tail1
+    400062: Bip001 Tail2
+    400064: Bip001 Tail3
+    400066: Bip001 Xtra_Jaw
+    400068: //RootNode
+    400070: Enemy_Fish_Tang_Blue_001
+    4300000: Enemy_Fish_Tang_Blue_001
+    9500000: //RootNode
+    11100000: //RootNode
+    13700000: Enemy_Fish_Tang_Blue_001
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 3
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 0.01
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 0
+    keepQuads: 0
+    weldVertices: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 2
+  importAnimation: 0
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638967085552079039
-    m_Hash: 3868220508
+      ticks: 638984430520007833
+    m_Hash: 2451687684
   m_LockFileStatus:
     m_FilePath: C:/Dev/MMG_CRPG/MMG_CRPG/Client/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638967085552223384
-    m_Hash: 2753832072
+      ticks: 638984431523843897
+    m_Hash: 1600027586
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
@@ -583,6 +583,8 @@ m_ResolvedPackages:
     - 2.9.2
     - 2.9.3
     - 2.10.0
+    - 2.10.1
+    - 2.10.2
     compatible:
     - 2.5.1
     - 2.5.2
@@ -594,6 +596,8 @@ m_ResolvedPackages:
     - 2.9.2
     - 2.9.3
     - 2.10.0
+    - 2.10.1
+    - 2.10.2
     recommended: 2.5.2
     deprecated: []
   dependencies: []
@@ -1209,6 +1213,166 @@ m_ResolvedPackages:
     path: 
   unityLifecycle:
     version: 1.7.6
+    nextVersion: 
+    recommendedVersion: 
+    isDeprecated: 0
+    deprecationMessage: 
+  isDeprecated: 0
+  deprecationMessage: 
+  fingerprint: 
+- packageId: com.unity.toonshader@0.10.0-preview
+  testable: 0
+  isDirectDependency: 1
+  version: 0.10.0-preview
+  source: 1
+  resolvedPath: C:\Dev\MMG_CRPG\MMG_CRPG\Client\Library\PackageCache\com.unity.toonshader@0.10.0-preview
+  assetPath: Packages/com.unity.toonshader
+  name: com.unity.toonshader
+  displayName: Unity Toon Shader
+  author:
+    name: 
+    email: 
+    url: 
+  category: 
+  type: assets
+  description: 'Unity Toon Shader (Unity-Chan Toon Shader 3) is a toon shader for
+    images and video that is designed to meet the needs of creators working on cel-shaded
+    3DCG animations.
+
+    Unlike other pre-render toon shaders, all features can
+    be adjusted in real time on Unity, which is the greatest feature of UTS.
+
+
+    UTS
+    has great power and makes a wide variety of character designs possible, from
+    cel-shaded to light novel illustration styles.
+
+
+    UTS has the 3 basic layers
+    of Base Color, 1st Shade Color, and 2nd Shade Color, colors and textures can
+    also accept a wide variety of customization options, such as High Color, Rim
+    Light, MatCap (sphere mapping), and Emissive (light emission).The level of gradation
+    (feather) between colors can also be adjusted in Unity in real-time.
+
+
+    More
+    precisely, View documentation above.'
+  status: 0
+  errors: []
+  versions:
+    all:
+    - 0.6.1-preview
+    - 0.7.0-preview
+    - 0.7.2-preview
+    - 0.7.3-preview
+    - 0.7.4-preview
+    - 0.7.5-preview
+    - 0.7.6-preview
+    - 0.8.0-preview
+    - 0.8.1-preview
+    - 0.8.2-preview
+    - 0.8.3-preview
+    - 0.8.4-preview
+    - 0.8.5-preview
+    - 0.9.0-preview
+    - 0.9.1-preview
+    - 0.9.2-preview
+    - 0.9.3-preview
+    - 0.9.4-preview
+    - 0.9.5-preview
+    - 0.9.6-preview
+    - 0.9.7-preview
+    - 0.10.0-preview
+    - 0.10.1-preview
+    - 0.10.2-preview
+    - 0.11.0-preview
+    - 0.11.1-preview
+    - 0.12.0-preview
+    compatible:
+    - 0.6.1-preview
+    - 0.7.0-preview
+    - 0.7.2-preview
+    - 0.7.3-preview
+    - 0.7.4-preview
+    - 0.7.5-preview
+    - 0.7.6-preview
+    - 0.8.0-preview
+    - 0.8.1-preview
+    - 0.8.2-preview
+    - 0.8.3-preview
+    - 0.8.4-preview
+    - 0.8.5-preview
+    - 0.9.0-preview
+    - 0.9.1-preview
+    - 0.9.2-preview
+    - 0.9.3-preview
+    - 0.9.4-preview
+    - 0.9.5-preview
+    - 0.9.6-preview
+    - 0.9.7-preview
+    - 0.10.0-preview
+    - 0.10.1-preview
+    - 0.10.2-preview
+    - 0.11.0-preview
+    - 0.11.1-preview
+    - 0.12.0-preview
+    recommended: 
+    deprecated: []
+  dependencies:
+  - name: com.unity.render-pipelines.core
+    version: 10.0.0
+  - name: com.unity.film-internal-utilities
+    version: 0.18.4-preview
+  resolvedDependencies:
+  - name: com.unity.render-pipelines.core
+    version: 14.0.11
+  - name: com.unity.ugui
+    version: 1.0.0
+  - name: com.unity.modules.ui
+    version: 1.0.0
+  - name: com.unity.modules.imgui
+    version: 1.0.0
+  - name: com.unity.modules.physics
+    version: 1.0.0
+  - name: com.unity.modules.terrain
+    version: 1.0.0
+  - name: com.unity.modules.jsonserialize
+    version: 1.0.0
+  - name: com.unity.film-internal-utilities
+    version: 0.18.4-preview
+  - name: com.unity.timeline
+    version: 1.7.6
+  - name: com.unity.modules.audio
+    version: 1.0.0
+  - name: com.unity.modules.director
+    version: 1.0.0
+  - name: com.unity.modules.animation
+    version: 1.0.0
+  - name: com.unity.modules.particlesystem
+    version: 1.0.0
+  - name: com.unity.modules.uielements
+    version: 1.0.0
+  keywords: []
+  registry:
+    id: main
+    name: 
+    url: https://packages.unity.com
+    scopes: []
+    isDefault: 1
+    capabilities: 7
+    configSource: 0
+  hideInEditor: 1
+  isAssetStorePackage: 0
+  datePublishedTicks: 638491125520000000
+  documentationUrl: https://docs.unity3d.com/Packages/com.unity.toonshader@0.10/manual/index.html
+  hasRepository: 1
+  repository:
+    type: git
+    url: https://github.com/Unity-Technologies/com.unity.toonshader.git
+    revision: 686591be7854499fcc15b7bc10b417a863f0b092
+    path: 
+  unityLifecycle:
+    version: 
     nextVersion: 
     recommendedVersion: 
     isDeprecated: 0
@@ -3324,6 +3488,347 @@ m_ResolvedPackages:
     type: 
     url: 
     revision: 
+    path: 
+  unityLifecycle:
+    version: 
+    nextVersion: 
+    recommendedVersion: 
+    isDeprecated: 0
+    deprecationMessage: 
+  isDeprecated: 0
+  deprecationMessage: 
+  fingerprint: 
+- packageId: com.unity.render-pipelines.core@14.0.11
+  testable: 0
+  isDirectDependency: 0
+  version: 14.0.11
+  source: 2
+  resolvedPath: C:\Dev\MMG_CRPG\MMG_CRPG\Client\Library\PackageCache\com.unity.render-pipelines.core@14.0.11
+  assetPath: Packages/com.unity.render-pipelines.core
+  name: com.unity.render-pipelines.core
+  displayName: Core RP Library
+  author:
+    name: 
+    email: 
+    url: 
+  category: 
+  type: 
+  description: SRP Core makes it easier to create or customize a Scriptable Render
+    Pipeline (SRP). SRP Core contains reusable code, including boilerplate code for
+    working with platform-specific graphics APIs, utility functions for common rendering
+    operations, and  shader libraries. The code in SRP Core is use by the High Definition
+    Render Pipeline (HDRP) and Universal Render Pipeline (URP). If you are creating
+    a custom SRP from scratch or customizing a prebuilt SRP, using SRP Core will
+    save you time.
+  status: 0
+  errors: []
+  versions:
+    all:
+    - 0.1.21
+    - 0.1.27
+    - 0.1.28
+    - 1.0.0-beta
+    - 1.0.1-beta
+    - 1.1.1-preview
+    - 1.1.2-preview
+    - 1.1.4-preview
+    - 1.1.5-preview
+    - 1.1.8-preview
+    - 1.1.10-preview
+    - 1.1.11-preview
+    - 2.0.1-preview
+    - 2.0.3-preview
+    - 2.0.4-preview
+    - 2.0.4-preview.1
+    - 2.0.5-preview
+    - 2.0.6-preview
+    - 2.0.7-preview
+    - 2.0.8-preview
+    - 3.0.0-preview
+    - 3.1.0-preview
+    - 3.3.0-preview
+    - 4.0.0-preview
+    - 4.0.1-preview
+    - 4.1.0-preview
+    - 4.2.0-preview
+    - 4.3.0-preview
+    - 4.6.0-preview
+    - 4.8.0-preview
+    - 4.9.0-preview
+    - 4.10.0-preview
+    - 5.0.0-preview
+    - 5.1.0
+    - 5.2.0
+    - 5.2.1
+    - 5.2.2
+    - 5.2.3
+    - 5.3.1
+    - 5.6.1
+    - 5.7.2
+    - 5.8.2
+    - 5.9.0
+    - 5.10.0
+    - 5.13.0
+    - 5.16.1
+    - 6.5.2
+    - 6.5.3
+    - 6.7.1
+    - 6.9.0
+    - 6.9.1
+    - 6.9.2
+    - 7.0.0
+    - 7.0.1
+    - 7.1.1
+    - 7.1.2
+    - 7.1.5
+    - 7.1.6
+    - 7.1.7
+    - 7.1.8
+    - 7.2.0
+    - 7.2.1
+    - 7.3.1
+    - 7.4.1
+    - 7.4.2
+    - 7.4.3
+    - 7.5.1
+    - 7.5.2
+    - 7.5.3
+    - 7.6.0
+    - 7.7.0
+    - 7.7.1
+    - 8.0.1
+    - 8.1.0
+    - 8.2.0
+    - 8.3.1
+    - 9.0.0-preview.13
+    - 9.0.0-preview.35
+    - 9.0.0-preview.38
+    - 9.0.0-preview.60
+    - 9.0.0-preview.77
+    - 10.0.0-preview.30
+    - 10.1.0
+    - 10.2.0
+    - 10.2.1
+    - 10.2.2
+    - 10.3.1
+    - 10.3.2
+    - 10.4.0
+    - 10.5.0
+    - 10.5.1
+    - 10.6.0
+    - 10.7.0
+    - 10.8.0
+    - 10.8.1
+    - 10.9.0
+    - 10.10.0
+    - 10.10.1
+    - 14.0.11
+    compatible:
+    - 14.0.11
+    recommended: 14.0.11
+    deprecated: []
+  dependencies:
+  - name: com.unity.ugui
+    version: 1.0.0
+  - name: com.unity.modules.physics
+    version: 1.0.0
+  - name: com.unity.modules.terrain
+    version: 1.0.0
+  - name: com.unity.modules.jsonserialize
+    version: 1.0.0
+  resolvedDependencies:
+  - name: com.unity.ugui
+    version: 1.0.0
+  - name: com.unity.modules.ui
+    version: 1.0.0
+  - name: com.unity.modules.imgui
+    version: 1.0.0
+  - name: com.unity.modules.physics
+    version: 1.0.0
+  - name: com.unity.modules.terrain
+    version: 1.0.0
+  - name: com.unity.modules.jsonserialize
+    version: 1.0.0
+  keywords: []
+  registry:
+    id: main
+    name: 
+    url: https://packages.unity.com
+    scopes: []
+    isDefault: 1
+    capabilities: 7
+    configSource: 0
+  hideInEditor: 1
+  isAssetStorePackage: 0
+  datePublishedTicks: 0
+  documentationUrl: 
+  hasRepository: 0
+  repository:
+    type: 
+    url: 
+    revision: 
+    path: 
+  unityLifecycle:
+    version: 14.0.11
+    nextVersion: 
+    recommendedVersion: 
+    isDeprecated: 0
+    deprecationMessage: 
+  isDeprecated: 0
+  deprecationMessage: 
+  fingerprint: 
+- packageId: com.unity.film-internal-utilities@0.18.4-preview
+  testable: 0
+  isDirectDependency: 0
+  version: 0.18.4-preview
+  source: 1
+  resolvedPath: C:\Dev\MMG_CRPG\MMG_CRPG\Client\Library\PackageCache\com.unity.film-internal-utilities@0.18.4-preview
+  assetPath: Packages/com.unity.film-internal-utilities
+  name: com.unity.film-internal-utilities
+  displayName: Film Internal Utilities
+  author:
+    name: 
+    email: 
+    url: 
+  category: 
+  type: asset
+  description: A package containing internal utility functions to support the development
+    of film packages/modules for Unity
+  status: 0
+  errors: []
+  versions:
+    all:
+    - 0.5.1-preview
+    - 0.6.0-preview
+    - 0.7.0-preview
+    - 0.7.1-preview
+    - 0.8.0-preview
+    - 0.8.1-preview
+    - 0.8.2-preview
+    - 0.8.3-preview
+    - 0.8.4-preview
+    - 0.9.0-preview
+    - 0.10.0-preview
+    - 0.10.1-preview
+    - 0.10.2-preview
+    - 0.11.0-preview
+    - 0.11.1-preview
+    - 0.12.0-preview
+    - 0.12.1-preview
+    - 0.12.2-preview
+    - 0.12.3-preview
+    - 0.12.4-preview
+    - 0.12.5-preview
+    - 0.13.0-preview
+    - 0.14.0-preview
+    - 0.14.1-preview
+    - 0.14.2-preview
+    - 0.15.0-preview
+    - 0.15.1-preview
+    - 0.15.2-preview
+    - 0.16.0-preview
+    - 0.16.1-preview
+    - 0.16.2-preview
+    - 0.16.3-preview
+    - 0.16.4-preview
+    - 0.17.0-preview
+    - 0.18.0-preview
+    - 0.18.1-preview
+    - 0.18.2-preview
+    - 0.18.3-preview
+    - 0.18.4-preview
+    - 0.19.0-preview
+    - 0.19.1-preview
+    - 0.19.2-preview
+    - 0.19.3-preview
+    compatible:
+    - 0.5.1-preview
+    - 0.6.0-preview
+    - 0.7.0-preview
+    - 0.7.1-preview
+    - 0.8.0-preview
+    - 0.8.1-preview
+    - 0.8.2-preview
+    - 0.8.3-preview
+    - 0.8.4-preview
+    - 0.9.0-preview
+    - 0.10.0-preview
+    - 0.10.1-preview
+    - 0.10.2-preview
+    - 0.11.0-preview
+    - 0.11.1-preview
+    - 0.12.0-preview
+    - 0.12.1-preview
+    - 0.12.2-preview
+    - 0.12.3-preview
+    - 0.12.4-preview
+    - 0.12.5-preview
+    - 0.13.0-preview
+    - 0.14.0-preview
+    - 0.14.1-preview
+    - 0.14.2-preview
+    - 0.15.0-preview
+    - 0.15.1-preview
+    - 0.15.2-preview
+    - 0.16.0-preview
+    - 0.16.1-preview
+    - 0.16.2-preview
+    - 0.16.3-preview
+    - 0.16.4-preview
+    - 0.17.0-preview
+    - 0.18.0-preview
+    - 0.18.1-preview
+    - 0.18.2-preview
+    - 0.18.3-preview
+    - 0.18.4-preview
+    - 0.19.0-preview
+    - 0.19.1-preview
+    - 0.19.2-preview
+    - 0.19.3-preview
+    recommended: 
+    deprecated: []
+  dependencies:
+  - name: com.unity.timeline
+    version: 1.2.18
+  - name: com.unity.modules.uielements
+    version: 1.0.0
+  resolvedDependencies:
+  - name: com.unity.timeline
+    version: 1.7.6
+  - name: com.unity.modules.audio
+    version: 1.0.0
+  - name: com.unity.modules.director
+    version: 1.0.0
+  - name: com.unity.modules.animation
+    version: 1.0.0
+  - name: com.unity.modules.particlesystem
+    version: 1.0.0
+  - name: com.unity.modules.uielements
+    version: 1.0.0
+  - name: com.unity.modules.ui
+    version: 1.0.0
+  - name: com.unity.modules.imgui
+    version: 1.0.0
+  - name: com.unity.modules.jsonserialize
+    version: 1.0.0
+  keywords: []
+  registry:
+    id: main
+    name: 
+    url: https://packages.unity.com
+    scopes: []
+    isDefault: 1
+    capabilities: 7
+    configSource: 0
+  hideInEditor: 1
+  isAssetStorePackage: 0
+  datePublishedTicks: 638155090800000000
+  documentationUrl: https://docs.unity3d.com/Packages/com.unity.film-internal-utilities@0.18/manual/index.html
+  hasRepository: 1
+  repository:
+    type: git
+    url: https://github.com/Unity-Technologies/AnimeSolution.git
+    revision: e2de226377d625af9002805dbec3e6e5454f365a
     path: 
   unityLifecycle:
     version: 

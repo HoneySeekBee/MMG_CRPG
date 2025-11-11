@@ -38,6 +38,7 @@
 
 <div class="section">Contents</div>
 <a asp-controller="Characters" asp-action="Index" class="@ActiveCls("Characters")">Characters</a>
+<a asp-controller="Monsters" asp-action="Index" class="@ActiveCls("Monsters")">Monsters</a>
 <a asp-controller="Items" asp-action="Index" class="@ActiveCls("Items")">Items</a>
 <a asp-controller="Skills" asp-action="Index" class="@ActiveCls("Skills")">Skills</a>
 
@@ -56,6 +57,9 @@
 <a asp-controller="AdminUsers" asp-action="Index" class="@ActiveCls("AdminUsers")">Users</a>
 <a asp-controller="AdminAuth" asp-action="Login" class="@ActiveCls("AdminAuth","Login")">Login</a>
 <a asp-controller="AdminAuth" asp-action="Register" class="@ActiveCls("AdminAuth","Register")">Register</a>
+
+
+
 @if (isAuthed)
 {
     <a asp-controller="UserInventory"

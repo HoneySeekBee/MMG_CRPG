@@ -7,9 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class BattleMapPopup : UIPopup
-{
-    private StagePb stageData;
-
+{  
     [Header("UI")]
     [SerializeField] private Button PauseBtn;
     [SerializeField] private Button SpeedBtn;
@@ -18,19 +16,8 @@ public class BattleMapPopup : UIPopup
     [SerializeField] private Transform SkillIconTr;
 
     // 이제 여기서 스테이지에 대한 정보를 받아야한다. 
-    public async void Set()
+    public void Set()
     {
-        stageData = LobbyRootController.Instance._currentStage;
-
-        foreach(var batch in stageData.Batches)
-        { 
-            var UnitObj = await AddressableManager.Instance.LoadAsync<GameObject>(batch.UnitKey);
-            var EnvObj = await AddressableManager.Instance.LoadAsync<GameObject>(batch.EnvKey);
-            GameObject unit = Instantiate(UnitObj);
-            GameObject env = Instantiate(EnvObj, unit.transform);
-            unit.transform.position = new Vector3(20 * (batch.BatchNum - 1), 0, 0);
-        }
-    }
-
-
+        StartCoroutine(BattleMapManager.Instance.Set_BattleMap());
+    } 
 }

@@ -65,14 +65,16 @@ namespace Domain.Entities.User
             if (_slots.Any(s => s.UserCharacterId == userCharacterId && s.SlotId != slotId))
                 throw new InvalidOperationException($"Character {userCharacterId} already assigned in this party.");
 
-            _slots[slotId].SetCharacter(userCharacterId);
+            var slot = GetSlotById(slotId);
+            slot.SetCharacter(userCharacterId);
             Touch();
         }
         // 캐릭터 해제 
         public void Unassign(int slotId)
         {
             EnsureSlotCapacity(slotId);
-            _slots[slotId].SetCharacter(null);
+            var slot = GetSlotById(slotId);
+            slot.SetCharacter(null);
             Touch();
         }
         // 교체 
@@ -110,5 +112,18 @@ namespace Domain.Entities.User
                 throw new ArgumentOutOfRangeException(nameof(slotId), $"Valid range: 0..{_slots.Count - 1}");
         }
         private void Touch() => UpdatedAt = DateTime.UtcNow;
+        private UserPartySlot GetSlotById(int slotId)
+        {
+            // 필요하면 여기서 EnsureSlotCapacity(slotId) 호출
+            var slot = _slots.FirstOrDefault(s => s.SlotId == slotId);
+            if (slot == null)
+            {
+                // 없으면 만들어서 추가
+                slot = new UserPartySlot(PartyId, slotId, null);
+                _slots.Add(slot);
+            }
+            return slot;
+        }
+
     }
 }

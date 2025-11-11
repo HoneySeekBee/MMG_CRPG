@@ -53,6 +53,7 @@ namespace AdminTool.Models
         [DisplayName("속성"), Range(1, int.MaxValue)] public int ElementId { get; set; }
         [DisplayName("역할"), Range(1, int.MaxValue)] public int RoleId { get; set; }
         [DisplayName("진영"), Range(1, int.MaxValue)] public int FactionId { get; set; }
+        public short FormationNum { get; set; }
 
         [DisplayName("아이콘")] public int? IconId { get; set; }
         public List<IconPickItem> IconChoices { get; set; } = new();
@@ -190,7 +191,7 @@ namespace AdminTool.Models
         // --- 폼 -> Application 요청 ---
         public static CreateCharacterRequest ToCreateRequest(this CharacterFormVm vm) =>
             new(
-                vm.Name, vm.RarityId, vm.FactionId, vm.RoleId, vm.ElementId,
+                vm.Name, vm.RarityId, vm.FactionId, vm.RoleId, vm.ElementId, vm.FormationNum,
                 vm.IconId, vm.PortraitId, vm.ReleaseDate, vm.IsLimited,
                 vm.Tags, vm.MetaJson
             );

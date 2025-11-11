@@ -36,6 +36,7 @@ using Application.Repositories.Contents;
 using Application.Contents.Battles;
 using Application.Contents.Chapters;
 using Application.Contents.Stages;
+using Application.Monsters;
 
 namespace WebServer.Extensions
 {
@@ -133,6 +134,9 @@ namespace WebServer.Extensions
             s.AddScoped<ICharacterService, CharacterService>();
             s.AddScoped<ICharacterModelRepository, CharacterModelRepository>();
             s.AddScoped<ICharacterModelService, CharacterModelService>();
+
+            s.AddScoped<IMonsterRepository, MonsterRepository>();
+            s.AddScoped<IMonsterService, MonsterService>();
 
             // 아이템 / 아이템 타입
             s.AddScoped<IItemRepository, ItemRepository>();

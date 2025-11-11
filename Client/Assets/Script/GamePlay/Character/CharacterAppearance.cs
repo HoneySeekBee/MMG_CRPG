@@ -107,7 +107,6 @@ public class CharacterAppearance : MonoBehaviour
         }
 
         filter.sharedMesh = mesh; 
-        Debug.Log($"ภ๛ฟ๋ตส: {filter.name} <- {mesh.name} || {modelKey} || {isWeapon}");
     }
     public void SetMeshColor(MeshRenderer meshRender, string hexColor)
     {

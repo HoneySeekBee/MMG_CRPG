@@ -42,6 +42,8 @@ public class BatchSlot : MonoBehaviour
     }
     public void BatchCharacter(int characterId, GameObject characterObject)
     {
+        if (characterId == 0)
+            return;
         Debug.Log($"{SlotNum}번에 캐릭터 {characterId}가 배치되었습니다.");
         if (SlotData == null)
         {

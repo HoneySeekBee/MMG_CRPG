@@ -106,14 +106,10 @@ namespace WebServer.Controllers.User
         {
             var party = await _repo.GetByIdAsync(req.PartyId, ct);
             if (party == null) return NotFound();
-            foreach (var p in req.Pairs)
+            foreach (var p in party.Slots)
             {
-                var v = p.UserCharacterId;
-                if (v == null || v.Value == 0)
-                {
-                    party.Unassign(p.SlotId);
-                }
-            }
+                party.Unassign(p.SlotId);
+            } 
             foreach (var p in req.Pairs)
             {
                 var v = p.UserCharacterId;
