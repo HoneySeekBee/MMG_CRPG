@@ -1,0 +1,175 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Monster
+  m_EditorClassIdentifier: 
+  m_GroupName: Monster
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 90d91384987d8b2479525e85683a2659
+  m_SerializeEntries:
+  - m_GUID: 030f8bc697b6d0d448c8ef251214626d
+    m_Address: model_cold_guardian
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0ba0f6eee23032e4e83d421e739dc905
+    m_Address: model_slime_soldier
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 11eed2dfd1329ab4db9e7f27b8e628b7
+    m_Address: model_slime_general
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1dacc378b7a85e64696e56ce8d0ce8a7
+    m_Address: model_judgment_of_god
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 26bc2984159d1de42bb4b27680704b5a
+    m_Address: model_faith_ghost_pure
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 28d0a30d6aed6fc4c8ca473413f70c24
+    m_Address: model_slime_king
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3869ca982ead0c54688e41291e691359
+    m_Address: model_ghosttree
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4f3b47bd8379ee143bbd0f7f08b51f22
+    m_Address: model_ghosttree_candy
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 60ab07b23a75fbf458c80cba08df9edb
+    m_Address: model_divine_wrath
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 62e7504d08c54bf42b3a8fa592812add
+    m_Address: model_bat_blue
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 69271a3cb98106a40950c3e35dfa6f91
+    m_Address: model_gillman_poison
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6be1d96ba537613429470bafd285be16
+    m_Address: model_gillman_contaminated_green
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7be2b5b4cc61026408b6811b60024183
+    m_Address: model_faith_ghost_mercy
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 85fdfa1704f97d747a46ce3fdc068820
+    m_Address: model_frog_king
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8767ee2843862e145b4a8b65847b9118
+    m_Address: model_mushroom_red_toxic
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 88ca1f4a7ef836541a27bbb9b4154f4a
+    m_Address: model_crab_spiked_shell
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8cd1910dfcd2777498ed105984085c41
+    m_Address: model_gillman_blue
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 94296ca148bc22a459e5dd80ec4ea6ef
+    m_Address: model_woodmask_warrior
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a08a82a36db97454aac71296eac84689
+    m_Address: model_ghosttree_drain
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a628e5fa53ad7b343a022c98131af914
+    m_Address: model_faith_knight_penitent
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a88c0d2eaa79daa4d8fa61996259b86e
+    m_Address: model_gillman_striped_yellow
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a9aefdcc22f2fe947b004dea54931786
+    m_Address: model_woodmask_shaman
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ade47c4d81f17ee42a367a8824b0dd0c
+    m_Address: model_gillman_red
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b15db69f6441c474eadaa63298d39fbb
+    m_Address: model_ghosttree_evil
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b8749443fa53a8341a7107cfd3c2e95a
+    m_Address: model_faith_ghost_wrath
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c2aa99e81d1df7847b9bee02769512aa
+    m_Address: model_slime_contaminated
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c9bed32ad7b42bd4cae29ef741863439
+    m_Address: model_gillman_striped
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ce565bf36f19eb44aa5fb52297b463ef
+    m_Address: model_brave_guardian
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cfdaf9009eaf6284bb2e89504bc24020
+    m_Address: model_ruin_guardian
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d941199d4a58fcb45adc75ea8e37c42c
+    m_Address: model_slime
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 70aef510b6431584d83ab967b21d913a, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: c96596adcbf236249b58a5ba705a55a5, type: 2}
+    - {fileID: 11400000, guid: 1498ac6e150b0b64ab23e5154c42e676, type: 2}

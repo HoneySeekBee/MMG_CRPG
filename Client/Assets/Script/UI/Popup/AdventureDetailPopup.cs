@@ -29,8 +29,7 @@ public class AdventureDetailPopup : UIPopup
 
         PlayButton.onClick.RemoveAllListeners();
         PlayButton.onClick.AddListener(() => { Play(data); }); 
-
-        Debug.Log($"º¸»ó °¹¼ö : {data.FirstRewards.Count}  || {data.Drops.Count}");
+         
         foreach (var item in data.FirstRewards)
         {
             GameObject go = slotPool.Get();

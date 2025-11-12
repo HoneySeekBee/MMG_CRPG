@@ -91,13 +91,14 @@ namespace Client.Systems
         IEnumerator LoadCaches()
         {
             Debug.Log("[AppBootstrap] 캐시 로드 시작");
-            bool done1 = false, 
-                done2 = false, 
+            bool done1 = false,
+                done2 = false,
                 done3 = false,
-                done4 = false, 
+                done4 = false,
                 done5 = false,
-                done6 = false, 
-                done7 = false;
+                done6 = false,
+                done7 = false,
+                done8 = false;
 
             StartCoroutine(Wrap(MasterDataCache.Instance.CoLoadMasterData(Http, Popup), () => done1 = true));
             StartCoroutine(Wrap(ItemCache.Instance.CoLoadItemData(Http, Popup), () => done2 = true));
@@ -106,7 +107,8 @@ namespace Client.Systems
             StartCoroutine(Wrap(UIImageCache.Instance.PreloadAllUISprites(), () => done5 = true));
             StartCoroutine(Wrap(BattleContentsCache.Instance.CoLoadContents(Http, Popup), () => done6 = true));
             StartCoroutine(Wrap(CharacterCache.Instance.CoPreloadMeshes(), () => done7 = true));
-            yield return new WaitUntil(() => done1 && done2 && done3 && done4 && done5 && done6 && done7); 
+            StartCoroutine(Wrap(MonsterCache.Instance.CoLoadMonsterCache(Http, Popup), () => done8 = true));
+            yield return new WaitUntil(() => done1 && done2 && done3 && done4 && done5 && done6 && done7 && done8); 
             Debug.Log("[AppBootstrap] 캐시 로드 완료");
         }
         // 각 코루틴 끝났을 때 콜백 호출하도록 래핑

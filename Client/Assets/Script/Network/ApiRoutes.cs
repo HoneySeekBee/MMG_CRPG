@@ -33,6 +33,8 @@ public static class ApiRoutes
     public const string CharacterModel_Weapons = "/character-model/weapons";
 
 
+    public const string Monsters = "/monsters";
+
     public const string BattlesProto = "/battles";
     public const string ChaptersProto = "/chapters";
     public const string StagesProto = "/stages";

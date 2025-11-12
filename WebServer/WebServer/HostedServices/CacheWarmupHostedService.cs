@@ -9,6 +9,7 @@ using Application.Factions;
 using Application.Icons;
 using Application.Items;
 using Application.ItemTypes;
+using Application.Monsters;
 using Application.Portraits;
 using Application.Rarities;
 using Application.Roles;
@@ -47,6 +48,8 @@ namespace WebServer.HostedServices
             await sp.GetRequiredService<IBattlesCache>().ReloadAsync(ct);
             await sp.GetRequiredService<IChapterCache>().ReloadAsync(ct);
             await sp.GetRequiredService<IStagesCache>().ReloadAsync(ct);
+
+            await sp.GetRequiredService<IMonsterCache>().ReloadAsync(ct);
 
         }
 

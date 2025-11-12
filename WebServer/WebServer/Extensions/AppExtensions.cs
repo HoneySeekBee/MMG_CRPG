@@ -87,6 +87,7 @@ namespace WebServer.Extensions
             s.AddSingleton<IBattlesCache, BattlesCache>();
             s.AddSingleton<IChapterCache, ChapterCache>();
             s.AddSingleton<IStagesCache, StagesCache>();
+            s.AddSingleton<IMonsterCache, MonsterCache>();
 
             // 도메인/리포지토리/서비스 (Scoped)
 

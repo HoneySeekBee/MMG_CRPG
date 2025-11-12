@@ -36,7 +36,7 @@ public class PartySetManager : MonoBehaviour
     }
 
     // [1] 이전에 배치한 정보를 불러온다. 
-    public void Initialize(int battleId, Action refresh)
+    public void Initialize(int battleId, Action refresh, bool isBattle = false)
     {
         ClearAll();
         partySlotsDict = partySlots.ToDictionary(p => p.slotNum, p => p.batchSlot);
@@ -53,7 +53,7 @@ public class PartySetManager : MonoBehaviour
             if (slot.UserCharacterId != null && slot.UserCharacterId != 0)
             {
                 Debug.Log($"{slot}번 슬롯 : {slot.UserCharacterId}");
-                partySlotsDict[slot.SlotId].BatchCharacter(slot.UserCharacterId ?? 0, GetCharacterObject());
+                partySlotsDict[slot.SlotId].BatchCharacter(slot.UserCharacterId ?? 0, GetCharacterObject(), isBattle);
             }
             partySlotsDict[slot.SlotId].SetData(slot);
         }
@@ -95,7 +95,7 @@ public class PartySetManager : MonoBehaviour
             return false;
         }
         if (characterNum != 0)
-            batch.BatchCharacter(characterNum, GetCharacterObject());
+            batch.BatchCharacter(characterNum, GetCharacterObject(), false);
         return true;
     }
 

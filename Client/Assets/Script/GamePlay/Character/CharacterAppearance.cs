@@ -20,9 +20,11 @@ public class CharacterAppearance : MonoBehaviour
     [SerializeField] private MeshFilter Eye_Mesh;
     [SerializeField] private MeshFilter Acc_Mesh;
 
-    public void Set(CharacterModelPb modelData)
+    private Vector3 PartySetSize = Vector3.one;
+    private Vector3 BattleSize = Vector3.one * 0.5f;
+    public void Set(CharacterModelPb modelData, bool isBattle = false)
     {
-        Set_Size(modelData.BodySize);
+        Set_Size(modelData.BodySize, isBattle ? BattleSize : PartySetSize);
         Set_Animator(modelData.Animation.ToString());
         CharacterCache characterCache = CharacterCache.Instance;
 
@@ -44,19 +46,19 @@ public class CharacterAppearance : MonoBehaviour
         SetMeshColor(Head_Mesh.GetComponent<MeshRenderer>(), modelData.SkinColorCode);
     }
 
-    private void Set_Size(BodySizePb size)
+    private void Set_Size(BodySizePb size, Vector3 standardSize)
     {
         if (size == BodySizePb.Normal)
         {
-            SetWorldScale(this.gameObject.transform, Vector3.one);
+            SetWorldScale(this.gameObject.transform, standardSize);
         }
         else if (size == BodySizePb.Small)
         {
-            SetWorldScale(this.gameObject.transform, Vector3.one * 0.75f); 
+            SetWorldScale(this.gameObject.transform, standardSize * 0.75f); 
         }
         else
         {
-            SetWorldScale(this.gameObject.transform, Vector3.one * 1.25f); 
+            SetWorldScale(this.gameObject.transform, standardSize * 1.25f); 
         }
 
     }

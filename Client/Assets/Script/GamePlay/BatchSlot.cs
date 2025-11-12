@@ -40,11 +40,11 @@ public class BatchSlot : MonoBehaviour
     {
         return SlotData == null || SlotData.UserCharacterId == 0 || SlotData.UserCharacterId == null;
     }
-    public void BatchCharacter(int characterId, GameObject characterObject)
+    public void BatchCharacter(int characterId, GameObject characterObject, bool isBattle = false)
     {
         if (characterId == 0)
             return;
-        Debug.Log($"{SlotNum}번에 캐릭터 {characterId}가 배치되었습니다.");
+        Debug.Log($"{SlotNum}번에 캐릭터 {characterId}가 배치되었습니다. {isBattle}");
         if (SlotData == null)
         {
             SlotData = new UserPartySlotPb();
@@ -57,7 +57,7 @@ public class BatchSlot : MonoBehaviour
         CharacterObject.transform.parent = this.transform;
         CharacterObject.transform.position = this.transform.position;
         CharacterAppearance appearance = CharacterObject.GetComponent<CharacterAppearance>();
-        appearance.Set(CharacterCache.Instance.CharacterModelById[characterId]);
+        appearance.Set(CharacterCache.Instance.CharacterModelById[characterId], isBattle);
     }
     private void Unassign()
     {
