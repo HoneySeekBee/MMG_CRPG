@@ -34,6 +34,6 @@ namespace Application.Monsters
         public string ModelKey { get; set; } = null!;
         public int? ElementId { get; set; }
         public int? PortraitId { get; set; }
-        public List<object>? Stats { get; set; }
+        public List<MonsterStatDto>? Stats { get; set; }
     }
 }

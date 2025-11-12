@@ -17,8 +17,7 @@
             <button type="submit" class="btn btn-primary">검색</button>
         </div>
     </form>
-</div>
-
+</div> 
 <div class="mb-3">
     <a asp-action="Create" class="btn btn-success">+ 몬스터 추가</a>
 </div>
@@ -57,9 +56,11 @@
                     </td>
                     <td>@m.StatCount</td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@m.Id" class="btn btn-sm btn-primary">Edit</a>
-                        <a asp-action="Stats" asp-route-id="@m.Id" class="btn btn-sm btn-info">Stats</a>
-                        <form asp-action="Delete" asp-route-id="@m.Id" method="post" class="d-inline"
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a asp-action="Detail" asp-route-id="@m.Id" class="btn btn-outline-secondary">Detail</a>
+                            <a asp-action="Edit" asp-route-id="@m.Id" class="btn btn-outline-primary">Edit</a>
+                        </div>
+                        <form asp-action="Delete" asp-route-id="@m.Id" method="post" class="d-inline ms-1"
                               onsubmit="return confirm('삭제할까요?');">
                             <button type="submit" class="btn btn-sm btn-danger">Del</button>
                         </form>
@@ -82,9 +83,8 @@
     var currentPage = Model.Page <= 0 ? 1 : Model.Page;
     var pageSize = Model.Monsters.Count == 0 ? 10 : Model.Monsters.Count;
     var totalPages = (int)Math.Ceiling((double)Model.TotalCount / pageSize);
-
-    <nav>
-        <ul class="pagination">
+    <nav class="mt-2">
+        <ul class="pagination pagination-sm">
             <li class="page-item @(currentPage == 1 ? "disabled" : "")">
                 <a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)" asp-route-search="@Model.Search">이전</a>
             </li>

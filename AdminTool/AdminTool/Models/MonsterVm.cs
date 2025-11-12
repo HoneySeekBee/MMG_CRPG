@@ -72,4 +72,18 @@ namespace AdminTool.Models
         public int Page { get; set; }
         public int TotalCount { get; set; }
     }
+    public class MonsterDetailVm
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = null!;
+        public string ModelKey { get; set; } = null!;
+        public int? ElementId { get; set; }
+        public string? PortraitUrl { get; set; }
+
+        public List<MonsterStatVm> Stats { get; set; } = new();
+    }
+    public class MonsterStatsBulkVm
+    { 
+        public string RawTable { get; set; } = ""; 
+    }
 }

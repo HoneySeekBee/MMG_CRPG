@@ -155,6 +155,264 @@ namespace AdminTool.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        public async Task<IActionResult> Detail(int id, CancellationToken ct)
+        {
+            var client = _http.CreateClient("GameApi");
+
+            // 1) 몬스터 기본 정보 로드 (API에는 PortraitUrl이 보통 없음)
+            var dto = await client.GetFromJsonAsync<MonsterDtoStub>($"/api/monster/{id}", ct);
+            if (dto is null) return NotFound();
+
+            // 2) 초상화 목록을 불러와 URL 계산
+            string? portraitUrl = null;
+            if (dto.PortraitId is not null)
+            {
+                var ports = await client.GetFromJsonAsync<List<PortraitVm>>("/api/portraits", ct) ?? new();
+                var p = ports.FirstOrDefault(x => x.PortraitId == dto.PortraitId);
+                if (p != null)
+                {
+                    var baseUrl = _cfg["PublicBaseUrl"]!.TrimEnd('/');
+                    var subdir = _cfg["Assets:PortraitsSubdir"] ?? "portraits";
+                    portraitUrl = $"{baseUrl}/{subdir}/{p.Key}.png?v={p.Version}";
+                }
+            }
+
+            // 3) 뷰모델로 매핑
+            var vm = new MonsterDetailVm
+            {
+                Id = dto.Id,
+                Name = dto.Name,
+                ModelKey = dto.ModelKey,
+                ElementId = dto.ElementId,
+                PortraitUrl = portraitUrl,
+                Stats = (dto.Stats ?? new()).Select(s => new MonsterStatVm
+                {
+                    MonsterId = dto.Id,
+                    Level = s.Level,
+                    HP = s.HP,
+                    ATK = s.ATK,
+                    DEF = s.DEF,
+                    SPD = s.SPD,
+                    CritRate = s.CritRate,
+                    CritDamage = s.CritDamage
+                }).OrderBy(s => s.Level).ToList()
+            };
+
+            return View(vm);
+        }
+        // GET: /Monsters/StatCreate?monsterId=4
+        [HttpGet]
+        public IActionResult StatCreate(int monsterId)
+        {
+            // 기본값 채워서 폼 오픈
+            var vm = new MonsterStatVm
+            {
+                MonsterId = monsterId,
+                CritRate = 5.00m,
+                CritDamage = 150.00m
+            };
+            return View(vm); // Views/Monsters/StatCreate.cshtml
+        }
+
+        // POST: /Monsters/StatCreate
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> StatCreate(MonsterStatVm vm, CancellationToken ct)
+        {
+            if (!ModelState.IsValid)
+                return View(vm);
+
+            var client = _http.CreateClient("GameApi");
+
+            var req = new
+            {
+                monsterId = vm.MonsterId,
+                level = vm.Level,
+                hp = vm.HP,
+                atk = vm.ATK,
+                def = vm.DEF,
+                spd = vm.SPD,
+                critRate = vm.CritRate,
+                critDamage = vm.CritDamage
+            };
+
+            var resp = await client.PostAsJsonAsync("/api/monster/stat", req, ct);
+            if (!resp.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError(string.Empty,
+                    $"API 호출 실패: {(int)resp.StatusCode} {resp.ReasonPhrase}");
+                return View(vm);
+            }
+
+            return RedirectToAction(nameof(Detail), new { id = vm.MonsterId });
+        }
+        // GET: /Monsters/StatEdit?monsterId=4&level=1
+        public async Task<IActionResult> StatEdit(int monsterId, int level, CancellationToken ct)
+        {
+            var client = _http.CreateClient("GameApi");
+
+            // 몬스터 정보 로드
+            var dto = await client.GetFromJsonAsync<MonsterDtoStub>($"/api/monster/{monsterId}", ct);
+            if (dto is null) return NotFound();
+
+            // 대상 스탯 찾기
+            var stat = (dto.Stats as List<MonsterStatDto> ?? new())
+                .FirstOrDefault(s => s.Level == level);
+
+            if (stat is null) return NotFound();
+
+            var vm = new MonsterStatVm
+            {
+                MonsterId = monsterId,
+                Level = stat.Level,
+                HP = stat.HP,
+                ATK = stat.ATK,
+                DEF = stat.DEF,
+                SPD = stat.SPD,
+                CritRate = stat.CritRate,
+                CritDamage = stat.CritDamage
+            };
+
+            return View(vm);
+        }
+
+        // POST: /Monsters/StatEdit
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> StatEdit(MonsterStatVm vm, CancellationToken ct)
+        {
+            if (!ModelState.IsValid)
+                return View(vm);
+
+            var client = _http.CreateClient("GameApi");
+
+            // API 구조 예시: PUT /api/monster/{id}/stat/{level}
+            var req = new
+            {
+                monsterId = vm.MonsterId,
+                level = vm.Level,
+                hp = vm.HP,
+                atk = vm.ATK,
+                def = vm.DEF,
+                spd = vm.SPD,
+                critRate = vm.CritRate,
+                critDamage = vm.CritDamage
+            };
+            var resp = await client.PostAsJsonAsync("/api/monster/stat", req, ct);
+            if (!resp.IsSuccessStatusCode)
+            {
+                var body = await resp.Content.ReadAsStringAsync(ct);
+                ModelState.AddModelError(string.Empty, $"API 호출 실패: {(int)resp.StatusCode} {resp.ReasonPhrase} / {body}");
+                return View(vm);
+            }
+
+            return RedirectToAction(nameof(Detail), new { id = vm.MonsterId });
+        }
+        [HttpGet]
+        public IActionResult StatsBulk() => View(new MonsterStatsBulkVm());
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> StatsBulk(MonsterStatsBulkVm vm, CancellationToken ct)
+        {
+            if (string.IsNullOrWhiteSpace(vm.RawTable))
+            {
+                ModelState.AddModelError(nameof(vm.RawTable), "내용을 붙여넣어 주세요.");
+                return View(vm);
+            }
+
+            var client = _http.CreateClient("GameApi");
+
+            // 1) 몬스터 목록/포트레이트 등 미리 로드 (이름/모델키 → Id 매핑)
+            var all = await client.GetFromJsonAsync<List<MonsterDtoStub>>("/api/monster", ct) ?? new();
+
+            // 2) 라인 파싱
+            var lines = vm.RawTable
+                .Replace("\r\n", "\n")
+                .Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+            int ok = 0, fail = 0;
+            var errors = new List<string>();
+
+            foreach (var line in lines)
+            {
+                // 탭/쉼표 모두 지원 (우선 탭 → 엑셀복붙), 탭이 없으면 쉼표 split
+                var cols = line.Contains('\t')
+                    ? line.Split('\t')
+                    : line.Split(',');
+
+                if (cols.Length < 9)
+                {
+                    // 헤더면 넘어감
+                    if (line.Contains("레벨") || line.Contains("Level", StringComparison.OrdinalIgnoreCase)) continue;
+                    fail++; errors.Add($"열 개수 부족: {line}");
+                    continue;
+                }
+
+                var name = cols[0].Trim();
+                var modelKey = cols[1].Trim();
+                int level = 0, hp = 0, atk = 0, def_ = 0, spd = 0;
+                bool okLevel = int.TryParse(cols[2].Trim(), out level);
+                bool okHp = int.TryParse(cols[3].Trim(), out hp);
+                bool okAtk = int.TryParse(cols[4].Trim(), out atk);
+                bool okDef = int.TryParse(cols[5].Trim(), out def_);
+                bool okSpd = int.TryParse(cols[6].Trim(), out spd);
+                bool parsed = okLevel && okHp && okAtk && okDef && okSpd;
+                if (!parsed)
+                {
+                    fail++; errors.Add($"정수 파싱 실패: {line}");
+                    continue;
+                }
+                decimal ParsePercent(string s)
+                {
+                    s = s.Trim().Replace("%", ""); 
+                    return decimal.TryParse(
+                        s,
+                        System.Globalization.NumberStyles.Any,
+                        System.Globalization.CultureInfo.InvariantCulture,
+                        out var d
+                    ) ? d : 0m;
+                }
+
+                var critRate = ParsePercent(cols[7]);
+                var critDamage = ParsePercent(cols[8]);
+                // 3) 대상 몬스터 찾기 (모델키 우선, 없으면 이름)
+                var monster = all.FirstOrDefault(m =>
+                                    string.Equals(m.ModelKey, modelKey, StringComparison.OrdinalIgnoreCase))
+                           ?? all.FirstOrDefault(m =>
+                                    string.Equals(m.Name, name, StringComparison.OrdinalIgnoreCase));
+
+                if (monster is null)
+                {
+                    fail++; errors.Add($"몬스터를 찾을 수 없음: name={name}, modelKey={modelKey}");
+                    continue;
+                }
+
+                // 4) 업서트 API 호출 (Create/Edit에서 쓰던 엔드포인트)
+                var req = new
+                {
+                    monsterId = monster.Id,
+                    level = level,
+                    hp = hp,
+                    atk = atk,
+                    def = def_,
+                    spd = spd,
+                    critRate = critRate,
+                    critDamage = critDamage
+                }; 
+                var resp = await client.PostAsJsonAsync("/api/monster/stat", req, ct);
+                if (resp.IsSuccessStatusCode) ok++;
+                else
+                {
+                    var body = await resp.Content.ReadAsStringAsync(ct);
+                    fail++; errors.Add($"업서트 실패: {monster.Id}/{level} ({(int)resp.StatusCode}) {body}");
+                }
+            }
+
+            TempData["Flash"] = $"업로드 완료: OK={ok}, FAIL={fail}";
+            if (errors.Count > 0) TempData["FlashDetail"] = string.Join("\n", errors.Take(20));
+            return RedirectToAction(nameof(Index));
+        }
 
         // POST: /Monster/Delete/5
         [HttpPost]
