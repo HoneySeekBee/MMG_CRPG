@@ -1,0 +1,109 @@
+syntax = "proto3";
+
+package game.characters;
+option csharp_namespace = "WebServer.Protos";
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+ 
+
+message CharactersResponsePb {
+  repeated CharacterDetailPb characters = 1;
+  int64 version = 2;  
+}
+ 
+message CharacterSummaryPb {
+  int32 id = 1;
+  string name = 2;
+  int32 rarity_id = 3;
+  int32 element_id = 4;
+  int32 role_id = 5;
+  int32 faction_id = 6;
+  bool is_limited = 7;
+  google.protobuf.Timestamp release_date = 8; 
+  int32 formation_num = 9;
+}
+
+message CharacterDetailPb {
+  int32 id = 1;
+  string name = 2;
+
+  int32 rarity_id = 3;
+  int32 element_id = 4;
+  int32 role_id = 5;
+  int32 faction_id = 6;
+
+
+  google.protobuf.Int32Value icon_id = 7;
+  google.protobuf.Int32Value portrait_id = 8;
+
+  bool is_limited = 9;
+  google.protobuf.Timestamp release_date = 10; 
+
+  repeated string tags = 11;
+   
+  google.protobuf.Struct meta = 12;
+
+  repeated CharacterSkillPb skills = 13;
+  repeated CharacterStatProgressionPb stat_progressions = 14;
+  repeated CharacterPromotionPb promotions = 15;
+   
+  string icon_url = 16;
+  string portrait_url = 17;
+  int32 formation_num = 18;
+}
+ 
+message CharacterSkillPb {
+  SkillSlotPb slot = 1;     // 도메인 SkillSlot  Proto 매핑 필요
+  int32 skill_id = 2;
+  int32 unlock_tier = 3;    // smallint → int32
+  int32 unlock_level = 4;   // smallint → int32
+}
+ 
+enum SkillSlotPb {
+  SKILL_SLOT_PB_UNKNOWN  = 0;
+  SKILL_SLOT_PB_BASIC    = 1; // 예: 기본 공격
+  SKILL_SLOT_PB_SKILL1   = 2;
+  SKILL_SLOT_PB_SKILL2   = 3;
+  SKILL_SLOT_PB_ULTIMATE = 4;
+}
+ 
+message CharacterStatProgressionPb {
+  int32 level = 1; // smallint  int32
+
+  int32 hp  = 2;
+  int32 atk = 3;
+  int32 def = 4;
+  int32 spd = 5; 
+  double crit_rate   = 6;  // 예: 5.00
+  double crit_damage = 7;  // 예: 150.00
+}
+ 
+
+message CharacterPromotionPb {
+  int32 tier = 1;
+  int32 max_level = 2;  // smallint   int32
+  int32 cost_gold = 3;
+
+  // null 가능
+  StatModifierPb bonus = 4;
+
+  repeated PromotionMaterialPb materials = 5;
+}
+
+// 승급 재료
+message PromotionMaterialPb {
+  int32 item_id  = 1; // bigint   int32로 내려도 충분하다면 int32, 아니면 int64로 바꾸세요.
+  int32 quantity = 2;
+}
+ 
+message StatModifierPb {
+  google.protobuf.Int32Value hp  = 1;
+  google.protobuf.Int32Value atk = 2;
+  google.protobuf.Int32Value def = 3;
+  google.protobuf.Int32Value spd = 4;
+
+  google.protobuf.DoubleValue crit_rate   = 5;
+  google.protobuf.DoubleValue crit_damage = 6;
+}

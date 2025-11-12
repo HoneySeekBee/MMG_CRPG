@@ -1,0 +1,168 @@
+﻿@model AdminTool.Models.GachaBannerFormVm
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Edit Gacha Banner";
+}
+
+<div class="container py-3">
+    <h2 class="mb-3">Edit Gacha Banner</h2>
+
+    <div class="mb-3">
+        <a asp-action="Index" class="btn btn-outline-secondary">← 목록으로</a>
+    </div>
+
+    <form asp-action="Edit" asp-route-id="@Model.Id" method="post" class="needs-validation" novalidate>
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+        <input type="hidden" asp-for="Id" />
+
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label asp-for="Key" class="form-label"></label>
+                <input asp-for="Key" class="form-control" readonly />
+                <span asp-validation-for="Key" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Title" class="form-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Subtitle" class="form-label"></label>
+                <input asp-for="Subtitle" class="form-control" />
+                <span asp-validation-for="Subtitle" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="GachaPoolId" class="form-label"></label>
+
+                <div class="input-group">
+                    <select asp-for="GachaPoolId" asp-items="Model.PoolOptions" class="form-select" id="poolSelect">
+                        <option value="">-- 풀 선택 --</option>
+                    </select>
+                    <button type="button" class="btn btn-outline-secondary" id="btnPoolRefresh" title="새로고침">🔄</button>
+                </div>
+
+                <input type="text" class="form-control mt-2" id="poolSearchBox" placeholder="풀 검색(이름/버전)…" />
+                <small class="text-muted">검색어 입력 후 잠시 기다리거나 엔터 키를 누르면 갱신됩니다.</small>
+
+                <span asp-validation-for="GachaPoolId" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="PortraitId" class="form-label"></label>
+                <select asp-for="PortraitId" asp-items="Model.PortraitOptions" class="form-select">
+                    <option value="">-- (선택) 포트레이트 --</option>
+                </select>
+                <span asp-validation-for="PortraitId" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="Priority" class="form-label"></label>
+                <input asp-for="Priority" class="form-control" />
+                <span asp-validation-for="Priority" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="Status" class="form-label"></label>
+                <select asp-for="Status" class="form-select"
+                        asp-items="Html.GetEnumSelectList<Domain.Enum.GachaBannerStatus>()">
+                </select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="StartsAtLocal" class="form-label"></label>
+                <input asp-for="StartsAtLocal" class="form-control" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm}" />
+                <span asp-validation-for="StartsAtLocal" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="EndsAtLocal" class="form-label"></label>
+                <input asp-for="EndsAtLocal" class="form-control" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm}" />
+                <span asp-validation-for="EndsAtLocal" class="text-danger"></span>
+            </div>
+
+            <div class="col-12 form-check mt-2">
+                <input asp-for="IsActive" class="form-check-input" />
+                <label asp-for="IsActive" class="form-check-label"></label>
+            </div>
+        </div>
+
+        <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">저장</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">취소</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function () {
+            const $select = document.getElementById('poolSelect');
+            const $search = document.getElementById('poolSearchBox');
+            const $refresh = document.getElementById('btnPoolRefresh');
+
+            let debounceTimer = null;
+            let lastSelected = $select?.value || "";
+
+            async function fetchPools(keyword = "", take = 50) {
+                try {
+                    const params = new URLSearchParams();
+                    if (keyword && keyword.trim().length > 0) params.set('keyword', keyword.trim());
+                    params.set('take', take);
+
+                    const res = await fetch(`/GachaBanners/PoolOptions?${params.toString()}`, { cache: 'no-store' });
+                    if (!res.ok) return;
+
+                    const items = await res.json(); // [{id,text}]
+                    const current = $select.value || lastSelected;
+
+                    const frag = document.createDocumentFragment();
+                    const first = document.createElement('option');
+                    first.value = "";
+                    first.textContent = "-- 풀 선택 --";
+                    frag.appendChild(first);
+
+                    for (const it of items) {
+                        const opt = document.createElement('option');
+                        opt.value = String(it.id);
+                        opt.textContent = it.text;
+                        frag.appendChild(opt);
+                    }
+                    $select.innerHTML = "";
+                    $select.appendChild(frag);
+
+                    if (current) $select.value = String(current);
+                } catch (e) {
+                    console.warn(e);
+                }
+            }
+
+            function debounceFetch() {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                    lastSelected = $select.value;
+                    fetchPools($search.value, 50);
+                }, 350);
+            }
+
+            $search?.addEventListener('input', debounceFetch);
+            $search?.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    lastSelected = $select.value;
+                    fetchPools($search.value, 50);
+                }
+            });
+            $refresh?.addEventListener('click', () => {
+                lastSelected = $select.value;
+                fetchPools($search.value, 50);
+            });
+        })();
+    </script>
+}

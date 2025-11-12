@@ -1,0 +1,277 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: ModelParts
+  m_EditorClassIdentifier: 
+  m_GroupName: ModelParts
+  m_Data:
+    m_SerializedData: []
+  m_GUID: c90da3e1b978af843ac9c8e4f05d29ed
+  m_SerializeEntries:
+  - m_GUID: 082426f6a127c2b41add5314d5ef84ef
+    m_Address: Mouth_02
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0a03286ff03a72c46a4d657b2e202b69
+    m_Address: Hair_08_Girl_Tied
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1343e307756c0eb4bbbec3aac519c35b
+    m_Address: Eye_10
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 154eba039a3a83f49af6efa7709a8ff0
+    m_Address: ACC_03_BlackGlass
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 20680c0a34e2a4b44abcfc2a8316f87f
+    m_Address: Eye_04
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2b5461ea5128c964ab59943ab0548b24
+    m_Address: ACC_11_NinjaMask07
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 327de97ec6a8a264aa57e9cd7bb931c8
+    m_Address: Eye_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3b04c553a8167324eb719efdc2914241
+    m_Address: Mouth_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 48517d26a4f7b704092e129fa3a90615
+    m_Address: ACC_07_ShortEars
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 48fad3f349b068a41a1316356dcc4816
+    m_Address: Eye04
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4b880e010edee4f44b44af0a1cac6c71
+    m_Address: Hair_06_Raised
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 62dfec1a756ee9648b4238c7f280b8c6
+    m_Address: ACC_04_HeavyMetalGlass
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6710de03b41336a449c425a0de0165fd
+    m_Address: Hair_09_Girl_Tied_2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6e8ae54479cb7084689ac73f32a93bcd
+    m_Address: Head01_Male
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6ed748544a960d74ea4cc85177214ec1
+    m_Address: Eye_06
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 70780aee8d625794eb7f8e7f20e0e228
+    m_Address: Mouth_05
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 77d41a5dc647e0940b90b94ed3187c1d
+    m_Address: ACC_01_Heart
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 793774aa13b5b104d89fd3dc4a253a8d
+    m_Address: Mouth_04
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7a27efeaaaa17da4cbf9c5bf4719df30
+    m_Address: ACC_09_PiratePatch
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8047381f452a24140ac2ef691ac367b9
+    m_Address: Hair_03_bobbed
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 88f90a8611c98984ea8c2abfaa5dea8b
+    m_Address: Hair_10_Girl_Raised
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8e4c4ffcb3cacd647940aa50980ee2d3
+    m_Address: Eye_09
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 929a55be5ccdf3a4ba44db5640522425
+    m_Address: Hair_04_Man_Mohican
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 98151a38f8d6ac240b84a9e1d086302b
+    m_Address: Hair_02_Man_Sharp
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a0c55dfda962e584a846e259b1168c04
+    m_Address: Hair_01_Girl_Long
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a9809239e8f752441a4fae2ee7b409b2
+    m_Address: Eye_11
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bfb338fc04e6953469b24dc54894ac9f
+    m_Address: Mouth_06
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c4195b2c7825eb644ae7ab6984859a8c
+    m_Address: ACC_02_Leaf
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cc8483124ab967745af055e2765c2d1e
+    m_Address: Hair_07_bobbed_2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cd2efc4fbd296d4419a07d34615db4b7
+    m_Address: ACC_05_NerdGlass
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d290ecc6b10cd3b4d8047341a4f66819
+    m_Address: Eye_07
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e2a39488908283e4da869eea7f0934f3
+    m_Address: Eye_03
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e3b175deca97c9b44bc3971efe4343e7
+    m_Address: Hair_05_Man_Raised
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e884ead5d91814445a814f3746778352
+    m_Address: Mouth_03
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ed33d0d1d94a17245b7f2a2dedc09c38
+    m_Address: Eye_05
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: efaad5c0a8c253c42bef0d403b921d0a
+    m_Address: Hair_11_Man_Sharp_2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f0879135c7ae45b48a5d57b0aaac9576
+    m_Address: Eye_02
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f0a2c78f0b6e1154da44fb8b6208392d
+    m_Address: ACC_08_Crown
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f234bc2b7d415d74ebb861249c5f7346
+    m_Address: ACC_06_BunnyEars
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f93edbf744da263448fbb97f71c40284
+    m_Address: Eye_08
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fee1870d9fc35c74f907dd736c8ff8b6
+    m_Address: ACC_10_NinjaMask02
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ffdb3f73a6ebaab4b9b6a4db92ed1235
+    m_Address: Head02_Female
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - model
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 70aef510b6431584d83ab967b21d913a, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 58c6f4e7ee5f5234eb7d43e8ae316766, type: 2}
+    - {fileID: 11400000, guid: 723939697f7c90e40a69626b9664867a, type: 2}

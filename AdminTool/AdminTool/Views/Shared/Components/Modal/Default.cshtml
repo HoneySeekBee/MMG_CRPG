@@ -1,0 +1,57 @@
+﻿@model ModalVm
+@{
+    var dialogClasses = $"modal-dialog {(Model.Size ?? "")}" +
+                        (Model.Centered ? " modal-dialog-centered" : "") +
+                        (Model.Scrollable ? " modal-dialog-scrollable" : "");
+    var backdrop = Model.StaticBackdrop ? "data-bs-backdrop=\"static\" data-bs-keyboard=\"false\"" : "";
+    var extraAttr = "";
+    if (Model.Attr != null)
+    {
+        foreach (var kv in Model.Attr) { extraAttr += $" {kv.Key}=\"{kv.Value}\""; }
+    }
+}
+<div class="modal fade" id="@Model.Id" tabindex="-1" aria-hidden="true" @Html.Raw(backdrop) @Html.Raw(extraAttr)>
+    <div class="@dialogClasses">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                @if (!string.IsNullOrWhiteSpace(Model.HeaderPartial))
+                {
+                    @await Html.PartialAsync(Model.HeaderPartial!, Model.HeaderModel)
+                }
+                else
+                {
+                    if (!string.IsNullOrWhiteSpace(Model.Title))
+                    {
+                        <h5 class="modal-title">@Model.Title</h5>
+                    }
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                }
+            </div>
+
+            <div class="modal-body">
+                @if (!string.IsNullOrWhiteSpace(Model.BodyPartial))
+                {
+                    @await Html.PartialAsync(Model.BodyPartial!, Model.BodyModel)
+                }
+                else
+                {
+                    @RenderSection("ModalBodyFallback", required: false)
+                }
+            </div>
+
+            <div class="modal-footer">
+                @if (!string.IsNullOrWhiteSpace(Model.FooterPartial))
+                {
+                    @await Html.PartialAsync(Model.FooterPartial!, Model.FooterModel)
+                }
+                else
+                {
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="@Model.Id-primary">OK</button>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>

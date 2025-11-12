@@ -1,0 +1,175 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: WeaponModel
+  m_EditorClassIdentifier: 
+  m_GroupName: WeaponModel
+  m_Data:
+    m_SerializedData: []
+  m_GUID: c88d63ecd2f93a541b771d0671a44255
+  m_SerializeEntries:
+  - m_GUID: 04bdae668aa8b484294ef0afb3b88f36
+    m_Address: Weapon_22_Wand_03
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 12a4805344fa42549b5fd2a4d679a6af
+    m_Address: Weapon_12_Shield03
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 15fbcb342209e1140a098484b5cda4d3
+    m_Address: Weapon_09_OHS_Axe_02
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 180a5fd2029fb2f4693c50d276034b34
+    m_Address: Weapon_25_Wand_06
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1e1429ddf4a2be748a39f8e177399deb
+    m_Address: Weapon_11_Shield02
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1e5bf8b696b57a74fac3b72e4d075bfe
+    m_Address: Weapon_10_OHS_Hammer_02
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 22681993f4108764e8b226615f665350
+    m_Address: Weapon_07_OHS_Hammer_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6f909ebfb179f284b9425ec76ee8601a
+    m_Address: Weapon_14_Shield09
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7502b3905fafa09488ed90bc8640718c
+    m_Address: Weapon_21_Wand_02
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7dbf79025748b684381cb76c1d8aea34
+    m_Address: Weapon_26_Wand_07
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7f8f6d195ef635e40acdf05ec5153a9f
+    m_Address: Weapon_20_Wand_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 83a8af740fd63734b9f63e721047dc7e
+    m_Address: Weapon_03_OHS_Sword_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 86e1c08b89a90934bb113fdb200a5e08
+    m_Address: Weapon_23_Wand_04
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 93e21acbbd4299843ba46f40003c3ed2
+    m_Address: Weapon_17_THS_Sword_03
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a2b6884880c10e64e88479b21c9ebcb9
+    m_Address: Weapon_15_THS_Sword_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b5b4a79239fb83743ae3717033c58cc9
+    m_Address: Weapon_18_Spear_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b9ca3fac2df7997469d7b589dd823ac0
+    m_Address: Weapon_06_OHS_Axe_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bbb892c38dc13704cbf503846ab0f1f7
+    m_Address: Weapon_02_OHS_Niddle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c2ac1b951ed691e418bf61f8114f9c24
+    m_Address: Weapon_08_OHS_Sword_04
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c32fb89e61176ee45a6cdfdde76a0004
+    m_Address: Weapon_24_Wand_05
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c64926b59fa30624cabebf427e2007e4
+    m_Address: Weapon_04_OHS_Sword_02
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dec7df1ba73dc7844a3726e7b0abffee
+    m_Address: Weapon_13_Shield04
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e402ed1929ac35b41b33f001e245bdfe
+    m_Address: Weapon_19_Spear_02
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e7e6525d4dba17f43abb38f290d3f9a5
+    m_Address: Weapon_05_OHS_Sword_03
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f0fa4c9d0a7e1e246a2e217041a3a718
+    m_Address: Weapon_16_THS_Sword_02
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - weapon
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 70aef510b6431584d83ab967b21d913a, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: c27925db6a1a7994e989a2940bbc46ac, type: 2}
+    - {fileID: 11400000, guid: c9f8f6d0c87904c4183e6bb0bf3032d7, type: 2}

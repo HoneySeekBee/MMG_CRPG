@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Grpc.Tools" Version="2.62.0" PrivateAssets="All" />
+		<PackageReference Include="Google.Protobuf" Version="3.25.5" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Protobuf Include="Proto\**\*.proto" ProtoRoot="Proto" GrpcServices="None" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Proto\Contents\" />
+	</ItemGroup>
+
+	<Target Name="CopyContractsToUnity" AfterTargets="Build">
+		<PropertyGroup>
+			<UnityPluginsDir>..\..\Client\Assets\Plugins\</UnityPluginsDir>
+		</PropertyGroup>
+		<MakeDir Directories="$(UnityPluginsDir)" />
+		<Copy SourceFiles="$(TargetDir)Contracts.dll" DestinationFolder="$(UnityPluginsDir)" />
+		<Copy SourceFiles="$(TargetDir)Contracts.pdb" DestinationFolder="$(UnityPluginsDir)" Condition="Exists('$(TargetDir)Contracts.pdb')" />
+	</Target>
+</Project>

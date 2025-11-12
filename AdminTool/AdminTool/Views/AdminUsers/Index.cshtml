@@ -1,0 +1,337 @@
+﻿@model UserListVm
+@{
+    ViewData["Title"] = "Users";
+    var q = Model.Search;
+}
+
+<style>
+    .page {
+        max-width: 1200px;
+        margin: 28px auto;
+        padding: 0 16px;
+        font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",Arial,"Apple SD Gothic Neo",sans-serif;
+    }
+
+    .title {
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 14px;
+    }
+
+    .alert {
+        padding: 10px 12px;
+        border-radius: 8px;
+        margin-bottom: 14px;
+    }
+
+        .alert.ok {
+            background: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .alert.err {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+    .card {
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        background: #fff;
+        box-shadow: 0 6px 18px rgba(0,0,0,.04);
+    }
+
+        .card .hd {
+            padding: 14px 16px;
+            font-weight: 700;
+            border-bottom: 1px solid #eef2f7;
+        }
+
+        .card .bd {
+            padding: 14px 16px;
+        }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 12px;
+        align-items: end;
+    }
+
+        .form-grid .col-2 {
+            grid-column: span 2;
+        }
+
+        .form-grid .col-3 {
+            grid-column: span 3;
+        }
+
+        .form-grid label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .form-grid input, .form-grid select {
+            width: 100%;
+            padding: 9px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+        }
+
+    .btn {
+        display: inline-block;
+        padding: 9px 14px;
+        border-radius: 8px;
+        border: none;
+        background: #2563eb;
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+        .btn.secondary {
+            background: #6b7280;
+        }
+
+        .btn.link {
+            background: transparent;
+            color: #2563eb;
+            padding: 0;
+        }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 10px 8px;
+        border-bottom: 1px solid #f1f5f9;
+        text-align: left;
+    }
+
+    th {
+        font-size: 12px;
+        color: #6b7280;
+        font-weight: 700;
+    }
+
+    tbody tr:hover {
+        background: #fbfdff;
+    }
+
+    .mono {
+        font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;
+    }
+
+    .status {
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 12px;
+        display: inline-block;
+    }
+
+        .status.Active {
+            background: #ecfdf5;
+            color: #065f46;
+        }
+
+        .status.Suspended {
+            background: #fff7ed;
+            color: #9a3412;
+        }
+
+        .status.Deleted {
+            background: #fef2f2;
+            color: #991b1b;
+        }
+
+    .pagination {
+        display: flex;
+        gap: 6px;
+        margin-top: 12px;
+        flex-wrap: wrap;
+    }
+
+    .page-btn {
+        padding: 6px 10px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        text-decoration: none;
+        color: #111827;
+    }
+
+        .page-btn.active {
+            background: #2563eb;
+            border-color: #2563eb;
+            color: #fff;
+        }
+
+    .right {
+        text-align: right;
+    }
+
+    .nowrap {
+        white-space: nowrap;
+    }
+</style>
+
+<div class="page">
+    <div class="title">사용자 관리</div>
+
+    @if (TempData["ok"] is string okMsg)
+    {
+        <div class="alert ok">@okMsg</div>
+    }
+    @if (TempData["err"] is string errMsg)
+    {
+        <div class="alert err">@errMsg</div>
+    }
+
+    <!-- 검색 카드 -->
+    <div class="card" style="margin-bottom:16px;">
+        <div class="hd">검색</div>
+        <div class="bd">
+            <form method="get" asp-action="Index" asp-controller="AdminUsers">
+                <div class="form-grid">
+                    <div>
+                        <label for="q">검색어 (계정/닉네임)</label>
+                        <input id="q" name="Query" value="@q.Query" />
+                    </div>
+                    <div>
+                        <label for="status">상태</label>
+                        <select id="status" name="Status" asp-items="Model.Search.StatusOptions"></select>
+                    </div>
+                    <div>
+                        <label for="from">가입일 From (UTC)</label>
+                        <input id="from" name="CreatedFrom" type="datetime-local"
+                               value="@(q.CreatedFrom?.UtcDateTime.ToString("yyyy-MM-ddTHH\\:mm") ?? "")" />
+                    </div>
+                    <div>
+                        <label for="to">가입일 To (UTC)</label>
+                        <input id="to" name="CreatedTo" type="datetime-local"
+                               value="@(q.CreatedTo?.UtcDateTime.ToString("yyyy-MM-ddTHH\\:mm") ?? "")" />
+                    </div>
+                    <div>
+                        <label for="ps">페이지 크기</label>
+                        <select id="ps" name="PageSize">
+                            @{
+                                int[] sizes = new[] { 10, 20, 50, 100, 200 };
+                                foreach (var s in sizes)
+                                {
+                                    <option value="@s" selected="@(q.PageSize==s)">@s</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="right">
+                        <button class="btn" type="submit">검색</button>
+                        <a class="btn secondary" href="@Url.Action("Index","AdminUsers")">초기화</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 목록 카드 -->
+    <div class="card">
+        <div class="hd">
+            목록
+            <span style="color:#6b7280; font-weight:400;">(총 @Model.Paging.TotalCount 건 / @Model.Paging.Page/@Model.Paging.TotalPages)</span>
+        </div>
+        <div class="bd">
+            <div style="overflow:auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="nowrap">ID</th>
+                            <th>Account</th>
+                            <th>Nick</th>
+                            <th class="nowrap">Level</th>
+                            <th class="nowrap">Gold</th>
+                            <th class="nowrap">Cristal</th>
+                            <th class="nowrap">Status</th>
+                            <th class="nowrap">Created</th>
+                            <th class="nowrap">Last Login</th>
+                            <th class="nowrap right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Items.Count == 0)
+                        {
+                            <tr><td colspan="10" style="text-align:center; color:#6b7280; padding:18px;">데이터가 없습니다.</td></tr>
+                        }
+                        else
+                        {
+                            foreach (var x in Model.Items)
+                            {
+                                <tr>
+                                    <td class="mono">@x.Id</td>
+                                    <td class="mono">@x.Account</td>
+                                    <td>@x.NickName</td>
+                                    <td class="mono">@x.Level</td>
+                                    <td class="mono">@x.Gold</td>
+                                    <td class="mono">@x.Gem</td>
+                                    <td><span class="status @x.Status">@x.Status</span></td>
+                                    <td class="mono">@x.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                                    <td class="mono">@x.LastLoginAt?.ToString("yyyy-MM-dd HH:mm")</td>
+                                    <td class="right nowrap">
+                                        <a class="btn" style="padding:6px 10px;"
+                                           asp-action="Detail" asp-controller="AdminUsers" asp-route-userId="@x.Id">상세</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 페이지네이션 -->
+            @if (Model.Paging.TotalPages > 1)
+            {
+                <div class="pagination">
+                    @{
+                        int current = Model.Paging.Page;
+                        int last = Model.Paging.TotalPages;
+
+                        // 쿼리 보존을 위해 hidden 폼 사용해도 되지만 여기선 링크에 그대로 포함
+                        string baseUrl(int page) => Url.Action("Index", "AdminUsers", new
+                        {
+                            Query = q.Query,
+                            Status = q.Status,
+                            CreatedFrom = q.CreatedFrom?.UtcDateTime.ToString("o"),
+                            CreatedTo = q.CreatedTo?.UtcDateTime.ToString("o"),
+                            Page = page,
+                            PageSize = q.PageSize
+                        })!;
+                        int start = Math.Max(1, current - 2);
+                        int end = Math.Min(last, current + 2);
+                        if (start > 1)
+                        {
+                            <a class="page-btn" href="@baseUrl(1)">« 처음</a>
+                        }
+                        if (current > 1)
+                        {
+                            <a class="page-btn" href="@baseUrl(current-1)">‹ 이전</a>
+                        }
+                        for (int p = start; p <= end; p++)
+                        {
+                            <a class="page-btn @(p==current?"active":"")" href="@baseUrl(p)">@p</a>
+                        }
+                        if (current < last)
+                        {
+                            <a class="page-btn" href="@baseUrl(current+1)">다음 ›</a>
+                        }
+                        if (end < last)
+                        {
+                            <a class="page-btn" href="@baseUrl(last)">마지막 »</a>
+                        }
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+﻿<script>
+    function removeRow(btn){ btn.closest('tr').remove(); renumberAll(); }
+
+    function addBonus(){
+      const tbody = document.querySelector('#tblBonuses tbody');
+      if(!tbody) return;
+      const idx = tbody.querySelectorAll('tr').length;
+      tbody.insertAdjacentHTML('beforeend', `
+        <tr>
+          <td><input name="Bonuses[${idx}].Threshold" class="form-control form-control-sm"/></td>
+          <td><textarea name="Bonuses[${idx}].EffectJson" rows="2" class="form-control form-control-sm font-monospace">{ "stat":"ATK","op":"add_pct","value":5 }</textarea></td>
+          <td><input name="Bonuses[${idx}].Note" class="form-control form-control-sm"/></td>
+          <td><button type="button" class="btn btn-outline-danger btn-sm" onclick="removeRow(this)">-</button></td>
+        </tr>`);
+    }
+
+    function addRule(){
+      const tbody = document.querySelector('#tblRules tbody');
+      if(!tbody) return;
+      const idx = tbody.querySelectorAll('tr').length;
+      tbody.insertAdjacentHTML('beforeend', `
+        <tr>
+          <td><input name="Rules[${idx}].Scope" class="form-control form-control-sm" value="0"/></td>
+          <td><input name="Rules[${idx}].Metric" class="form-control form-control-sm" value="2"/></td>
+          <td><input name="Rules[${idx}].RefId" class="form-control form-control-sm"/></td>
+          <td><input name="Rules[${idx}].RequiredCnt" class="form-control form-control-sm" value="1"/></td>
+          <td><textarea name="Rules[${idx}].ExtraJson" rows="1" class="form-control form-control-sm font-monospace"></textarea></td>
+          <td><button type="button" class="btn btn-outline-danger btn-sm" onclick="removeRow(this)">-</button></td>
+        </tr>`);
+    }
+
+    function addTarget(){
+      const tbody = document.querySelector('#tblTargets tbody');
+      if(!tbody) return;
+      const idx = tbody.querySelectorAll('tr').length;
+      tbody.insertAdjacentHTML('beforeend', `
+        <tr>
+          <td><input name="Targets[${idx}].TargetType" class="form-control form-control-sm" value="0"/></td>
+          <td><input name="Targets[${idx}].TargetId" class="form-control form-control-sm"/></td>
+          <td><button type="button" class="btn btn-outline-danger btn-sm" onclick="removeRow(this)">-</button></td>
+        </tr>`);
+    }
+
+    function renumberAll(){
+      // 필요하면 삭제 후 인덱스 재정렬 로직 작성
+      // (간단히는 서버가 컬렉션 바인딩 시 빠진 인덱스도 처리 가능)
+    }
+</script>

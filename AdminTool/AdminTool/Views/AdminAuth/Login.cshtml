@@ -1,0 +1,101 @@
+﻿@model AdminLoginVm
+@{
+    ViewData["Title"] = "Admin Login";
+}
+
+<style>
+    .auth-card {
+        max-width: 420px; margin: 48px auto; padding: 28px;
+        border: 1px solid #e5e7eb; border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.06); background: #fff;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", Arial, "Apple SD Gothic Neo", sans-serif;
+    }
+    .auth-title { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+    .auth-sub   { color: #6b7280; margin-bottom: 20px; }
+    .form-row   { margin-bottom: 14px; }
+    .form-row label { display:block; font-weight:600; margin-bottom:6px; }
+    .form-row input[type="text"],
+    .form-row input[type="password"] {
+        width:100%; padding:10px 12px; border:1px solid #d1d5db; border-radius:8px; outline:none;
+    }
+    .form-row input:focus { border-color:#2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,.15); }
+    .btn {
+        display:inline-block; padding:10px 16px; border-radius:8px; border:none; cursor:pointer;
+        background:#2563eb; color:#fff; font-weight:600;
+    }
+    .btn:disabled { opacity:.6; cursor:not-allowed; }
+    .btn-secondary { background:#6b7280; }
+    .actions { display:flex; gap:10px; align-items:center; }
+    .link { color:#2563eb; text-decoration:none; }
+    .link:hover { text-decoration:underline; }
+    .alert { padding:10px 12px; border-radius:8px; margin-bottom:14px; }
+    .alert.ok { background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0; }
+    .alert.err { background:#fef2f2; color:#991b1b; border:1px solid #fecaca; }
+    .val-summary { margin-bottom:12px; color:#991b1b; }
+    .token-box {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        font-size: 12px; background:#0b1020; color:#e5e7eb; border-radius:8px; padding:10px 12px;
+        overflow:auto; max-height:160px;
+    }
+    .hint { color:#6b7280; font-size:12px; margin-top:6px; }
+</style>
+
+<div class="auth-card">
+    <div class="auth-title">운영툴 로그인</div>
+    <div class="auth-sub">관리 콘솔 접속을 위해 계정과 비밀번호를 입력하세요.</div>
+
+    @if (TempData["ok"] is string okMsg)
+    {
+        <div class="alert ok">@okMsg</div>
+    }
+    @if (TempData["err"] is string errMsg)
+    {
+        <div class="alert err">@errMsg</div>
+    }
+
+    @* 서버 유효성 요약 *@
+    @Html.ValidationSummary(false, "", new { @class = "val-summary" })
+
+    <form asp-action="Login" asp-controller="AdminAuth" method="post">
+        @Html.AntiForgeryToken()
+
+        @* ReturnUrl 보존 *@
+        <input type="hidden" asp-for="ReturnUrl" />
+
+        <div class="form-row">
+            <label asp-for="Account"></label>
+            <input asp-for="Account" type="text" autocomplete="username" />
+            <span asp-validation-for="Account" class="text-danger"></span>
+        </div>
+
+        <div class="form-row">
+            <label asp-for="Password"></label>
+            <input asp-for="Password" type="password" autocomplete="current-password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <div class="actions">
+            <button class="btn" type="submit">로그인</button>
+            <a class="btn btn-secondary" asp-action="Register" asp-controller="AdminAuth">회원 생성</a>
+            <a class="link" href="/swagger" target="_blank" rel="noreferrer">Swagger</a>
+        </div>
+
+        <div class="hint">
+            테스트용 계정이 없다면 “회원 생성”으로 먼저 계정을 만들어 주세요.
+        </div>
+    </form>
+
+    @* 직전 로그인 성공 시 토큰을 잠깐 보여주고 싶다면(TempData에서) *@
+    @if (TempData["accessToken"] is string at && !string.IsNullOrWhiteSpace(at))
+    {
+        <div style="margin-top:18px;">
+            <div style="font-weight:600;margin-bottom:6px;">Access Token (최근 로그인)</div>
+            <div class="token-box">@at</div>
+            <div class="hint">API 테스트 시 Authorization 헤더에 <code>Bearer (토큰)</code> 형태로 사용하세요.</div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

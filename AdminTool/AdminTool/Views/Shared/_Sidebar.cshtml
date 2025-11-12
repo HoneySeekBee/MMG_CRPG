@@ -1,0 +1,87 @@
+﻿@using System.Security.Claims
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor Http
+@{
+    var isAuthed = User?.Identity?.IsAuthenticated == true;
+    var uid = Http?.HttpContext?.Request?.Query["userId"].ToString();
+    if (string.IsNullOrWhiteSpace(uid) && isAuthed)
+        uid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+}
+
+@model (string ctrl, string act)
+
+@functions{
+    bool isActive(string c, string? a = null)
+    {
+        var (curC, curA) = Model;
+        if (!string.Equals(curC, c, StringComparison.OrdinalIgnoreCase)) return false;
+        if (a is null) return true;
+        return string.Equals(curA, a, StringComparison.OrdinalIgnoreCase);
+    }
+    string ActiveCls(string c, string? a = null) => isActive(c, a) ? "active" : "";
+}
+
+<!-- [ Common ] -->
+<div class="section">Common</div>
+<a asp-controller="Dashboard" asp-action="Index" class="@ActiveCls("Dashboard")">Dashboard</a>
+<a asp-controller="AuditLogs" asp-action="Index" class="@ActiveCls("AuditLogs")">AuditLogs</a>
+<a asp-controller="Publish" asp-action="Index" class="@ActiveCls("Publish")">Dashboard</a>
+
+<div class="section">Code/Master</div>
+<a asp-controller="Icons" asp-action="Index" class="@ActiveCls("Icons")">Icons</a>
+<a asp-controller="Portraits" asp-action="Index" class="@ActiveCls("Portraits")">Portraits</a>
+<a asp-controller="Elements" asp-action="Index" class="@ActiveCls("Elements")">Elements</a>
+<a asp-controller="ElementAffinities" asp-action="Index" class="@ActiveCls("ElementAffinities")">ElementAffinity</a>
+<a asp-controller="Factions" asp-action="Index" class="@ActiveCls("Factions")">Faction</a>
+<a asp-controller="Roles" asp-action="Index" class="@ActiveCls("Roles")">Role</a>
+<a asp-controller="Rarities" asp-action="Index" class="@ActiveCls("Rarities")">Rarity</a>
+
+
+<div class="section">Contents</div>
+<a asp-controller="Characters" asp-action="Index" class="@ActiveCls("Characters")">Characters</a>
+<a asp-controller="Monsters" asp-action="Index" class="@ActiveCls("Monsters")">Monsters</a>
+<a asp-controller="Items" asp-action="Index" class="@ActiveCls("Items")">Items</a>
+<a asp-controller="Skills" asp-action="Index" class="@ActiveCls("Skills")">Skills</a>
+
+<div class="section">Battle</div>
+<a asp-controller="Combat" asp-action="Index" class="@ActiveCls("Combat")">Combat</a>
+<a asp-controller="Stages" asp-action="Index" class="@ActiveCls("Stages")">Stage</a>
+
+<div class="section">Synergy</div>
+<a asp-controller="Synergies" asp-action="Index" class="@ActiveCls("Synergies")">Synergy</a>
+
+<div class="section">Banners</div>
+<a asp-controller="GachaBanners" asp-action="Index" class="@ActiveCls("GachaBanners")">GachaBanner</a>
+<a asp-controller="GachaPools" asp-action="Index" class="@ActiveCls("GachaPools")">GachaPools</a>
+
+<div class="section">Users</div>
+<a asp-controller="AdminUsers" asp-action="Index" class="@ActiveCls("AdminUsers")">Users</a>
+<a asp-controller="AdminAuth" asp-action="Login" class="@ActiveCls("AdminAuth","Login")">Login</a>
+<a asp-controller="AdminAuth" asp-action="Register" class="@ActiveCls("AdminAuth","Register")">Register</a>
+
+
+
+@if (isAuthed)
+{
+    <a asp-controller="UserInventory"
+       asp-action="Index"
+       asp-route-userId="@uid"
+       class="@ActiveCls("UserInventory")">Inventory</a>
+
+    <a asp-controller="UserCharacter"
+       asp-action="Index"
+       asp-route-userId="@uid"
+       class="@ActiveCls("UserCharacter")">UserCharacter</a>
+}
+else
+{
+    <!-- 미로그인: 로그인으로 보내되 returnUrl은 경로만 -->
+    <a asp-controller="AdminAuth"
+       asp-action="Login"
+       asp-route-returnUrl="@Url.Action("Index","UserInventory")"
+       class="@ActiveCls("UserInventory")">Inventory</a>
+
+    <a asp-controller="AdminAuth"
+       asp-action="Login"
+       asp-route-returnUrl="@Url.Action("Index","UserCharacter")"
+       class="@ActiveCls("UserCharacter")">UserCharacter</a>
+}

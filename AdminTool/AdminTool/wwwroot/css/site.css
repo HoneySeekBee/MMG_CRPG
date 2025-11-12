@@ -1,0 +1,88 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.table-scroll {
+    max-height: 420px;
+    overflow-y: auto;
+    overflow-x: auto;
+    border: 1px solid #e2e8f0;
+}
+
+.table thead th {
+    position: sticky;
+    top: 0;
+    background: #f1f5f9;
+    z-index: 1;
+}
+
+.portrait-scroll {
+    max-height: 240px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 6px;
+    border-radius: 4px;
+    background: #fff;
+    /* 많아지면 가로 스크롤도 허용 */
+    overflow-x: auto;
+}
+.portrait-option {
+    width: 128px;
+    height: 128px;
+    text-align: center;
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    padding: 4px;
+    transition: 0.1s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 4px;
+}
+    .portrait-option img {
+        height: 128px;
+        width: auto;
+        max-width: 100%;
+        object-fit: contain; /* 안 잘리게 */
+        display: block;
+    }
+    .portrait-option:hover {
+        border-color: #ccc;
+        background: #f7f7f7;
+    }
+
+    .portrait-option.selected {
+        border-color: #0d6efd;
+        background: rgba(13, 110, 253, 0.12);
+        box-shadow: 0 0 4px rgba(13, 110, 253, 0.4);
+    }
+
+.portrait-name {
+    font-size: 0.65rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    text-align: center;
+}

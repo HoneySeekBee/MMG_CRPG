@@ -1,0 +1,155 @@
+﻿@model AdminTool.Models.GachaPoolFormVm
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Gacha Pool Details";
+
+    string? CharacterNameOrId(int? id)
+    {
+        if (id is null) return "-";
+        var opts = Model.CharacterOptions ?? Enumerable.Empty<SelectListItem>();
+        var hit = opts.FirstOrDefault(o => o.Value == id.Value.ToString());
+        return hit?.Text ?? $"#{id.Value}";
+    }
+
+    string Pretty(string? json)
+    {
+        if (string.IsNullOrWhiteSpace(json)) return "-";
+        try
+        {
+            using var doc = System.Text.Json.JsonDocument.Parse(json);
+            return System.Text.Json.JsonSerializer.Serialize(
+                doc.RootElement,
+                new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+        }
+        catch { return json!; }
+    }
+}
+
+<div class="container py-3">
+    <h2 class="mb-3">Gacha Pool Details</h2>
+
+    <div class="mb-3 d-flex gap-2">
+        <a asp-action="Index" class="btn btn-outline-secondary">← 목록으로</a>
+        @if (Model.PoolId > 0)
+        {
+            <a asp-action="Edit" asp-route-id="@Model.PoolId" class="btn btn-primary">Edit</a>
+            <form asp-action="Delete" asp-route-id="@Model.PoolId" method="post" class="d-inline"
+                  onsubmit="return confirm('정말 삭제할까요?');">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-outline-danger">Delete</button>
+            </form>
+        }
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header fw-semibold">기본 정보</div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <div class="text-muted">ID</div>
+                    <div class="fw-semibold">@Model.PoolId</div>
+                </div>
+                <div class="col-md-5">
+                    <div class="text-muted">이름</div>
+                    <div class="fw-semibold">@Model.Name</div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-muted">표 버전</div>
+                    <div class="fw-semibold">@(string.IsNullOrWhiteSpace(Model.TablesVersion) ? "-" : Model.TablesVersion)</div>
+                </div>
+                <div class="fw-semibold">
+                    @(Model.ScheduleStartLocal.HasValue
+                        ? Model.ScheduleStartLocal.Value.ToString("yyyy-MM-dd HH:mm")
+                        : "-")
+                </div>
+
+                <div class="fw-semibold">
+                    @(Model.ScheduleEndLocal.HasValue
+                        ? Model.ScheduleEndLocal.Value.ToString("yyyy-MM-dd HH:mm")
+                        : "-")
+                </div>
+                <div class="col-md-3">
+                    <div class="text-muted">타임존</div>
+                    <div class="fw-semibold">Asia/Seoul</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header fw-semibold">Pity 설정 (JSON)</div>
+                <div class="card-body">
+                    <pre class="mb-0" style="white-space:pre-wrap">@Pretty(Model.PityJson)</pre>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header fw-semibold">가챠 설정 (JSON)</div>
+                <div class="card-body">
+                    <pre class="mb-0" style="white-space:pre-wrap">@Pretty(Model.ConfigJson)</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span class="fw-semibold">엔트리(확률표)</span>
+            <small class="text-muted">총 @((Model.Entries?.Count ?? 0))개</small>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-sm table-striped align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width:45%;">캐릭터</th>
+                            <th style="width:15%;">등급</th>
+                            <th style="width:15%;">픽업</th>
+                            <th style="width:15%;">가중치</th>
+                            <th style="width:10%;">비고</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Entries == null || Model.Entries.Count == 0)
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center text-muted py-4">엔트리가 없습니다.</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            // 총 가중치 계산
+                            var totalWeight = Model.Entries.Sum(e => Math.Max(0, e.Weight));
+                            foreach (var e in Model.Entries)
+                            {
+                                var name = CharacterNameOrId(e.CharacterId);
+                                var w = Math.Max(0, e.Weight);
+                                var pct = (totalWeight > 0) ? (100.0 * w / totalWeight) : 0.0;
+                                <tr>
+                                    <td class="fw-semibold">@name</td>
+                                    <td>@e.Grade</td>
+                                    <td>@(e.RateUp ? "Yes" : "No")</td>
+                                    <td>@w</td>
+                                    <td class="text-muted">@pct.ToString("0.####")%</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                    @if (Model.Entries != null && Model.Entries.Count > 0)
+                    {
+                        <tfoot>
+                            <tr class="table-light">
+                                <th colspan="3" class="text-end">총 가중치</th>
+                                <th>@Model.Entries.Sum(e => Math.Max(0, e.Weight))</th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,206 @@
+﻿@model AdminTool.Models.SkillCreateVm
+
+<h2 class="mb-3">Create Skill</h2>
+
+@if (TempData["Message"] is string msg)
+{
+     <div class="alert alert-success">@msg</div>
+}
+@if (TempData["Error"] is string err)
+{
+     <div class="alert alert-danger">@err</div>
+}
+
+<form asp-action="Create" method="post" class="row g-3">
+    @Html.AntiForgeryToken()
+    <div class="col-12">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="Name" class="form-label">Name</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <!-- 아이콘 선택 -->
+    <div class="col-12 mb-3">
+        <input asp-for="IconId" id="IconId" type="hidden" />
+        <div class="d-flex align-items-center gap-2 mb-2">
+            <img id="iconPreviewImg" src="" alt="icon"
+                 style="width:32px;height:32px;border:1px solid #eee;border-radius:6px;object-fit:contain" />
+            <button type="button" class="btn btn-outline-primary btn-sm"
+                    data-bs-toggle="modal" data-bs-target="#iconPickerModal">
+                아이콘 선택
+            </button>
+        </div>
+        @await Html.PartialAsync("~/Views/Elements/PickIconModal.cshtml",
+                 new PickIconModalVm
+        {
+            ModalId = "iconPickerModal",
+            Icons = Model.Icons,
+            TargetHiddenId = "IconId",
+            TargetPreviewImgId = "iconPreviewImg"
+        })
+    </div>
+
+    <!-- 전투 정보 -->
+    <div class="col-md-3">
+        <label class="form-label">Type</label>
+        <select asp-for="Type" class="form-select">
+            @foreach (var opt in Model.TypeOptions)
+            {
+                <option value="@opt.Value" selected="@opt.Selected">@opt.Text</option>
+            }
+        </select>
+        <span asp-validation-for="Type" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-3">
+        <label class="form-label">Element</label>
+        <select asp-for="ElementId" class="form-select">
+            @foreach (var opt in Model.ElementOptions)
+            {
+                <option value="@opt.Value" selected="@opt.Selected">@opt.Text</option>
+            }
+        </select>
+        <span asp-validation-for="ElementId" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="TargetingType" class="form-label">Targeting</label>
+        <select asp-for="TargetingType" class="form-select">
+            @foreach (var opt in Model.TargetingTypeOptions)
+            {
+                <option value="@opt.Value" selected="@opt.Selected">@opt.Text</option>
+            }
+        </select>
+        <span asp-validation-for="TargetingType" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="TargetSide" class="form-label">Target Side</label>
+        <select asp-for="TargetSide" class="form-select">
+            @foreach (var opt in Model.TargetSideOptions)
+            {
+                <option value="@opt.Value" selected="@opt.Selected">@opt.Text</option>
+            }
+        </select>
+        <span asp-validation-for="TargetSide" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="AoeShape" class="form-label">AOE Shape</label>
+        <select asp-for="AoeShape" class="form-select">
+            @foreach (var opt in Model.AoeShapeOptions)
+            {
+                <option value="@opt.Value" selected="@opt.Selected">@opt.Text</option>
+            }
+        </select>
+        <span asp-validation-for="AoeShape" class="text-danger"></span>
+    </div>
+
+    <!-- 기타 정보 -->
+    <div class="col-md-3">
+        <label asp-for="IsActive" class="form-label">Active?</label>
+        <select asp-for="IsActive" class="form-select">
+            <option value="true">Active</option>
+            <option value="false">Passive</option>
+        </select>
+        <span asp-validation-for="IsActive" class="text-danger"></span>
+    </div>
+
+    <!-- Tags -->
+    <div class="col-12">
+        <label class="form-label">Tags</label>
+        <div class="d-flex gap-2">
+            <input type="text" id="tagInput" class="form-control" placeholder="ex) burn, stun (공백 없이)" style="max-width:320px;">
+            <button type="button" id="addTagBtn" class="btn btn-outline-primary">추가</button>
+        </div>
+        <div id="tagChips" class="mt-2 d-flex flex-wrap gap-2"></div>
+        <!-- JS가 hidden 추가: name="Tags" (VM이 List<string> Tags 라고 가정) -->
+    </div>
+
+    <div class="col-12">
+        <label asp-for="Etc" class="form-label">Base Info - Etc</label>
+        <input asp-for="Etc" class="form-control" placeholder="설명/메모 등 자유 입력" />
+        <span asp-validation-for="Etc" class="text-danger"></span>
+    </div>
+
+    <div class="col-12 d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <!-- 아이콘 픽커 -->
+    <script>
+        (function () {
+            const hiddenIconId = document.getElementById('IconId');
+            const preview = document.getElementById('iconPreviewImg');
+            const picker = document.getElementById('iconPickerModal'); // ModalId와 일치하게
+
+            if (preview && picker) {
+                if (!preview.getAttribute('src')) {
+                    const active = picker.querySelector('.icon-pick');
+                    if (active) {
+                        preview.src = active.dataset.iconUrl;
+                        if (hiddenIconId) hiddenIconId.value = active.dataset.iconId;
+                    }
+                }
+                picker.addEventListener('click', function (e) {
+                    const btn = e.target.closest('.icon-pick');
+                    if (!btn) return;
+                    picker.querySelectorAll('.icon-pick').forEach(b => b.classList.remove('border-primary'));
+                    btn.classList.add('border-primary');
+                    if (hiddenIconId) hiddenIconId.value = btn.dataset.iconId;
+                    if (preview) preview.src = btn.dataset.iconUrl;
+                }, false);
+            }
+        })();
+    </script>
+
+    <!-- 태그 칩 -->
+    <script>
+        (function () {
+            const chips = document.getElementById('tagChips');
+            const input = document.getElementById('tagInput');
+            const addBtn = document.getElementById('addTagBtn');
+            const tags = new Set();
+            const valid = t => /^[a-z0-9_-]+$/i.test(t);
+
+            function syncHidden() {
+                chips.querySelectorAll('input[type=hidden][name=Tags]').forEach(x => x.remove());
+                for (const t of tags) {
+                    const h = document.createElement('input');
+                    h.type = 'hidden'; h.name = 'Tags'; h.value = t; 
+                    chips.appendChild(h);
+                }
+            }
+            function render() {
+                chips.querySelectorAll('.tag-chip').forEach(x => x.remove());
+                for (const t of tags) {
+                    const span = document.createElement('span');
+                    span.className = 'badge bg-secondary tag-chip';
+                    span.textContent = t + ' ';
+                    const x = document.createElement('button');
+                    x.type = 'button'; x.className = 'btn-close btn-close-white btn-sm ms-1';
+                    x.addEventListener('click', () => { tags.delete(t); render(); syncHidden(); });
+                    span.appendChild(x); chips.appendChild(span);
+                }
+            }
+            function add() {
+                const raw = (input.value || '').trim();
+                if (!raw) return;
+                const t = raw.toLowerCase();
+                if (!valid(t)) { alert('영문/숫자/-,_ 만 허용 (공백 불가)'); return; }
+                tags.add(t); input.value = ''; render(); syncHidden();
+            }
+            addBtn.addEventListener('click', add);
+            input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); add(); } });
+        })();
+    </script>
+}

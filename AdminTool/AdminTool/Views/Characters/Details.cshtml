@@ -1,0 +1,270 @@
+﻿@model Application.Character.CharacterDetailDto
+
+@{
+    ViewData["Title"] = "Character Details";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Character #@Model.Id — @Model.Name</h2>
+    <div class="d-flex gap-2">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+        <a asp-action="Skills" asp-route-id="@Model.Id" class="btn btn-outline-primary">Skills</a>
+        <a asp-action="Progressions" asp-route-id="@Model.Id" class="btn btn-outline-primary">Progress</a>
+        <a asp-action="Promotions" asp-route-id="@Model.Id" class="btn btn-outline-primary">Promos</a>
+        <a asp-action="Index" class="btn btn-secondary">Back</a>
+    </div>
+</div>
+
+@if (TempData["toast"] is string toast && !string.IsNullOrWhiteSpace(toast))
+{
+    <div class="alert alert-success">@toast</div>
+}
+
+<div class="row g-3">
+    <!-- 기본 정보 -->
+    <div class="col-12 col-xl-6">
+        <div class="card">
+            <div class="card-header">Basic</div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Name</dt>
+                    <dd class="col-sm-8">@Model.Name</dd>
+
+                    <dt class="col-sm-4">Rarity</dt>
+                    <dd class="col-sm-8">★@Model.RarityId</dd>
+
+                    <dt class="col-sm-4">Element</dt>
+                    <dd class="col-sm-8">@Model.ElementId</dd>
+
+                    <dt class="col-sm-4">Role</dt>
+                    <dd class="col-sm-8">@Model.RoleId</dd>
+
+                    <dt class="col-sm-4">Faction</dt>
+                    <dd class="col-sm-8">@Model.FactionId</dd>
+
+                    <dt class="col-sm-4">IconId</dt>
+                    <dd class="col-sm-8">@Model.IconId</dd>
+
+                    <dt class="col-sm-4">PortraitId</dt>
+                    <dd class="col-sm-8">@Model.PortraitId</dd>
+
+                    <dt class="col-sm-4">Limited</dt>
+                    <dd class="col-sm-8">@(Model.IsLimited ? "Yes" : "No")</dd>
+
+                    <dt class="col-sm-4">Release</dt>
+                    <dd class="col-sm-8">@Model.ReleaseDate?.ToString("yyyy-MM-dd")</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <!-- 태그 & 메타 -->
+    <div class="col-12 col-xl-6">
+        <div class="card mb-3">
+            <div class="card-header">Tags</div>
+            <div class="card-body">
+                @if (Model.Tags is { Count: > 0 })
+                {
+                    <div class="d-flex flex-wrap gap-2">
+                        @foreach (var t in Model.Tags)
+                        {
+                            <span class="badge text-bg-secondary">@t</span>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="text-muted">No tags</div>
+                }
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Meta (JSON)</div>
+            <div class="card-body">
+                @if (!string.IsNullOrWhiteSpace(Model.MetaJson))
+                {
+                    <pre class="mb-0 small" style="white-space:pre-wrap;">@Model.MetaJson</pre>
+                }
+                else
+                {
+                    <div class="text-muted">No meta</div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- 스킬 -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div>Skills</div>
+                <a asp-action="Skills" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-primary">Edit Skills</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-sm mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width:120px;">Slot</th>
+                                <th style="width:120px;">SkillId</th>
+                                <th style="width:120px;">Unlock Tier</th>
+                                <th style="width:120px;">Unlock Level</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @if (Model.Skills is { Count: > 0 })
+                        {
+                            foreach (var s in Model.Skills.OrderBy(x => x.Slot))
+                            {
+                                <tr>
+                                    <td>@s.Slot</td>
+                                    <td>@s.SkillId</td>
+                                    <td>@s.UnlockTier</td>
+                                    <td>@s.UnlockLevel</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="4" class="text-center text-muted">No skills</td></tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 레벨 스탯 -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div>Level Progressions</div>
+                <a asp-action="Progressions" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-primary">Edit Progress</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-sm mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width:80px;">Lv</th>
+                                <th>HP</th>
+                                <th>ATK</th>
+                                <th>DEF</th>
+                                <th>SPD</th>
+                                <th>CritRate</th>
+                                <th>CritDmg</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @if (Model.StatProgressions is { Count: > 0 })
+                        {
+                            foreach (var p in Model.StatProgressions.OrderBy(x => x.Level))
+                            {
+                                <tr>
+                                    <td>@p.Level</td>
+                                    <td>@p.HP</td>
+                                    <td>@p.ATK</td>
+                                    <td>@p.DEF</td>
+                                    <td>@p.SPD</td>
+                                    <td>@p.CriRate</td>
+                                    <td>@p.CriDamage</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="7" class="text-center text-muted">No progressions</td></tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 승급 -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div>Promotions</div>
+                <a asp-action="Promotions" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-primary">Edit Promos</a>
+            </div>
+            <div class="card-body">
+                @if (Model.Promotions is { Count: > 0 })
+                {
+                    @foreach (var pr in Model.Promotions.OrderBy(x => x.Tier))
+                    {
+                        <div class="border rounded p-3 mb-3">
+                            <div class="fw-semibold mb-2">Tier @pr.Tier</div>
+                            <div class="row g-2">
+                                <div class="col-6 col-md-3">
+                                    <div class="text-muted small">Max Level</div>
+                                    <div>@pr.MaxLevel</div>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <div class="text-muted small">Cost Gold</div>
+                                    <div>@pr.CostGold</div>
+                                </div>
+                            </div>
+
+                            <div class="mt-2">
+                                <div class="text-muted small mb-1">Bonus</div>
+                                @if (pr.Bonus is not null)
+                                {
+                                    <div class="row g-2">
+                                        <div class="col-6 col-md-2"><span class="small text-muted">HP</span> @pr.Bonus.HP</div>
+                                        <div class="col-6 col-md-2"><span class="small text-muted">ATK</span> @pr.Bonus.ATK</div>
+                                        <div class="col-6 col-md-2"><span class="small text-muted">DEF</span> @pr.Bonus.DEF</div>
+                                        <div class="col-6 col-md-2"><span class="small text-muted">SPD</span> @pr.Bonus.SPD</div>
+                                        <div class="col-6 col-md-2"><span class="small text-muted">CritRate</span> @pr.Bonus.CritRate</div>
+                                        <div class="col-6 col-md-2"><span class="small text-muted">CritDmg</span> @pr.Bonus.CritDamage</div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="text-muted">No bonus</div>
+                                }
+                            </div>
+
+                            <div class="mt-3">
+                                <div class="text-muted small mb-1">Materials</div>
+                                @if (pr.Materials is { Count: > 0 })
+                                {
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-bordered mb-0">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>ItemId</th>
+                                                    <th style="width:140px;">Qty</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            @foreach (var m in pr.Materials)
+                                            {
+                                                <tr>
+                                                    <td>@m.ItemId</td>
+                                                    <td>@m.Quantity</td>
+                                                </tr>
+                                            }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="text-muted">No materials</div>
+                                }
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="text-muted">No promotions</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

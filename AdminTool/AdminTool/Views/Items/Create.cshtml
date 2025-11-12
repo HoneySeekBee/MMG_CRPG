@@ -1,0 +1,447 @@
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@using AdminTool.Models
+@using Domain.Enum
+@model ItemEditVm
+
+@{
+    ViewData["Title"] = "New Item";
+    string formAction = "/admin/items/new"; // ItemsController.New [POST]
+    var statOptions = (IEnumerable<SelectListItem>)(ViewBag.StatOptions ?? new List<SelectListItem>());
+    // JS에서 추가행 만들 때 쓸 option HTML 미리 생성
+    var statOptionsHtml = string.Join("", statOptions.Select(o =>
+        $"<option value=\"{o.Value}\">{System.Net.WebUtility.HtmlEncode(o.Text)}</option>"));
+}
+
+<div class="container py-3">
+    <div class="d-flex align-items-center mb-3">
+        <h2 class="mb-0">New Item</h2>
+        <a class="btn btn-outline-secondary ms-auto" href="/admin/items">← Back</a>
+    </div>
+
+    @if (TempData["Error"] is string err)
+    {
+        <div class="alert alert-danger">@err</div>
+    }
+    @if (TempData["Message"] is string msg)
+    {
+        <div class="alert alert-success">@msg</div>
+    }
+
+    <form method="post" action="@formAction" class="card" novalidate>
+        @Html.AntiForgeryToken()
+        <div class="card-body">
+
+            <h5 class="mb-3">Basic</h5>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Code</label>
+                    <input asp-for="Code" class="form-control" />
+                    <span asp-validation-for="Code" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Name</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Active</label>
+                    <select asp-for="IsActive" class="form-select">
+                        <option value="true" selected="@(Model.IsActive ? "selected" : null)">true</option>
+                        <option value="false" selected="@(!Model.IsActive ? "selected" : null)">false</option>
+                    </select>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">Description</label>
+                    <textarea asp-for="Description" class="form-control" rows="2"></textarea>
+                </div>
+            </div>
+
+            <hr class="my-4" />
+            <h5 class="mb-3">Classification & Resources</h5>
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Type</label>
+                    <select asp-for="TypeId" class="form-select"
+                            asp-items="(IEnumerable<SelectListItem>)ViewBag.TypeOptions"
+                            id="TypeId"></select>
+                    <span asp-validation-for="TypeId" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Rarity</label>
+                    <select asp-for="RarityId"
+                            class="form-select"
+                            asp-items="(IEnumerable<SelectListItem>)ViewBag.RarityOptions"></select>
+                    <span asp-validation-for="RarityId" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label d-block">Icon</label>
+
+                    <!-- 실제 값 -->
+                    <input asp-for="IconId" id="IconId" type="hidden" />
+
+                    <!-- 미리보기 + 버튼 -->
+                    <div class="d-flex align-items-center gap-2">
+                        <img id="iconPreviewImg" src=""
+                             alt="icon" style="width:32px;height:32px;border:1px solid #eee;border-radius:6px;object-fit:contain" />
+                        <button type="button" class="btn btn-outline-primary btn-sm"
+                                data-bs-toggle="modal" data-bs-target="#iconPickerModal">
+                            아이콘 선택
+                        </button>
+                    </div>
+
+                    @await Html.PartialAsync("~/Views/Elements/PickIconModal.cshtml",
+                             new PickIconModalVm
+                    {
+                        ModalId = "iconPickerModal",
+                        Icons = Model.Icons,     
+                        TargetHiddenId = "IconId",
+                        TargetPreviewImgId = "iconPreviewImg"
+                    })
+                    <small class="text-muted d-block mt-1">선택 안 하면 빈 값 → null</small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Portrait</label>
+                    <select asp-for="PortraitId"
+                            class="form-select"
+                            asp-items="(IEnumerable<SelectListItem>)ViewBag.PortraitOptions"></select>
+                </div>
+            </div>
+
+            <hr class="my-4" />
+
+            <h5 class="mb-3">Rules</h5>
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Stackable</label>
+                    <select asp-for="Stackable" class="form-select">
+                        <option value="true" selected="@(Model.Stackable ? "selected" : null)">true</option>
+                        <option value="false" selected="@(!Model.Stackable ? "selected" : null)">false</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">MaxStack</label>
+                    <input asp-for="MaxStack" type="number" class="form-control" />
+                    <span asp-validation-for="MaxStack" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">BindType</label>
+                    <select asp-for="BindType" class="form-select">
+                        @{
+                            var names = Enum.GetNames(typeof(BindType));
+                            foreach (var n in names)
+                            {
+                                <option value="@n" selected="@(Model.BindType.ToString()==n ? "selected" : null)">@n</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Tradable</label>
+                    <select asp-for="Tradable" class="form-select">
+                        <option value="true" selected="@(Model.Tradable ? "selected" : null)">true</option>
+                        <option value="false" selected="@(!Model.Tradable ? "selected" : null)">false</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">DurabilityMax</label>
+                    <input asp-for="DurabilityMax" type="number" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Weight</label>
+                    <input asp-for="Weight" type="number" class="form-control" />
+                    <span asp-validation-for="Weight" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row g-3 mt-2" id="equipTypeRow" style="display:none">
+                <div class="col-md-3">
+                    <label class="form-label">EquipType (Slot)</label>
+                    <select asp-for="EquipType" class="form-select"
+                            asp-items="(IEnumerable<SelectListItem>)ViewBag.EquipSlotOptions"
+                            id="EquipType"></select>
+                    <span asp-validation-for="EquipType" class="text-danger"></span>
+                    <small class="text-muted">TypeId가 17(장비)일 때만 필요</small>
+                </div>
+            </div>
+
+            <hr class="my-4" />
+
+            <h5 class="mb-3">Tags & Meta</h5>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Tags (comma/space separated)</label>
+                    <input asp-for="Tags" class="form-control" placeholder="weapon, starter" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Meta (JSON)</label>
+                    <textarea asp-for="MetaJson" class="form-control" rows="4" placeholder='{ "set": "IRON" }'></textarea>
+                </div>
+            </div>
+
+            <hr class="my-4" />
+
+            <h5 class="mb-2">Stats</h5>
+            <div id="stats" class="mb-3">
+                @for (int i = 0; i < Model.Stats.Count; i++)
+                {
+                    <div class="row g-2 align-items-end stat-row">
+                        <div class="col-5">
+                            <label class="form-label">Stat</label>
+                            <select name="Stats[@i].StatId" class="form-select" asp-items="statOptions">
+                                <option value="">-- select --</option>
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <label class="form-label">Value</label>
+                            <input name="Stats[@i].Value" type="number" step="0.0001" class="form-control" value="@Model.Stats[i].Value" />
+                        </div>
+                        <div class="col-3">
+                            <button type="button" class="btn btn-outline-danger" onclick="removeRow(this)">Remove</button>
+                        </div>
+                    </div>
+                    <script>
+                        // 선택값을 초기화(asp-items가 자동선택을 못하는 경우 대비)
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const sel = document.querySelector('select[name="Stats[@i].StatId"]');
+                            if (sel) sel.value = '@Model.Stats[i].StatId';
+                        });
+                    </script>
+                }
+                @if (Model.Stats.Count == 0)
+                {
+                    <div class="row g-2 align-items-end stat-row">
+                        <div class="col-5">
+                            <label class="form-label">Stat</label>
+                            <select name="Stats[0].StatId" class="form-select" asp-items="statOptions">
+                                <option value="">-- select --</option>
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <label class="form-label">Value</label>
+                            <input name="Stats[0].Value" type="number" step="0.0001" class="form-control" />
+                        </div>
+                        <div class="col-3">
+                            <button type="button" class="btn btn-outline-danger" onclick="removeRow(this)">Remove</button>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <button type="button" class="btn btn-outline-primary btn-sm mb-3" onclick="addStat()">+ Add Stat</button>
+            <h5 class="mb-2">Effects</h5>
+            <div id="effects" class="mb-3">
+                <div class="row g-2 align-items-end effect-row">
+                    <div class="col-md-3">
+                        <label class="form-label">Scope</label>
+                        <select name="Effects[0].Scope" class="form-select">
+                            @{
+                                var scopes = Enum.GetNames(typeof(ItemEffectScope));
+                                foreach (var s in scopes)
+                                {
+                                    <option value="@s">@s</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Payload (JSON)</label>
+                        <textarea name="Effects[0].PayloadJson" class="form-control" rows="3">{}</textarea>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Sort</label>
+                        <input name="Effects[0].SortOrder" type="number" class="form-control" value="0" />
+                    </div>
+                    <div class="col-md-1">
+                        <button type="button" class="btn btn-outline-danger" onclick="removeRow(this)">Remove</button>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-outline-primary btn-sm mb-3" onclick="addEffect()">+ Add Effect</button>
+
+            <h5 class="mb-2">Prices</h5>
+            <div id="prices" class="mb-3">
+                <div class="row g-2 align-items-end price-row">
+                    <div class="col-md-4">
+                        <label class="form-label">Currency</label>
+                        <select name="Prices[0].CurrencyId"
+                                class="form-select"
+                                asp-items="@(ViewBag.CurrencyOptions as List<SelectListItem>)">
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">PriceType</label>
+                        <select name="Prices[0].PriceType" class="form-select">
+                            @foreach (var v in Enum.GetValues(typeof(ItemPriceType)))
+                            {
+                                var iv = (int)v; var name = Enum.GetName(typeof(ItemPriceType), v);
+                                <option value="@iv">@name</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Price</label>
+                        <input name="Prices[0].Price" type="number" class="form-control" min="0" value="0" />
+                    </div>
+
+                    <div class="col-md-1 d-grid">
+                        <button type="button" class="btn btn-outline-danger" onclick="removeRow(this)">Remove</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addPrice()">+ Add Price</button>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Create</button>
+                <a class="btn btn-outline-secondary" href="/admin/items">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function nextIndex(containerId) {
+            const rows = document.querySelectorAll(`#${containerId} .price-row`);
+            return rows.length;
+        }
+        function removeRow(btn) {
+            const row = btn.closest('.row');
+            row?.parentElement?.removeChild(row);
+            renumber('stats', 'Stats', 'stat-row');
+        }
+        function addStat() {
+            const c = document.getElementById('stats');
+            const idx = c.querySelectorAll('.stat-row').length;
+            const options = `@Html.Raw(statOptionsHtml)`; // 서버에서 만든 option HTML
+            const html = `
+        <div class="row g-2 align-items-end stat-row">
+          <div class="col-5">
+            <label class="form-label">Stat</label>
+            <select name="Stats[${idx}].StatId" class="form-select">
+              <option value="">-- select --</option>${options}
+            </select>
+          </div>
+          <div class="col-4">
+            <label class="form-label">Value</label>
+            <input name="Stats[${idx}].Value" type="number" step="0.0001" class="form-control" />
+          </div>
+          <div class="col-3">
+            <button type="button" class="btn btn-outline-danger" onclick="removeRow(this)">Remove</button>
+          </div>
+        </div>`;
+            c.insertAdjacentHTML('beforeend', html);
+        }
+
+        function renumber(containerId, prefix, rowClass) {
+            const c = document.getElementById(containerId);
+            const rows = c.querySelectorAll(`.${rowClass}`);
+            rows.forEach((row, i) => {
+                row.querySelectorAll('input,select,textarea').forEach(el => {
+                    el.name = el.name.replace(new RegExp(`${prefix}\\[\\d+\\]`), `${prefix}[${i}]`);
+                });
+            });
+        }
+        function addEffect() {
+            const c = document.getElementById('effects');
+            const idx = c.querySelectorAll('.effect-row').length;
+            const scopes = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Enum.GetNames(typeof(ItemEffectScope))));
+            const options = scopes.map(s => `<option value="${s}">${s}</option>`).join('');
+            const html = `
+        <div class="row g-2 align-items-end effect-row">
+          <div class="col-md-3">
+            <label class="form-label">Scope</label>
+            <select name="Effects[${idx}].Scope" class="form-select">${options}</select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Payload (JSON)</label>
+            <textarea name="Effects[${idx}].PayloadJson" class="form-control" rows="3">{}</textarea>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Sort</label>
+            <input name="Effects[${idx}].SortOrder" type="number" class="form-control" value="0" />
+          </div>
+          <div class="col-md-1">
+            <button type="button" class="btn btn-outline-danger" onclick="removeRow(this)">Remove</button>
+          </div>
+        </div>`;
+            c.insertAdjacentHTML('beforeend', html);
+        }
+        function addPrice() {
+            const container = document.getElementById('prices');
+            const idx = container.querySelectorAll('.price-row').length;
+
+            // 첫 행의 select 옵션을 그대로 복제해서 씀
+            const currencyOptions = container.querySelector('select[name="Prices[0].CurrencyId"]').innerHTML;
+            const typeOptions = container.querySelector('select[name="Prices[0].PriceType"]').innerHTML;
+
+            const html = `
+              <div class="row g-2 align-items-end price-row">
+                <div class="col-md-4">
+                  <label class="form-label">Currency</label>
+                  <select name="Prices[${idx}].CurrencyId" class="form-select">
+                    ${currencyOptions}
+                  </select>
+                </div>
+
+                <div class="col-md-4">
+                  <label class="form-label">PriceType</label>
+                  <select name="Prices[${idx}].PriceType" class="form-select">
+                    ${typeOptions}
+                  </select>
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label">Price</label>
+                  <input name="Prices[${idx}].Price" type="number" class="form-control" min="0" value="0" />
+                </div>
+
+                <div class="col-md-1 d-grid">
+                  <button type="button" class="btn btn-outline-danger" onclick="removeRow(this)">Remove</button>
+                </div>
+              </div>`;
+            container.insertAdjacentHTML('beforeend', html);
+        }
+
+        function removeRow(btn) {
+            const row = btn.closest('.price-row');
+            row?.remove();
+        }
+        function renumber(containerId, prefix) {
+            const c = document.getElementById(containerId);
+            const rows = c.querySelectorAll(`.${containerId.slice(0, -1)}-row`);
+            rows.forEach((row, i) => {
+                row.querySelectorAll('input,select,textarea').forEach(el => {
+                    el.name = el.name.replace(new RegExp(`${prefix}\\[\\d+\\]`), `${prefix}[${i}]`);
+                });
+            });
+        }
+    </script>
+    <script>
+        (function(){
+            const TYPE_EQUIPMENT = 17;
+            const typeSel = document.getElementById('TypeId');
+            const equipRow = document.getElementById('equipTypeRow');
+            const equipSel = document.getElementById('EquipType');
+
+            function toggleEquip() {
+                const isEquip = String(typeSel.value) === String(TYPE_EQUIPMENT);
+                equipRow.style.display = isEquip ? '' : 'none';
+                if (!isEquip) {
+                    // 장비가 아니면 값 초기화(서버에서 null로 처리하긴 하지만 프런트도 정리)
+                    if (equipSel) equipSel.value = '';
+                }
+            }
+            typeSel?.addEventListener('change', toggleEquip);
+            // 초기 진입 시도 반영 (수정/검증 실패 재출력)
+            toggleEquip();
+        })();
+    </script>
+} 

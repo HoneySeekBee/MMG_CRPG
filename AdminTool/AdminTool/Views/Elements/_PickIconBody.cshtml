@@ -1,0 +1,23 @@
+﻿@model IEnumerable<AdminTool.Models.IconPickItem>
+
+
+<div class="row row-cols-6 g-2">
+    @foreach (var i in Model)
+    {
+        <div class="col">
+            <button type="button"
+                    class="icon-tile btn p-1 w-100"
+                    data-id="@i.IconId"
+                    data-url="@i.Url"
+                    title="@i.Key">
+                <img src="@i.Url" alt="@i.Key"
+                     style="width:100%;aspect-ratio:1/1;object-fit:contain;border:1px solid #eee;border-radius:8px;" />
+                <div class="small text-truncate mt-1">@i.Key</div>
+            </button>
+        </div>
+    }
+</div>
+
+<style>
+    .icon-tile.selected { outline: 2px solid var(--bs-primary); }
+</style>

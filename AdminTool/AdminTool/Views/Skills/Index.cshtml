@@ -1,0 +1,175 @@
+﻿@model AdminTool.Models.SkillIndexVm
+@using Domain.Enum
+
+@{
+    ViewData["Title"] = "Skills";
+}
+
+<h2 class="mb-3">Skills</h2>
+
+@if (TempData["Message"] is string msg)
+{
+    <div class="alert alert-success">@msg</div>
+}
+@if (TempData["Error"] is string err)
+{
+    <div class="alert alert-danger">@err</div>
+}
+
+<div class="mb-3">
+    <form method="get" class="row g-2 align-items-end">
+        <div class="col-auto">
+            <label class="form-label">Type</label>
+            <select name="type" class="form-select">
+                <option value="">All</option>
+                @foreach (var opt in Model.TypeOptions)
+                {
+                    <option value="@opt.Value" selected="@opt.Selected">@opt.Text</option>
+                }
+            </select>
+        </div>
+        <div class="col-auto">
+            <label class="form-label">Element</label>
+            <select name="elementId" class="form-select">
+                <option value="">All</option>
+                @foreach (var opt in Model.ElementOptions)
+                {
+                    <option value="@opt.Value" selected="@opt.Selected">@opt.Text</option>
+                }
+            </select>
+        </div>
+        <div class="col-auto">
+            <label class="form-label">Name</label>
+            <input type="text" name="name" value="@Model.NameContains" class="form-control" />
+        </div>
+        <div class="col-auto">
+            <label class="form-label">Active</label>
+            <select name="isActive" class="form-select">
+                <option value="">All</option>
+                <option value="true" selected="@(Model.IsActive == true)">Active</option>
+                <option value="false" selected="@(Model.IsActive == false)">Passive</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <label class="form-label">Targeting</label>
+            <select name="targetingType" class="form-select">
+                <option value="">All</option>
+                @foreach (var opt in Model.TargetingTypeOptions)
+                {
+                    <option value="@opt.Value" selected="@opt.Selected">@opt.Text</option>
+                }
+            </select>
+        </div>
+        <div class="col-auto">
+            <label class="form-label">Side</label>
+            <select name="targetSide" class="form-select">
+                <option value="">All</option>
+                @foreach (var opt in Model.TargetSideOptions)
+                {
+                    <option value="@opt.Value" selected="@opt.Selected">@opt.Text</option>
+                }
+            </select>
+        </div>
+        <div class="col-auto">
+            <label class="form-label">AOE</label>
+            <select name="aoeShape" class="form-select">
+                <option value="">All</option>
+                @foreach (var opt in Model.AoeShapeOptions)
+                {
+                    <option value="@opt.Value" selected="@opt.Selected">@opt.Text</option>
+                }
+            </select>
+        </div>
+        <div class="col-auto">
+            <label class="form-label">Tags</label>
+            <input type="text" name="tagsAny" value="@(Model.TagsAny is { Length: >0 } ? string.Join(',', Model.TagsAny) : "")" class="form-control" placeholder="comma,separated" />
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-outline-secondary">Filter</button>
+            <a asp-action="Index" class="btn btn-outline-dark">Reset</a>
+            <a asp-action="Create" class="btn btn-primary">Create</a>
+        </div>
+    </form>
+</div>
+
+<table class="table table-bordered align-middle">
+    <thead class="table-light">
+        <tr>
+            <th style="width:80px;">ID</th>
+            <th>Name</th>
+            <th style="width:80px;">Icon</th>
+
+            <th style="width:100px;">Type</th>
+            <th style="width:100px;">Element</th>
+            <th style="width:120px;">Targeting</th>
+            <th style="width:100px;">Side</th>
+            <th style="width:100px;">AOE</th>
+
+            <th style="width:80px;">Active</th>
+            <th>Tags</th>
+
+            <th style="width:120px;" class="text-end">Actions</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.Items.Any())
+        {
+            <tr><td colspan="6" class="text-center">No skills found</td></tr>
+        }
+        else
+        {
+            foreach (var x in Model.Items)
+            {
+                <tr>
+                    <td>@x.SkillId</td>
+                    <td>@x.Name</td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(x.IconUrl))
+                        {
+                            <img src="@x.IconUrl" alt="icon" style="width:24px;height:24px;object-fit:contain;" />
+                        }
+                    </td>
+
+                    <td>@x.Type</td>
+                    <td>@x.ElementId</td>
+                    <td>@x.TargetingType</td>
+                    <td>@x.TargetSide</td>
+                    <td>@x.AoeShape</td>
+
+                    <td>@(x.IsActive ? "Active" : "Passive")</td>
+
+                    <td>
+                        @if (x.Tag?.Length > 0)
+                        {
+                            @string.Join(", ", x.Tag)
+                        }
+                    </td>
+                    <td class="text-end text-nowrap">
+                        <a asp-route="Skills_Levels" asp-route-id="@x.SkillId"
+                           class="btn btn-sm btn-outline-primary">
+                            Skill Levels
+                        </a>
+                        <a asp-action="Edit" asp-route-id="@x.SkillId" class="btn btn-sm btn-outline-primary">Edit</a>
+                        <form asp-action="Delete" asp-route-id="@x.SkillId" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('삭제할까요?');">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        // 필터 select 즉시 submit 기능
+        document.querySelectorAll("select[name=type], select[name=elementId]").forEach(sel => {
+            sel.addEventListener("change", () => sel.form.submit());
+        });
+    </script>
+}

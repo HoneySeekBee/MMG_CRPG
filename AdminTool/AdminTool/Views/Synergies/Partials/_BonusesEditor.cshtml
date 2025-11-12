@@ -1,0 +1,22 @@
+﻿@model SynergyEditVm
+<hr />
+<h5>Bonuses</h5>
+
+<table class="table table-sm" id="tblBonuses">
+    <thead>
+        <tr><th style="width:120px;">Threshold</th><th>Effect (JSON)</th><th style="width:220px;">Note</th><th style="width:60px;"></th></tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Bonuses.Count; i++)
+        {
+            <tr>
+                <td><input asp-for="Bonuses[i].Threshold" class="form-control form-control-sm" /></td>
+                <td><textarea asp-for="Bonuses[i].EffectJson" rows="2" class="form-control form-control-sm font-monospace"></textarea></td>
+                <td><input asp-for="Bonuses[i].Note" class="form-control form-control-sm" /></td>
+                <td><button type="button" class="btn btn-outline-danger btn-sm" onclick="removeRow(this)">-</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+<button type="button" class="btn btn-outline-primary btn-sm" onclick="addBonus()">+ Add Bonus</button>
+<span asp-validation-for="Bonuses" class="text-danger"></span>

@@ -1,0 +1,85 @@
+﻿@using AdminTool.Models
+@model AdminTool.Models.CharacterSkillsVm
+
+@{
+    ViewData["Title"] = "Assign Skills";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Assign Skills (ID: @Model.CharacterId)</h2>
+    <div class="d-flex gap-2">
+        <a asp-action="Edit" asp-route-id="@Model.CharacterId" class="btn btn-outline-secondary">← Back to Edit</a>
+        <a asp-action="Index" class="btn btn-outline-secondary">List</a>
+    </div>
+</div>
+
+
+<form asp-controller="Characters"
+      asp-action="Skills"
+      asp-route-id="@Model.CharacterId"
+      method="post" class="needs-validation" novalidate>
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" asp-for="CharacterId" />
+
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+    <div class="card">
+        <div class="card-header">Skill Slots</div>
+        <div class="card-body p-0">
+            <table class="table table-sm mb-0 align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width:160px">Slot</th>
+                        <th>Skill</th>
+                        <th style="width:140px">Unlock Tier</th>
+                        <th style="width:140px">Unlock Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Rows.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                <!-- Slot은 고정이므로 hidden으로 보내고 텍스트는 표시 -->
+                                <input asp-for="Rows[@i].Slot" type="hidden" />
+                                <span class="fw-semibold">@Model.Rows[i].Slot</span>
+                            </td>
+                            <td>
+                                <select asp-for="Rows[@i].SkillId"
+                                        asp-items="Model.AllSkills"
+                                        class="form-select">
+                                    <option value="">-- None --</option>
+                                </select>
+                                <span asp-validation-for="Rows[@i].SkillId" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="Rows[@i].UnlockTier" class="form-control" type="number" />
+                                <span class="form-text">사용 안 하면 0</span>
+                                <span asp-validation-for="Rows[@i].UnlockTier" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <input asp-for="Rows[@i].UnlockLevel" class="form-control" type="number" />
+                                <span class="form-text">사용 안 하면 0</span>
+                                <span asp-validation-for="Rows[@i].UnlockLevel" class="text-danger"></span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer d-flex justify-content-between align-items-center">
+            <div class="small text-muted">
+                * 슬롯 중복 없이 하나의 스킬만 지정하세요. 중복 시 검증 오류가 납니다.
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a asp-action="Edit" asp-route-id="@Model.CharacterId" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

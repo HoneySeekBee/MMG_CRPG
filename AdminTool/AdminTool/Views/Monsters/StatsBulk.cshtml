@@ -1,0 +1,22 @@
+﻿@model MonsterStatsBulkVm
+@{
+    ViewData["Title"] = "스탯 일괄 입력";
+}
+<h2>스탯 일괄 입력</h2>
+<form asp-action="StatsBulk" method="post">
+    <div class="mb-2">
+        <p class="text-muted">
+            엑셀에서 아래 열 순서로 복사해서 붙여넣으세요:<br />
+            <code>이름, 모델키, 레벨, HP, ATK, DEF, SPD, 치명타율(예: 5%), 치명타피해(예: 130%)</code>
+        </p>
+    </div>
+    <div class="mb-3">
+        <textarea asp-for="RawTable" class="form-control" rows="12"
+                  placeholder="예)
+순수한 신도의 영혼	model_faith_ghost_pure	1	25	15	10	25	5%	130%
+순수한 신도의 영혼	model_faith_ghost_pure	2	25	15	10	25	5%	130%"></textarea>
+        <span asp-validation-for="RawTable" class="text-danger"></span>
+    </div>
+    <button class="btn btn-primary">업로드</button>
+    <a asp-action="Index" class="btn btn-secondary">목록</a>
+</form>

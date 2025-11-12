@@ -1,0 +1,190 @@
+﻿@using AdminTool.Models
+@model CharacterFormVm
+@{
+    ViewData["Title"] = "Create Character";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">@ViewData["Title"]</h2>
+    <a asp-action="Index" class="btn btn-outline-secondary">← Back to list</a>
+</div>
+
+<form asp-action="Create" method="post" onsubmit="console.log('SUBMIT fired')" class="needs-validation" novalidate>
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+    <div class="row g-3">
+        <!-- 기본 정보 -->
+        <div class="col-12 col-lg-8">
+            <div class="card">
+                <div class="card-header">Basic</div>
+                <div class="card-body row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="Name" class="form-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label asp-for="RarityId" class="form-label"></label>
+                        <select asp-for="RarityId" asp-items="Model.Rarities" class="form-select">
+                            <option value="">-- Select --</option>
+                        </select>
+                        <span asp-validation-for="RarityId" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label asp-for="ElementId" class="form-label"></label>
+                        <select asp-for="ElementId" asp-items="Model.Elements" class="form-select">
+                            <option value="">-- Select --</option>
+                        </select>
+                        <span asp-validation-for="ElementId" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="RoleId" class="form-label"></label>
+                        <select asp-for="RoleId" asp-items="Model.Roles" class="form-select">
+                            <option value="">-- Select --</option>
+                        </select>
+                        <span asp-validation-for="RoleId" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="FactionId" class="form-label"></label>
+                        <select asp-for="FactionId" asp-items="Model.Factions" class="form-select">
+                            <option value="">-- Select --</option>
+                        </select>
+                        <span asp-validation-for="FactionId" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="ReleaseDate" class="form-label"></label>
+                        <!-- DateTimeOffset는 기본 text로 렌더되므로 명시적으로 datetime-local 지정 -->
+                        <input asp-for="ReleaseDate" type="datetime-local" class="form-control" />
+                        <span asp-validation-for="ReleaseDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input asp-for="IsLimited" class="form-check-input" />
+                            <label asp-for="IsLimited" class="form-check-label"></label>
+                        </div>
+                        <span asp-validation-for="IsLimited" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 리소스/메타 -->
+        <div class="col-12 col-lg-4">
+            <div class="card mb-3">
+                <div class="card-header">Assets</div>
+                <div class="card-body row g-3">
+                    <div class="card mb-3">
+                        <div class="card-header">Icon</div>
+                        <div class="card-body">
+                            @if (Model.IconChoices?.Count > 0)
+                            {
+                                <div class="row row-cols-6 row-cols-md-8 g-2" id="icon-grid">
+                                    @foreach (var it in Model.IconChoices)
+                                    {
+                                        var isChecked = (Model.IconId ?? 0) == it.IconId;
+                                        <div class="col">
+                                            <input type="radio"
+                                                   class="btn-check"
+                                                   name="IconId"
+                                                   id="icon-@it.IconId"
+                                                   value="@it.IconId"
+                                            @(isChecked ? "checked" : null) />
+                                            <label class="btn btn-outline-secondary w-100 p-2" for="icon-@it.IconId" title="@it.Key">
+                                                <img src="@it.Url" alt="@it.Key"
+                                                     class="img-fluid"
+                                                     style="width:48px;height:48px;object-fit:contain;" />
+                                                <div class="small text-truncate">@it.Key</div>
+                                            </label>
+                                        </div>
+                                    }
+                                </div>
+                                <span asp-validation-for="IconId" class="text-danger"></span>
+                            }
+                            else
+                            {
+                                <div class="alert alert-warning small mb-2">
+                                    아이콘 목록이 없습니다. (임시로 드롭다운을 표시합니다)
+                                </div>
+                                <select asp-for="IconId" asp-items="Model.Icons" class="form-select">
+                                    <option value="">-- None --</option>
+                                </select>
+                            }
+                        </div>
+                    </div><div class="card mb-3">
+                        <div class="card-header">Portrait</div>
+                        <div class="card-body">
+                            @if (Model.PortraitChoices?.Count > 0)
+                            {
+                                <div class="row row-cols-4 row-cols-md-6 g-2" id="portrait-grid">
+                                    @foreach (var p in Model.PortraitChoices)
+                                    {
+                                        var isChecked = (Model.PortraitId ?? 0) == p.PortraitId;
+                                        <div class="col">
+                                            <input type="radio"
+                                                   class="btn-check"
+                                                   name="PortraitId"
+                                                   id="portrait-@p.PortraitId"
+                                                   value="@p.PortraitId"
+                                            @(isChecked ? "checked" : null) />
+                                            <label class="btn btn-outline-secondary w-100 p-2"
+                                                   for="portrait-@p.PortraitId"
+                                                   title="@p.Key">
+                                                <img src="@p.Url" alt="@p.Key"
+                                                     class="img-fluid"
+                                                     style="width:96px;height:96px;object-fit:contain;" />
+                                                <div class="small text-truncate">@p.Key</div>
+                                            </label>
+                                        </div>
+                                    }
+                                </div>
+                                <span asp-validation-for="PortraitId" class="text-danger"></span>
+                            }
+                            else
+                            {
+                                <div class="alert alert-warning small mb-2">
+                                    초상화 목록이 없습니다. (임시로 드롭다운 표시)
+                                </div>
+                                <select asp-for="PortraitId" asp-items="Model.Portraits" class="form-select">
+                                    <option value="">-- None --</option>
+                                </select>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Meta</div>
+                <div class="card-body row g-3">
+                    <div class="col-12">
+                        <label asp-for="TagsCsv" class="form-label"></label>
+                        <input asp-for="TagsCsv" class="form-control" placeholder="예: healer, cleanse, regen" />
+                        <div class="form-text">쉼표로 구분해 입력하면 서버에서 표준화합니다.</div>
+                        <span asp-validation-for="TagsCsv" class="text-danger"></span>
+                    </div>
+                    <div class="col-12">
+                        <label asp-for="MetaJson" class="form-label"></label>
+                        <textarea asp-for="MetaJson" class="form-control" rows="6" placeholder='예: {"lore":"starter healer"}'></textarea>
+                        <span asp-validation-for="MetaJson" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-3 d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,102 @@
+﻿@model AdminTool.Models.MonsterIndexVm
+
+@{
+    ViewData["Title"] = "Monsters";
+}
+
+<h2>Monsters</h2>
+
+<div class="mb-3">
+    <form asp-action="Index" method="get" class="form-inline">
+        <div class="input-group">
+            <input type="text"
+                   name="search"
+                   value="@(Model.Search ?? "")"
+                   class="form-control"
+                   placeholder="이름 / 모델키 검색" />
+            <button type="submit" class="btn btn-primary">검색</button>
+        </div>
+    </form>
+</div> 
+<div class="mb-3">
+    <a asp-action="Create" class="btn btn-success">+ 몬스터 추가</a>
+</div>
+
+<table class="table table-striped table-bordered table-sm">
+    <thead>
+        <tr>
+            <th style="width:60px;">ID</th>
+            <th>이름</th>
+            <th>ModelKey</th>
+            <th style="width:90px;">Element</th>
+            <th style="width:120px;">Portrait</th>
+            <th style="width:60px;">Stats</th>
+            <th style="width:180px;">작업</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Monsters.Any())
+        {
+            foreach (var m in Model.Monsters)
+            {
+                <tr>
+                    <td>@m.Id</td>
+                    <td>@m.Name</td>
+                    <td>@m.ModelKey</td>
+                    <td>@m.ElementId</td>
+                    <td>
+                        @m.PortraitId
+                        @if (!string.IsNullOrEmpty(m.PortraitUrl))
+                        {
+                            <br />
+                            <img src="@m.PortraitUrl"
+                                 alt="portrait"
+                                 style="width:48px;height:48px;object-fit:cover;border-radius:4px;" />
+                        }
+                    </td>
+                    <td>@m.StatCount</td>
+                    <td>
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a asp-action="Detail" asp-route-id="@m.Id" class="btn btn-outline-secondary">Detail</a>
+                            <a asp-action="Edit" asp-route-id="@m.Id" class="btn btn-outline-primary">Edit</a>
+                        </div>
+                        <form asp-action="Delete" asp-route-id="@m.Id" method="post" class="d-inline ms-1"
+                              onsubmit="return confirm('삭제할까요?');">
+                            <button type="submit" class="btn btn-sm btn-danger">Del</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="7" class="text-center">데이터가 없습니다.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@* 간단한 페이징 *@
+@if (Model.TotalCount > 0)
+{
+    var currentPage = Model.Page <= 0 ? 1 : Model.Page;
+    var pageSize = Model.Monsters.Count == 0 ? 10 : Model.Monsters.Count;
+    var totalPages = (int)Math.Ceiling((double)Model.TotalCount / pageSize);
+    <nav class="mt-2">
+        <ul class="pagination pagination-sm">
+            <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                <a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)" asp-route-search="@Model.Search">이전</a>
+            </li>
+            @for (int p = 1; p <= totalPages; p++)
+            {
+                <li class="page-item @(p == currentPage ? "active" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@p" asp-route-search="@Model.Search">@p</a>
+                </li>
+            }
+            <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                <a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)" asp-route-search="@Model.Search">다음</a>
+            </li>
+        </ul>
+    </nav>
+}

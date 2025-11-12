@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+package game.inv;
+option csharp_namespace = "Contracts.Protos";
+import "google/protobuf/timestamp.proto";
+// 단일 인벤토리 레코드
+message UserInventory {
+  int32 user_id = 1;
+  int32 item_id = 2;
+  int32 count   = 3;
+  google.protobuf.Timestamp updated_at = 4;
+  int64 id = 5; 
+}
+
+// 페이지네이션 공통
+message PageInfo {
+  int32 page = 1;        // 1-based
+  int32 page_size = 2;   // requested size
+  int32 total_count = 3; // 전체 레코드 수
+}
+
+// GET: 목록 응답
+message ListUserInventoryResponse {
+  PageInfo page_info = 1;
+  repeated UserInventory items = 2; 
+}
+
+// GET: 단건 응답
+message GetUserInventoryResponse {
+  UserInventory item = 1;
+}
+
+// POST: 지급
+message GrantItemRequest {
+  int32 user_id = 1;
+  int32 item_id = 2;
+  int32 amount  = 3; // +개수
+}
+message GrantItemResponse {
+  UserInventory item = 1; // 변경 후 상태
+}
+
+// POST: 소비
+message ConsumeItemRequest {
+  int32 user_id = 1;
+  int32 item_id = 2;
+  int32 amount  = 3; // 소비량(양수)
+}
+message ConsumeItemResponse {
+  bool success = 1;
+  int32 before_count = 2;
+  int32 after_count  = 3;
+  int32 consumed     = 4; // 실제 소비량
+  // 실패/부족 등 원인 (문구는 클라에선 로컬라이징)
+  string failure_reason = 5;
+}
+
+// PUT: 개수 설정
+message SetItemCountRequest {
+  int32 user_id = 1;
+  int32 item_id = 2;
+  int32 new_count = 3;
+}
+message SetItemCountResponse {
+  UserInventory item = 1;
+}
+
+// DELETE: 삭제 (응답 바디는 비움)
+message DeleteItemRequest {
+  int32 user_id = 1;
+  int32 item_id = 2;
+}
+
+// GET: 특정 아이템 보유자(운영툴과 동일 기능이 필요하면)
+message ListOwnersRequest {
+  int32 item_id   = 1;
+  int32 page      = 2;
+  int32 page_size = 3;
+  // 최소 수량 필터 (nullable 대신 0 사용, 미사용 시 0)
+  int32 min_count = 4;
+}
+message ListOwnersResponse {
+  PageInfo page_info = 1;
+  repeated UserInventory owners = 2;
+}

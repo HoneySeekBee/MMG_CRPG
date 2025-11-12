@@ -1,0 +1,119 @@
+syntax = "proto3";
+
+package mmg.charactermodel;
+option csharp_namespace = "Contracts.CharacterModel";
+
+import "google/protobuf/wrappers.proto";
+
+enum BodySizePb {
+  BODY_SIZE_UNSPECIFIED = 0;
+  SMALL  = 1;
+  NORMAL = 2;
+  BIG    = 3;
+}
+
+enum PartTypePb {
+  PART_TYPE_UNSPECIFIED = 0;
+  HEAD    = 1;
+  HAIR    = 2;
+  MOUTH   = 3;
+  EYE     = 4;
+  ACC     = 5;
+  WEAPON_L = 6;
+  WEAPON_R = 7;
+}
+
+enum AnimationTypePb {
+  ANIM_TYPE_UNSPECIFIED = 0;
+  BOW           = 1;
+  ONE_HAND_SWORD = 2;
+  WAND          = 3;
+  FIST          = 4;
+  TWO_HAND_SWORD = 5;
+  SWORD_SHIELD  = 6;
+  SPEAR         = 7;
+}
+message CharacterModelPb {
+  int32 character_id = 1;
+
+  BodySizePb body_size = 2;
+  AnimationTypePb animation = 3;
+  
+  string hair_color_code = 4;
+  string skin_color_code = 5;
+  // nullable slots (DB: int? → proto: Int32Value)
+  google.protobuf.Int32Value weapon_l_id  = 10;
+  google.protobuf.Int32Value weapon_r_id  = 11;
+
+  google.protobuf.Int32Value part_head_id  = 20;
+  google.protobuf.Int32Value part_hair_id  = 21;
+  google.protobuf.Int32Value part_mouth_id = 22;
+  google.protobuf.Int32Value part_eye_id   = 23;
+  google.protobuf.Int32Value part_acc_id   = 24;
+
+}
+
+message CharacterModelPartPb {
+  int32 part_id = 1;
+  string part_key = 2;      // Addressables key
+  PartTypePb part_type = 3; 
+}
+
+
+
+message CharacterModelWeaponPb {
+  int32 weapon_id = 1;
+  string code = 2;          // 내부 코드
+  string display_name = 3;  // UI
+  bool is_two_handed = 4;
+   
+  google.protobuf.StringValue prefab_key = 10;
+}
+
+message CharacterVisualRecipePb {
+  int32 character_id = 1;
+  BodySizePb body_size = 2;
+  AnimationTypePb animation = 3;
+
+  google.protobuf.StringValue weapon_l_key = 10;
+  google.protobuf.StringValue weapon_r_key = 11;
+
+  google.protobuf.StringValue head_key  = 20;
+  google.protobuf.StringValue hair_key  = 21;
+  google.protobuf.StringValue mouth_key = 22;
+  google.protobuf.StringValue eye_key   = 23;
+  google.protobuf.StringValue acc_key   = 24;
+}
+message GetCharacterModelByIdRequestPb {
+  int32 character_id = 1;
+}
+message GetCharacterModelResponsePb {
+  CharacterModelPb model = 1;
+}
+
+// 여러 개 조회(캐시 프리로딩용)
+message ListCharacterModelsRequestPb {
+  repeated int32 character_ids = 1; // 비우면 전체
+}
+message ListCharacterModelsResponsePb {
+  repeated CharacterModelPb models = 1;
+}
+
+message ListCharacterModelPartsRequestPb {}
+
+message ListCharacterModelPartsResponsePb {
+  repeated CharacterModelPartPb parts = 1;
+}
+
+message ListCharacterModelWeaponsRequestPb {}
+
+message ListCharacterModelWeaponsResponsePb {
+  repeated CharacterModelWeaponPb weapons = 1;
+}
+
+message GetCharacterVisualRecipeRequestPb {
+  int32 character_id = 1;
+}
+message GetCharacterVisualRecipeResponsePb {
+  CharacterVisualRecipePb recipe = 1;
+}

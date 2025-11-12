@@ -1,0 +1,78 @@
+﻿@using System.Text.Json
+@using System.Text.Json.Nodes
+@model AdminTool.Models.SkillLevelsVm
+
+@functions {
+    string Summarize(object? valuesObj)
+    {
+        if (valuesObj is null) return "";
+        // object → JSON 문자열
+        var json = JsonSerializer.Serialize(valuesObj);
+        try
+        {
+            using var doc = JsonDocument.Parse(json);
+            var root = doc.RootElement;
+
+            // power 기반(attack/heal)
+            if (root.TryGetProperty("power", out var p))
+            {
+                var kind = p.TryGetProperty("kind", out var k) ? k.GetString() : "power";
+                var flat = p.TryGetProperty("flat", out var f) ? f.GetDouble() : 0;
+                var atkRt = p.TryGetProperty("atkRate", out var a) ? a.GetDouble() : 0;
+                var hpRt = p.TryGetProperty("hpRate", out var h) ? h.GetDouble() : 0;
+                var hits = p.TryGetProperty("hits", out var s) ? s.GetInt32() : 1;
+                var s1 = $"{kind} {flat}+{atkRt}×ATK+{hpRt}×HP ×{hits}";
+                if (p.TryGetProperty("dot", out var dot))
+                {
+                    var tick = dot.TryGetProperty("tick", out var t) ? t.GetDouble() : 0;
+                    var every = dot.TryGetProperty("every", out var ev) ? ev.GetDouble() : 0;
+                    var dur = dot.TryGetProperty("duration", out var du) ? du.GetDouble() : 0;
+                    s1 += $" | DoT {tick} / {every}s × {dur}s";
+                }
+                return s1;
+            }
+
+            // mods 기반(버프/패시브)
+            var parts = new List<string>();
+            if (root.TryGetProperty("mods", out var mods) && mods.ValueKind == JsonValueKind.Array)
+            {
+                foreach (var m in mods.EnumerateArray())
+                {
+                    var stat = m.TryGetProperty("stat", out var st) ? st.GetString() : "?";
+                    var op = m.TryGetProperty("op", out var opEl) ? opEl.GetString() : "add";
+                    var val = m.TryGetProperty("value", out var vv) ? vv.GetDouble() : 0;
+                    parts.Add($"{stat} {op} {val}");
+                }
+            }
+            if (root.TryGetProperty("duration", out var d) && d.ValueKind is JsonValueKind.Number)
+            {
+                parts.Add($"dur {d.GetDouble()}s");
+            }
+            return parts.Count > 0 ? string.Join(", ", parts) : json;
+        }
+        catch
+        {
+            return json; // 파싱 실패 시 원본 JSON
+        }
+    }
+}
+
+<table class="table table-sm">
+    <thead><tr><th>Lv</th><th>Description</th><th>Values</th><th style="width:1%"></th></tr></thead>
+    <tbody>
+        @foreach (var x in Model.Items)
+        {
+            <tr>
+                <td>@x.Level</td>
+                <td>@x.Description</td>
+                <td class="text-muted">@Summarize(x.Values)</td>
+                <td class="text-end">
+                    <div class="btn-group btn-group-sm">
+                        <button type="button" class="btn btn-outline-danger btn-del" data-level="@x.Level">삭제</button>
+                        <button type="button" class="btn btn-outline-primary btn-edit" data-level="@x.Level">편집</button>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

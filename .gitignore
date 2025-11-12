@@ -1,0 +1,80 @@
+# ---- 기본 OS 파일 ----
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+__MACOSX/
+
+# ---- Visual Studio / Rider / .NET ----
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# 빌드 결과물
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Tt]est[Rr]esults/
+*.exe
+*.dll
+*.pdb
+*.cache
+*.config
+*.dbmdl
+*.bak
+*.mdf
+*.ldf
+
+# 패키지
+*.nupkg
+*.snupkg
+*.nuspec
+packages/
+project.lock.json
+project.fragment.lock.json
+
+# DotNet
+*.vs/
+.vscode/
+*.idea/
+*.swp
+*.lock.json
+
+# ---- Unity ----
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+UserSettings/
+
+# Bee 빌드 시스템 캐시 (Unity 2021+)
+[Bb]ee/
+
+# Memory / Recordings / Profiler
+MemoryCaptures/
+Recordings/
+
+# Auto-generated solution/project files
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+
+# 기타 Unity 자동 생성 파일
+sysinfo.txt
+*.pidb
+*.booproj
+*.svd
+*.mdb

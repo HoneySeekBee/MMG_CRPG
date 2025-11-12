@@ -1,0 +1,80 @@
+﻿using Application.Repositories;
+using Application.Validation;
+using Domain.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+
+namespace Application.Rarities
+{
+    public sealed class RarityService : IRarityService
+    {
+        private readonly IRarityRepository _repo;
+        public RarityService(IRarityRepository repo) => _repo = repo;
+
+        public async Task<RarityDto?> GetAsync(int id, CancellationToken ct)
+            => (await _repo.GetByIdAsync(id, ct)) is { } e ? RarityDto.From(e) : null;
+
+        public async Task<IReadOnlyList<RarityDto>> ListAsync(bool? isActive, int? stars, int page, int pageSize, CancellationToken ct)
+        {
+            if (page < 1) page = 1;
+            if (pageSize <= 0) pageSize = 50;
+            var list = await _repo.ListAsync(isActive, stars, (page - 1) * pageSize, pageSize, ct);
+            return list.Select(RarityDto.From).ToList();
+        }
+
+        public async Task<RarityDto> CreateAsync(CreateRarityRequest req, CancellationToken ct)
+        {
+            Guard.NotEmpty(req.Key, nameof(req.Key));
+            Guard.NotEmpty(req.Label, nameof(req.Label));
+            Guard.Color(req.ColorHex, nameof(req.ColorHex));
+            Guard.Range(req.Stars, 0, 10, nameof(req.Stars)); // 필요 범위로 조정
+
+            if (await _repo.GetByKeyAsync(req.Key, ct) is not null)
+                throw new InvalidOperationException("이미 존재하는 Key 입니다.");
+
+            var e = new Rarity
+            {
+                Stars = req.Stars,
+                Key = req.Key.Trim(),
+                Label = req.Label.Trim(),
+                ColorHex = req.ColorHex,
+                SortOrder = req.SortOrder,
+                IsActive = req.IsActive,
+                Meta = JsonSerializer.Serialize(new { description = req.Meta })
+            };
+
+            await _repo.AddAsync(e, ct);
+            await _repo.SaveChangesAsync(ct);
+            return RarityDto.From(e);
+        }
+
+        public async Task UpdateAsync(int id, UpdateRarityRequest req, CancellationToken ct)
+        {
+            var e = await _repo.GetByIdAsync(id, ct) ?? throw new KeyNotFoundException("대상을 찾을 수 없습니다.");
+
+            Guard.NotEmpty(req.Label, nameof(req.Label));
+            Guard.Color(req.ColorHex, nameof(req.ColorHex));
+            Guard.Range(req.Stars, 0, 10, nameof(req.Stars));
+
+            e.Stars = req.Stars;
+            e.Label = req.Label.Trim();
+            e.ColorHex = req.ColorHex;
+            e.SortOrder = req.SortOrder;
+            e.IsActive = req.IsActive;
+            e.Meta = JsonSerializer.Serialize(new { description = req.Meta });
+
+            await _repo.SaveChangesAsync(ct);
+        }
+
+        public async Task DeleteAsync(int id, CancellationToken ct)
+        {
+            var e = await _repo.GetByIdAsync(id, ct) ?? throw new KeyNotFoundException("대상을 찾을 수 없습니다.");
+            await _repo.RemoveAsync(e, ct);
+            await _repo.SaveChangesAsync(ct);
+        }
+    }
+}

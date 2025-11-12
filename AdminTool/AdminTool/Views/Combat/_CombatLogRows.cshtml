@@ -1,0 +1,18 @@
+﻿@model AdminTool.Models.CombatLogPageVm
+@{
+    Layout = null;
+}
+<tbody data-next-cursor="@Model.NextCursor">
+    @foreach (var e in Model.Items)
+    {
+        <tr data-log-row>
+            <td>@e.TMs</td>
+            <td>@e.Type</td>
+            <td>@e.Actor</td>
+            <td>@e.Target</td>
+            <td>@e.Damage</td>
+            <td>@(e.Crit?.ToString()?.ToLower())</td>
+            <td class="text-truncate" style="max-width: 360px;">@e.ExtraJson</td>
+        </tr>
+    }
+</tbody>

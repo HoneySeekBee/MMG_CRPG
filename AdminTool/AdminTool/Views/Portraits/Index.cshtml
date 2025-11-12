@@ -1,0 +1,45 @@
+﻿@using AdminTool.Models
+@model IEnumerable<AdminTool.Models.PortraitVm>
+
+<h2>Portraits</h2>
+
+<div class="table-scroll">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Key</th>
+                <th>Image</th>
+                <th>Version</th>
+                <th style="width:160px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in Model)
+            {
+                <tr>
+                    <td>@p.Key</td>
+                    <td>
+                        <img src="@p.Url" alt="@p.Key"
+                             style="max-width:96px;max-height:96px;border:1px solid #eee;border-radius:6px;padding:4px;" />
+                    </td>
+                    <td>@p.Version</td>
+                    <td>
+                        <a asp-controller="Portraits" asp-action="Edit" asp-route-id="@p.PortraitId" class="btn btn-sm btn-outline-primary">Edit</a>
+                        <form asp-controller="Portraits" asp-action="Delete" asp-route-id="@p.PortraitId"
+                              method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-danger"
+                                    onclick="return confirm('정말 삭제할까요?');">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <a asp-controller="Portraits" asp-action="Create" class="btn btn-primary mt-3">Create</a>
+</div>

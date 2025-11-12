@@ -1,0 +1,71 @@
+syntax = "proto3";
+package Contracts.Protos;
+
+// 내 요약(TopBar 표시용)
+message UserSummaryPb {
+  int32  userId   = 1;
+  string nickname = 2;
+  int32  level    = 3;
+  int32  gold     = 4;
+  int32  gem  = 5;
+  int32  token  = 6;
+  int32  iconId   = 7; // 없으면 0
+}
+
+// 상세 프로필
+message UserProfilePb {
+  int32  id       = 1;
+  int32  userId   = 2;
+  string nickname = 3;
+  int32  level    = 4;
+  int32  exp      = 5;
+  int32  gold     = 6;
+  int32  gem  = 7;
+  int32  token  = 8;
+  int32  iconId   = 9; // 없으면 0 
+  string iconKey  = 10;   // 예: "hero_0001"
+  int32  iconVersion = 11; 
+}
+
+message InventoryItemPb {
+  string refId = 1;   // "mat_exp_1", "potion_small" 등
+  int64  amount = 2;
+}
+
+message HeroPb {
+  string heroId   = 1;  // "h001"
+  int32  rarity   = 2;
+  int32  level    = 3;
+  int32  tier     = 4;  // 돌파 단계
+  int32  baseAtk  = 5;
+  int32  baseHp   = 6;
+  // 필요 시 잠금/선호/장비슬롯 등 추가
+}
+// 수정 요청
+message UpdateProfilePb {
+  string nickname = 1;
+  int32  iconId   = 2; // optional 대용: 0이면 null 취급
+}
+message ChangePasswordPb {
+  string oldPassword = 1;
+  string newPassword = 2;
+}
+enum StageStarsPb {
+  STAGE_STARS_ZERO  = 0;
+  STAGE_STARS_ONE   = 1;
+  STAGE_STARS_TWO   = 2;
+  STAGE_STARS_THREE = 3;
+}
+
+// 유저 한 명의 스테이지 진행도
+message UserStageProgressPb {
+  int32 stage_id = 1;
+  bool cleared = 2;
+  StageStarsPb stars = 3;
+  int64 cleared_at_utc = 4; 
+}
+
+// 여러 개 한 번에 주기
+message MyStageProgressListPb {
+  repeated UserStageProgressPb progresses = 1;
+}

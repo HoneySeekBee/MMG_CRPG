@@ -1,0 +1,166 @@
+﻿@model AdminTool.Models.ElementCreateVm
+
+
+<h2 class="mb-3">Create Element</h2>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <!-- 유효성 요약 -->
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <!-- Key 입력 -->
+    <div class="mb-3">
+        <label asp-for="Key" class="form-label">Key</label>
+        <input asp-for="Key" class="form-control" placeholder="예 : fire, wind" />
+        <span asp-validation-for="Key" class="text-danger"></span>
+    </div>
+
+    <!-- Label 입력 -->
+    <div class="mb-3">
+        <label asp-for="Label" class="form-label">Label</label>
+        <input asp-for="Label" class="form-control" placeholder="예 : 불, 물" />
+        <span asp-validation-for="Label" class="text-danger"></span>
+    </div>
+
+    <!-- 아이콘 선택 : 여기서는 전체 아이콘 목록을 보여주는 모달창을 통해서 1개 선택해야한다.  -->
+    <div class="mb-3">
+        <!-- 숨겨진 실제 값 -->
+        <input asp-for="IconId" id="IconId" type="hidden" />
+        <!-- 미리보기 + 버튼 -->
+        <div class="d-flex align-items-center gap-2 mb-2">
+            <img id="iconPreviewImg" src=""
+                 alt="icon" style="width:32px;height:32px;border:1px solid #eee;border-radius:6px;object-fit:contain" />
+            <button type="button" class="btn btn-outline-primary btn-sm"
+                    data-bs-toggle="modal" data-bs-target="#iconPickerModal">
+                아이콘 선택
+            </button>
+        </div>
+        @await Html.PartialAsync("~/Views/Elements/PickIconModal.cshtml",
+                 new PickIconModalVm
+        {
+            ModalId = "iconPickerModal",
+            Icons = Model.Icons,                 // GET에서 채워넣은 목록
+            TargetHiddenId = "IconId",
+            TargetPreviewImgId = "iconPreviewImg"
+        })
+    </div>
+
+    <!-- 색상 선택 : 여기서는 색상 선택창을 띄워주고 그걸로 선택하자. -->
+    <div class="mb-3">
+        <label asp-for="ColorHex" class="form-label">Color</label>
+
+        <!-- 숨겨진 실제 컬러피커 (브라우저 기본) -->
+        <input type="color" id="colorPicker" value="@(@Model?.ColorHex ?? "#FFFFFF")" class="d-none" />
+
+        <!-- 폼에 바인딩 되는 진짜 입력 -->
+        <input asp-for="ColorHex" id="ColorHex" class="form-control d-none" />
+
+        <!-- 사용자에게 보여줄 스와치(아이콘처럼 클릭 가능) -->
+        <button type="button" id="colorSwatchBtn" class="btn btn-outline-secondary"
+                style="display:inline-flex;align-items:center;gap:.5rem;">
+            <span id="colorSwatch"
+                  style="display:inline-block;width:20px;height:20px;border:1px solid #ccc;border-radius:4px;background:@(@Model?.ColorHex ?? "#FFFFFF");"></span>
+            <span id="colorText">@(@Model?.ColorHex ?? "#FFFFFF")</span>
+
+        </button>
+        <h2 id="elementPreview" style="color:@(@Model?.ColorHex ?? "#FFFFFF")">Element</h2>
+    </div>
+
+    <!-- SortOrder 숫자(양수)만 입력 가능하게 하기 -->
+    <div class="mb-3">
+        <label asp-for="SortOrder" class="form-label">SortOrder</label>
+        <input asp-for="SortOrder" class="form-control" placeholder="1이상 양수만 입력" />
+        <span asp-validation-for="SortOrder" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <!-- Meta : 설명/기타 → JSON(Meta)로 합쳐 저장 -->
+        <div class="mb-3">
+            <label class="form-label">Description</label>
+            <input asp-for="MetaDescription" class="form-control" placeholder="예: 불 속성은 풀에 강함" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Etc</label>
+            <input asp-for="MetaEtc" class="form-control" placeholder="예: 이벤트: 할로윈" />
+        </div>
+        <!-- 실제 전송될 JSON 문자열 (숨김) -->
+        <input asp-for="Meta" id="Meta" type="hidden" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function () {
+            const picker = document.getElementById('colorPicker');
+            const hexInput = document.getElementById('ColorHex');
+            const swatchBtn = document.getElementById('colorSwatchBtn');
+            const swatch = document.getElementById('colorSwatch');
+            const colorText = document.getElementById('colorText');
+            const preview = document.getElementById('elementPreview');
+
+            // 초기값 동기화 (asp-for 값이 있으면 그걸로)
+            if (hexInput.value) {
+                picker.value = to6Hex(hexInput.value);
+                swatch.style.background = hexInput.value;
+                colorText.textContent = hexInput.value;
+                preview.style.color = hexInput.value;
+            } else {
+                hexInput.value = picker.value;
+                preview.style.color = picker.value;
+            }
+
+            // 스와치 버튼 클릭 → 숨겨진 input[type=color] 열기
+            swatchBtn.addEventListener('click', () => picker.click());
+
+            // 색상 선택 시 두 입력과 스와치 동기화
+            picker.addEventListener('input', () => {
+                const hex = picker.value; // #RRGGBB
+                hexInput.value = hex;
+                swatch.style.background = hex;
+                colorText.textContent = hex;
+                preview.style.color = hex;
+            });
+
+            // #RRGGBBAA → #RRGGBB 변환 (브라우저 컬러피커용)
+            function to6Hex(v) {
+                const m = /^#([0-9A-Fa-f]{6})([0-9A-Fa-f]{2})?$/.exec(v || "");
+                return m ? ('#' + m[1]) : (v || '#FFFFFF');
+            }
+        })();
+        (function () {
+            const $desc = document.getElementById('MetaDescription');
+            const $etc = document.getElementById('MetaEtc');
+            const $meta = document.getElementById('Meta');
+
+            // 기존 Meta가 있으면 파싱해 폼 채우기(주로 Edit에서)
+            try {
+                if ($meta.value) {
+                    const obj = JSON.parse($meta.value);
+                    if ($desc && obj.description != null) $desc.value = obj.description;
+                    if ($etc && obj.etc != null) $etc.value = obj.etc;
+                }
+            } catch { /* invalid json이면 무시 */ }
+
+            // 입력 변경 시마다 Meta를 동기화(클라이언트 즉시 반영)
+            function sync() {
+                const obj = {
+                    description: $desc?.value ?? "",
+                    etc: $etc?.value ?? ""
+                };
+                $meta.value = JSON.stringify(obj);
+            }
+            $desc?.addEventListener('input', sync);
+            $etc?.addEventListener('input', sync);
+
+            // 초기 1회 동기화 (Create에서도 빈 JSON 생성)
+            sync();
+        })();
+    </script>
+            }

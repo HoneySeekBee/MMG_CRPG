@@ -1,0 +1,81 @@
+﻿@model AdminTool.Models.MonsterStatVm
+
+@{
+    ViewData["Title"] = "스탯 추가";
+}
+
+<h2>스탯 추가</h2>
+
+<form asp-action="StatCreate" method="post">
+    @* 어떤 몬스터의 스탯인지 *@
+    <input type="hidden" asp-for="MonsterId" />
+
+    <div class="row g-3">
+        <div class="col-12 col-md-3">
+            <label asp-for="Level" class="form-label"></label>
+            <input asp-for="Level" class="form-control" type="number" min="1" step="1" />
+            <span asp-validation-for="Level" class="text-danger"></span>
+        </div>
+
+        <div class="col-12 col-md-3">
+            <label asp-for="HP" class="form-label"></label>
+            <input asp-for="HP" class="form-control" type="number" min="0" step="1" />
+            <span asp-validation-for="HP" class="text-danger"></span>
+        </div>
+
+        <div class="col-12 col-md-3">
+            <label asp-for="ATK" class="form-label"></label>
+            <input asp-for="ATK" class="form-control" type="number" min="0" step="1" />
+            <span asp-validation-for="ATK" class="text-danger"></span>
+        </div>
+
+        <div class="col-12 col-md-3">
+            <label asp-for="DEF" class="form-label"></label>
+            <input asp-for="DEF" class="form-control" type="number" min="0" step="1" />
+            <span asp-validation-for="DEF" class="text-danger"></span>
+        </div>
+
+        <div class="col-12 col-md-3">
+            <label asp-for="SPD" class="form-label"></label>
+            <input asp-for="SPD" class="form-control" type="number" min="0" step="1" />
+            <span asp-validation-for="SPD" class="text-danger"></span>
+        </div>
+
+        <div class="col-12 col-md-3">
+            <label asp-for="CritRate" class="form-label"></label>
+            <div class="input-group">
+                <input asp-for="CritRate" class="form-control" type="number" min="0" step="0.01" />
+                <span class="input-group-text">%</span>
+            </div>
+            <small class="text-muted">예: 5.00 = 5%</small>
+            <span asp-validation-for="CritRate" class="text-danger"></span>
+        </div>
+
+        <div class="col-12 col-md-3">
+            <label asp-for="CritDamage" class="form-label"></label>
+            <div class="input-group">
+                <input asp-for="CritDamage" class="form-control" type="number" min="0" step="0.01" />
+                <span class="input-group-text">%</span>
+            </div>
+            <small class="text-muted">예: 150.00 = 150%</small>
+            <span asp-validation-for="CritDamage" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <button type="submit" class="btn btn-success">추가</button>
+        <a asp-action="Detail" asp-route-id="@Model.MonsterId" class="btn btn-secondary">뒤로</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // 음수 방지(브라우저별 기본 동작 보완)
+        document.querySelectorAll('input[type="number"][min="0"]').forEach(el => {
+            el.addEventListener('input', () => {
+                if (el.value !== '' && Number(el.value) < 0) el.value = 0;
+            });
+        });
+    </script>
+}
