@@ -132,6 +132,7 @@
     <Compile Include="Assets\Script\UI\Popup\LoginPopup.cs" />
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\PlayPopup.cs" />
     <Compile Include="Assets\Script\Network\RemoteIconLoader.cs" />
+    <Compile Include="Assets\Script\GamePlay\Character\CombatActorView.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\Movement\MovementStates\LadderMovementState.cs" />
     <Compile Include="Assets\Script\Scenes\Init\InitSceneController.cs" />
     <Compile Include="Assets\Script\UI\UIPopup.cs" />
@@ -168,6 +169,7 @@
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\NuttyKnightBehavior.cs" />
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\LevelScene.cs" />
     <Compile Include="Assets\Script\Network\Login\LoginSceneController.cs" />
+    <Compile Include="Assets\Script\GamePlay\Character\CharacterBase.cs" />
     <Compile Include="Assets\Script\UI\ItemType\ItemTypeToggleUI.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\BonusItem.cs" />
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\SpinWheel.cs" />

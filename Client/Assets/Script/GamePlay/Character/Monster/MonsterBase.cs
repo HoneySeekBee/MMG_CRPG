@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using WebServer.Protos.Monsters;
 
-public class MonsterBase : MonoBehaviour
+public class MonsterBase : CombatActorView
 {
     [HideInInspector] public MonsterPb MonsterData;
     [SerializeField] private MonsterAppearance Appearance; 
@@ -15,5 +15,14 @@ public class MonsterBase : MonoBehaviour
         MonsterData = enemyPb;
         Appearance.Set(MonsterData.Id);
 
+    }
+    public override void PlayHitFx(bool isCrit)
+    {
+        base.PlayHitFx(isCrit); 
+    }
+
+    protected override void OnDie()
+    {
+        base.OnDie(); 
     }
 }

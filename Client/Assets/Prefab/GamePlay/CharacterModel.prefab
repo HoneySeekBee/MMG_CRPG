@@ -378,6 +378,7 @@ GameObject:
   - component: {fileID: 5641758199895904767}
   - component: {fileID: 84036617835226779}
   - component: {fileID: 1053560021840283413}
+  - component: {fileID: 8078428765279157641}
   m_Layer: 0
   m_Name: CharacterModel
   m_TagString: Untagged
@@ -434,6 +435,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 7567093064457021036}
+--- !u!114 &8078428765279157641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1262873950469424905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d2ce56e90844e49866ae058b7afa4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ActorId: 0
+  Team: 0
+  MaxHp: 0
+  Hp: 0
+  HitEffect: {fileID: 0}
+  DeadEffect: {fileID: 0}
 --- !u!1 &1271190272441778634
 GameObject:
   m_ObjectHideFlags: 0
