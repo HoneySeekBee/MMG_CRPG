@@ -39,6 +39,7 @@ using Application.Contents.Stages;
 using Application.Monsters;
 using Application.UserParties;
 using Infrastructure.Reader;
+using System.Collections.Concurrent;
 
 namespace WebServer.Extensions
 {
@@ -158,16 +159,16 @@ namespace WebServer.Extensions
             #region Contents 
             s.AddScoped<IUserPartyReader, EfUserPartyReader>();
             s.AddScoped<ICombatService, CombatService>();
-            s.AddScoped<ICombatRepository, EfCombatRepository>();
+            s.AddScoped<ICombatRepository, EfCombatRepository>(); 
             s.AddScoped<IMasterDataProvider, FakeMasterDataProvider>();
             s.AddScoped<IBattlesService, BattlesService>();
             s.AddScoped<IBattlesRepository, BattlesRepository>();
             s.AddScoped<IChapterService, ChapterService>();
             s.AddScoped<IChapterRepository, ChapterRepository>();
             #endregion
-
+             
             // 전투 엔진
-            s.AddSingleton<ICombatEngine, SimpleCombatEngine>();
+            s.AddSingleton<ICombatEngine, SimpleCombatEngine>(); 
 
             // 스탯 타입
             s.AddScoped<Application.StatTypes.IStatTypeService, Application.StatTypes.StatTypeService>();

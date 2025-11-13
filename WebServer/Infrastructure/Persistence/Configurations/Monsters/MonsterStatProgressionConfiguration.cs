@@ -24,6 +24,7 @@ namespace Infrastructure.Persistence.Configurations.Monsters
             b.Property(s => s.SPD).HasColumnName("spd");
             b.Property(s => s.CritRate).HasColumnName("cri_rate");
             b.Property(s => s.CritDamage).HasColumnName("cri_damage");
+            b.Property(s => s.Range).HasColumnName("range");
         }
     }
 }

@@ -35,7 +35,7 @@ namespace Application.Combat
     }
     public sealed class CombatService : ICombatService
     {
-        private readonly IMasterDataProvider _md;
+        private readonly IMasterDataProvider _master; 
         private readonly ICombatRepository _repo;
         private readonly ICombatEngine _engine;
         private readonly IUserPartyReader _partyReader;
@@ -44,21 +44,22 @@ namespace Application.Combat
         private static readonly ConcurrentDictionary<long, CombatRuntimeState> _runtimeStates = new();
 
         public CombatService(
-            IMasterDataProvider md,
+            IMasterDataProvider master, 
             ICombatRepository repo,
             ICombatEngine engine,
             IUserPartyReader partyReader)
         {
-            _md = md;
+            _master = master; 
             _repo = repo;
             _engine = engine;
             _partyReader = partyReader;
         }
         public async Task<StartCombatResponse> StartAsync(StartCombatRequest req, CancellationToken ct)
         {
-            // 1) 기본 검증
             if (req.StageId <= 0)
                 throw new ArgumentException("StageId must be positive.", nameof(req.StageId));
+
+            // (1) 유저 파티 로드하기  
             var party = await _partyReader.GetAsync(req.FormationId, ct);
             if (party is null)
                 throw new InvalidOperationException($"Party {req.FormationId} not found.");
@@ -68,17 +69,24 @@ namespace Application.Combat
             if (filledSlots.Count == 0)
                 throw new InvalidOperationException($"Party {req.FormationId} has no members.");
 
-            var partyCharacterIds = filledSlots.Select(s => (long)s.UserCharacterId!.Value).ToArray();
+            var playerCharacterIds = filledSlots
+    .Select(s => (long)s.UserCharacterId!.Value)
+    .Distinct()
+    .ToArray();
+
             // 2) Seed 생성
             var seed = BitConverter.ToInt64(Guid.NewGuid().ToByteArray(), 0);
             if (seed == 0) seed = 1;
 
             // 3) 마스터 데이터 패키지 (스테이지 + 캐릭터들)
-            var pack = await _md.BuildPackAsync(req.StageId, partyCharacterIds, ct);
 
+            var pack = await _master.BuildPackAsync(req.StageId, playerCharacterIds, ct);
             // 4) CombatInputSnapshot 생성 (PartyMember/SkillInput은 일단 최소)
-            var partyMembers = partyCharacterIds
-                .Select(cid => new Domain.Entities.PartyMember(cid, Level: 1)) // TODO: 실제 레벨 사용
+            var partyMembers = filledSlots
+                .Select(s => new Domain.Entities.PartyMember(
+                    s.UserCharacterId!.Value,
+                    Level: 1 // TODO: 실제 유저 캐릭터 레벨 반영
+                ))
                 .ToArray();
 
             var input = new Domain.Entities.CombatInputSnapshot(
@@ -109,7 +117,9 @@ namespace Application.Combat
                 CombatId = combatId,
                 StageId = req.StageId,
                 Seed = seed,
-                StartedAt = DateTimeOffset.UtcNow
+                StartedAt = DateTimeOffset.UtcNow,
+                CurrentWaveIndex = 0,
+                TotalWaves = 1
             };
 
             _runtimeStates[combatId] = runtime;
@@ -118,33 +128,30 @@ namespace Application.Combat
             var actors = new List<ActorInitDto>();
 
             // 8-1) 플레이어 유닛들 (왼쪽 라인)
-            for (int i = 0; i < filledSlots.Count; i++)
+            foreach (var slot in filledSlots)
             {
-                var slot = filledSlots[i];
-                var cid = (long)slot.UserCharacterId!;
+                var charId = slot.UserCharacterId!.Value;
 
-                if (!pack.Characters.TryGetValue(cid, out var cdef))
-                    throw new KeyNotFoundException($"CharacterDef {cid} not found in pack.");
+                if (!pack.Characters.TryGetValue(charId, out var cdef))
+                    throw new KeyNotFoundException($"CharacterDef {charId} not found in pack.");
 
                 var (x, z) = GetPlayerPositionBySlot(slot.SlotId);
-                var actorId = 1 + i; 
+                var actorId = 1 + slot.SlotId;
 
                 actors.Add(new ActorInitDto(
                     ActorId: actorId,
-                    Team: 0, // Player
+                    Team: 0,
                     X: x,
                     Z: z,
                     Hp: cdef.BaseHp,
                     MaxHp: cdef.BaseHp,
-                    ModelCode: $"Hero_{cid}" // TODO: 실제 프리팹 코드 매핑
+                    ModelCode: $"Hero_{charId}"
                 ));
             }
             // 8-2) 적 유닛들 (오른쪽 라인)
             const float enemyStartX = 3.0f;
             const float spacingZ = 1.5f;
-
             var enemies = pack.Stage.Enemies;
-
             for (int i = 0; i < enemies.Count; i++)
             {
                 var enemy = enemies[i];
@@ -153,19 +160,20 @@ namespace Application.Combat
                 if (!pack.Characters.TryGetValue(cid, out var cdef))
                     throw new KeyNotFoundException($"Enemy CharacterDef {cid} not found in pack.");
 
-                var actorId = 100 + i;
+                var actorId = 100 + i;            // 적 ActorId 100번대
+                var x = enemyStartX;
+                var z = (i - 1) * spacingZ;       // -1.5, 0, 1.5 이런 느낌
 
                 actors.Add(new ActorInitDto(
                     ActorId: actorId,
                     Team: 1, // Enemy
-                    X: enemyStartX,
-                    Z: (i - 1) * spacingZ,
+                    X: x,
+                    Z: z,
                     Hp: cdef.BaseHp,
                     MaxHp: cdef.BaseHp,
                     ModelCode: $"Enemy_{cid}"
                 ));
             }
-
             var snapshot = new CombatInitialSnapshotDto(actors);
 
             return new StartCombatResponse(combatId, snapshot);
@@ -193,7 +201,7 @@ namespace Application.Combat
 
             // 4) 마스터 데이터 패키지
             var partyIds = party.Select(x => x.CharacterId).ToArray();
-            var pack = await _md.BuildPackAsync(req.StageId, partyIds, ct);
+            var pack = await _master.BuildPackAsync(req.StageId, partyIds, ct);
 
             // 5) Aggregate 생성
             var combat = Domain.Entities.Combat.Create(
@@ -269,18 +277,52 @@ namespace Application.Combat
         public Task<CombatLogSummaryDto> GetSummaryAsync(long combatId, CancellationToken ct)
             => _repo.GetSummaryAsync(combatId, ct);
         private static (float x, float z) GetPlayerPositionBySlot(int slotId)
-        {
-            // 예시: 0~4 앞줄, 5~9 뒷줄, 왼쪽에서 오른쪽으로
-            const float baseX = -3.0f;
-            const float stepX = 1.2f;
-            const float frontZ = 0.5f;
-            const float backZ = -0.5f;
+        { 
+            var index = slotId - 1; // 0~8
 
-            var col = slotId % 5;   // 0~4
-            var row = slotId / 5;   // 0 or 1
+            var col = index % 3; // 0,1,2
+            var row = index / 3; // 0=전열, 1=중열, 2=후열
+
+            const float baseX = -3.0f;  // 플레이어는 왼쪽
+            const float stepX = 1.5f;
+
+            const float frontZ = 1.0f;   // 전열
+            const float middleZ = 0.0f;  // 중열
+            const float backZ = -1.0f;   // 후열
 
             var x = baseX + col * stepX;
-            var z = row == 0 ? frontZ : backZ;
+            var z = row switch
+            {
+                0 => frontZ,
+                1 => middleZ,
+                2 => backZ,
+                _ => middleZ
+            };
+
+            return (x, z);
+        }
+        private static (float x, float z) GetEnemyPositionBySlot(int slotId)
+        {
+            var index = slotId - 1; // 0~8
+            var col = index % 3;
+            var row = index / 3;
+
+            const float baseX = 3.0f;   // 적은 오른쪽
+            const float stepX = 1.5f;
+
+            const float frontZ = 1.0f;
+            const float middleZ = 0.0f;
+            const float backZ = -1.0f;
+
+            var x = baseX - col * stepX; // 좌우 대칭 느낌 나게
+            var z = row switch
+            {
+                0 => frontZ,
+                1 => middleZ,
+                2 => backZ,
+                _ => middleZ
+            };
+
             return (x, z);
         }
     }

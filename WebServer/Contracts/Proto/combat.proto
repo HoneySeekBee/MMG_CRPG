@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package combat;
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/struct.proto";
+ 
+
+message StartCombatRequestPb {
+  int32 stage_id = 1;
+  int64 formation_id = 2;
+}
+
+message ActorInitPb {
+  int64 actor_id = 1;
+  int32 team = 2;
+  float x = 3;
+  float z = 4;
+  int32 hp = 5;
+  int32 max_hp = 6;
+  string model_code = 7;
+}
+
+message CombatInitialSnapshotPb {
+  repeated ActorInitPb actors = 1;
+}
+
+message StartCombatResponsePb {
+  int64 combat_id = 1;
+  CombatInitialSnapshotPb snapshot = 2;
+}
+ 
+
+message CombatCommandPb {
+  int64 actor_id = 1;
+  int64 skill_id = 2;
+  google.protobuf.Int64Value target_actor_id = 3;
+}
+ 
+
+message CombatLogEventPb {
+  int32 t_ms = 1;
+  string type = 2;
+  string actor = 3;
+  google.protobuf.StringValue target = 4;
+  google.protobuf.Int32Value damage = 5;
+  google.protobuf.BoolValue crit = 6;
+  google.protobuf.Struct extra = 7;
+}
+
+message CombatLogPagePb {
+  int64 combat_id = 1;
+  repeated CombatLogEventPb items = 2;
+  google.protobuf.StringValue next_cursor = 3;
+}
+ 
+
+message CombatLogSummaryPb {
+  int64 combat_id = 1;
+  int32 total_events = 2;
+  int32 duration_ms = 3;
+  int32 damage_done = 4;
+  int32 damage_taken = 5;
+}

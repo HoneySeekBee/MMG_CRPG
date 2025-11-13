@@ -34,5 +34,6 @@ namespace Application.Monsters
         public int SPD { get; set; }
         public decimal CritRate { get; set; }
         public decimal CritDamage { get; set; }
+        public float Range { get; set; }
     }
 }

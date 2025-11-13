@@ -48,7 +48,8 @@ namespace Application.Monsters
                         s.DEF,
                         s.SPD,
                         s.CritRate,
-                        s.CritDamage
+                        s.CritDamage,
+                        s.Range
                     );
                 }
             }
@@ -94,7 +95,8 @@ namespace Application.Monsters
                 request.DEF,
                 request.SPD,
                 request.CritRate,
-                request.CritDamage
+                request.CritDamage,
+                request.Range
             );
 
             await _repo.SaveChangesAsync(ct);

@@ -24,9 +24,9 @@ namespace Infrastructure.Persistence.Configurations.Characters
             e.Property(x => x.ATK).IsRequired();
             e.Property(x => x.DEF).IsRequired();
             e.Property(x => x.SPD).IsRequired();
-
             e.Property(x => x.CriRate).HasPrecision(5, 2).HasDefaultValue(5m).IsRequired();
             e.Property(x => x.CriDamage).HasPrecision(6, 2).HasDefaultValue(150m).IsRequired();
+            e.Property(x => x.Range).HasColumnName("Range").IsRequired();
 
             e.HasOne(x => x.Character)
              .WithMany(c => c.CharacterStatProgressions)

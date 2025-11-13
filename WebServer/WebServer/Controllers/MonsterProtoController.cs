@@ -71,7 +71,8 @@ namespace WebServer.Controllers
             Def = s.DEF,
             Spd = s.SPD,
             CritRate = (double)s.CritRate,
-            CritDamage = (double)s.CritDamage
+            CritDamage = (double)s.CritDamage,
+            Range = s.Range
         };
     }
 }

@@ -16,7 +16,7 @@ namespace Application.Character
         SkillSlot Slot, int SkillId, short UnlockTier, short UnlockLevel);
 
     public sealed record CharacterStatProgressionDto(
-        short Level, int HP, int ATK, int DEF, int SPD, decimal CriRate, decimal CriDamage);
+        short Level, int HP, int ATK, int DEF, int SPD, decimal CriRate, decimal CriDamage, float Range);
 
     public sealed record PromotionMaterialDto(int ItemId, int Quantity);
 
@@ -54,7 +54,7 @@ namespace Application.Character
                 new CharacterSkillDto(s.Slot, s.SkillId, s.UnlockTier, s.UnlockLevel)).ToList();
 
             var progDtos = progressions.Select(p =>
-                new CharacterStatProgressionDto(p.Level, p.HP, p.ATK, p.DEF, p.SPD, p.CriRate, p.CriDamage)).ToList();
+                new CharacterStatProgressionDto(p.Level, p.HP, p.ATK, p.DEF, p.SPD, p.CriRate, p.CriDamage, p.Range)).ToList();
 
             var promoDtos = promotions.Select(p =>
                 new CharacterPromotionDto(

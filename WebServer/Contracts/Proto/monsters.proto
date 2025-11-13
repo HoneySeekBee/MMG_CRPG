@@ -17,6 +17,7 @@ message MonsterStatPb {
   int32 spd          = 6;
   double crit_rate   = 7;  // decimal -> double
   double crit_damage = 8;  // decimal -> double
+  float range = 9;
 }
 
 message MonsterPb {

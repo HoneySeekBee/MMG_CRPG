@@ -78,6 +78,7 @@ message CharacterStatProgressionPb {
   int32 spd = 5; 
   double crit_rate   = 6;  // ¿¹: 5.00
   double crit_damage = 7;  // ¿¹: 150.00
+  float range = 8;
 }
  
 

@@ -39,7 +39,8 @@ namespace Domain.Entities.Monsters
             int def,
             int spd,
             decimal critRate,
-            decimal critDamage)
+            decimal critDamage,
+            float range)
         {
             var existing = _stats.FirstOrDefault(s => s.Level == level);
             if (existing is null)
@@ -51,11 +52,12 @@ namespace Domain.Entities.Monsters
                     def,
                     spd,
                     critRate,
-                    critDamage));
+                    critDamage,
+                    range));
             }
             else
             {
-                existing.Update(hp, atk, def, spd, critRate, critDamage);
+                existing.Update(hp, atk, def, spd, critRate, critDamage, range);
             }
         }
         public void Update(string name, string modelKey, int? elementId, int? portraitId)

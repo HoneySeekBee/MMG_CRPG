@@ -59,7 +59,8 @@ namespace Infrastructure.Caching
                             sp.DEF,
                             sp.SPD,
                             sp.CriRate,     // 엔티티: CriRate/CriDamage ↔ DTO: CritRate/CritDamage (포지션만 맞추면 OK)
-                            sp.CriDamage
+                            sp.CriDamage,
+                            sp.Range
                         ))
                         .ToList(),
 

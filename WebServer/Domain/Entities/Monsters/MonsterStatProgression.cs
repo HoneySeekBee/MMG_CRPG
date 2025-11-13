@@ -22,6 +22,7 @@ namespace Domain.Entities.Monsters
         // numeric(5,2)
         public decimal CritRate { get; private set; }
         public decimal CritDamage { get; private set; }
+        public float Range { get; private set; }
 
         // 네비게이션 (역방향)
         public Monster Monster { get; private set; } = null!;
@@ -35,7 +36,8 @@ namespace Domain.Entities.Monsters
             int def,
             int spd,
             decimal critRate,
-            decimal critDamage)
+            decimal critDamage,
+            float range)
         {
             Level = level;
             HP = hp;
@@ -44,6 +46,7 @@ namespace Domain.Entities.Monsters
             SPD = spd;
             CritRate = critRate;
             CritDamage = critDamage;
+            Range = range;
         }
 
         public void Update(
@@ -52,7 +55,8 @@ namespace Domain.Entities.Monsters
             int def,
             int spd,
             decimal critRate,
-            decimal critDamage)
+            decimal critDamage, 
+            float range)
         {
             HP = hp;
             ATK = atk;
@@ -60,6 +64,7 @@ namespace Domain.Entities.Monsters
             SPD = spd;
             CritRate = critRate;
             CritDamage = critDamage;
+            Range = range;
         }
     }
 }

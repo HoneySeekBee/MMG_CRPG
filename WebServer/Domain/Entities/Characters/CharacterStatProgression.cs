@@ -24,6 +24,7 @@ namespace Domain.Entities.Characters
         // ==== Crit (퍼센트값; 5 = 5%) ====
         public decimal CriRate { get; private set; } = 5m;    // 0..100
         public decimal CriDamage { get; private set; } = 150m;  // 0..1000 (예: 150 = +150%)
+        public float Range{ get; private set; }
 
         // ==== Navigation ====
         public Character Character { get; private set; } = null!;

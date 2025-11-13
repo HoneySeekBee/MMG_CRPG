@@ -12,7 +12,7 @@ namespace Infrastructure.Repositories
         private static readonly JsonSerializerOptions JsonOpt = new(JsonSerializerDefaults.Web);
 
         public EfCombatRepository(GameDBContext db) => _db = db;
-        public async Task<long> SaveAsync(Combat combat,
+        public async Task<long> SaveAsync(Domain.Entities.Combat combat,
     IEnumerable<Domain.Events.CombatLogEvent> events,
     CancellationToken ct)
         {
