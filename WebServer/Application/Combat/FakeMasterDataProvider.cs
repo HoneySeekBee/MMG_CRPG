@@ -49,7 +49,7 @@ namespace Application.Combat
             var pack = new MasterDataPack(stage, chars, skills);
             return Task.FromResult(pack);
         }
-        public Task<CombatMasterDataPack> BuildPackAsync(
+        public async Task<MasterPackDto> BuildPackAsync(
              int stageId,
              long userId,
              IReadOnlyCollection<long> partyCharacterIds,
@@ -103,7 +103,7 @@ namespace Application.Combat
             }
 
             var combatPack = new CombatMasterDataPack(stageDef, actors);
-            return Task.FromResult(combatPack);
+            return new MasterPackDto(stageDef, actors); 
         }
     }
 

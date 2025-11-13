@@ -17,7 +17,7 @@ namespace WebServer.Controllers
             _service = service;
         }
 
-        // ========== START ==========
+        // START
         [HttpPost("start")]
         public async Task<ActionResult<StartCombatResponsePb>> Start(
             [FromBody] StartCombatRequestPb req, CancellationToken ct)
@@ -27,7 +27,7 @@ namespace WebServer.Controllers
             return CombatProtoMapper.ToPb(res);
         }
 
-        // ========== COMMAND ==========
+        // COMMAND
         [HttpPost("{combatId:long}/command")]
         public async Task<IActionResult> Command(
             long combatId,
@@ -39,7 +39,7 @@ namespace WebServer.Controllers
             return Accepted();
         }
 
-        // ========== LOG ==========
+        // LOG
         [HttpGet("{combatId:long}/log")]
         public async Task<CombatLogPagePb> GetLog(
             long combatId,
@@ -51,7 +51,7 @@ namespace WebServer.Controllers
             return CombatProtoMapper.ToPb(log);
         }
 
-        // ========== SUMMARY ==========
+        //SUMMARY
         [HttpGet("{combatId:long}/summary")]
         public async Task<CombatLogSummaryPb> GetSummary(
             long combatId,
@@ -59,6 +59,13 @@ namespace WebServer.Controllers
         {
             var summary = await _service.GetSummaryAsync(combatId, ct);
             return CombatProtoMapper.ToPb(summary);
+        }
+
+        [HttpPost("{combatId:long}/tick")]
+        public async Task<CombatTickResponsePb> Tick(long combatId, [FromBody] CombatTickRequestPb req, CancellationToken ct)
+        {
+            var res = await _service.TickAsync(combatId, req.Tick, ct);
+            return CombatProtoMapper.ToPb(res);
         }
     }
 }

@@ -40,6 +40,7 @@ using Application.Monsters;
 using Application.UserParties;
 using Infrastructure.Reader;
 using System.Collections.Concurrent;
+using Application.Combat.Engine;
 
 namespace WebServer.Extensions
 {
@@ -167,7 +168,9 @@ namespace WebServer.Extensions
             s.AddScoped<IChapterRepository, ChapterRepository>();
             s.AddScoped<IUserCharacterReader, EfUserCharacterReader>();
             s.AddScoped<ICharacterReader, EfCharacterReader>();
-            s.AddScoped<ISkillReader, EfSkillReader>();
+            s.AddScoped<ISkillReader, EfSkillReader>(); 
+            s.AddScoped<ICombatTickEngine, CombatTickEngine>();
+            s.AddScoped<IMonsterStatReader, MonsterStatReader>();
             #endregion
 
             // 전투 엔진

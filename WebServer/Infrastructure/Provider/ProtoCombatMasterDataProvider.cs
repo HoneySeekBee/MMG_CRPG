@@ -1,20 +1,16 @@
 ﻿using Application.Combat;
 using Contracts.Protos;
-using Infrastructure.Reader;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Infrastructure.Reader; 
 using WebServer.Protos;
 using WebServer.Protos.Monsters;
+using Application.Combat.Engine;
 
 namespace Infrastructure.Provider
 {
     public sealed class ProtoCombatMasterDataProvider : ICombatMasterDataProvider
     {
         private readonly IStageAssetReader _stageReader;
-        private readonly IMonsterAssetReader _monsterReader;
+        private readonly IMonsterStatReader _monsterReader;
         private readonly ICharacterAssetReader _characterReader;
         private readonly IRangeConfigReader _rangeReader;
 
@@ -26,7 +22,7 @@ namespace Infrastructure.Provider
 
         public ProtoCombatMasterDataProvider(
             IStageAssetReader stageReader,
-            IMonsterAssetReader monsterReader,
+            IMonsterStatReader monsterReader,
             ICharacterAssetReader characterReader,
             IRangeConfigReader rangeReader)
         {
@@ -56,10 +52,27 @@ namespace Infrastructure.Provider
                 .ToArray();
 
             // 4) 마스터 몬스터/캐릭터 로드
-            var monsterDict = enemyMonsterIds.Length > 0
-                ? await _monsterReader.GetMonstersAsync(enemyMonsterIds, ct)
-                : new Dictionary<int, MonsterPb>();
+            var monsterDict = new Dictionary<long, CombatActorDef>();
 
+            foreach (var spawn in stageDef.Waves.SelectMany(w => w.Enemies))
+            {
+                var stat = await _monsterReader.GetAsync(spawn.MonsterId, spawn.Level, ct);
+                if (stat == null) continue;
+
+                monsterDict[spawn.MonsterId] = new CombatActorDef(
+                    masterId: stat.MonsterId,
+                    isPlayer: false,
+                    modelKey: $"Monster_{stat.MonsterId}",
+                    maxHp: stat.HP,
+                    atk: stat.ATK,
+                    def: stat.DEF,
+                    spd: stat.SPD,
+                    range: stat.Range,
+                    attackIntervalMs: stat.SPD,
+                    critRate: (double)stat.CritRate,
+                    critDamage: (double)stat.CritDamage
+                );
+            }
             var characterDict = playerCharacterIds.Count > 0
                 ? await _characterReader.GetCharactersAsync(playerCharacterIds, ct)
                 : new Dictionary<long, CharacterDetailPb>();
@@ -70,18 +83,10 @@ namespace Infrastructure.Provider
             // 5-1) 몬스터
             foreach (var monsterId in enemyMonsterIds)
             {
-                if (!monsterDict.TryGetValue(monsterId, out var m))
+                if (!monsterDict.TryGetValue(monsterId, out var def))
                     throw new KeyNotFoundException($"Monster {monsterId} not found.");
 
-                // 이 몬스터가 등장하는 첫 스폰에서 레벨 하나 뽑음 (MVP)
-                var level = stageDef.Waves
-                    .SelectMany(w => w.Enemies)
-                    .Where(e => e.MonsterId == monsterId)
-                    .Select(e => e.Level)
-                    .DefaultIfEmpty(1)
-                    .First();
-
-                var def = await MapMonsterToCombatActorDefAsync(m, level, ct);
+                // 이미 def 가 CombatActorDef 라서 바로 넣으면 됨
                 actors[def.MasterId] = def;
             }
 

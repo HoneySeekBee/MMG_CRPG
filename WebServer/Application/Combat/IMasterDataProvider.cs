@@ -15,7 +15,7 @@ namespace Application.Combat
         CancellationToken ct);
 
         // 클라이언트 초기 스냅샷 용 
-        Task<CombatMasterDataPack> BuildPackAsync(
+        Task<MasterPackDto> BuildPackAsync(
             int stageId,
             long userid,
             IReadOnlyCollection<long> partyCharacterIds,  

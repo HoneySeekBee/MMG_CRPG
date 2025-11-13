@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Application.Contents.Stages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -38,4 +39,50 @@ namespace Application.Combat
     public sealed record StageMasterDto(long StageId, IReadOnlyList<long> EnemyCharacterIds /* ... */);
     public sealed record CharacterMasterDto(long CharacterId, int BaseHp, int BaseAtk, int BaseDef, int BaseAspd /* ... */);
     public sealed record SkillMasterDto(long SkillId, int CooldownMs, float Coeff /* ... */);
+
+ 
+
+    public sealed record CombatSnapshotDto(
+        IReadOnlyList<ActorSnapshotDto> Actors
+    );
+
+    public sealed record ActorSnapshotDto(
+        long ActorId,
+        float X,
+        float Z,
+        int Hp,
+        bool Dead,
+        IReadOnlyList<CombatLogEventDto> Events
+    ); 
+    public sealed class CombatTickRequest
+    {
+        public int Tick { get; set; }
+    }
+
+    public sealed class CombatTickResponse
+    {
+        public long CombatId { get; }
+        public int Tick { get; }
+        public CombatSnapshotDto Snapshot { get; }
+
+        public CombatTickResponse(long combatId, int tick, CombatSnapshotDto snapshot)
+        {
+            CombatId = combatId;
+            Tick = tick;
+            Snapshot = snapshot;
+        }
+    }
+    public sealed class MasterPackDto
+    {
+        public CombatStageDef Stage { get; init; }
+        public Dictionary<long, CombatActorDef> Actors { get; init; }
+
+        public MasterPackDto(
+            CombatStageDef stage,
+            Dictionary<long, CombatActorDef> actors)
+        {
+            Stage = stage;
+            Actors = actors;
+        }
+    }
 }

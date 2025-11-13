@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Application.Combat;
+using Application.Combat.Engine;
 using Application.UserCharacter;
 
 namespace Application.Combat
@@ -14,6 +15,7 @@ namespace Application.Combat
         private readonly ICharacterReader _char;
         private readonly ISkillReader _skill;
         private readonly IUserCharacterReader _userChars;
+        private readonly IMonsterStatReader _monsterStats;
 
         // 크리 기본값 (DTO에 없으므로 임시 적용)
         private const float DefaultCritRate = 0.10f; // 10%
@@ -22,12 +24,14 @@ namespace Application.Combat
         // 적 레벨 기본값 (Stage에 없으면 사용)
         private const int DefaultEnemyLevel = 1;
 
-        public MasterDataProvider(IStageReader stage, ICharacterReader @char, ISkillReader skill, IUserCharacterReader userChars)
+        public MasterDataProvider(IStageReader stage, ICharacterReader @char, ISkillReader skill, IUserCharacterReader userChars, IMonsterStatReader monsterStats)
         {
             _stage = stage;
             _char = @char;
             _skill = skill;
             _userChars = userChars;
+            _monsterStats = monsterStats
+                ?? throw new ArgumentNullException(nameof(monsterStats));
         }
         public async Task<Domain.Services.MasterDataPack> BuildEnginePackAsync(
            int stageId,
@@ -78,11 +82,7 @@ namespace Application.Combat
             );
         }
 
-        public async Task<CombatMasterDataPack> BuildPackAsync(
-    int stageId,
-    long userId,
-    IReadOnlyCollection<long> partyCharacterIds,
-    CancellationToken ct)
+        public async Task<MasterPackDto> BuildPackAsync(int stageId, long userId, IReadOnlyCollection<long> partyCharacterIds, CancellationToken ct)
         {
             // 1) 스테이지 상세 정보 로드 (StageDetailDto)
             var stage = await _stage.GetAsync(stageId, ct)
@@ -123,6 +123,8 @@ namespace Application.Combat
             // 3-1) 플레이어 유닛들
             foreach (var us in userStats)
             {
+                int attackIntervalMs = (int)(1000f / MathF.Sqrt(us.Spd));
+                if (attackIntervalMs < 200) attackIntervalMs = 200;
                 var def = new CombatActorDef(
                     masterId: us.CharacterId,      // 마스터 캐릭터 id
                     isPlayer: true,
@@ -132,7 +134,7 @@ namespace Application.Combat
                     def: us.Def,
                     spd: us.Spd,
                     range: us.Range,
-                    attackIntervalMs: us.Spd,      // 일단 Aspd = Spd 그대로 사용
+                    attackIntervalMs: attackIntervalMs,      // 일단 Aspd = Spd 그대로 사용
                     critRate: us.CritRate,
                     critDamage: us.CritDamage
                 );
@@ -153,26 +155,34 @@ namespace Application.Combat
             {
                 if (actors.ContainsKey(mid))
                     continue;
+                var firstSpawn = waveDefs
+      .SelectMany(w => w.Enemies)
+      .First(e => e.MonsterId == mid);
+                int level = firstSpawn.Level == 0 ? DefaultEnemyLevel : firstSpawn.Level;
 
-                // TODO: 나중에 Monster 테이블 + MonsterStatProgression 에서 읽어오기
+                var m = await _monsterStats.GetAsync(mid, level, ct)
+                        ?? throw new KeyNotFoundException($"MonsterStat {mid} Lv{level} not found");
+
+                int attackIntervalMs = (int)(1000f / MathF.Sqrt(m.SPD)); 
+                if (attackIntervalMs < 200) attackIntervalMs = 200;
                 var def = new CombatActorDef(
                     masterId: (int)mid,
                     isPlayer: false,
                     modelKey: $"Enemy_{mid}",
-                    maxHp: 1000,
-                    atk: 100,
-                    def: 50,
-                    spd: 1000,
-                    range: 1.5f,
-                    attackIntervalMs: 1000,
-                    critRate: 0.1,
-                    critDamage: 0.5
+                    maxHp: m.HP,
+                    atk: m.ATK,
+                    def: m.DEF,
+                    spd: m.SPD,
+                    range: m.Range,
+                    attackIntervalMs: attackIntervalMs,
+                   critRate: (double)m.CritRate,
+                    critDamage: (double)m.CritDamage
                 );
 
                 actors[mid] = def;
             }
 
-            return new CombatMasterDataPack(stageDef, actors);
+            return new MasterPackDto(stageDef, actors);
         }
 
 

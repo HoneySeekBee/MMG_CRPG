@@ -63,3 +63,26 @@ message CombatLogSummaryPb {
   int32 damage_done = 4;
   int32 damage_taken = 5;
 }
+message CombatTickRequestPb {
+  int64 combat_id = 1;
+  int32 tick = 2;
+}
+
+message CombatTickResponsePb {
+  int64 combat_id = 1;
+  int32 tick = 2;
+  CombatSnapshotPb snapshot = 3;
+}
+
+message ActorSnapshotPb {
+  int64 actor_id = 1;
+  float x = 2;
+  float z = 3;
+  int32 hp = 4;
+  bool dead = 5;
+  repeated CombatLogEventPb events = 6; // 이 틱에서 이 Actor가 일으킨 이벤트
+}
+
+message CombatSnapshotPb {
+  repeated ActorSnapshotPb actors = 1;
+}

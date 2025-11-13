@@ -94,5 +94,27 @@ namespace WebServer.Mappers
                 DamageTaken = src.DamageTaken
             };
         }
+        public static CombatTickResponsePb ToPb(CombatTickResponse src)
+        {
+            var pb = new CombatTickResponsePb
+            {
+                CombatId = src.CombatId,
+                Tick = src.Tick
+            };
+
+            foreach (var a in src.Snapshot.Actors)
+            {
+                pb.Snapshot.Actors.Add(new ActorSnapshotPb
+                {
+                    ActorId = a.ActorId,
+                    X = a.X,
+                    Z = a.Z,
+                    Hp = a.Hp,
+                    Dead = a.Dead,
+                });
+            }
+
+            return pb;
+        }
     }
 }

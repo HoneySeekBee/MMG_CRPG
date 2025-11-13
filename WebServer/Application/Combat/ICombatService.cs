@@ -20,6 +20,7 @@ namespace Application.Combat
             long combatId, string? cursor, int size, CancellationToken ct);
 
         Task<CombatLogSummaryDto> GetSummaryAsync(long combatId, CancellationToken ct);
+        Task<CombatTickResponse> TickAsync(long combatId, int tick, CancellationToken ct);
 
         // 선택: 보상 수령 등
         // Task<ClaimResponse> ClaimAsync(long combatId, CancellationToken ct);

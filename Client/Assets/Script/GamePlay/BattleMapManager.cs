@@ -172,7 +172,7 @@ public class BattleMapManager : MonoBehaviour
 
         foreach (var actor in snapshot.Actors)
         {
-            GameObject go = GetPrefabByModelCode(actor.MasterId, actor.Team);
+            GameObject go = GetPrefabByModelCode(actor.MasterId, actor.Team, actor.WaveIndex);
             go.transform.parent = this.transform;
             Vector3 worldPos = new Vector3(actor.X, 0, actor.Z); // 필요하면 offset 추가 
 

@@ -1,4 +1,5 @@
 ﻿using Application.Combat;
+using Combat;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebServer.Controllers
@@ -47,6 +48,16 @@ namespace WebServer.Controllers
         public async Task<IActionResult> GetSummary([FromRoute] long combatId, CancellationToken ct)
         {
             var res = await _service.GetSummaryAsync(combatId, ct);
+            return Ok(res);
+        }
+        [HttpPost("{combatId:long}/tick")]
+        [ProducesResponseType(typeof(CombatTickResponse), StatusCodes.Status200OK)]
+        public async Task<IActionResult> Tick(
+    [FromRoute] long combatId,
+    [FromBody] CombatTickRequest req,
+    CancellationToken ct)
+        {
+            var res = await _service.TickAsync(combatId, req.Tick, ct);
             return Ok(res);
         }
     }
