@@ -23,7 +23,8 @@ namespace WebServer.Mappers.Contents
             {
                 var wp = new WavePb
                 {
-                    Index = w.Index
+                    Index = w.Index,
+                    BatchNum = w.batchNum,
                 };
 
                 foreach (var e in w.Enemies)

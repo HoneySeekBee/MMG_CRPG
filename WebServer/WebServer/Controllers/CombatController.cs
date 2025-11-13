@@ -10,7 +10,23 @@ namespace WebServer.Controllers
         private readonly ICombatService _service;
 
         public CombatController(ICombatService service) => _service = service;
-
+        [HttpPost("start")]
+        [ProducesResponseType(typeof(StartCombatResponse), StatusCodes.Status200OK)]
+        public async Task<IActionResult> Start([FromBody] StartCombatRequest req, CancellationToken ct)
+        {
+            var res = await _service.StartAsync(req, ct);
+            return Ok(res);
+        }
+        [HttpPost("{combatId:long}/command")]
+        [ProducesResponseType(StatusCodes.Status202Accepted)]
+        public async Task<IActionResult> Command(
+            [FromRoute] long combatId,
+            [FromBody] CombatCommandDto cmd,
+            CancellationToken ct)
+        {
+            await _service.EnqueueCommandAsync(combatId, cmd, ct);
+            return Accepted();
+        }
         [HttpPost("simulate")]
         [ProducesResponseType(typeof(SimulateCombatResponse), StatusCodes.Status200OK)]
         public async Task<IActionResult> Simulate([FromBody] SimulateCombatRequest req, CancellationToken ct)

@@ -37,6 +37,8 @@ using Application.Contents.Battles;
 using Application.Contents.Chapters;
 using Application.Contents.Stages;
 using Application.Monsters;
+using Application.UserParties;
+using Infrastructure.Reader;
 
 namespace WebServer.Extensions
 {
@@ -152,8 +154,9 @@ namespace WebServer.Extensions
             s.AddScoped<IWalletService, WalletService>();
             s.AddScoped<ICurrencyRepository, EFCurrencyRepository>();
             s.AddScoped<ICurrencyService, CurrencyService>();
-             
+
             #region Contents 
+            s.AddScoped<IUserPartyReader, EfUserPartyReader>();
             s.AddScoped<ICombatService, CombatService>();
             s.AddScoped<ICombatRepository, EfCombatRepository>();
             s.AddScoped<IMasterDataProvider, FakeMasterDataProvider>();

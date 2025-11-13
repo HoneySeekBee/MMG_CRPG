@@ -19,7 +19,7 @@ namespace Infrastructure.Persistence.Configurations.Contents
 
             e.Property(x => x.StageId).HasColumnName("stage_id").IsRequired();
             e.Property(x => x.Index).HasColumnName("index").HasColumnType("smallint").IsRequired();
-
+            e.Property(x => x.BatchNum).HasColumnName("batch_num").IsRequired();
             e.HasIndex(x => new { x.StageId, x.Index }).IsUnique(); // 웨이브 순번 중복 방지
 
             e.HasMany(x => x.Enemies)

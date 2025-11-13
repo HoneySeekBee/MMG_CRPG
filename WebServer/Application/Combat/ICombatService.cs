@@ -8,6 +8,10 @@ namespace Application.Combat
 {
     public interface ICombatService
     {
+        Task<StartCombatResponse> StartAsync(StartCombatRequest req, CancellationToken ct);
+
+        Task EnqueueCommandAsync(long combatId, CombatCommandDto cmd, CancellationToken ct);
+
         Task<SimulateCombatResponse> SimulateAsync(
             SimulateCombatRequest request, CancellationToken ct);
 

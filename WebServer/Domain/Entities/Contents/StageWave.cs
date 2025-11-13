@@ -12,6 +12,7 @@ namespace Domain.Entities.Contents
         public int Id { get; private set; }
         public int StageId { get; private set; }
         public short Index { get; private set; } // 1..N
+        public int BatchNum { get; private set; }
         public List<StageWaveEnemy> Enemies { get; private set; } = new();
 
         public StageWave(short index) => Index = index;

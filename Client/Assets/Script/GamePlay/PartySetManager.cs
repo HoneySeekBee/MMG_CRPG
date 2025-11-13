@@ -10,7 +10,7 @@ public class PartySetManager : MonoBehaviour
 {
     public static PartySetManager Instance { get; private set; }
     [System.Serializable]
-    private class PartySlot
+    public class PartySlot
     {
         public int slotNum;
         public BatchSlot batchSlot;

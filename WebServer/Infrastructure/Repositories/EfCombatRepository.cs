@@ -1,16 +1,9 @@
 ﻿using Application.Combat;
 using Application.Repositories;
-using Domain.Entities;
-using Domain.Events;
+using Domain.Entities; 
 using Infrastructure.Persistence;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-
+using Microsoft.EntityFrameworkCore; 
+using System.Text.Json; 
 namespace Infrastructure.Repositories
 {
     public sealed class EfCombatRepository : ICombatRepository
@@ -61,6 +54,18 @@ namespace Infrastructure.Repositories
                 await tx.CommitAsync(ct);
                 return c.Id;
             });
+        }
+        public async Task AppendLogsAsync(long combatId, IEnumerable<Domain.Events.CombatLogEvent> events, CancellationToken ct)
+        {
+            var logs = events.Select(e => new CombatLogRecord
+            {
+                CombatId = combatId,
+                TMs = e.TMs,
+                PayloadJson = JsonSerializer.Serialize(e)
+            });
+
+            await _db.CombatLogs.AddRangeAsync(logs, ct);
+            await _db.SaveChangesAsync(ct);
         }
         public async Task<CombatLogPageDto> GetLogAsync(long combatId, string? cursor, int size, CancellationToken ct)
         {

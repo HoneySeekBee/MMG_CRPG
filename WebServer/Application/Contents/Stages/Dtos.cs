@@ -13,7 +13,7 @@ namespace Application.Contents.Stages
 
     // 상세 그래프
     public sealed record EnemyDto(int EnemyCharacterId, short Level, short Slot, string? AiProfile);
-    public sealed record WaveDto(short Index, IReadOnlyList<EnemyDto> Enemies);
+    public sealed record WaveDto(short Index, IReadOnlyList<EnemyDto> Enemies, int batchNum);
     public sealed record DropDto(int ItemId, decimal Rate, short MinQty, short MaxQty, bool FirstClearOnly);
     public sealed record RewardDto(int ItemId, short Qty);
     public sealed record RequirementDto(int? RequiredStageId, short? MinAccountLevel);
@@ -27,10 +27,8 @@ namespace Application.Contents.Stages
         IReadOnlyList<RequirementDto> Requirements,
         IReadOnlyList<BatchDto> Batches);
 
-
-    // ─────────────────────────────────────────────
-    // Mappings (Domain → DTO)
-    // ─────────────────────────────────────────────
+     
+    // Mappings (Domain → DTO) 
     public static class StageMappings
     {
         public static StageSummaryDto ToSummaryDto(this Stage s) =>
@@ -46,7 +44,8 @@ namespace Application.Contents.Stages
                      w.Enemies
                       .OrderBy(e => e.Slot)
                       .Select(e => new EnemyDto(e.EnemyCharacterId, e.Level, e.Slot, e.AiProfile))
-                      .ToList()
+                      .ToList(),
+                     w.BatchNum
                  )).ToList(),
                 s.Drops
                  .Select(d => new DropDto(d.ItemId, d.Rate, d.MinQty, d.MaxQty, d.FirstClearOnly))

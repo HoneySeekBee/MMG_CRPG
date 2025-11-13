@@ -73,7 +73,8 @@ namespace Infrastructure.Caching.Contents
                                 e.Slot,
                                 e.AiProfile
                             ))
-                            .ToList()
+                            .ToList(),
+                        w.BatchNum
                     ))
                     .ToList(),
                 Drops: s.Drops
