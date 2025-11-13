@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Application.Contents.Stages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +24,7 @@ namespace Application.Combat
         // 선택: 보상 수령 등
         // Task<ClaimResponse> ClaimAsync(long combatId, CancellationToken ct);
     }
-    public interface IStageReader { Task<StageMasterDto> GetAsync(long stageId, CancellationToken ct); }
+    public interface IStageReader { Task<StageDetailDto> GetAsync(long stageId, CancellationToken ct); }
     public interface ICharacterReader { Task<CharacterMasterDto> GetAsync(long characterId, CancellationToken ct); }
     public interface ISkillReader { Task<SkillMasterDto> GetAsync(long skillId, CancellationToken ct); }
 

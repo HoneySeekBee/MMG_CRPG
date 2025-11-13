@@ -89,6 +89,7 @@
     <Compile Include="Assets\Script\UI\User\UserCharacterEquipUI.cs" />
     <Compile Include="Assets\Script\UI\Popup\BattleMapPopup.cs" />
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\ColorSwapper.cs" />
+    <Compile Include="Assets\Script\Network\GamePlay\CombatNetwork.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\Movement\MovementStates\Obstacles\LadderObstacleState.cs" />
     <Compile Include="Assets\Script\Scenes\Lobby\UserCharactersListUI.cs" />
     <Compile Include="Assets\Script\Cache\MonsterCache.cs" />
@@ -607,12 +608,12 @@
       <HintPath>Assets\Plugins\Google.Protobuf.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
-      <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="DOTween">
       <HintPath>Assets\Plugins\Demigiant\DOTween\DOTween.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
+      <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Android.Types">

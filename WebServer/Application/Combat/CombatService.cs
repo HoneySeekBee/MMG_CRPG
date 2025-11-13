@@ -1,4 +1,5 @@
 ﻿using Application.Repositories;
+using Application.UserCharacter;
 using Application.UserParties;
 using Domain.Enum;
 using Domain.Services;
@@ -35,24 +36,27 @@ namespace Application.Combat
     }
     public sealed class CombatService : ICombatService
     {
-        private readonly IMasterDataProvider _master; 
+        private readonly IMasterDataProvider _master;
         private readonly ICombatRepository _repo;
         private readonly ICombatEngine _engine;
         private readonly IUserPartyReader _partyReader;
+        private readonly IUserCharacterReader _userCharacterReader;
 
         private const int MaxPageSize = 500;
         private static readonly ConcurrentDictionary<long, CombatRuntimeState> _runtimeStates = new();
 
         public CombatService(
-            IMasterDataProvider master, 
+            IMasterDataProvider master,
             ICombatRepository repo,
             ICombatEngine engine,
-            IUserPartyReader partyReader)
+            IUserPartyReader partyReader,
+            IUserCharacterReader userCharacterReader)
         {
-            _master = master; 
+            _master = master;
             _repo = repo;
             _engine = engine;
             _partyReader = partyReader;
+            _userCharacterReader = userCharacterReader;
         }
         public async Task<StartCombatResponse> StartAsync(StartCombatRequest req, CancellationToken ct)
         {
@@ -60,34 +64,55 @@ namespace Application.Combat
                 throw new ArgumentException("StageId must be positive.", nameof(req.StageId));
 
             // (1) 유저 파티 로드하기  
-            var party = await _partyReader.GetAsync(req.FormationId, ct);
-            if (party is null)
-                throw new InvalidOperationException($"Party {req.FormationId} not found.");
+            var party = await _partyReader.GetByUserBattleAsync(req.UserId, req.BattleId, ct)
+         ?? throw new InvalidOperationException($"Party {req.UserId} not found.");
 
-            var filledSlots = party.Slots.Where(s => s.UserCharacterId.HasValue).OrderBy(s => s.SlotId).ToList();
+            var filledSlots = party.Slots
+                .Where(s => s.UserCharacterId.HasValue)
+                .OrderBy(s => s.SlotId)
+                .ToList();
 
             if (filledSlots.Count == 0)
-                throw new InvalidOperationException($"Party {req.FormationId} has no members.");
+                throw new InvalidOperationException($"Party {req.BattleId} has no members.");
 
-            var playerCharacterIds = filledSlots
-    .Select(s => (long)s.UserCharacterId!.Value)
-    .Distinct()
-    .ToArray();
+            //  (2) 파티에 포함된 UserCharacterId 목록 
+            var partyCharacterIds = filledSlots
+          .Select(s => (long)s.UserCharacterId!.Value)
+          .Distinct()
+          .ToArray();
+            // (3) 유저 캐릭터 + 레벨별 스탯 로드 
+            var userCharStats = await _userCharacterReader
+        .GetManyByCharacterIdAsync(partyCharacterIds, req.UserId, ct);
 
-            // 2) Seed 생성
-            var seed = BitConverter.ToInt64(Guid.NewGuid().ToByteArray(), 0);
-            if (seed == 0) seed = 1;
+            var statsByCharacterId = userCharStats
+                .ToDictionary(x => (long)x.CharacterId);
 
-            // 3) 마스터 데이터 패키지 (스테이지 + 캐릭터들)
+            var masterCharIds = partyCharacterIds;
 
-            var pack = await _master.BuildPackAsync(req.StageId, playerCharacterIds, ct);
-            // 4) CombatInputSnapshot 생성 (PartyMember/SkillInput은 일단 최소)
-            var partyMembers = filledSlots
-                .Select(s => new Domain.Entities.PartyMember(
-                    s.UserCharacterId!.Value,
-                    Level: 1 // TODO: 실제 유저 캐릭터 레벨 반영
-                ))
-                .ToArray();
+
+
+            //  (5) 마스터 데이터 패키지 (스테이지 + 캐릭터 마스터) 
+            var pack = await _master.BuildPackAsync(
+     req.StageId,
+     req.UserId,
+     masterCharIds,
+     ct
+ );
+
+
+            // (6) CombatInputSnapshot 생성 (PartyMember: 마스터 캐릭터ID + 유저레벨)
+            var partyMembers = filledSlots.Select(s =>
+            {
+                long charId = s.UserCharacterId!.Value;
+
+                if (!statsByCharacterId.TryGetValue(charId, out var uc))
+                    throw new InvalidOperationException($"CharacterId {charId} not found in stats.");
+
+                return new Domain.Entities.PartyMember(
+                    CharacterId: uc.CharacterId,
+                    Level: uc.Level
+                );
+            }).ToArray();
 
             var input = new Domain.Entities.CombatInputSnapshot(
        req.StageId,
@@ -95,7 +120,10 @@ namespace Application.Combat
        Array.Empty<Domain.Entities.SkillInput>()
    );
 
-            // 5) 도메인 Combat Aggregate 생성
+            // (7) Combat Aggregate 생성/저장 (이 부분은 거의 그대로)
+            var seed = BitConverter.ToInt64(Guid.NewGuid().ToByteArray(), 0);
+            if (seed == 0) seed = 1;
+
             var combat = Domain.Entities.Combat.Create(
                 CombatMode.Pve,
                 req.StageId,
@@ -105,14 +133,13 @@ namespace Application.Combat
                 clientVersion: null
             );
 
-            // 6) DB에 CombatRecord + (초기에는 로그 없음) 저장
-            var combatId = await _repo.SaveAsync(combat,
+            var combatId = await _repo.SaveAsync(
+                combat,
                 events: Enumerable.Empty<Domain.Events.CombatLogEvent>(),
-                ct);
+                ct
+            );
 
-
-            // 7) 인메모리 런타임 상태 등록
-            var runtime = new CombatRuntimeState
+            _runtimeStates[combatId] = new CombatRuntimeState
             {
                 CombatId = combatId,
                 StageId = req.StageId,
@@ -122,18 +149,17 @@ namespace Application.Combat
                 TotalWaves = 1
             };
 
-            _runtimeStates[combatId] = runtime;
-
-            // 8) 초기 스냅샷 구성 (ActorInitDto 리스트) 
+            // (8) 초기 스냅샷 ActorInitDto 구성
             var actors = new List<ActorInitDto>();
 
-            // 8-1) 플레이어 유닛들 (왼쪽 라인)
+            // 8-1) 플레이어 유닛들
             foreach (var slot in filledSlots)
             {
-                var charId = slot.UserCharacterId!.Value;
+                long charId = slot.UserCharacterId!.Value;
+                var uc = statsByCharacterId[charId];   // 캐릭터별 스탯
 
-                if (!pack.Characters.TryGetValue(charId, out var cdef))
-                    throw new KeyNotFoundException($"CharacterDef {charId} not found in pack.");
+                long masterId = uc.CharacterId;
+                var cdef = pack.Actors[masterId];
 
                 var (x, z) = GetPlayerPositionBySlot(slot.SlotId);
                 var actorId = 1 + slot.SlotId;
@@ -143,39 +169,35 @@ namespace Application.Combat
                     Team: 0,
                     X: x,
                     Z: z,
-                    Hp: cdef.BaseHp,
-                    MaxHp: cdef.BaseHp,
-                    ModelCode: $"Hero_{charId}"
+                    Hp: uc.Hp,
+                    WaveIndex: 1,
+                    MasterId: masterId
                 ));
             }
-            // 8-2) 적 유닛들 (오른쪽 라인)
-            const float enemyStartX = 3.0f;
-            const float spacingZ = 1.5f;
-            var enemies = pack.Stage.Enemies;
-            for (int i = 0; i < enemies.Count; i++)
+
+            // 8-2) 적 유닛들
+            foreach (var wave in pack.Stage.Waves)
             {
-                var enemy = enemies[i];
-                var cid = enemy.CharacterId;
+                foreach (var spawn in wave.Enemies)
+                {
+                    long cid = spawn.MonsterId;
 
-                if (!pack.Characters.TryGetValue(cid, out var cdef))
-                    throw new KeyNotFoundException($"Enemy CharacterDef {cid} not found in pack.");
+                    var cdef = pack.Actors[cid];
+                    var (x, z) = GetEnemyPositionBySlot(spawn.Slot);
+                    var actorId = 1000 * wave.Index + spawn.Slot;
 
-                var actorId = 100 + i;            // 적 ActorId 100번대
-                var x = enemyStartX;
-                var z = (i - 1) * spacingZ;       // -1.5, 0, 1.5 이런 느낌
-
-                actors.Add(new ActorInitDto(
-                    ActorId: actorId,
-                    Team: 1, // Enemy
-                    X: x,
-                    Z: z,
-                    Hp: cdef.BaseHp,
-                    MaxHp: cdef.BaseHp,
-                    ModelCode: $"Enemy_{cid}"
-                ));
+                    actors.Add(new ActorInitDto(
+                        ActorId: actorId,
+                        Team: 1,
+                        X: x,
+                        Z: z,
+                        Hp: cdef.MaxHp,
+                        WaveIndex: wave.Index,
+                        MasterId: cid
+                    ));
+                }
             }
             var snapshot = new CombatInitialSnapshotDto(actors);
-
             return new StartCombatResponse(combatId, snapshot);
         }
         public async Task<SimulateCombatResponse> SimulateAsync(SimulateCombatRequest req, CancellationToken ct)
@@ -201,7 +223,7 @@ namespace Application.Combat
 
             // 4) 마스터 데이터 패키지
             var partyIds = party.Select(x => x.CharacterId).ToArray();
-            var pack = await _master.BuildPackAsync(req.StageId, partyIds, ct);
+            var masterPack = await _master.BuildEnginePackAsync(req.StageId, partyIds, ct);
 
             // 5) Aggregate 생성
             var combat = Domain.Entities.Combat.Create(
@@ -209,8 +231,8 @@ namespace Application.Combat
                 balanceVersion: "1", // TODO: 운영툴/설정에서 주입
                 clientVersion: req.ClientVersion);
 
-            // 6) 전투 시뮬레이션
-            var result = _engine.Simulate(input, seed, pack);
+            // 6) 전투 시뮬레이션 
+            var result = _engine.Simulate(input, seed, masterPack);
 
             // 7) 결과 반영
             switch (result.Result)
@@ -277,7 +299,7 @@ namespace Application.Combat
         public Task<CombatLogSummaryDto> GetSummaryAsync(long combatId, CancellationToken ct)
             => _repo.GetSummaryAsync(combatId, ct);
         private static (float x, float z) GetPlayerPositionBySlot(int slotId)
-        { 
+        {
             var index = slotId - 1; // 0~8
 
             var col = index % 3; // 0,1,2

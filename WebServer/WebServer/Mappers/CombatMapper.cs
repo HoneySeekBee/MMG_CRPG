@@ -19,8 +19,8 @@ namespace WebServer.Mappers
                     X = a.X,
                     Z = a.Z,
                     Hp = a.Hp,
-                    MaxHp = a.MaxHp,
-                    ModelCode = a.ModelCode
+                    WaveIndex = a.WaveIndex,
+                    MasterId = a.MasterId,
                 });
             }
 

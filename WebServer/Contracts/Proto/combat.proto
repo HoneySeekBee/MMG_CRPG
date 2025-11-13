@@ -8,17 +8,18 @@ import "google/protobuf/struct.proto";
 
 message StartCombatRequestPb {
   int32 stage_id = 1;
-  int64 formation_id = 2;
-}
+  int32 userId = 2;        // 추가
+  int32 battleId = 3;      // 변경
+} 
 
 message ActorInitPb {
   int64 actor_id = 1;
   int32 team = 2;
   float x = 3;
   float z = 4;
-  int32 hp = 5;
-  int32 max_hp = 6;
-  string model_code = 7;
+  int32 hp = 5; 
+  int32 waveIndex = 6;
+  int64 master_id = 7;
 }
 
 message CombatInitialSnapshotPb {

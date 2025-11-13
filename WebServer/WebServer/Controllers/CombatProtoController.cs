@@ -7,7 +7,7 @@ namespace WebServer.Controllers
 {
     [ApiController]
     [Route("api/pb/combat")]
-    [Produces("application/x-protobuf")] 
+    [Produces("application/x-protobuf")]
     public sealed class CombatProtoController : ControllerBase
     {
         private readonly ICombatService _service;
@@ -22,11 +22,7 @@ namespace WebServer.Controllers
         public async Task<ActionResult<StartCombatResponsePb>> Start(
             [FromBody] StartCombatRequestPb req, CancellationToken ct)
         {
-            var domainReq = new Application.Combat.StartCombatRequest(
-                req.StageId,
-                req.FormationId
-            );
-
+            var domainReq = new StartCombatRequest(req.StageId, req.UserId, req.BattleId);
             var res = await _service.StartAsync(domainReq, ct);
             return CombatProtoMapper.ToPb(res);
         }

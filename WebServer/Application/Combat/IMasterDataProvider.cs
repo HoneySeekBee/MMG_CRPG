@@ -8,10 +8,18 @@ namespace Application.Combat
 {
     public interface IMasterDataProvider
     {
-        Task<Domain.Services.MasterDataPack> BuildPackAsync(
+        // 전투 엔진 용 
+        Task<Domain.Services.MasterDataPack> BuildEnginePackAsync(
+        int stageId, 
+        IReadOnlyCollection<long> partyCharacterIds,
+        CancellationToken ct);
+
+        // 클라이언트 초기 스냅샷 용 
+        Task<CombatMasterDataPack> BuildPackAsync(
             int stageId,
-            IReadOnlyCollection<long> partyCharacterIds,
-            CancellationToken ct);
+            long userid,
+            IReadOnlyCollection<long> partyCharacterIds,  
+            CancellationToken ct); 
     }
 
 }

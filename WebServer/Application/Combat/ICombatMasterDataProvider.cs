@@ -10,7 +10,7 @@ namespace Application.Combat
     { 
         Task<CombatMasterDataPack> BuildPackAsync(
             int stageId,
-            IReadOnlyCollection<int> playerCharacterIds,
+            IReadOnlyCollection<long> playerCharacterIds,
             CancellationToken ct);
     }
 }

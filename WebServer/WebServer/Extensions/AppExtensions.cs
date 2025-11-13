@@ -160,13 +160,16 @@ namespace WebServer.Extensions
             s.AddScoped<IUserPartyReader, EfUserPartyReader>();
             s.AddScoped<ICombatService, CombatService>();
             s.AddScoped<ICombatRepository, EfCombatRepository>(); 
-            s.AddScoped<IMasterDataProvider, FakeMasterDataProvider>();
+            s.AddScoped<IMasterDataProvider, MasterDataProvider>();
             s.AddScoped<IBattlesService, BattlesService>();
             s.AddScoped<IBattlesRepository, BattlesRepository>();
             s.AddScoped<IChapterService, ChapterService>();
             s.AddScoped<IChapterRepository, ChapterRepository>();
+            s.AddScoped<IUserCharacterReader, EfUserCharacterReader>();
+            s.AddScoped<ICharacterReader, EfCharacterReader>();
+            s.AddScoped<ISkillReader, EfSkillReader>();
             #endregion
-             
+
             // 전투 엔진
             s.AddSingleton<ICombatEngine, SimpleCombatEngine>(); 
 
@@ -184,6 +187,7 @@ namespace WebServer.Extensions
             s.AddScoped<IStagesRepository, EfStagesRepository>();
             s.AddScoped<IStageQueryRepository, EfStageQueryRepository>();
             s.AddScoped<IStagesService, StagesService>();
+            s.AddScoped<IStageReader, StageCacheReader>();
 
             // 시너지
             s.AddScoped<ISynergyRepository, SynergyRepository>();

@@ -26,5 +26,17 @@ namespace Application.UserCharacter
                 e.Equips.Select(s => new UserCharacterEquipDto(s.UserId, s.CharacterId, s.EquipId, s.InventoryId)).ToList()
             );
     }
-
+    public sealed record UserCharacterStatsDto(
+       int UserCharacterId,
+       int UserId,
+       int CharacterId,
+       short Level,
+       int Hp,
+       int Atk,
+       int Def,
+       int Spd,
+       double CritRate,
+       double CritDamage,
+       float Range
+   );
 }

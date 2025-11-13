@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.Combat
 {
-    public sealed record StartCombatRequest(int StageId, long FormationId);
+    public sealed record StartCombatRequest( int StageId,  int UserId,  int BattleId );
     public sealed record StartCombatResponse(long CombatId, CombatInitialSnapshotDto Snapshot);
 
     public sealed record SimulateCombatRequest(

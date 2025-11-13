@@ -9,7 +9,7 @@ namespace Infrastructure.Reader
 {
     public interface ICharacterAssetReader
     {
-        Task<IReadOnlyDictionary<int, CharacterDetailPb>> GetCharactersAsync(
-            IReadOnlyCollection<int> ids, CancellationToken ct);
+        Task<IReadOnlyDictionary<long, CharacterDetailPb>> GetCharactersAsync(
+            IReadOnlyCollection<long> ids, CancellationToken ct);
     }
 }

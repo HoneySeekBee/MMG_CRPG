@@ -49,4 +49,13 @@ public static class ApiRoutes
 
     public static string UserPartyGet(int useId, int partyId) => $"/userparty/by-battle?userId={useId}&battleId={partyId}";
     public const string UserPartyBulkAssign = "/userparty/bulk-assign";
+
+    #region Combat
+
+    public const string CombatStart =  "/combat/start";
+    public static string CombatCommand(long combatId) => $"/combat/{combatId}/command";
+    public static string CombatSummary(long combatId) => $"/combat/{combatId}/summary";
+    public static string CombatLog(long combatId, string cursor, int size) => $"/combat/{combatId}/log?cursor={cursor}&size={size}";
+    #endregion
+
 }

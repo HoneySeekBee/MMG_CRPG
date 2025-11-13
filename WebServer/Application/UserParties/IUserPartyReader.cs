@@ -9,5 +9,6 @@ namespace Application.UserParties
     public interface IUserPartyReader
     {
         Task<UserPartyDto?> GetAsync(long partyId, CancellationToken ct);
+        Task<UserPartyDto?> GetByUserBattleAsync(int userId, int battleId, CancellationToken ct);
     } 
 }

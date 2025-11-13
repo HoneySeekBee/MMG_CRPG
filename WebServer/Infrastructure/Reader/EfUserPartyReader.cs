@@ -43,5 +43,30 @@ namespace Infrastructure.Reader
 
             return party;
         }
+        public async Task<UserPartyDto?> GetByUserBattleAsync(int userId, int battleId, CancellationToken ct)
+        {
+            var party = await _db.UserParties
+                .AsNoTracking()
+                .Where(p => p.UserId == userId && p.BattleId == battleId)
+                .Select(p => new UserPartyDto
+                {
+                    PartyId = p.PartyId,
+                    UserId = p.UserId,
+                    BattleId = p.BattleId,
+                    CreatedAt = p.CreatedAt,
+                    UpdatedAt = p.UpdatedAt,
+                    Slots = p.Slots
+                        .OrderBy(s => s.SlotId)
+                        .Select(s => new PartySlotDto
+                        {
+                            SlotId = s.SlotId,
+                            UserCharacterId = s.UserCharacterId
+                        })
+                        .ToList()
+                })
+                .FirstOrDefaultAsync(ct);
+
+            return party;
+        }
     }
 }

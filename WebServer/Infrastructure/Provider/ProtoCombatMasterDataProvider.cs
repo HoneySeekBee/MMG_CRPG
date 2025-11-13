@@ -38,7 +38,7 @@ namespace Infrastructure.Provider
 
         public async Task<CombatMasterDataPack> BuildPackAsync(
             int stageId,
-            IReadOnlyCollection<int> playerCharacterIds,
+            IReadOnlyCollection<long> playerCharacterIds,
             CancellationToken ct)
         {
             // 1) StagePb 로드
@@ -62,10 +62,10 @@ namespace Infrastructure.Provider
 
             var characterDict = playerCharacterIds.Count > 0
                 ? await _characterReader.GetCharactersAsync(playerCharacterIds, ct)
-                : new Dictionary<int, CharacterDetailPb>();
+                : new Dictionary<long, CharacterDetailPb>();
 
             // 5) CombatActorDef 구성
-            var actors = new Dictionary<int, CombatActorDef>();
+            var actors = new Dictionary<long, CombatActorDef>();
 
             // 5-1) 몬스터
             foreach (var monsterId in enemyMonsterIds)

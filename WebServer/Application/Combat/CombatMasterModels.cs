@@ -87,11 +87,11 @@ namespace Application.Combat
     public sealed class CombatMasterDataPack
     {
         public CombatStageDef Stage { get; }
-        public IReadOnlyDictionary<int, CombatActorDef> Actors { get; }
+        public IReadOnlyDictionary<long, CombatActorDef> Actors { get; }
 
         public CombatMasterDataPack(
             CombatStageDef stage,
-            IReadOnlyDictionary<int, CombatActorDef> actors)
+            IReadOnlyDictionary<long, CombatActorDef> actors)
         {
             Stage = stage;
             Actors = actors;

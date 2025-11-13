@@ -21,9 +21,9 @@ namespace Application.Combat
         int Team,          // 0 = Player, 1 = Enemy (enum으로 빼도 됨)
         float X,
         float Z,
-        int Hp,
-        int MaxHp,
-        string ModelCode   // Unity에서 어떤 프리팹 쓸지
+        int Hp, 
+        int WaveIndex,
+        long MasterId
     );
 
     // 전투 시작 시 전체 스냅샷
@@ -34,6 +34,7 @@ namespace Application.Combat
 
     public sealed record CombatLogSummaryDto(
         long CombatId, int TotalEvents, int DurationMs, int DamageDone, int DamageTaken /* etc */);
+
     public sealed record StageMasterDto(long StageId, IReadOnlyList<long> EnemyCharacterIds /* ... */);
     public sealed record CharacterMasterDto(long CharacterId, int BaseHp, int BaseAtk, int BaseDef, int BaseAspd /* ... */);
     public sealed record SkillMasterDto(long SkillId, int CooldownMs, float Coeff /* ... */);
