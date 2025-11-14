@@ -3,6 +3,7 @@ using Contracts.UserParty;
 using Game.Data;
 using Game.Managers;
 using Lobby;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,18 +27,21 @@ public class PartySetupPopup : UIPopup
         .Select(x => x.Value)
         .ToList();
     }
-    public void Set()
+    public void Set(Action action)
     {
-        StartCoroutine(LoadPartySet());
+        StartCoroutine(LoadPartySet(action));
         Set_Character();
         startBtn.onClick.RemoveAllListeners();
         startBtn.onClick.AddListener(GameStart);
     }
-    private IEnumerator LoadPartySet()
+    private IEnumerator LoadPartySet(Action action = null)
     {
+        yield return CharacterCache.Instance.CoPreloadMeshes(); 
         yield return SceneController.Instance.LoadAdditiveAsync(SceneController.PartySetupSceneName);
         PartySetManager.Instance.Initialize(NetworkManager.BATTLE_ADVENTURE, Refresh_CharacterList);
         Refresh_CharacterList();
+        if (action != null)
+            action.Invoke();
     }
     private void Refresh_CharacterList()
     {
@@ -104,7 +108,7 @@ public class PartySetupPopup : UIPopup
     private void GameStart()
     {
         PartySetManager partyManager = PartySetManager.Instance;
-        int assignedCount = partyManager.AssignedCount(); 
+        int assignedCount = partyManager.AssignedCount();
         if (assignedCount == 0) // 파티에 배치된 캐릭터가 0
         {
             Debug.Log("캐릭터를 배치하세요");
@@ -116,7 +120,7 @@ public class PartySetupPopup : UIPopup
             return;
         }
 
-        Debug.Log("스테이지를 실행합니다. "); 
+        Debug.Log("스테이지를 실행합니다. ");
         StartCoroutine(StartStageLogic());
     }
     private IEnumerator StartStageLogic()

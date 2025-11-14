@@ -20,6 +20,8 @@ public class LobbyRootController : MonoBehaviour
      
     [HideInInspector] public int _currentBattleId;
     [HideInInspector] public StagePb _currentStage;
+     
+    [SerializeField] private FadeInOut FadeInOut;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -59,6 +61,7 @@ public class LobbyRootController : MonoBehaviour
 
     public void Show(string key)
     {
+        FadeInOut.Direct_FadeOut();
         popupRoot = _panels[key].transform;
         foreach (var kv in _panels)
         {
@@ -86,6 +89,7 @@ public class LobbyRootController : MonoBehaviour
         var popup = await popupPool.ShowPopupAsync<LoginPopup>(key, popupRoot);
         if (popup == null) { Debug.LogError("LoginPopup open failed"); return; }
 
+        FadeInOut.Start_FadeIn();
         // 완료 이벤트 구독
         popup.OnLoginCompleted += async result =>
         {
@@ -114,6 +118,7 @@ public class LobbyRootController : MonoBehaviour
         var popup = await popupPool.ShowPopupAsync<LobbyPopup>(key, popupRoot);
         if (popup == null) { Debug.LogError("LobbyPopup open failed"); return; }
 
+        FadeInOut.Start_FadeIn();
 
         popup.Set_BattleLobbyBtn(() => Show("Battle"));
     }
@@ -133,6 +138,7 @@ public class LobbyRootController : MonoBehaviour
         var popup = await popupPool.ShowPopupAsync<BattleLobbyPopup>(key, popupRoot);
         if (popup == null) { Debug.LogError("BattleLobbyPopup open failed"); return; }
 
+        FadeInOut.Start_FadeIn();
         popup.Set_AdventureBtn(() => Show("Adventure"));
     }
     private async void OpenAdventureLobbyPopup()
@@ -151,6 +157,7 @@ public class LobbyRootController : MonoBehaviour
         var popup = await popupPool.ShowPopupAsync<AdventureLobbyPopup>(key, popupRoot);
         if (popup == null) { Debug.LogError("BattleLobbyPopup open failed"); return; }
 
+        FadeInOut.Start_FadeIn();
         popup.Set();
     }
     private async void OpenPartySetupPopup()
@@ -164,8 +171,8 @@ public class LobbyRootController : MonoBehaviour
         }
         var popup = await popupPool.ShowPopupAsync<PartySetupPopup>(key, popupRoot);
         if (popup == null) { Debug.LogError("PartySetupPopup open failed"); return; }
-
-        popup.Set();
+         
+        popup.Set(FadeInOut.Start_FadeIn);
     }
     private async void OpenBattleMapPopup()
     {
@@ -178,7 +185,7 @@ public class LobbyRootController : MonoBehaviour
         }
         var popup = await popupPool.ShowPopupAsync<BattleMapPopup>(key, popupRoot);
         if (popup == null) { Debug.LogError("BattleMapPopup open failed"); return; }
-
-        popup.Set();
+         
+        popup.Set(FadeInOut.Start_FadeIn);
     }
 }

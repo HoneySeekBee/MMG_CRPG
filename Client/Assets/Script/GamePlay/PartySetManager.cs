@@ -72,15 +72,14 @@ public class PartySetManager : MonoBehaviour
     {
         bool check = false;
         int assignedCount = AssignedCount();
-        if (assignedCount > MAX_CHARACTER_COUNT)
+        if (assignedCount >= MAX_CHARACTER_COUNT )
         {
             Debug.Log("배치 할 수 있는 캐릭터가 가득찼어요.");
             return false;
         }
 
-        BatchSlot batch = null;
-
-        for (int i = formationNum * 3; i < formationNum * 3 + 3; i++)
+        BatchSlot batch = null; 
+        for (int i = formationNum * 3 - 2; i <= formationNum * 3; i++)
         {
             if (partySlotsDict[i].CheckEmpty())
             {

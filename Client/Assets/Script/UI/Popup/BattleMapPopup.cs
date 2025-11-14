@@ -1,5 +1,6 @@
 using Contracts.Protos;
 using Lobby;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -27,9 +28,9 @@ public class BattleMapPopup : UIPopup
         Instance = this;
     }
     // 이제 여기서 스테이지에 대한 정보를 받아야한다. 
-    public void Set()
+    public void Set(Action fadeIn)
     {
-        StartCoroutine(BattleMapManager.Instance.Set_BattleMap());
+        StartCoroutine(BattleMapManager.Instance.Set_BattleMap(fadeIn));
         StartPopup.SetActive(false);
     }
     

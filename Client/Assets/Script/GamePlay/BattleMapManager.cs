@@ -63,7 +63,7 @@ public class BattleMapManager : MonoBehaviour
         Instance = this;
         _combatNetwork = new CombatNetwork();
     }
-    public IEnumerator Set_BattleMap()
+    public IEnumerator Set_BattleMap(Action action)
     {
         MonstersByWaves.Clear();
         Set_MonsterSlot();
@@ -105,7 +105,7 @@ public class BattleMapManager : MonoBehaviour
 
         // [5] 배틀 플로우 시작 ( 맵 이동 + 전투 연출 ) 
         StartCoroutine(BattleFlow());
-
+        action.Invoke();
     }
     private void Set_MonsterSlot()
     {
