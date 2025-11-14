@@ -72,6 +72,7 @@ message CombatTickResponsePb {
   int64 combat_id = 1;
   int32 tick = 2;
   CombatSnapshotPb snapshot = 3;
+  repeated CombatLogEventPb events = 4; 
 }
 
 message ActorSnapshotPb {

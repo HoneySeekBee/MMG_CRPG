@@ -1,5 +1,6 @@
 ﻿using Application.Combat;
 using Combat;
+using Domain.Entities;
 using Google.Protobuf.WellKnownTypes;
 
 namespace WebServer.Mappers
@@ -94,27 +95,53 @@ namespace WebServer.Mappers
                 DamageTaken = src.DamageTaken
             };
         }
-        public static CombatTickResponsePb ToPb(CombatTickResponse src)
+        public static CombatTickResponsePb ToPb(Application.Combat.CombatTickResponse src)
         {
-            var pb = new CombatTickResponsePb
-            {
-                CombatId = src.CombatId,
-                Tick = src.Tick
-            };
-
+            var snapshotPb = new CombatSnapshotPb();
             foreach (var a in src.Snapshot.Actors)
             {
-                pb.Snapshot.Actors.Add(new ActorSnapshotPb
+                snapshotPb.Actors.Add(new ActorSnapshotPb
                 {
                     ActorId = a.ActorId,
                     X = a.X,
                     Z = a.Z,
                     Hp = a.Hp,
-                    Dead = a.Dead,
+                    Dead = a.Dead
                 });
             }
 
-            return pb;
+            var resp = new CombatTickResponsePb
+            {
+                CombatId = src.CombatId,
+                Tick = src.Tick,
+                Snapshot = snapshotPb
+            };
+
+            //  여기서 src.Events → resp.Events
+            foreach (var e in src.Events)
+            {
+                var evPb = new CombatLogEventPb
+                {
+                    TMs = e.TMs,
+                    Type = e.Type,
+                    Actor = e.Actor
+                };
+                if (e.Target != null) evPb.Target = e.Target;
+                if (e.Damage.HasValue) evPb.Damage = e.Damage.Value;
+                if (e.Crit.HasValue) evPb.Crit = e.Crit.Value;
+
+                if (e.Extra != null)
+                {
+                    var s = new Struct();
+                    foreach (var kv in e.Extra)
+                        s.Fields[kv.Key] = Value.ForString(kv.Value?.ToString() ?? "");
+                    evPb.Extra = s;
+                }
+
+                resp.Events.Add(evPb);
+            }
+
+            return resp;
         }
     }
 }

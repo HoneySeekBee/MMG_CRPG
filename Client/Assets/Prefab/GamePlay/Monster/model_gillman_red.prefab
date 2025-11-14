@@ -635,6 +635,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4091430041705806}
   - component: {fileID: 95750468323761140}
+  - component: {fileID: 8048385997920756131}
   m_Layer: 0
   m_Name: model_gillman_red
   m_TagString: Untagged
@@ -669,7 +670,7 @@ Animator:
   m_GameObject: {fileID: 1352244576534100}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 261aa4850395ea148bf2519a5d061ca4, type: 3}
-  m_Controller: {fileID: 9100000, guid: abdcd9401f631644aa1218c78aa2b9ba, type: 2}
+  m_Controller: {fileID: 22100000, guid: 2981607fc586a1a428b2c32c633a0c86, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -680,6 +681,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8048385997920756131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1352244576534100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc16faf3b5740a24e956fcca96895eb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  height: 0
+  animator: {fileID: 95750468323761140}
 --- !u!1 &1358249682321024
 GameObject:
   m_ObjectHideFlags: 0

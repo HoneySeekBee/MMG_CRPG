@@ -49,7 +49,8 @@ namespace Application.Combat
                 throw new ArgumentException("StageId must be positive.", nameof(req.StageId));
 
             // (1) 유저 파티 로드하기  
-            var party = await _partyReader.GetByUserBattleAsync(req.UserId, req.BattleId, ct) ?? throw new InvalidOperationException($"Party {req.UserId} not found.");
+            var party = await _partyReader.GetByUserBattleAsync(req.UserId, req.BattleId, ct)
+                        ?? throw new InvalidOperationException($"Party {req.UserId} not found.");
 
             var filledSlots = party.Slots
                 .Where(s => s.UserCharacterId.HasValue)
@@ -60,17 +61,22 @@ namespace Application.Combat
                 throw new InvalidOperationException($"Party {req.BattleId} has no members.");
 
             //  (2) 파티에 포함된 UserCharacterId 목록 
-            var partyCharacterIds = filledSlots.Select(s => (long)s.UserCharacterId!.Value).Distinct().ToArray();
+            var partyCharacterIds = filledSlots
+                .Select(s => (long)s.UserCharacterId!.Value)
+                .Distinct()
+                .ToArray();
+
             // (3) 유저 캐릭터 + 레벨별 스탯 로드 
-            var userCharStats = await _userCharacterReader.GetManyByCharacterIdAsync(partyCharacterIds, req.UserId, ct);
+            var userCharStats = await _userCharacterReader
+                .GetManyByCharacterIdAsync(partyCharacterIds, req.UserId, ct);
 
             var statsByCharacterId = userCharStats
                 .ToDictionary(x => (long)x.CharacterId);
 
             var masterCharIds = partyCharacterIds;
+
             //  (5) 마스터 데이터 패키지 (스테이지 + 캐릭터 마스터) 
             var pack = await _master.BuildPackAsync(req.StageId, req.UserId, masterCharIds, ct);
-
 
             // (6) CombatInputSnapshot 생성 (PartyMember: 마스터 캐릭터ID + 유저레벨)
             var partyMembers = filledSlots.Select(s =>
@@ -86,9 +92,12 @@ namespace Application.Combat
                 );
             }).ToArray();
 
-            var input = new Domain.Entities.CombatInputSnapshot(req.StageId, partyMembers, Array.Empty<Domain.Entities.SkillInput>());
+            var input = new Domain.Entities.CombatInputSnapshot(
+                req.StageId,
+                partyMembers,
+                Array.Empty<Domain.Entities.SkillInput>());
 
-            // (7) Combat Aggregate 생성/저장 (이 부분은 거의 그대로)
+            // (7) Combat Aggregate 생성/저장
             var seed = BitConverter.ToInt64(Guid.NewGuid().ToByteArray(), 0);
             if (seed == 0) seed = 1;
 
@@ -102,10 +111,11 @@ namespace Application.Combat
             );
 
             var combatId = await _repo.SaveAsync(
-      combat,
-      events: Enumerable.Empty<Domain.Events.CombatLogEvent>(),
-      ct
-  );
+                combat,
+                events: Enumerable.Empty<Domain.Events.CombatLogEvent>(),
+                ct
+            );
+
             // 7-1) RuntimeState 먼저 생성
             _runtimeStates[combatId] = new CombatRuntimeState
             {
@@ -120,6 +130,7 @@ namespace Application.Combat
             var runtimeState = _runtimeStates[combatId];
             runtimeState.Snapshot = new CombatRuntimeSnapshot();
             runtimeState.MasterPack = pack;
+
             // (8) ActorInitDto 구성
             var actors = new List<ActorInitDto>();
 
@@ -176,7 +187,11 @@ namespace Application.Combat
                     Team = a.Team,
                     X = a.X,
                     Z = a.Z,
-                    Hp = a.Hp,                 
+
+                    SpawnX = a.X,
+                    SpawnZ = a.Z,
+
+                    Hp = a.Hp,
                     Atk = def.Atk,
                     Def = def.Def,
                     Spd = def.Spd,
@@ -184,12 +199,24 @@ namespace Application.Combat
                     AttackIntervalMs = def.AttackIntervalMs,
                     CritRate = def.CritRate,
                     CritDamage = def.CritDamage,
-
                     AttackCooldownMs = 0,
                     SkillCooldownMs = 0,
                     TargetActorId = null,
                     Waveindex = a.WaveIndex
                 };
+            }
+
+            // (9-1) ActiveActors 초기화 - 전투 시작 시점에 필드에 있는 애들 등록
+            // CombatRuntimeState 안에 ActiveActors가 Dictionary<long, ActorState> 라고 가정
+            runtimeState.ActiveActors.Clear();
+
+            // 플레이어는 항상 필드에 존재하므로 전부 ActiveActors 에 넣어줌
+            foreach (var a in runtimeState.Snapshot.Actors.Values)
+            {
+                if (a.Waveindex == runtimeState.CurrentWaveIndex && a.Hp > 0)
+                {
+                    runtimeState.ActiveActors[a.ActorId] = a;
+                }
             }
             // (10) 클라이언트 초기 스냅샷 반환
             var snapshot = new CombatInitialSnapshotDto(actors);
@@ -293,7 +320,7 @@ namespace Application.Combat
 
         public Task<CombatLogSummaryDto> GetSummaryAsync(long combatId, CancellationToken ct)
             => _repo.GetSummaryAsync(combatId, ct);
-       
+
         public async Task<CombatTickResponse> TickAsync(long combatId, int tick, CancellationToken ct)
         {
             if (!_runtimeStates.TryGetValue(combatId, out var state))
@@ -304,11 +331,14 @@ namespace Application.Combat
 
             lock (state.SyncRoot)
             {
+                // 1) 틱 처리 → 이벤트 수집
                 evs = _tickEngine.Process(state);
-                snapshot = _tickEngine.BuildSnapshot(state, evs);
+
+                // 2) 현재 상태 기준 스냅샷 
+                snapshot = _tickEngine.BuildSnapshot(state);
             }
 
-            //  DTO → 도메인 이벤트 변환해서 로그에 적재
+            // 3) 이벤트 로그 영속화
             if (evs.Count > 0)
             {
                 var domainEvents = evs.Select(e =>
@@ -325,7 +355,8 @@ namespace Application.Combat
                 await _repo.AppendLogsAsync(combatId, domainEvents, ct);
             }
 
-            return new CombatTickResponse(combatId, tick, snapshot);
+            // 4) 스냅샷 + 이벤트를 함께 반환
+            return new CombatTickResponse(combatId, tick, snapshot, evs);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Infrastructure.Provider
     public sealed class ProtoCombatMasterDataProvider : ICombatMasterDataProvider
     {
         private readonly IStageAssetReader _stageReader;
-        private readonly IMonsterStatReader _monsterReader;
+        private readonly Application.Combat.Engine.IMonsterStatReader _monsterReader;
         private readonly ICharacterAssetReader _characterReader;
         private readonly IRangeConfigReader _rangeReader;
 
@@ -22,7 +22,7 @@ namespace Infrastructure.Provider
 
         public ProtoCombatMasterDataProvider(
             IStageAssetReader stageReader,
-            IMonsterStatReader monsterReader,
+            Application.Combat.Engine.IMonsterStatReader monsterReader,
             ICharacterAssetReader characterReader,
             IRangeConfigReader rangeReader)
         {

@@ -25,9 +25,7 @@ public class CharacterAppearance : MonoBehaviour
     public void Set(CharacterModelPb modelData, bool isBattle = false)
     {
         Set_Size(modelData.BodySize, isBattle ? BattleSize : PartySetSize);
-        Set_Animator(modelData.Animation.ToString());
         CharacterCache characterCache = CharacterCache.Instance;
-
         string weaponLCode = modelData.WeaponLId == null ? string.Empty : characterCache.WeaponPartsById[modelData.WeaponLId ?? 0].Code;
         string weaponRCode = modelData.WeaponRId == null ? string.Empty : characterCache.WeaponPartsById[modelData.WeaponRId?? 0].Code;
         string headCode = modelData.PartHeadId == null ? string.Empty : characterCache.ModelPartsById[modelData.PartHeadId?? 0].PartKey;
@@ -80,19 +78,7 @@ public class CharacterAppearance : MonoBehaviour
             );
         }
     }
-    private async void Set_Animator(string key)
-    {
-        var controller = await AddressableManager.Instance.LoadAsync<RuntimeAnimatorController>(key + "_CONTROLLER");
-         
-        if (controller != null)
-        {
-            animController.Set_Controller(controller); 
-        }
-        else
-        {
-            Debug.LogError($"Animator Controller '{key + "_CONTROLLER"}' 로드 실패");
-        }
-    }
+   
     public void Set_Model(MeshFilter filter, string modelKey, bool isWeapon = false)
     {
         if (string.IsNullOrEmpty(modelKey))

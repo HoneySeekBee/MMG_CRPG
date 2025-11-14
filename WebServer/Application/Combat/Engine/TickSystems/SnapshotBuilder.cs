@@ -9,27 +9,22 @@ namespace Application.Combat.Engine.TickSystems
 {
     public sealed class SnapshotBuilder
     {
-        public CombatSnapshotDto Build(CombatRuntimeState s, List<CombatLogEventDto> tickEvents)
+        public CombatSnapshotDto Build(CombatRuntimeState s)
         {
-            var list = new List<ActorSnapshotDto>();
-
-            foreach (var a in s.Snapshot.Actors.Values)
+            var snapshot = new CombatSnapshotDto();
+            foreach (var actor in s.ActiveActors.Values)
             {
-                var evs = tickEvents
-                    .Where(e => e.Actor == a.ActorId.ToString())
-                    .ToList();
-
-                list.Add(new ActorSnapshotDto(
-                    ActorId: a.ActorId,
-                    X: a.X,
-                    Z: a.Z,
-                    Hp: a.Hp,
-                    Dead: a.Dead,
-                    Events: evs
-                ));
+                var aSnap = new ActorSnapshotDto
+                {
+                    ActorId = actor.ActorId,
+                    X = actor.X,
+                    Z = actor.Z,
+                    Hp = actor.Hp,
+                    Dead = actor.Dead,
+                };
+                snapshot.Actors.Add(aSnap);
             }
-
-            return new CombatSnapshotDto(list);
+            return snapshot;
         }
     }
 

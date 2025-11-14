@@ -15,24 +15,25 @@ namespace Application.Combat.Engine
         private readonly MovementSystem _move = new();
         private readonly AttackSystem _atk = new();
         private readonly DeathSystem _death = new();
-        private readonly WaveSystem _wave = new();
-        private readonly SnapshotBuilder _snapshot = new();
-
+        private readonly WaveSystem _wave = new(); 
+        private readonly SnapshotBuilder _snapshot = new SnapshotBuilder(); 
         public List<CombatLogEventDto> Process(CombatRuntimeState state)
         {
             var events = new List<CombatLogEventDto>();
+            if (state.BattleEnded)
+                return events;
 
             _commands.Run(state, events);
             _ai.Run(state, events);
             _move.Run(state, events);
             _atk.Run(state, events);
-            _death.Run(state, events); 
+            _death.Run(state, events);
             _wave.Run(state, events);
 
             return events;
         }
 
-        public CombatSnapshotDto BuildSnapshot(CombatRuntimeState s, List<CombatLogEventDto> events)
-            => _snapshot.Build(s, events);
+        public CombatSnapshotDto BuildSnapshot(CombatRuntimeState s)
+            => _snapshot.Build(s);
     }
 }

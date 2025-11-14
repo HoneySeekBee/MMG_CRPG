@@ -11,23 +11,38 @@ namespace Application.Combat.Engine.TickSystems
     {
         public void Run(CombatRuntimeState s, List<CombatLogEventDto> evs)
         {
-            foreach (var actor in s.Snapshot.Actors.Values.Where(a => !a.Dead))
+            foreach (var actor in s.ActiveActors.Values.Where(a => !a.Dead))
             {
                 if (actor.TargetActorId == null)
                     actor.TargetActorId = FindNearestEnemy(s, actor.ActorId);
             }
         }
-
         private long? FindNearestEnemy(CombatRuntimeState s, long actorId)
         {
-            var self = s.Snapshot.Actors[actorId];
+            if (!s.ActiveActors.TryGetValue(actorId, out var self))
+                return null;
 
-            return s.Snapshot.Actors.Values
-                .Where(a => a.Team != self.Team && !a.Dead)
-                .OrderBy(a => Distance(self, a))
-                .FirstOrDefault()?.ActorId;
+            float nearestDist = float.MaxValue;
+            long? nearestId = null;
+
+            foreach (var other in s.ActiveActors.Values)
+            {
+                if (other.Team == self.Team) continue;
+                if (other.Dead) continue;
+
+                float dx = other.X - self.X;
+                float dz = other.Z - self.Z;
+                float dist = MathF.Sqrt(dx * dx + dz * dz);
+
+                if (dist < nearestDist)
+                {
+                    nearestDist = dist;
+                    nearestId = other.ActorId;
+                }
+            }
+
+            return nearestId;
         }
-
         private float Distance(ActorState a, ActorState b)
         {
             float dx = a.X - b.X;

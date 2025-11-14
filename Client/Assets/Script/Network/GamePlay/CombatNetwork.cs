@@ -137,5 +137,25 @@ public class CombatNetwork
             onDone?.Invoke(res);
         });
     }
+    public IEnumerator TickAsync(long combatId, int tick, Action<ApiResult<CombatTickResponsePb>> onDone)
+    {
+        string url = ApiRoutes.CombatTick(combatId);
+        // ¿¹: /api/pb/combat/{combatId}/tick
 
+        var req = new CombatTickRequestPb
+        {
+            CombatId = combatId,
+            Tick = tick
+        };
+
+        Debug.Log($"[CombatNetwork] Tick: {url}, tick={tick}");
+
+        yield return Http.Post(url, req, CombatTickResponsePb.Parser, res =>
+        {
+            if (!res.Ok)
+                Debug.LogError($"[CombatNetwork] Tick ½ÇÆÐ: {res.Message}");
+
+            onDone?.Invoke(res);
+        });
+    }
 }

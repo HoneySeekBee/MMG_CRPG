@@ -40,36 +40,42 @@ namespace Application.Combat
     public sealed record CharacterMasterDto(long CharacterId, int BaseHp, int BaseAtk, int BaseDef, int BaseAspd /* ... */);
     public sealed record SkillMasterDto(long SkillId, int CooldownMs, float Coeff /* ... */);
 
- 
+    public sealed class CombatSnapshotDto
+    {
+        public List<ActorSnapshotDto> Actors { get; init; } = new();
+    }
 
-    public sealed record CombatSnapshotDto(
-        IReadOnlyList<ActorSnapshotDto> Actors
-    );
 
-    public sealed record ActorSnapshotDto(
-        long ActorId,
-        float X,
-        float Z,
-        int Hp,
-        bool Dead,
-        IReadOnlyList<CombatLogEventDto> Events
-    ); 
+    public sealed class ActorSnapshotDto
+    {
+        public long ActorId { get; init; }
+        public float X { get; init; }
+        public float Z { get; init; }
+        public int Hp { get; init; }
+        public bool Dead { get; init; }
+         
+    }
     public sealed class CombatTickRequest
     {
         public int Tick { get; set; }
     }
-
     public sealed class CombatTickResponse
     {
         public long CombatId { get; }
         public int Tick { get; }
         public CombatSnapshotDto Snapshot { get; }
+        public IReadOnlyList<CombatLogEventDto> Events { get; }
 
-        public CombatTickResponse(long combatId, int tick, CombatSnapshotDto snapshot)
+        public CombatTickResponse(
+            long combatId,
+            int tick,
+            CombatSnapshotDto snapshot,
+            IReadOnlyList<CombatLogEventDto> events)
         {
             CombatId = combatId;
             Tick = tick;
             Snapshot = snapshot;
+            Events = events ?? Array.Empty<CombatLogEventDto>();
         }
     }
     public sealed class MasterPackDto

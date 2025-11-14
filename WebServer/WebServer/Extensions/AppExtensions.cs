@@ -41,6 +41,7 @@ using Application.UserParties;
 using Infrastructure.Reader;
 using System.Collections.Concurrent;
 using Application.Combat.Engine;
+using Application.Combat.Engine.TickSystems;
 
 namespace WebServer.Extensions
 {
@@ -157,7 +158,7 @@ namespace WebServer.Extensions
             s.AddScoped<ICurrencyRepository, EFCurrencyRepository>();
             s.AddScoped<ICurrencyService, CurrencyService>();
 
-            #region Contents 
+            #region Contents  
             s.AddScoped<IUserPartyReader, EfUserPartyReader>();
             s.AddScoped<ICombatService, CombatService>();
             s.AddScoped<ICombatRepository, EfCombatRepository>(); 
@@ -170,7 +171,7 @@ namespace WebServer.Extensions
             s.AddScoped<ICharacterReader, EfCharacterReader>();
             s.AddScoped<ISkillReader, EfSkillReader>(); 
             s.AddScoped<ICombatTickEngine, CombatTickEngine>();
-            s.AddScoped<IMonsterStatReader, MonsterStatReader>();
+            s.AddScoped<Application.Combat.Engine.IMonsterStatReader, MonsterStatReader>();
             #endregion
 
             // 전투 엔진

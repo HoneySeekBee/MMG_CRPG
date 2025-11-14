@@ -10,7 +10,7 @@ namespace Application.Combat.Engine
     public interface ICombatTickEngine
     {
         List<CombatLogEventDto> Process(CombatRuntimeState state);
-        CombatSnapshotDto BuildSnapshot(CombatRuntimeState s, List<CombatLogEventDto> events);
+        CombatSnapshotDto BuildSnapshot(CombatRuntimeState s);
 
 
     }

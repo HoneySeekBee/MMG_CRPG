@@ -6,34 +6,48 @@ public class CharacterAnimationController : MonoBehaviour
 {
     [SerializeField] private Animator animator;
 
+    bool isMove;
     public void Set_Controller(RuntimeAnimatorController controller)
     {
+        isMove = false;
         animator.runtimeAnimatorController = controller;
+    }
+    public void Play_GetHit(bool isCrit)
+    {
+        isMove = false;
+        string key = isCrit == false ? "GetHit01" : "GetHit02";
+        animator.Play(key);
     }
     public void PlayIdle(bool battle)
     {
-        animator.SetBool("InBattle", battle);
+        isMove = false;
+        animator.Play("Idle_Battle", 0, 0);
     }
 
     public void PlayMove(float speed)
     {
-        animator.SetBool("IsMoving", speed > 0.01f);
-        animator.SetFloat("MoveSpeed", speed);
+        if (isMove)
+            return;
+        isMove = true;
+        animator.SetTrigger("isMove");
     }
 
-    public void PlayAttack(int type)
+    public void PlayAttack(bool isCrit)
     {
-        // 1 = normal, 2 = crit
-        animator.SetTrigger(type == 1 ? "Attack01" : "Attack02");
+        isMove = false;
+        string key = isCrit == false ? "Attack01" : "Attack02";
+        animator.Play(key, 0, 0);
     }
 
     public void PlaySkill()
     {
-        animator.SetTrigger("Skill");
+        isMove = false;
+        animator.Play("Skill", 0, 0);
     }
 
     public void PlayDie()
     {
-        animator.SetTrigger("Die");
+        isMove = false;
+        animator.Play("Die", 0, 0);
     }
 }

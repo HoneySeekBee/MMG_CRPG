@@ -10224,6 +10224,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4229017260248700}
   - component: {fileID: 95321712878142246}
+  - component: {fileID: 8108932562692025585}
   m_Layer: 0
   m_Name: model_slime_contaminated
   m_TagString: Untagged
@@ -10259,7 +10260,7 @@ Animator:
   m_GameObject: {fileID: 1975511107788428}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 00fd31736571eff4eabbac76f3c5e9d3, type: 3}
-  m_Controller: {fileID: 9100000, guid: 7d3b6127e7ed37942b43f1a7838b4106, type: 2}
+  m_Controller: {fileID: 22100000, guid: f8b4cca07bcf9d341a5db5593da907bd, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -10270,3 +10271,17 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8108932562692025585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1975511107788428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc16faf3b5740a24e956fcca96895eb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  height: 0
+  animator: {fileID: 95321712878142246}

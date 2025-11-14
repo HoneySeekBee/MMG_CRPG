@@ -12,8 +12,11 @@ namespace Application.Combat.Runtime
         public int Team { get; init; }
         public float X { get; set; }
         public float Z { get; set; }
+        public float SpawnX { get; set; }
+        public float SpawnZ { get; set; }
         public int Hp { get; set; }
-        public bool Dead => Hp <= 0;
+        public bool Dead { get; set; }
+        public bool ReturningToSpawn { get; set; }
 
         // 전투 스텟 
         public int Atk { get; set; }

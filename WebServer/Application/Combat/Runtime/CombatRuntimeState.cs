@@ -26,6 +26,8 @@ namespace Application.Combat.Runtime
         public object SyncRoot { get; } = new();
         public CombatStageDef StageDef { get; }
         public Dictionary<long, ActorState> ActiveActors { get; } = new();
+        public bool WaitingNextWave { get; set; }
+        public int? NextWaveSpawnMs { get; set; }
     }
     public enum CombatBattlePhase
     {

@@ -17,6 +17,7 @@ using UnityEngine.TextCore.Text;
 using WebServer.Protos.Monsters;
 using Unity.VisualScripting;
 using Google.Protobuf.WellKnownTypes;
+using System;
 
 public class BattleMapManager : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class BattleMapManager : MonoBehaviour
     // Network
     private CombatNetwork _combatNetwork;
     private long _combatId;
+    private int _clientTick;
     private StartCombatResponsePb _combatStart;
 
     // Map / Wave
@@ -32,16 +34,24 @@ public class BattleMapManager : MonoBehaviour
     [SerializeField] private Dictionary<int, BatchSlot> monsterSlotByIndex = new();
     private readonly Dictionary<long, GameObject> _actorObjects = new(); //  ActorId → GameObject
     private readonly List<long> _enemyActorIds = new();
-
+    private readonly Dictionary<long, CombatTeam> _actorTeams = new();
+    private readonly Dictionary<long, int> _actorWaveIndex = new();
+    private readonly Dictionary<long, ActorLastState> _lastStates = new();
+    private class ActorLastState
+    {
+        public Vector3 Pos;
+        public int Hp;
+        public bool Dead;
+    }
     [SerializeField] private GameObject MonsterBasePrefab;
     [SerializeField] private GameObject UserPartyObj;
      
     private StagePb stageData;
     [Header("몬스터 관련")]
     [SerializeField] private PartySlot[] monsterSlots;
-
     private string _logCursor = "";
     private bool _battleEnded = false;
+
 
     private void Awake()
     {
@@ -133,144 +143,186 @@ public class BattleMapManager : MonoBehaviour
         // [1] 게임 시작 
         yield return popup.StartCoroutine(popup.ShowStart());
 
+        // (1) 파티 구성원들의 애니메이션 
+        Debug.Log("유저 캐릭터들 등장 애니메이션");
+
+        // (2) 맵 이동
+
+
         int currentWave = 0;
         WavePb[] waves = stageData.Waves.OrderBy(x => x.Index).ToArray();
 
-        Vector3 goalPos = new Vector3(0, 1.5f, 0);
-
+        Vector3 goalPos = new Vector3(0, 1.5f, 0); 
         for (int b = 1; b < stageData.Batches.Count; b++)
-        {
-            goalPos.x = b * 20 - 5;
-            UserPartyObj.transform.DOMove(goalPos, 1f).SetEase(Ease.InOutSine);
+        { 
             yield return new WaitForSeconds(1f);
 
             bool isBattle = (currentWave < waves.Length && waves[currentWave].BatchNum == b);
 
             if (isBattle)
             {
-                Debug.Log($"웨이브 {currentWave} 시작");
+                var waveIndex = waves[currentWave].Index;
+                Debug.Log($"웨이브 {waveIndex} 시작"); 
 
                 // 해당 Wave 몬스터 활성화
                 ActivateServerActorsForWave(waves[currentWave].Index);
 
                 // 서버 틱 폴링 시작
-                yield return StartCoroutine(PollCombat());
+                yield return StartCoroutine(TickLoop(waveIndex));
 
                 currentWave++;
-            }
+            } 
         }
     }
-    private IEnumerator PollCombat()
+    private IEnumerator TickLoop(int waveIndex)
     {
-        while (!_battleEnded)
+        bool waveEnded = false;
+
+        while (!waveEnded && !_battleEnded)
         {
-            yield return _combatNetwork.GetLogAsync(
+            yield return _combatNetwork.TickAsync(
                 _combatId,
-                _logCursor,
-                size: 50,
+                _clientTick,
                 res =>
                 {
-                    if (!res.Ok) return;
+                    if (!res.Ok)
+                    {
+                        Debug.Log("[TickLoop Error] " + res.Message);
+                        return;
+                    }
 
-                    CombatLogPagePb page = res.Data;
+                    var snapshot = res.Data.Snapshot;
+                    var events = res.Data.Events;
+                    ApplyTickSnapshot(snapshot, events);
 
-                    // cursor 업데이트
-                    if (!string.IsNullOrEmpty(page.NextCursor))
-                        _logCursor = page.NextCursor;
+                    // 패배 판정용: 플레이어 살아있는지
+                    bool anyPlayerAlive = snapshot.Actors != null &&
+                                          snapshot.Actors.Any(a =>
+                                              _actorTeams.TryGetValue(a.ActorId, out var team) &&
+                                              team == CombatTeam.Player &&
+                                              !a.Dead);
 
-                    foreach (var ev in page.Items)
-                        HandleCombatEvent(ev);
-
-                    // 종료 처리
-                    if (page.Items.Any(x => x.Type == "stage_cleared"))
+                    if (!anyPlayerAlive)
+                    {
                         _battleEnded = true;
+                        waveEnded = true;
+                        Debug.Log("[BattleMap] 전투 종료: lose");
+                        _clientTick++;
+                        return;
+                    }
+
+                    // 서버에서 온 CombatLog/이벤트 확인 
+                    foreach (var ev in events)
+                    {
+                        switch (ev.Type)
+                        {
+                            case "wave_cleared":
+                                {
+                                    // wave 번호 확인
+                                    int evWaveIndex = -1;
+                                    if (ev.Extra != null && ev.Extra.Fields.TryGetValue("wave", out var v))
+                                    {
+                                        // 서버에서 wave 인덱스를 string으로 넣었으면:
+                                        if (v.KindCase == Value.KindOneofCase.StringValue)
+                                            int.TryParse(v.StringValue, out evWaveIndex);
+                                        // number로 넣었으면:
+                                        else if (v.KindCase == Value.KindOneofCase.NumberValue)
+                                            evWaveIndex = (int)v.NumberValue;
+                                    }
+
+                                    Debug.Log($"[BattleMap] wave_cleared 이벤트 수신. evWaveIndex={evWaveIndex}, current={waveIndex}");
+
+                                    // 현재 틱루프가 처리 중인 웨이브와 같으면 종료
+                                    if (evWaveIndex == waveIndex)
+                                    {
+                                        waveEnded = true;
+                                        Debug.Log($"[BattleMap] 웨이브 {waveIndex} 종료 (서버 wave_cleared)");
+                                    }
+                                    break;
+                                }
+
+                            case "stage_cleared":
+                                {
+                                    _battleEnded = true;
+                                    waveEnded = true;
+                                    Debug.Log("[BattleMap] 스테이지 클리어 (stage_cleared)");
+                                    break;
+                                }
+
+                            case "hit":
+                                {
+                                    // 필요하면 여기서도 이펙트 처리 가능 
+                                    break;
+                                }
+                        }
+                    }
+
+                    _clientTick++;
                 });
 
             yield return new WaitForSeconds(0.1f);
         }
-    }
-    private void HandleCombatEvent(CombatLogEventPb ev)
-    {
-        switch (ev.Type)
-        {
-            case "spawn":
-                HandleSpawn(ev);
-                break;
 
-            case "hit":
-                ApplyDamage(ev);
-                break;
-
-            case "death":
-                HandleDeath(ev);
-                break;
-
-            case "wave_cleared":
-                int wave = GetWaveIndexFromExtra(ev);
-                Debug.Log($"웨이브 완료: {wave}");
-                break;
-
-            case "stage_cleared":
-                Debug.Log("전투 종료");
-                break;
-        }
-    }
-    private void HandleSpawn(CombatLogEventPb ev)
-    {
-        long actorId = long.Parse(ev.Actor);
-        int wave = GetWaveIndexFromExtra(ev);
-
-        Debug.Log($"[Spawn] enemy {actorId} wave={wave}");
-
-        if (_actorObjects.TryGetValue(actorId, out var go))
-        {
-            go.SetActive(true);
-        }
-        else
-        {
-            Debug.LogWarning($"[Spawn] actorId={actorId} 에 해당하는 오브젝트가 없습니다.");
-        }
-    }
-    private int GetWaveIndexFromExtra(CombatLogEventPb ev)
-    {
-        if (ev.Extra == null)
-            return -1;
-
-        // ev.Extra.Fields["wave"] 로 접근해야 함
-        if (ev.Extra.Fields.TryGetValue("wave", out Value v))
-        {
-            // 서버에서 string으로 넣었으니 StringValue 사용
-            if (int.TryParse(v.StringValue, out int wave))
-                return wave;
-        }
-
-        return -1;
-    } 
-    private void ApplyDamage(CombatLogEventPb ev)
-    {
-        if (!_actorObjects.TryGetValue(long.Parse(ev.Target), out var obj))
-            return;
-
-        var view = obj.GetComponent<CombatActorView>();
-        if (view == null)
-            return;
-
-        int dmg = ev.Damage ?? 0;
-        bool isCrit = ev.Crit ?? false;
-
-        view.ApplyDamage(dmg, isCrit);
+        Debug.Log("[BattleMap] TickLoop 종료");
     }
 
-    private void HandleDeath(CombatLogEventPb ev)
+    private void ApplyTickSnapshot(CombatSnapshotPb snapshot, IList<CombatLogEventPb> eventsThisTick)
     {
-        long actorId = long.Parse(ev.Actor);
-
-        if (_actorObjects.TryGetValue(actorId, out GameObject go))
+        foreach (var a in snapshot.Actors)
         {
-            go.SetActive(false);
-        }
+            if (!_actorObjects.TryGetValue(a.ActorId, out var go))
+                continue;
 
-        Debug.Log($"[DEATH] actor={actorId}");
+            var view = go.GetComponent<CombatActorView>();
+            if (view == null)
+                continue;
+
+            if (!_lastStates.TryGetValue(a.ActorId, out var prev))
+            {
+                prev = new ActorLastState
+                {
+                    Pos = view.transform.position,
+                    Hp = view.Hp,
+                    Dead = false
+                };
+            }
+
+            var newPos = new Vector3(a.X, 0, a.Z);
+            float moveDist = Vector3.Distance(prev.Pos, newPos);
+
+            view.transform.position = newPos;
+
+            bool isMoving = moveDist > 0.01f && !a.Dead;
+            if (isMoving)
+                view.PlayMove();
+            else if (!a.Dead)
+                view.PlayIdle();
+
+            int prevHp = prev.Hp;
+            view.SetHp(a.Hp);
+            int damage = Mathf.Max(0, prevHp - a.Hp);
+
+            string myId = a.ActorId.ToString();
+
+            //  이 틱에서 나와 관련된 이벤트들
+            bool didAttackThisTick = eventsThisTick.Any(ev => ev.Type == "hit" && ev.Actor == myId);
+            bool gotHitThisTick = eventsThisTick.Any(ev => ev.Type == "hit" && ev.Target == myId);
+            bool isCrit = eventsThisTick.Any(ev => ev.Type == "hit" && ev.Target == myId && (ev.Crit ?? false));
+
+            if (didAttackThisTick && !a.Dead)
+                view.PlayAttack(isCrit);
+
+            if (damage > 0 && gotHitThisTick)
+                view.PlayHitFx(isCrit);
+
+            if (!prev.Dead && a.Dead)
+                view.OnDie();
+
+            prev.Pos = newPos;
+            prev.Hp = a.Hp;
+            prev.Dead = a.Dead;
+            _lastStates[a.ActorId] = prev;
+        }
     }
     #endregion
 
@@ -278,10 +330,14 @@ public class BattleMapManager : MonoBehaviour
     {
         _actorObjects.Clear();
         _enemyActorIds.Clear();
+        _actorTeams.Clear();
+        _actorWaveIndex.Clear();
 
         foreach (var actor in snapshot.Actors)
         {
             GameObject go = GetPrefabByModelCode(actor.MasterId, actor.Team, actor.WaveIndex);
+            CombatActorView actorView = go.GetComponent<CombatActorView>();
+            actorView.InitFromServer(actor.ActorId, actor.Team, actor.Hp);
             go.transform.parent = this.transform;
 
             Vector3 worldPos = new Vector3(actor.X, 0, actor.Z); // 필요하면 offset 추가 
@@ -295,6 +351,8 @@ public class BattleMapManager : MonoBehaviour
                 _enemyActorIds.Add(actor.ActorId);
             } 
             _actorObjects[actor.ActorId] = go;
+            _actorTeams[actor.ActorId] = (CombatTeam)actor.Team;
+            _actorWaveIndex[actor.ActorId] = actor.WaveIndex;
         }
         Debug.Log($"[BattleMap] SetupActorsFromSnapshot 완료. Actors={snapshot.Actors.Count}");
     }
@@ -307,8 +365,8 @@ public class BattleMapManager : MonoBehaviour
             GameObject character = PartySetManager.Instance.GetCharacterObject();
             // 유저 파티
             Debug.Log($"[character ] {actorId} {CharacterCache.Instance.DetailById[(int)actorId].Name}");
-            CharacterAppearance appearance = character.GetComponent<CharacterAppearance>();
-            appearance.Set(CharacterCache.Instance.CharacterModelById[(int)actorId], true);
+            CharacterBase chaBase = character.GetComponent<CharacterBase>();
+            chaBase.Set(CharacterCache.Instance.CharacterModelById[(int)actorId], true);
 
             return character;
         }
@@ -331,8 +389,38 @@ public class BattleMapManager : MonoBehaviour
     {
         if (!MonstersByWaves.ContainsKey(waveIndex)) return;
 
+        Debug.Log($"Wave {waveIndex} 활성화 : {MonstersByWaves[waveIndex].Count}");
         foreach (var monster in MonstersByWaves[waveIndex])
             monster.gameObject.SetActive(true); 
     }
+    private List<CombatActorView> GetAlivePlayerActors()
+    {
+        var result = new List<CombatActorView>();
 
+        foreach (var kv in _actorObjects)
+        {
+            long actorId = kv.Key;
+            GameObject go = kv.Value;
+
+            // 팀 정보 없으면 스킵
+            if (!_actorTeams.TryGetValue(actorId, out var team))
+                continue;
+
+            // 플레이어 팀만
+            if (team != CombatTeam.Player)
+                continue;
+
+            var view = go.GetComponent<CombatActorView>();
+            if (view == null)
+                continue;
+
+            // 살아있는 애만 (Hp > 0 기준, 필요하면 view.IsDead 같은 플래그 써도 됨)
+            if (view.Hp <= 0)
+                continue;
+
+            result.Add(view);
+        }
+
+        return result;
+    }
 }

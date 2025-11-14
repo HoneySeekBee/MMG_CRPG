@@ -160,6 +160,7 @@
     <Compile Include="Assets\Script\GamePlay\BatchSlot.cs" />
     <Compile Include="Assets\Script\GamePlay\Character\CharacterAnimationController.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CroakLand.cs" />
+    <Compile Include="Assets\Script\GamePlay\Character\Monster\MonsterModelData.cs" />
     <Compile Include="Assets\Script\UI\User\UserCharacterUI.cs" />
     <Compile Include="Assets\Script\GamePlay\Character\CharacterAppearance.cs" />
     <Compile Include="Assets\Script\Scenes\Lobby\UserProfileIUI.cs" />
@@ -201,6 +202,7 @@
     <Compile Include="Assets\Script\Network\ApiRoutes.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\PatrolByPointsCharacterState.cs" />
     <Compile Include="Assets\Script\UI\UIPrefabPool.cs" />
+    <Compile Include="Assets\Script\UI\HpCanvasController.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Obstacle\LadderObstacle.cs" />
     <Compile Include="Assets\Script\Cache\BattleContentsCache.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CandyKing.cs" />

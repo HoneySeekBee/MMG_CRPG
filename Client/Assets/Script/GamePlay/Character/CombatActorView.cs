@@ -60,7 +60,7 @@ public class CombatActorView : MonoBehaviour
         // TODO: 피격 애니메이션, 크리일 때 살짝 다르게, 카메라 흔들기 등
     }
 
-    protected virtual void OnDie()
+    public virtual void OnDie()
     {
         if (DeadEffect != null)
             Instantiate(DeadEffect, transform.position, Quaternion.identity);
@@ -68,4 +68,19 @@ public class CombatActorView : MonoBehaviour
         // 기본 구현: 그냥 꺼버리기
         gameObject.SetActive(false);
     }
+
+    public virtual void PlayMove()
+    {
+
+    }
+
+    public virtual void PlayIdle()
+    {
+
+    }
+    public virtual void PlayAttack(bool isCrit)
+    {
+
+    }
+
 }
