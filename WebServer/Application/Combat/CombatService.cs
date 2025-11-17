@@ -1,8 +1,13 @@
 ﻿using Application.Combat.Engine;
 using Application.Combat.Runtime;
+using Application.Contents.Stages;
 using Application.Repositories;
+using Application.StageReward;
 using Application.UserCharacter;
+using Application.UserCurrency;
 using Application.UserParties;
+using Application.Users;
+using Domain.Entities.Contents;
 using Domain.Enum;
 using Domain.Services;
 using Microsoft.EntityFrameworkCore;
@@ -25,16 +30,30 @@ namespace Application.Combat
         private readonly IUserPartyReader _partyReader;
         private readonly IUserCharacterReader _userCharacterReader;
         private readonly ICombatTickEngine _tickEngine;
+
+        // 전투 종료시 사용되는 서비스 
+        private readonly IUserStageProgressService _stageProgress;
+        private readonly IStageRewardService _stageReward;
+        private readonly IWalletService _wallet;
+        private readonly IStagesService _stages;
+        private readonly IClock _clock;
+
+
         private const int MaxPageSize = 500;
         private static readonly ConcurrentDictionary<long, CombatRuntimeState> _runtimeStates = new();
 
         public CombatService(
-            IMasterDataProvider master,
-            ICombatRepository repo,
-            ICombatEngine engine,
-            IUserPartyReader partyReader,
-            IUserCharacterReader userCharacterReader,
-             ICombatTickEngine tickEngine)
+       IMasterDataProvider master,
+       ICombatRepository repo,
+       ICombatEngine engine,
+       IUserPartyReader partyReader,
+       IUserCharacterReader userCharacterReader,
+       ICombatTickEngine tickEngine,
+       IUserStageProgressService stageProgress,
+       IStageRewardService stageReward,
+       IWalletService wallet,
+       IStagesService stages,
+       IClock clock)
         {
             _master = master;
             _repo = repo;
@@ -42,6 +61,12 @@ namespace Application.Combat
             _partyReader = partyReader;
             _userCharacterReader = userCharacterReader;
             _tickEngine = tickEngine;
+
+            _stageProgress = stageProgress;
+            _stageReward = stageReward;
+            _wallet = wallet;
+            _stages = stages;
+            _clock = clock;
         }
         public async Task<StartCombatResponse> StartAsync(StartCombatRequest req, CancellationToken ct)
         {
@@ -121,6 +146,7 @@ namespace Application.Combat
             {
                 CombatId = combatId,
                 StageId = req.StageId,
+                UserId = req.UserId,
                 Seed = seed,
                 StartedAt = DateTimeOffset.UtcNow,
                 CurrentWaveIndex = 1,
@@ -278,6 +304,70 @@ namespace Application.Combat
                 combat.ClientVersion,
                 eventsShort
             );
+        }
+        public async Task<FinishCombatResponse> FinishAsync(FinishCombatRequest req, CancellationToken ct)
+        {
+            if (!_runtimeStates.TryGetValue(req.CombatId, out var state))
+                throw new KeyNotFoundException($"Combat {req.CombatId} not found");
+
+            // (1) 다른 유저가 Finish 못하게
+            if (state.UserId != req.UserId)
+                throw new InvalidOperationException("COMBAT_USER_MISMATCH");
+
+            // (2) 아직 서버 상태에서 전투가 안 끝났으면 막기
+            if (!state.BattleEnded)
+                throw new InvalidOperationException("COMBAT_NOT_FINISHED");
+
+            // (3) 승패/별 계산 
+            bool success = true; 
+            StageStars stars = CalculateStars(state, success);
+
+            // (4) 보상 + 진행도 + 지갑 처리 전부 StageRewardService에 위임
+            var rewardResult = await _stageReward.GrantRewardsAsync(
+      userId: req.UserId,
+      stageId: state.StageId,
+      success: success,
+      stars: stars,
+      nowUtc: _clock.UtcNow.UtcDateTime,
+      ct: ct);
+
+            // (5) runtime state 정리 (메모리 누수 방지)
+            _runtimeStates.TryRemove(req.CombatId, out _);
+
+            // (6) 클라로 보낼 DTO로 매핑 
+            var items = rewardResult.Rewards
+                .Select(r => new GainedItemDto(
+                    ItemId: r.ItemId,
+                    Qty: (int)r.Qty,
+                    IsFirstClearReward: r.FirstClearReward))
+                .ToList();
+
+            return new FinishCombatResponse(
+        StageId: rewardResult.StageId,
+        Stars: stars,
+        FirstClear: rewardResult.IsFirstClear,
+        Items: items,
+        Gold: rewardResult.Gold,
+        Gem: rewardResult.Gem,
+        Token: rewardResult.Token
+    );
+        }
+        private StageStars CalculateStars(CombatRuntimeState state, bool success)
+        {
+            if (!success)
+                return StageStars.Zero;
+
+            var players = state.Snapshot.Actors.Values
+                .Where(a => a.Team == 0)
+                .ToList();
+
+            int deadCount = players.Count(a => a.Dead || a.Hp <= 0);
+
+            if (deadCount <= 0)
+                return StageStars.Three;
+            if (deadCount < 3)
+                return StageStars.Two;
+            return StageStars.One;
         }
         public async Task EnqueueCommandAsync(long combatId, CombatCommandDto cmd, CancellationToken ct)
         {

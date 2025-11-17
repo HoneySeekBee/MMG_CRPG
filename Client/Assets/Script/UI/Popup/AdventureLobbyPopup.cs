@@ -24,11 +24,14 @@ public class AdventureLobbyPopup : UIPopup
     private readonly List<StageButtonPopup> _pool = new();
     private readonly List<StageButtonPopup> _activeButtons = new();
 
+    [SerializeField] private Button beforeBtn;
+
     public void Set()
     { 
         UserPartyNetwork partyNetwork = NetworkManager.Instance.PartyNetwork;
         StartCoroutine(partyNetwork.GetPartyAsync(NetworkManager.BATTLE_ADVENTURE));
-
+        beforeBtn.onClick.RemoveAllListeners();
+        beforeBtn.onClick.AddListener(() => LobbyRootController.Instance.Show("Battle"));
         var cache = BattleContentsCache.Instance;
         var user = GameState.Instance.CurrentUser;
         var progMgr = user.StageProgress;
@@ -225,7 +228,7 @@ public class AdventureLobbyPopup : UIPopup
         {
             var btn = _activeButtons[i];
             btn.gameObject.SetActive(false);
-            // 필요하면 공용 부모로 옮겨도 되고, 그냥 두어도 됨
+            btn.transform.SetParent(this.transform, false);
             _pool.Add(btn);
         }
         _activeButtons.Clear();

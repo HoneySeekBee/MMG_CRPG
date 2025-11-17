@@ -23,20 +23,20 @@ MonoBehaviour:
     m_SerializedLabels:
     - UISprite
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 30d6a0d6f3b32405da9ff113866c34ac
+  - m_GUID: 34157d181beff524f82fc39e73e90601
     m_Address: Green
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UISprite
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 39f08bc366dc2874090ee78f14742c8b
+    m_Address: Gray
     m_ReadOnly: 0
     m_SerializedLabels:
     - UISprite
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 77f356499436245caab55dafd6a3006b
     m_Address: StarGray
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - UISprite
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ebd4078abdc1e4038961aa1423bb18bf
-    m_Address: Gray
     m_ReadOnly: 0
     m_SerializedLabels:
     - UISprite

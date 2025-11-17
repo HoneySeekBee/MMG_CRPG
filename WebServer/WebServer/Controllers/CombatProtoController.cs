@@ -1,5 +1,6 @@
 ﻿using Application.Combat;
 using Combat;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using WebServer.Mappers;
 
@@ -66,6 +67,45 @@ namespace WebServer.Controllers
         {
             var res = await _service.TickAsync(combatId, req.Tick, ct);
             return CombatProtoMapper.ToPb(res);
+        }
+
+        [HttpPost("{combatId:long}/finish")]
+        public async Task<ActionResult<FinishCombatResponsePb>> Finish([FromRoute] long combatId, [FromBody] FinishCombatRequestPb req, CancellationToken ct)
+        {
+            if (req.CombatId == 0)
+            {
+                req.CombatId = combatId;
+            }
+            else if (req.CombatId != combatId)
+            {
+                return BadRequest("COMBAT_ID_MISMATCH");
+            }
+
+            var appReq = new FinishCombatRequest(
+                CombatId: req.CombatId,
+                UserId: req.UserId
+            );
+
+            var result = await _service.FinishAsync(appReq, ct);
+
+            var pb = new FinishCombatResponsePb
+            {
+                StageId = result.StageId,
+                Stars = (int)result.Stars,       // enum -> int
+                FirstClear = result.FirstClear,
+                Gold = result.Gold,
+                Gem = result.Gem,
+                Token = result.Token
+            };
+
+            pb.Rewards.AddRange(result.Items.Select(i => new StageRewardItemPb
+            {
+                ItemId = i.ItemId,
+                Qty = i.Qty,
+                FirstClearReward = i.IsFirstClearReward
+            }));
+
+            return Ok(pb);
         }
     }
 }

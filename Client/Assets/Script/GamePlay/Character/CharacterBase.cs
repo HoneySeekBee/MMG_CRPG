@@ -53,4 +53,8 @@ public class CharacterBase : CombatActorView
     {
         Animator.PlayAttack(isCrit);
     }
+    public override void PlayVictory()
+    {
+        Animator.PlayVictory();
+    }
 }

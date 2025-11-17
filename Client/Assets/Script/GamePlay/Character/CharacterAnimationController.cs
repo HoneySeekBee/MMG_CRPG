@@ -23,13 +23,17 @@ public class CharacterAnimationController : MonoBehaviour
         isMove = false;
         animator.Play("Idle_Battle", 0, 0);
     }
-
+    public void PlayVictory()
+    {
+        isMove=false;
+        animator.Play("Victory", 0, 0);
+    }
     public void PlayMove(float speed)
     {
         if (isMove)
             return;
         isMove = true;
-        animator.SetTrigger("isMove");
+        animator.Play("MoveFWD", 0, 0); 
     }
 
     public void PlayAttack(bool isCrit)

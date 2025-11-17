@@ -32,7 +32,7 @@ public class StageButtonPopup : UIPopup
                 StageStars[i].sprite = (i <= score - 1) ? yellowStar : grayStar;
             }
         }
-        StageButtonImage.sprite = isActive ? UIImageCache.Instance.Get(UIImageCache.ButtonGreenKey) : UIImageCache.Instance.Get(UIImageCache.ButtonGreenKey);
+        StageButtonImage.sprite = isActive ? UIImageCache.Instance.Get(UIImageCache.ButtonGreenKey) : UIImageCache.Instance.Get(UIImageCache.ButtonGrayKey);
         StarObj.SetActive(isActive);
         LockObj.SetActive(!isActive);
     }

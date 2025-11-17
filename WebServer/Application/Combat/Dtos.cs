@@ -1,4 +1,5 @@
 ﻿using Application.Contents.Stages;
+using Domain.Entities.Contents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,13 +17,13 @@ namespace Application.Combat
         long CombatId,
         IReadOnlyList<CombatLogEventDto> Items,
         string? NextCursor
-    ); 
+    );
     public sealed record ActorInitDto(
         long ActorId,
         int Team,          // 0 = Player, 1 = Enemy (enum으로 빼도 됨)
         float X,
         float Z,
-        int Hp, 
+        int Hp,
         int WaveIndex,
         long MasterId
     );
@@ -53,7 +54,7 @@ namespace Application.Combat
         public float Z { get; init; }
         public int Hp { get; init; }
         public bool Dead { get; init; }
-         
+
     }
     public sealed class CombatTickRequest
     {
@@ -91,4 +92,21 @@ namespace Application.Combat
             Actors = actors;
         }
     }
+    public sealed record FinishCombatRequest(long CombatId, int UserId);
+
+    public sealed record GainedItemDto(
+        int ItemId,
+        int Qty,
+        bool IsFirstClearReward
+    );
+
+    public sealed record FinishCombatResponse(
+        int StageId,
+        StageStars Stars,
+        bool FirstClear,
+        IReadOnlyList<GainedItemDto> Items,
+        long Gold,
+        long Gem,
+        long Token
+    );
 }

@@ -81,6 +81,7 @@ public class AdventureDetailPopup : UIPopup
     private void Play(StagePb data)
     {
         Debug.Log($"{data.Chapter}-{data.Order} 실행하기");
+        this.gameObject.SetActive(false);
         LobbyRootController.Instance.Show("PartySet");
     }
 }

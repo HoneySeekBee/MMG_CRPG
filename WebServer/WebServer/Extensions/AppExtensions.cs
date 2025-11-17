@@ -42,6 +42,7 @@ using Infrastructure.Reader;
 using System.Collections.Concurrent;
 using Application.Combat.Engine;
 using Application.Combat.Engine.TickSystems;
+using Application.StageReward;
 
 namespace WebServer.Extensions
 {
@@ -171,6 +172,7 @@ namespace WebServer.Extensions
             s.AddScoped<ICharacterReader, EfCharacterReader>();
             s.AddScoped<ISkillReader, EfSkillReader>(); 
             s.AddScoped<ICombatTickEngine, CombatTickEngine>();
+            s.AddScoped<IStageRewardService, StageRewardService>();
             s.AddScoped<Application.Combat.Engine.IMonsterStatReader, MonsterStatReader>();
             #endregion
 

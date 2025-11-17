@@ -7,6 +7,7 @@ using Game.UICommon;
 using Google.Protobuf.WellKnownTypes;
 using System;
 using System.Collections;
+using UnityEditor.PackageManager;
 using UnityEngine;
 public class CombatNetwork
 {
@@ -154,6 +155,29 @@ public class CombatNetwork
         {
             if (!res.Ok)
                 Debug.LogError($"[CombatNetwork] Tick 실패: {res.Message}");
+
+            onDone?.Invoke(res);
+        });
+    }
+    public IEnumerator FinishCombatAsync( long combatId,   Action<ApiResult<FinishCombatResponsePb>> onDone)
+    {
+        var req = new FinishCombatRequestPb
+        {
+            CombatId = combatId,
+            UserId = _userId
+        };
+        // 예: /api/pb/combat/{combatId}/finish
+        string url = ApiRoutes.CombatFinish(combatId);
+
+        Debug.Log($"[CombatNetwork] FinishCombat: {url}, combatId={combatId}");
+
+        yield return Http.Post(url, req, FinishCombatResponsePb.Parser, (ApiResult<FinishCombatResponsePb> res) =>
+        {
+            if (!res.Ok)
+            {
+                Debug.LogError($"[CombatNetwork] FinishCombat 실패: {res.Message}");
+                _popup?.Show($"전투 종료 처리 실패: {res.Message}");
+            }
 
             onDone?.Invoke(res);
         });

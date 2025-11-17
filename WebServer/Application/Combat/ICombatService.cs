@@ -21,6 +21,7 @@ namespace Application.Combat
 
         Task<CombatLogSummaryDto> GetSummaryAsync(long combatId, CancellationToken ct);
         Task<CombatTickResponse> TickAsync(long combatId, int tick, CancellationToken ct);
+        Task<FinishCombatResponse> FinishAsync(FinishCombatRequest req, CancellationToken ct);
 
         // 선택: 보상 수령 등
         // Task<ClaimResponse> ClaimAsync(long combatId, CancellationToken ct);

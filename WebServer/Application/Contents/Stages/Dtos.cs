@@ -64,5 +64,6 @@ namespace Application.Contents.Stages
         // 목록 변환 헬퍼
         public static IReadOnlyList<StageSummaryDto> ToSummaryDtos(this IEnumerable<Stage> stages) =>
             stages.Select(ToSummaryDto).ToList();
+
     }
 }

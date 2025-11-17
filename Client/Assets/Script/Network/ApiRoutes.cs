@@ -57,6 +57,7 @@ public static class ApiRoutes
     public static string CombatSummary(long combatId) => $"/combat/{combatId}/summary";
     public static string CombatLog(long combatId, string cursor, int size) => $"/combat/{combatId}/log?cursor={cursor}&size={size}";
     public static string CombatTick(long combatId) => $"/combat/{combatId}/tick";
+    public static string CombatFinish(long combatId) => $"/combat/{combatId}/finish";
     #endregion
-
+     
 }

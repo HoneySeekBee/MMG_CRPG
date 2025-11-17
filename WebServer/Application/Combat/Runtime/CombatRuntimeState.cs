@@ -11,6 +11,7 @@ namespace Application.Combat.Runtime
         public int Tick { get; set; } = 0;
         public long CombatId { get; init; }
         public int StageId { get; init; }
+        public int UserId { get; set; }
         public long Seed { get; init; }
 
         public DateTimeOffset StartedAt { get; init; } = DateTimeOffset.UtcNow;

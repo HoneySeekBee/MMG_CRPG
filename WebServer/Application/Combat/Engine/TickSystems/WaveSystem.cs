@@ -9,70 +9,10 @@ using System.Threading.Tasks;
 namespace Application.Combat.Engine.TickSystems
 {
     public sealed class WaveSystem
-    {
-        public void StartWave(CombatRuntimeState s)
-        {
-            var stage = s.MasterPack?.Stage;
-            if (stage == null)
-            {
-                Console.WriteLine("[WaveSystem] StartWave: s.MasterPack.Stage is null");
-                return;
-            }
-
-            var wave = stage.Waves[s.CurrentWaveIndex];
-
-            foreach (var spawn in wave.Enemies)
-            {
-                var def = s.MasterPack.Actors[spawn.MonsterId]; // 기존 생성된 CombatActorDef
-                var actor = new ActorState
-                {
-                    ActorId = spawn.MonsterId,
-                    Team = 1, // 몬스터 팀
-                    Hp = def.MaxHp,
-                    Dead = false,
-                    Atk = def.Atk,
-                    Def = def.Def,
-                    Spd = def.Spd,
-                    Range = def.Range,
-                    AttackIntervalMs = def.AttackIntervalMs,
-                    CritRate = def.CritRate,
-                    CritDamage = def.CritDamage,
-                    TargetActorId = null,
-                    Waveindex = s.CurrentWaveIndex
-                };
-
-                // 초기 위치 잡기 (기본 X,Z 같은 것)
-                var (x, z) = PositionUtils.GetEnemyPositionBySlot(spawn.Slot);
-
-                actor.X = x;
-                actor.Z = z;
-                s.ActiveActors[actor.ActorId] = actor;
-            }
-        }
-        public void CheckWaveTransition(CombatRuntimeState s)
-        {
-            bool allEnemiesDead = s.ActiveActors.Values
-                .Where(a => a.Team == 1)
-                .All(a => a.Dead);
-
-            if (!allEnemiesDead)
-                return;
-
-            // 다음 웨이브 존재?
-            if (s.CurrentWaveIndex + 1 < s.StageDef.Waves.Count)
-            {
-                s.CurrentWaveIndex++;
-                StartWave(s);
-            }
-            else
-            {
-                s.BattleEnded = true; // 전투 종료
-            }
-        }
-
-
+    {  
         public void Run(CombatRuntimeState s, List<CombatLogEventDto> evs)
         {
+            Console.WriteLine($"[WaveSystem] tick: curWave={s.CurrentWaveIndex}, WaitingNextWave={s.WaitingNextWave}, NextWaveSpawnMs={s.NextWaveSpawnMs}");
             if (s.BattleEnded)
                 return;
 
@@ -90,14 +30,20 @@ namespace Application.Combat.Engine.TickSystems
             {
                 if (!s.NextWaveSpawnMs.HasValue)
                 {
-                    bool allPlayersAtSpawn = s.ActiveActors.Values
-             .Where(a => a.Team == 0 && !a.Dead && a.Hp > 0)
-             .All(a => !a.ReturningToSpawn);
+                    var players = s.ActiveActors.Values
+        .Where(a => a.Team == 0 && !a.Dead && a.Hp > 0)
+        .ToList();
+
+                    bool allPlayersAtSpawn = players.All(a => IsAtSpawn(a));
 
                     if (!allPlayersAtSpawn)
-                        return; 
+                        return;
+                     
+                    foreach (var p in players)
+                    {
+                        p.ReturningToSpawn = false;
+                    }
 
-                    // 복귀 
                     s.NextWaveSpawnMs = now + 1000;
                     Console.WriteLine("[WaveSystem] All players reached spawn. Next wave in 1s.");
                     return;
@@ -231,7 +177,12 @@ namespace Application.Combat.Engine.TickSystems
                 ));
             }
         }
-
+        private bool IsAtSpawn(ActorState a, float radius = 0.25f)
+        {
+            var dx = a.X - a.SpawnX;
+            var dz = a.Z - a.SpawnZ;
+            return dx * dx + dz * dz <= radius * radius;
+        }
         private int NowMs(CombatRuntimeState s)
             => (int)(DateTimeOffset.UtcNow - s.StartedAt).TotalMilliseconds;
         

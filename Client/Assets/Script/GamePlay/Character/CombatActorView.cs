@@ -1,4 +1,5 @@
 using Combat;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,10 +17,17 @@ public class CombatActorView : MonoBehaviour
     public int MaxHp;
     public int Hp;
 
+    public float SpawnX { get; private set; }
+    public float SpawnZ { get; private set; }
     [Header("Optional")]
     public GameObject HitEffect;
     public GameObject DeadEffect;
-     
+    public void SetSpawnPosition(Vector3 pos)
+    {
+        SpawnX = pos.x;
+        SpawnZ = pos.z;
+    }
+
     public virtual void InitFromServer(long actorId, int team, int hp)
     {
         ActorId = actorId;
@@ -82,5 +90,8 @@ public class CombatActorView : MonoBehaviour
     {
 
     }
+    public virtual void PlayVictory()
+    {
 
+    }
 }
