@@ -22,6 +22,7 @@ public class LobbyRootController : MonoBehaviour
     [HideInInspector] public StagePb _currentStage;
      
     [SerializeField] private FadeInOut FadeInOut;
+    public LoadingPopup Loading;
     private void Awake()
     {
         if (Instance != null && Instance != this)

@@ -399,8 +399,7 @@ public class CharacterCache : MonoBehaviour
     public IEnumerator CoPreloadMeshes()
     {
         // 1) 캐릭터 파츠(mesh)들
-        yield return PreloadLabelToDict("model", CharacterMeshByKey);
-
+        yield return PreloadLabelToDict("model", CharacterMeshByKey); 
         // 2) 무기(mesh)들
         yield return PreloadLabelToDict("weapon", WeaponMeshByKey);
     }

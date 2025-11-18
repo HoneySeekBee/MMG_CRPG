@@ -70,6 +70,7 @@
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\TintedButton.cs" />
     <Compile Include="Assets\Script\Network\ProtoHttpClient.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\OscillateScale.cs" />
+    <Compile Include="Assets\Script\UI\Popup\LoadingPopup.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\PatrolCharacterState.cs" />
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\SoundManager.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\OscillateRotation.cs" />

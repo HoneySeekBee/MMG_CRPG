@@ -36,8 +36,10 @@ public class PartySetupPopup : UIPopup
     }
     private IEnumerator LoadPartySet(Action action = null)
     {
+        LobbyRootController.Instance.Loading.Show("잠시만 기다려주세요… 데이터를 불러오는 중입니다.");
         yield return CharacterCache.Instance.CoPreloadMeshes(); 
         yield return SceneController.Instance.LoadAdditiveAsync(SceneController.PartySetupSceneName);
+        LobbyRootController.Instance.Loading.UnShow();
         PartySetManager.Instance.Initialize(NetworkManager.BATTLE_ADVENTURE, Refresh_CharacterList);
         Refresh_CharacterList();
         if (action != null)
