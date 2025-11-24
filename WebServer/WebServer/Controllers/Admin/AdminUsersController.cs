@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebServer.Controllers
+namespace WebServer.Controllers.Admin
 {
     [ApiController]
     [Route("api/admin/users")]

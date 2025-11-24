@@ -6,24 +6,25 @@ namespace AdminTool.Services
 {
     public class TokenAttachHandler : DelegatingHandler
     {
-        private readonly IHttpContextAccessor _http;
+        private readonly IHttpContextAccessor _context;
 
-        public TokenAttachHandler(IHttpContextAccessor http)
+        public TokenAttachHandler(IHttpContextAccessor context)
         {
-            _http = http;
+            _context = context;
         }
 
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var ctx = _http.HttpContext;
-             
-            var at = ctx?.Session.GetString("access_token");
-            if (!string.IsNullOrWhiteSpace(at))
+            var httpContext = _context.HttpContext;
+            var token = httpContext?.Session.GetString("access_token");
+
+            if (!string.IsNullOrWhiteSpace(token))
             {
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", at);
+                request.Headers.Authorization =
+                    new AuthenticationHeaderValue("Bearer", token);
             }
 
-            return await base.SendAsync(request, cancellationToken);
+            return base.SendAsync(request, cancellationToken);
         }
     }
 }

@@ -1,0 +1,43 @@
+﻿@model AdminServerDetailVm
+
+@{
+    ViewData["Title"] = "서버 상세 상태";
+}
+
+<h2 class="mt-3">@Model.ServerId 상세 상태</h2>
+<a asp-controller="AdminServerStatus" asp-action="Index" class="btn btn-secondary mb-3">
+    ← 목록
+</a>
+
+<div class="card mb-4">
+    <div class="card-header">
+        서버 상태 정보
+    </div>
+    <div class="card-body">
+        <p><strong>Server ID:</strong> @Model.ServerId</p>
+
+        <p>
+            <strong>Alive:</strong>
+            @if (Model.Alive)
+            {
+                <span class="badge bg-success">Online</span>
+            }
+            else
+            {
+                <span class="badge bg-danger">Offline</span>
+            }
+        </p>
+
+        <p><strong>Version:</strong> @Model.Version</p>
+        <p><strong>Region:</strong> @Model.Region</p>
+        <p><strong>Online Users:</strong> @Model.OnlineUsers</p>
+        <p><strong>Requests/sec:</strong> @Model.RequestsPerSec</p>
+        <p><strong>Total Requests:</strong> @Model.RequestCount</p>
+
+        <p>
+            <strong>Last Updated:</strong>
+            @DateTimeOffset.FromUnixTimeSeconds(Model.LastUpdated)
+            .ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss")
+        </p>
+    </div>
+</div>

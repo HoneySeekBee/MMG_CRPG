@@ -17,14 +17,7 @@ namespace AdminTool.Controllers
         public AdminAuthController(IHttpClientFactory http) => _http = http;
 
         // 공통: GameApi 클라이언트 + 쿠키의 액세스 토큰을 Authorization 헤더로 세팅
-        private HttpClient Api()
-        {
-            var c = _http.CreateClient("GameApi");
-            if (Request.Cookies.TryGetValue("accessToken", out var at) && !string.IsNullOrWhiteSpace(at))
-                c.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", at);
-            return c;
-        }
-
+        private HttpClient Api() => _http.CreateClient("GameApi");
         // ===== Login =====
         [AllowAnonymous]
         [HttpGet("login")]

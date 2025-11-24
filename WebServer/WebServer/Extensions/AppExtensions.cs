@@ -43,6 +43,8 @@ using System.Collections.Concurrent;
 using Application.Combat.Engine;
 using Application.Combat.Engine.TickSystems;
 using Application.StageReward;
+using Application.Common.Interface;
+using Infrastructure.Services;
 
 namespace WebServer.Extensions
 {
@@ -94,6 +96,7 @@ namespace WebServer.Extensions
             s.AddSingleton<IChapterCache, ChapterCache>();
             s.AddSingleton<IStagesCache, StagesCache>();
             s.AddSingleton<IMonsterCache, MonsterCache>();
+            s.AddSingleton<RedisServerStatusTracker>();
 
             // 도메인/리포지토리/서비스 (Scoped)
 
@@ -226,6 +229,15 @@ namespace WebServer.Extensions
             s.AddScoped<IUnitOfWork, EfUnitOfWork>();
 
             s.AddScoped<ISecurityEventSink, SecurityEventSink>();
+
+            // Redis 
+            s.AddScoped<ICacheService, RedisCacheService>();
+            s.AddScoped<ISessionStorage, RedisSessionStorage>();
+            s.AddSingleton<IDistributedLock, RedisDistributedLock>();
+            s.AddSingleton<IEventStreamLogger, RedisEventStreamLogger>();
+            s.AddSingleton<IServerStatusTracker, RedisServerStatusTracker>();
+            
+            
 
             // 순수 싱글턴들
             s.AddSingleton<IClock, SystemClock>();

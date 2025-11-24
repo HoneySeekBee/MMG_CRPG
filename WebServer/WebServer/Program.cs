@@ -2,7 +2,11 @@ using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using WebServer;
-using WebServer.Extensions; // 위 확장 메서드 네임스페이스들
+using WebServer.Extensions;  
+using StackExchange.Redis;
+using Application.Common.Interface;
+using Infrastructure.Services;
+using WebServer.HostedServices;
 
 public class Program
 {
@@ -18,8 +22,13 @@ public class Program
             .AddApplicationServices(builder.Configuration) // DI 묶음
             .AddHostedWorkers();                     // 캐시 워밍업 등
         builder.Services.AddHealthChecks();
-         
+        builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+        {
+            return ConnectionMultiplexer.Connect("localhost:6379");
+        });
+        builder.Services.AddHostedService<HeartbeatService>();
 
+        Environment.SetEnvironmentVariable("SERVER_ID", "web-1");
 
         var app = builder.Build();
 
@@ -65,6 +74,13 @@ public class Program
             version = typeof(Program).Assembly.GetName().Version?.ToString() ?? "1.0.0",
             timeUtc = DateTime.UtcNow
         }).AllowAnonymous();
+
+        app.MapGet("/redis-test", async (ICacheService cache) =>
+        {
+            await cache.SetAsync("ping:test", "HelloRedis!", TimeSpan.FromMinutes(1));
+            var value = await cache.GetAsync("ping:test");
+            return new { value };
+        });
 
         app.Run();
     }

@@ -1,8 +1,10 @@
-﻿using Application.Repositories;
+﻿using Application.Common.Interface;
+using Application.Repositories;
 using Application.UserCurrency;
 using Domain.Entities;
 using Domain.Entities.User;
 using Domain.Enum;
+using System.Text.Json;
 
 namespace Application.Users
 {
@@ -21,18 +23,14 @@ namespace Application.Users
         private readonly IUserCurrencyRepository _userCurrs;
         private readonly IWalletService _wallet;
 
+        private readonly ICacheService _cache;
+        private readonly ISessionStorage _sessionStorage;
+        private readonly IEventStreamLogger _events;
         public UserService(
-            IUserRepository users,
-            IUserQueryRepository userQuery,
-            IProfileRepository profiles,
-            ISessionRepository sessions,
-            ISessionQueryRepository sessionQuery,
-            ISecurityEventRepository sec,
-            IPasswordHasher hasher,
-            ITokenService tokens,
-            IClock clock,
-        IUserCurrencyRepository userCurrs,
-          IWalletService wallet)
+            IUserRepository users, IUserQueryRepository userQuery, IProfileRepository profiles,
+            ISessionRepository sessions, ISessionQueryRepository sessionQuery, ISecurityEventRepository sec, IPasswordHasher hasher, ITokenService tokens,
+            IClock clock, IUserCurrencyRepository userCurrs, IWalletService wallet,
+            ICacheService cache, ISessionStorage storage, IEventStreamLogger events)
         {
             _users = users;
             _userQuery = userQuery;
@@ -46,6 +44,9 @@ namespace Application.Users
 
             _userCurrs = userCurrs;
             _wallet = wallet;
+            _cache = cache;
+            _sessionStorage = storage;
+            _events = events;
         }
 
         // --- 인증/계정 -------------------------------------------------------
@@ -72,6 +73,15 @@ namespace Application.Users
             await _profiles.SaveChangesAsync(ct);
 
             await _userCurrs.InitializeForUserAsync(user.Id, ct);
+
+            await _events.LogAsync("stream:user-events", new()
+            {
+                ["event"] = "user_registered",
+                ["userId"] = user.Id.ToString(),
+                ["account"] = account,
+                ["nickname"] = profile.NickName,
+                ["timestamp"] = _clock.UtcNow.ToString("O")
+            });
 
             // 4) 이벤트
             await _sec.AddAsync(SecurityEvent.Create(SecurityEventType.LoginSuccess, _clock.UtcNow, user.Id, "{\"register\":true}"), ct);
@@ -110,14 +120,22 @@ namespace Application.Users
                 refreshExpiresAt: refreshExp,
                 now: _clock.UtcNow);
 
-            await _sessions.AddAsync(session, ct);
-            await _sessions.SaveChangesAsync(ct);
+            //await _sessions.AddAsync(session, ct);
+            //await _sessions.SaveChangesAsync(ct);
+
+            await _sessionStorage.StoreSessionAsync(session, ct);
 
             user.TouchLogin(_clock.UtcNow);
             await _users.SaveChangesAsync(ct);
 
             await _sec.AddAsync(SecurityEvent.Create(SecurityEventType.LoginSuccess, _clock.UtcNow, user.Id), ct);
             await _sec.SaveChangesAsync(ct);
+            await _events.LogAsync("stream:user-events", new()
+            {
+                ["event"] = "user_logged_in",
+                ["userId"] = user.Id.ToString(),
+                ["timestamp"] = _clock.UtcNow.ToString("O")
+            });
 
             var userDto = user.ToSummaryDto(profile);
             var tokenDto = new AuthTokensDto(access, refresh, accessExp, refreshExp);
@@ -129,9 +147,9 @@ namespace Application.Users
             if (string.IsNullOrWhiteSpace(req.RefreshToken)) throw new ArgumentException("INVALID_REFRESH");
 
             var hash = _tokens.Hash(req.RefreshToken);
-            var session = await _sessions.FindByRefreshHashAsync(hash, ct)
-                          ?? throw new InvalidOperationException("INVALID_REFRESH");
-
+            //var session = await _sessions.FindByRefreshHashAsync(hash, ct)
+            //              ?? throw new InvalidOperationException("INVALID_REFRESH");
+            var session = await _sessionStorage.GetByRefreshHashAsync(hash, ct);
             if (session.Revoked || session.IsRefreshExpired(_clock.UtcNow))
                 throw new InvalidOperationException("EXPIRED_REFRESH");
 
@@ -146,11 +164,17 @@ namespace Application.Users
 
             session.RotateAccess(_tokens.Hash(access), accessExp);
             session.RotateRefresh(_tokens.Hash(newRefresh), newRefreshExp);
-            await _sessions.SaveChangesAsync(ct);
+            //await _sessions.SaveChangesAsync(ct);
+            await _sessionStorage.StoreSessionAsync(session, ct);
 
             await _sec.AddAsync(SecurityEvent.Create(SecurityEventType.TokenRefresh, _clock.UtcNow, user.Id), ct);
             await _sec.SaveChangesAsync(ct);
-
+            await _events.LogAsync("stream:user-events", new()
+            {
+                ["event"] = "token_refreshed",
+                ["userId"] = user.Id.ToString(),
+                ["timestamp"] = _clock.UtcNow.ToString("O")
+            });
             return new AuthTokensDto(access, newRefresh, accessExp, newRefreshExp);
         }
 
@@ -159,14 +183,23 @@ namespace Application.Users
             if (string.IsNullOrWhiteSpace(req.RefreshToken)) return;
 
             var hash = _tokens.Hash(req.RefreshToken);
-            var session = await _sessions.FindByRefreshHashAsync(hash, ct);
+            //var session = await _sessions.FindByRefreshHashAsync(hash, ct);
+            var session = await _sessionStorage.GetByRefreshHashAsync(hash, ct);
             if (session is null) return;
 
             session.Revoke();
-            await _sessions.SaveChangesAsync(ct);
+            //await _sessions.SaveChangesAsync(ct);
+            await _sessionStorage.StoreSessionAsync(session, ct);
 
             await _sec.AddAsync(SecurityEvent.Create(SecurityEventType.Logout, _clock.UtcNow, session.UserId), ct);
             await _sec.SaveChangesAsync(ct);
+
+            await _events.LogAsync("stream:user-events", new()
+            {
+                ["event"] = "user_logged_out",
+                ["userId"] = session.UserId.ToString(),
+                ["timestamp"] = _clock.UtcNow.ToString("O")
+            });
         }
 
         public async Task ChangePasswordAsync(int userId, ChangePasswordRequest req, CancellationToken ct)
@@ -191,32 +224,64 @@ namespace Application.Users
         // --- 내 정보 / 프로필 -------------------------------------------------
         public async Task<UserSummaryDto> GetMySummaryAsync(int userId, CancellationToken ct)
         {
-            var u = await _users.GetByIdAsync(userId, ct) ?? throw new InvalidOperationException("USER_NOT_FOUND");
-            var p = await _profiles.GetByUserIdAsync(userId, ct) ?? throw new InvalidOperationException("PROFILE_NOT_FOUND");
-            return u.ToSummaryDto(p);
+            string cacheKey = $"user:{userId}:summary";
+
+            // [1] 캐시에서 조회하기 
+            var cached = await _cache.GetAsync(cacheKey);
+            if (cached != null)
+                return JsonSerializer.Deserialize<UserSummaryDto>(cached)!;
+
+            // [2] 없으면 DB에서 조회하기 
+            var u = await _users.GetByIdAsync(userId, ct)
+            ?? throw new InvalidOperationException("USER_NOT_FOUND");
+            var p = await _profiles.GetByUserIdAsync(userId, ct)
+                    ?? throw new InvalidOperationException("PROFILE_NOT_FOUND");
+
+            var dto = u.ToSummaryDto(p);
+
+            // [3] 캐시에 저장하기 
+            await _cache.SetAsync(cacheKey, JsonSerializer.Serialize(dto), TimeSpan.FromMinutes(5));
+
+            return dto;
         }
 
         public async Task<UserDetailDto> GetDetailAsync(int userId, CancellationToken ct)
         {
+            string cacheKey = $"user:{userId}:detail";
+
+            var cached = await _cache.GetAsync(cacheKey);
+            if (cached != null)
+                return JsonSerializer.Deserialize<UserDetailDto>(cached)!;
+
             var (u, p) = await _userQuery.GetAggregateAsync(userId, ct);
             if (u is null || p is null) throw new InvalidOperationException("USER_NOT_FOUND");
 
             var recent = await _sessionQuery.GetRecentByUserIdAsync(userId, 5, ct);
-            return u.ToDetailDto(p, recent);
+            var dto = u.ToDetailDto(p, recent);
+
+            await _cache.SetAsync(cacheKey, JsonSerializer.Serialize(dto), TimeSpan.FromMinutes(3));
+
+            return dto;
         }
 
         public async Task<UserProfileDto> GetProfileAsync(int userId, CancellationToken ct)
         {
-            var p = await _profiles.GetByUserIdAsync(userId, ct)
-                    ?? throw new InvalidOperationException("PROFILE_NOT_FOUND");
+            string cacheKey = $"user:{userId}:profile";
 
-            // 동적 지갑에서 골드/젬/토큰 조회
-            var balances = await _wallet.GetBalancesAsync(userId, ct); // List<(string Code,long Amount)>
+            var cached = await _cache.GetAsync(cacheKey);
+            if (cached != null)
+                return JsonSerializer.Deserialize<UserProfileDto>(cached)!;
+
+            var p = await _profiles.GetByUserIdAsync(userId, ct)
+           ?? throw new InvalidOperationException("PROFILE_NOT_FOUND");
+
+            var balances = await _wallet.GetBalancesAsync(userId, ct);
             long gold = balances.FirstOrDefault(x => x.Code == "GOLD").Amount;
             long gem = balances.FirstOrDefault(x => x.Code == "GEM").Amount;
             long token = balances.FirstOrDefault(x => x.Code == "TOKEN").Amount;
 
-            return new UserProfileDto(
+
+            var dto = new UserProfileDto(
                 Id: p.Id,
                 UserId: p.UserId,
                 NickName: p.NickName,
@@ -227,6 +292,10 @@ namespace Application.Users
                 Token: (int)Math.Min(int.MaxValue, token),
                 IconId: p.IconId
             );
+
+            await _cache.SetAsync(cacheKey, JsonSerializer.Serialize(dto), TimeSpan.FromMinutes(3));
+
+            return dto;
         }
 
         public async Task<UserProfileDto> UpdateProfileAsync(int userId, UpdateProfileRequest req, CancellationToken ct)
@@ -236,7 +305,20 @@ namespace Application.Users
             var p = await _profiles.GetByUserIdAsync(userId, ct) ?? throw new InvalidOperationException("PROFILE_NOT_FOUND");
             p.Rename(req.NickName.Trim());
             p.SetIcon(req.IconId);
+
             await _profiles.SaveChangesAsync(ct);
+            await _events.LogAsync("stream:user-events", new()
+            {
+                ["event"] = "profile_updated",
+                ["userId"] = userId.ToString(),
+                ["nickname"] = req.NickName,
+                ["iconId"] = req.IconId.ToString(),
+                ["timestamp"] = _clock.UtcNow.ToString("O")
+            });
+            await _cache.RemoveAsync($"user:{userId}:summary");
+            await _cache.RemoveAsync($"user:{userId}:profile");
+            await _cache.RemoveAsync($"user:{userId}:detail");
+
             return p.ToProfileDto();
         }
 
@@ -278,6 +360,17 @@ namespace Application.Users
             }
 
             await _users.SaveChangesAsync(ct);
+
+            await _events.LogAsync("stream:admin-events", new()
+            {
+                ["event"] = "admin_user_status_changed",
+                ["userId"] = userId.ToString(),
+                ["newStatus"] = req.Status.ToString(),
+                ["timestamp"] = _clock.UtcNow.ToString("O")
+            });
+
+            await _cache.RemoveAsync($"user:{userId}:summary");
+            await _cache.RemoveAsync($"user:{userId}:detail");
         }
 
         public async Task AdminSetNicknameAsync(int userId, AdminSetNicknameRequest req, CancellationToken ct)
@@ -287,6 +380,10 @@ namespace Application.Users
             var p = await _profiles.GetByUserIdAsync(userId, ct) ?? throw new InvalidOperationException("PROFILE_NOT_FOUND");
             p.Rename(req.NickName.Trim());
             await _profiles.SaveChangesAsync(ct);
+
+            await _cache.RemoveAsync($"user:{userId}:summary");
+            await _cache.RemoveAsync($"user:{userId}:profile");
+            await _cache.RemoveAsync($"user:{userId}:detail");
         }
 
         public async Task AdminResetPasswordAsync(int userId, AdminResetPasswordRequest req, CancellationToken ct)
@@ -301,26 +398,38 @@ namespace Application.Users
             await _users.SaveChangesAsync(ct);
 
             // 보안 정책에 따라 모든 세션 만료 권장
-            await _sessions.InvalidateAllByUserIdAsync(userId, ct);
-            await _sessions.SaveChangesAsync(ct);
+            //await _sessions.InvalidateAllByUserIdAsync(userId, ct);
+            //await _sessions.SaveChangesAsync(ct);
+            await _sessionStorage.RevokeAllByUserIdAsync(userId);
         }
 
         public async Task AdminRevokeSessionAsync(int userId, AdminRevokeSessionRequest req, CancellationToken ct)
         {
             if (req.AllOfUser)
             {
-                await _sessions.InvalidateAllByUserIdAsync(userId, ct);
-                await _sessions.SaveChangesAsync(ct);
+                await _sessionStorage.RevokeAllByUserIdAsync(userId);
+                //await _sessions.InvalidateAllByUserIdAsync(userId, ct);
+                //await _sessions.SaveChangesAsync(ct); 
                 return;
             }
 
             if (req.SessionId is not int sid) throw new ArgumentException("SESSION_ID_REQUIRED");
 
+            //var session = await _sessions.FindByIdAsync(sid, ct) ?? throw new InvalidOperationException("SESSION_NOT_FOUND");
+            //if (session.UserId != userId) throw new InvalidOperationException("SESSION_USER_MISMATCH");
             var session = await _sessions.FindByIdAsync(sid, ct) ?? throw new InvalidOperationException("SESSION_NOT_FOUND");
             if (session.UserId != userId) throw new InvalidOperationException("SESSION_USER_MISMATCH");
+            //session.Revoke();
+            //await _sessions.SaveChangesAsync(ct); 
+            await _sessionStorage.RevokeAsync(session.RefreshTokenHash, ct);
 
-            session.Revoke();
-            await _sessions.SaveChangesAsync(ct);
+            await _events.LogAsync("stream:admin-events", new()
+            {
+                ["event"] = "admin_session_revoked",
+                ["userId"] = userId.ToString(),
+                ["sessionId"] = sid.ToString(),
+                ["timestamp"] = _clock.UtcNow.ToString("O")
+            });
         }
     }
 }

@@ -1,8 +1,10 @@
-﻿using Application.Repositories;
+﻿using Application.Common.Interface;
+using Application.Repositories;
 using Application.UserCurrency;
 using Application.UserInventory;
 using Application.Users;
 using Domain.Entities.Contents;
+using Microsoft.Extensions.Caching.Distributed;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +19,7 @@ namespace Application.StageReward
         private readonly IUserStageProgressService _progressService;
         private readonly IWalletService _wallet;
         private readonly IUserInventoryService _inventory;
+        private readonly IDistributedLock _lock;
         // ItemId → 통화 코드 매핑 (예시)
         private readonly IReadOnlyDictionary<int, string> _itemToCurrencyCode =
             new Dictionary<int, string>
@@ -30,16 +33,17 @@ namespace Application.StageReward
          IStageQueryRepository stageQuery,
          IUserStageProgressService progressService,
          IWalletService wallet,
-         IUserInventoryService inventory)
+         IUserInventoryService inventory,
+         IDistributedLock redisLock)
         {
             _stageQuery = stageQuery;
             _progressService = progressService;
             _wallet = wallet;
             _inventory = inventory;
+            _lock = redisLock;
         }
-
-        public async Task<StageRewardResult> GrantRewardsAsync(int userId, int stageId, bool success, StageStars stars, DateTime nowUtc, CancellationToken ct = default)
-        {
+        private async Task<StageRewardResult> GrantRewardsInternalAsync(int userId, int stageId, bool success, StageStars stars, DateTime nowUtc, CancellationToken ct)
+        { 
             // 1) 스테이지 마스터 조회
             var stage = await _stageQuery.GetDetailAsync(stageId, ct)
                         ?? throw new InvalidOperationException("STAGE_NOT_FOUND");
@@ -125,19 +129,35 @@ namespace Application.StageReward
                 Token: token
             );
         }
+        public async Task<StageRewardResult> GrantRewardsAsync(int userId, int stageId, bool success, StageStars stars, DateTime nowUtc, CancellationToken ct = default)
+        {
+            string lockKey = $"lock:stage-reward:{userId}:{stageId}";
+
+            if (!await _lock.AcquireAsync(lockKey, TimeSpan.FromSeconds(3)))
+                throw new InvalidOperationException("STAGE_REWARD_BUSY");
+
+            try
+            {
+                return await GrantRewardsInternalAsync(userId, stageId, success, stars, nowUtc, ct);
+            }
+            finally
+            {
+                await _lock.ReleaseAsync(lockKey);
+            } 
+        }
 
         // ----------------- 내부 유틸 -----------------
         private async Task GrantInventoryItemsAsync(int userId, IReadOnlyList<GainedRewardDto> rewards, CancellationToken ct)
-        { 
+        {
             foreach (var r in rewards)
             {
                 if (_itemToCurrencyCode.ContainsKey(r.ItemId))
                     continue;   // 통화 아이템은 건너뜀
-                 
+
                 var req = new GrantItemRequest(
                     UserId: userId,
                     ItemId: r.ItemId,
-                    Amount: (int)r.Qty 
+                    Amount: (int)r.Qty
                 );
 
                 await _inventory.GrantAsync(req, ct);

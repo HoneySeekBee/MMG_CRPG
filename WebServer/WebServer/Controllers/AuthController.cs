@@ -2,6 +2,7 @@
 using Application.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebServer.Monitoring;
 
 namespace WebServer.Controllers
 {
@@ -35,6 +36,7 @@ namespace WebServer.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<LoginResultDto>> Login([FromBody] LoginUserRequest req, CancellationToken ct)
         {
+            ServerMetrics.IncrementRequest();
             try
             {
                 var res = await _users.LoginAsync(req, ct);

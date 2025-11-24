@@ -40,8 +40,8 @@ namespace AdminTool
             builder.Services.AddSession(o =>
             {
                 o.Cookie.Name = ".AdminTool.Session";
-                o.Cookie.HttpOnly = true;
-                o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                o.Cookie.HttpOnly = true; 
+                o.Cookie.SecurePolicy = CookieSecurePolicy.None;
                 o.IdleTimeout = TimeSpan.FromHours(2);
             });
             builder.Services.AddHttpContextAccessor();
@@ -63,8 +63,9 @@ namespace AdminTool
 
             app.UseRouting();
 
-            app.UseAuthorization();
             app.UseSession();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
