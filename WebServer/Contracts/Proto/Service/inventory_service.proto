@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package game.inv;
+option csharp_namespace = "Contracts.Protos";
+
+import "user_inventory.proto"; 
+import "google/protobuf/empty.proto";
+
+service InventoryService {
+  rpc List(ListUserInventoryRequest) returns (ListUserInventoryResponse);
+  rpc Grant(GrantItemRequest) returns (GrantItemResponse);
+  rpc Consume(ConsumeItemRequest) returns (ConsumeItemResponse);
+  rpc SetItemCount(SetItemCountRequest) returns (SetItemCountResponse);
+  rpc Delete(DeleteItemRequest) returns (google.protobuf.Empty);
+}

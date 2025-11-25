@@ -18,7 +18,14 @@ message PageInfo {
   int32 page_size = 2;   // requested size
   int32 total_count = 3; // 전체 레코드 수
 }
-
+message ListUserInventoryRequest {
+  int32 user_id = 1;
+  int32 page = 2;
+  int32 page_size = 3;
+  int32 item_id = 4;                 
+  int64 updated_from_unix = 5;      
+  int64 updated_to_unix = 6;         
+}
 // GET: 목록 응답
 message ListUserInventoryResponse {
   PageInfo page_info = 1;

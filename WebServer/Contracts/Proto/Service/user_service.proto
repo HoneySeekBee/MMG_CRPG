@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package Contracts.Protos;
+option csharp_namespace = "Contracts.Protos";
+
+import "user.proto";  
+import "user_inventory.proto";
+import "user_wallet.proto";
+import "google/protobuf/empty.proto";
+
+service UserService {
+  rpc GetSummary(google.protobuf.Empty) returns (UserSummaryPb);
+  rpc GetProfile(google.protobuf.Empty) returns (UserProfilePb);
+  rpc UpdateProfile(UpdateProfilePb) returns (UserProfilePb);
+  rpc GetMyStages(google.protobuf.Empty) returns (MyStageProgressListPb);
+  rpc ChangePassword(ChangePasswordPb) returns (google.protobuf.Empty);
+}
