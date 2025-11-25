@@ -21,12 +21,15 @@ public class Program
             .AddJwtAuth(builder.Configuration)       // AuthN/AuthZ
             .AddApplicationServices(builder.Configuration) // DI 묶음
             .AddHostedWorkers();                     // 캐시 워밍업 등
+
         builder.Services.AddHealthChecks();
         builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
         {
             return ConnectionMultiplexer.Connect("localhost:6379");
         });
         builder.Services.AddHostedService<HeartbeatService>();
+
+        builder.Services.AddGrpcServices();
 
         Environment.SetEnvironmentVariable("SERVER_ID", "web-1");
 
@@ -67,6 +70,7 @@ public class Program
         app.MapControllers();
         app.MapRazorPages();
 
+        app.MapGrpcServices();
         app.MapHealthChecks("/health").AllowAnonymous();
         app.MapGet("/version", () => new
         {

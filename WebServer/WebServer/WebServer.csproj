@@ -8,17 +8,36 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" Version="2.71.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.76.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.19" />
     <PackageReference Include="Npgsql.DependencyInjection" Version="9.0.4" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.4" />
   </ItemGroup>
 
-  <ItemGroup>
+	<ItemGroup>
+		<!-- gRPC service proto only -->
+		<Protobuf Include="..\Contracts\Proto\Service\user_service.proto"
+				  GrpcServices="Server"
+				  ProtoRoot="..\Contracts\Proto" />
+
+		<Protobuf Include="..\Contracts\Proto\Service\inventory_service.proto"
+				  GrpcServices="Server"
+				  ProtoRoot="..\Contracts\Proto" />
+
+		<Protobuf Include="..\Contracts\Proto\Service\wallet_service.proto"
+				  GrpcServices="Server"
+				  ProtoRoot="..\Contracts\Proto" />
+	</ItemGroup>
+	
+	<ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Contracts\Contracts.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
-	  <PackageReference Include="Google.Protobuf" Version="3.25.5" />
   </ItemGroup>
 
 </Project>

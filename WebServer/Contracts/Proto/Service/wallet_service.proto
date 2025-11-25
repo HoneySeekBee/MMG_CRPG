@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package contracts.protos;
+
+
+import "user_wallet.proto";
+import "google/protobuf/empty.proto";
+
+service WalletService {
+  rpc Summary(google.protobuf.Empty) returns (UserWalletPb);
+}
