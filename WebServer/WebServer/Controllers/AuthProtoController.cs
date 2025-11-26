@@ -2,6 +2,7 @@
 using Contracts.Protos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebServer.Monitoring;
 
 namespace WebServer.Controllers
 {
@@ -123,6 +124,7 @@ namespace WebServer.Controllers
                 if (login?.Tokens?.AccessToken is null)
                     return Problem(statusCode: 500, title: "LOGIN_TOKENS_MISSING");
 
+                ServerMetrics.IncrementOnlineUsers();
                 return Ok(new AuthResponse
                 {
                     PlayerId = login.User.Id.ToString(),

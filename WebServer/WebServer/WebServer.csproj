@@ -16,22 +16,17 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.19" />
     <PackageReference Include="Npgsql.DependencyInjection" Version="9.0.4" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+    <PackageReference Include="protobuf-net.AspNetCore" Version="3.2.52" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.4" />
   </ItemGroup>
 
 	<ItemGroup>
 		<!-- gRPC service proto only -->
-		<Protobuf Include="..\Contracts\Proto\Service\user_service.proto"
-				  GrpcServices="Server"
-				  ProtoRoot="..\Contracts\Proto" />
+		<Protobuf Include="..\Contracts\Proto\Service\user_service.proto" GrpcServices="Server" ProtoRoot="..\Contracts\Proto" />
 
-		<Protobuf Include="..\Contracts\Proto\Service\inventory_service.proto"
-				  GrpcServices="Server"
-				  ProtoRoot="..\Contracts\Proto" />
+		<Protobuf Include="..\Contracts\Proto\Service\inventory_service.proto" GrpcServices="Server" ProtoRoot="..\Contracts\Proto" />
 
-		<Protobuf Include="..\Contracts\Proto\Service\wallet_service.proto"
-				  GrpcServices="Server"
-				  ProtoRoot="..\Contracts\Proto" />
+		<Protobuf Include="..\Contracts\Proto\Service\wallet_service.proto" GrpcServices="Server" ProtoRoot="..\Contracts\Proto" />
 	</ItemGroup>
 	
 	<ItemGroup>

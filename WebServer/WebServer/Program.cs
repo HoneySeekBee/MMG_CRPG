@@ -27,8 +27,7 @@ public class Program
         {
             return ConnectionMultiplexer.Connect("localhost:6379");
         });
-        builder.Services.AddHostedService<HeartbeatService>();
-
+        builder.Services.AddHostedService<HeartbeatService>(); 
         builder.Services.AddGrpcServices();
 
         Environment.SetEnvironmentVariable("SERVER_ID", "web-1");

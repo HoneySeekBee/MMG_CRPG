@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 namespace Domain.Common
 {
     public record ServerStatus(
-    int RequestCount,
-    int OnlineUsers
+    long RequestCount,
+    int OnlineUsers,
+    string Version
 );
 
     public record ServerStatusInfo(

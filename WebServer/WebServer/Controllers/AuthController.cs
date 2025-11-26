@@ -39,7 +39,8 @@ namespace WebServer.Controllers
             ServerMetrics.IncrementRequest();
             try
             {
-                var res = await _users.LoginAsync(req, ct);
+                var res = await _users.LoginAsync(req, ct); 
+                bool isAdminLogin = Request.Headers.ContainsKey("X-Admin-Login");
                 return Ok(res);
             }
             catch (InvalidOperationException ex) when (ex.Message is "BAD_CREDENTIALS")
@@ -76,6 +77,8 @@ namespace WebServer.Controllers
         public async Task<IActionResult> Logout([FromBody] LogoutRequest req, CancellationToken ct)
         {
             await _users.LogoutAsync(req, ct);
+            ServerMetrics.DecrementOnlineUsers();
+
             return NoContent();
         }
     }

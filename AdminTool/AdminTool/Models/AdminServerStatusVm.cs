@@ -14,10 +14,8 @@ namespace AdminTool.Models
         public long LastUpdated { get; init; }
 
         // 세부 상태
-        public required string Version { get; init; }
-        public required string Region { get; init; }
-        public required int OnlineUsers { get; init; }
-        public required int RequestsPerSec { get; init; }
+        public required string Version { get; init; } 
+        public required int OnlineUsers { get; init; } 
     }
     public sealed class AdminServerDetailVm
     {
@@ -25,10 +23,8 @@ namespace AdminTool.Models
         public bool Alive { get; init; }
         public long LastUpdated { get; init; }
 
-        public required string Version { get; init; }
-        public required string Region { get; init; }
-        public required int OnlineUsers { get; init; }
-        public required int RequestsPerSec { get; init; }
+        public required string Version { get; init; } 
+        public required int OnlineUsers { get; init; } 
         public required int RequestCount { get; init; }
     }
 }

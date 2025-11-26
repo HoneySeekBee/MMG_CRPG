@@ -17,18 +17,21 @@ public class LobbyRootController : MonoBehaviour
     [SerializeField] private Transform popupRoot;
     private Dictionary<string, GameObject> _panels;
     private Dictionary<string, System.Action> _onShowActions;
-     
+
     [HideInInspector] public int _currentBattleId;
     [HideInInspector] public StagePb _currentStage;
-     
+
+    public PingScheduler _scheduler;
     [SerializeField] private FadeInOut FadeInOut;
     public LoadingPopup Loading;
+
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
-        { 
+        {
             Destroy(gameObject);
-            return; 
+            return;
         }
         Instance = this;
 
@@ -41,15 +44,15 @@ public class LobbyRootController : MonoBehaviour
             ["Shop"] = panelShop,
             ["PartySet"] = partySet,
             ["BattleMap"] = panelBattleMap
-        }; 
+        };
         _onShowActions = new()
         {
             ["Login"] = OpenLoginPopup,
             ["Main"] = () => OpenLobbyPopup(),
             ["Battle"] = () => OpenBattleLobbyPopup(),
             ["Adventure"] = () => OpenAdventureLobbyPopup(),
-            ["PartySet"] = () => OpenPartySetupPopup(), 
-            ["BattleMap"] = () => OpenBattleMapPopup(), 
+            ["PartySet"] = () => OpenPartySetupPopup(),
+            ["BattleMap"] = () => OpenBattleMapPopup(),
         };
 
         btnLogin.onClick.AddListener(() => Show("Login"));
@@ -57,7 +60,7 @@ public class LobbyRootController : MonoBehaviour
         btnBattle.onClick.AddListener(() => Show("Battle"));
         btnAdventure.onClick.AddListener(() => Show("Adventure"));
         btnShop.onClick.AddListener(() => Show("Shop"));
-         
+
     }
 
     public void Show(string key)
@@ -77,7 +80,6 @@ public class LobbyRootController : MonoBehaviour
     {
         // Addressables 키 이름은 프로젝트에 맞게
         const string key = "LoginPopup";
-
         // 풀에서 열기
         var popupPool = UIPrefabPool.Instance as UIPopupPool;
         if (popupPool == null)
@@ -90,6 +92,8 @@ public class LobbyRootController : MonoBehaviour
         var popup = await popupPool.ShowPopupAsync<LoginPopup>(key, popupRoot);
         if (popup == null) { Debug.LogError("LoginPopup open failed"); return; }
 
+        _scheduler.gameObject.SetActive(false);
+
         FadeInOut.Start_FadeIn();
         // 완료 이벤트 구독
         popup.OnLoginCompleted += async result =>
@@ -97,8 +101,7 @@ public class LobbyRootController : MonoBehaviour
             if (!result.Ok) return;
 
             // 원하는 패널로 전환
-            Show("Main");
-
+            Show("Main"); 
             // 팝업 닫기(풀에 반납)
             await popupPool.HidePopupAsync(key, popup);
         };
@@ -166,13 +169,13 @@ public class LobbyRootController : MonoBehaviour
         const string key = "PartySetupUI";
         var popupPool = UIPrefabPool.Instance as UIPopupPool;
         if (popupPool == null)
-        { 
+        {
             popupPool = FindObjectOfType<UIPopupPool>();
             if (popupPool == null) { Debug.LogError("UIPopupPool not found"); return; }
         }
         var popup = await popupPool.ShowPopupAsync<PartySetupPopup>(key, popupRoot);
         if (popup == null) { Debug.LogError("PartySetupPopup open failed"); return; }
-         
+
         popup.Set(FadeInOut.Start_FadeIn);
     }
     private async void OpenBattleMapPopup()
@@ -186,7 +189,7 @@ public class LobbyRootController : MonoBehaviour
         }
         var popup = await popupPool.ShowPopupAsync<BattleMapPopup>(key, popupRoot);
         if (popup == null) { Debug.LogError("BattleMapPopup open failed"); return; }
-         
+
         popup.Set(FadeInOut.Start_FadeIn);
     }
 

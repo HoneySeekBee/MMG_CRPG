@@ -72,5 +72,25 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@4.0.0/dist/jquery.validate.unobtrusive.min.js"></script>
 
     @RenderSection("Scripts", required: false)
+
+    <script>
+        // 운영자가 로그인한 경우에만 Ping 실행하기
+        const isAuthenticated = @User.Identity.IsAuthenticated.ToString().ToLower();
+
+        if (isAuthenticated) {
+            async function sendPing() {
+                try {
+                    await fetch('/api/ping', {
+                        method: 'POST'
+                    });
+                } catch (err) {
+                    console.warn('Admin ping failed');
+                }
+            }
+
+            // 5초마다 Ping
+            setInterval(sendPing, 5000);
+        }
+    </script>
 </body>
 </html>

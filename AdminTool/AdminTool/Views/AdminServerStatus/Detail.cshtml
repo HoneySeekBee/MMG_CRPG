@@ -9,6 +9,11 @@
     ← 목록
 </a>
 
+<h3 class="mt-5">Online Users (최근 60초)</h3>
+<canvas id="usersChart"
+        height="100"
+        style="max-width: 500px; margin-bottom: 20px;">
+</canvas>
 <div class="card mb-4">
     <div class="card-header">
         서버 상태 정보
@@ -28,16 +33,100 @@
             }
         </p>
 
-        <p><strong>Version:</strong> @Model.Version</p>
-        <p><strong>Region:</strong> @Model.Region</p>
-        <p><strong>Online Users:</strong> @Model.OnlineUsers</p>
-        <p><strong>Requests/sec:</strong> @Model.RequestsPerSec</p>
+        <p><strong>Version:</strong> @Model.Version</p> 
+        <p><strong>Online Users:</strong> @Model.OnlineUsers</p> 
         <p><strong>Total Requests:</strong> @Model.RequestCount</p>
 
         <p>
             <strong>Last Updated:</strong>
-            @DateTimeOffset.FromUnixTimeSeconds(Model.LastUpdated)
+            @DateTimeOffset.FromUnixTimeMilliseconds(Model.LastUpdated)
             .ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss")
         </p>
     </div>
 </div>
+@section Scripts {
+    <!-- Chart.js 라이브러리 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+
+
+    <script>
+        // [1] 서버 ID를 Razor에서 읽어옴
+        const serverId = "@Model.ServerId";
+        let usersChart = null;
+
+        // [2] History API 호출 (최근 60초 데이터 가져오기)
+        async function loadHistory() {
+            const url = `/admin/servers/${serverId}/history?seconds=60`;
+            const res = await fetch(url);
+            const data = await res.json();
+
+            return data.map(x => ({
+                ts: x.ts,
+                onlineUsers: x.onlineUsers
+            }));
+        }
+
+        // [3]Chart.js로 그래프 그리기
+        async function renderChart() {
+            const history = await loadHistory();
+
+            // x축: Date 객체로 넣기
+            const labels = history.map(h => new Date(h.ts));
+
+            const values = history.map(h => h.onlineUsers);
+
+            const ctx = document.getElementById("usersChart").getContext("2d");
+
+            if (usersChart !== null) {
+                usersChart.data.labels = labels;
+                usersChart.data.datasets[0].data = values;
+                usersChart.update();
+                return;
+            }
+            usersChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Online Users',
+                        data: values,
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.3)',
+                        tension: 0.2,
+                        fill: true,
+                        pointRadius: 2
+                    }]
+                },
+                options: {
+                    animation: false,
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'second',
+                                tooltipFormat: 'HH:mm:ss',
+                                displayFormats: { second: 'HH:mm:ss' }
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1,         
+                                precision: 0      
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // [4] 페이지 로드 후 자동 실행
+        renderChart();
+
+        // [5] 60초 마다 갱신
+        setInterval(() => {
+            renderChart();
+        }, 60000);
+    </script>
+}

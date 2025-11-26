@@ -19,10 +19,7 @@ namespace WebServer.Controllers.Admin
         // Redis Stream 조회
         // ex) /api/admin/streams/user-events?count=50
         [HttpGet("{streamName}")]
-        public async Task<IActionResult> ReadEvents(
-            string streamName,
-            [FromQuery] int count = 100,
-            CancellationToken ct = default)
+        public async Task<IActionResult> ReadEvents(string streamName, [FromQuery] int count = 100, CancellationToken ct = default)
         {
             var events = await _logger.ReadRecentAsync(streamName, count, ct);
             return Ok(events);

@@ -258,6 +258,7 @@ public class LoginPopup : UIPopup
             Profile = profile,
             Boot = boot
         });
+        LobbyRootController.Instance._scheduler.gameObject.SetActive(true);
 
         if (chaRes != null)
             GameState.Instance.CurrentUser.SyncCharacters(chaRes.Characters);

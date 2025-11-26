@@ -54,10 +54,8 @@ namespace AdminTool.Controllers
                 ServerId = dto.ServerId,
                 Alive = dto.Alive,
                 LastUpdated = dto.LastUpdated,
-                Version = dto.Status?.Version ?? "-",
-                Region = dto.Status?.Region ?? "-",
-                OnlineUsers = dto.Status?.OnlineUsers ?? 0,
-                RequestsPerSec = dto.Status?.RequestsPerSec ?? 0,
+                Version = dto.Status?.Version ?? "-", 
+                OnlineUsers = dto.Status?.OnlineUsers ?? 0, 
                 RequestCount = dto.Status?.RequestCount ?? 0
             };
 

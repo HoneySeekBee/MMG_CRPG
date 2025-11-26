@@ -177,6 +177,7 @@
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\SpinWheel.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\BlendShapeAnimator.cs" />
     <Compile Include="Assets\Script\Core\Result.cs" />
+    <Compile Include="Assets\Script\Network\PingScheduler.cs" />
     <Compile Include="Assets\Script\Scenes\Lobby\InventoryUI.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\FaceManagement\FacePicker.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CroakWater.cs" />
@@ -232,6 +233,7 @@
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\PopupOpener.cs" />
     <Compile Include="Assets\Script\UI\User\EquipSlotUI.cs" />
     <Compile Include="Assets\Script\UI\User\EquipmentQuery.cs" />
+    <Compile Include="Assets\Script\Network\GamePlay\PingNetwork.cs" />
     <Compile Include="Assets\Script\UICommon\LoadingSpinner.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -44,15 +44,13 @@
                         {
                             <span class="badge bg-danger">Offline</span>
                         }
-                    </td>
-                    <td>@(s.Status?.Region ?? "-")</td>
+                    </td> 
                     <td>@(s.Status?.Version ?? "-")</td>
-                    <td>@(s.Status?.OnlineUsers ?? 0)</td>
-                    <td>@(s.Status?.RequestsPerSec ?? 0)</td>
+                    <td>@(s.Status?.OnlineUsers ?? 0)</td> 
 
                     <td>
                         @((s.LastUpdated > 0
-                            ? DateTimeOffset.FromUnixTimeSeconds(s.LastUpdated).ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss")
+                            ? DateTimeOffset.FromUnixTimeMilliseconds(s.LastUpdated)
                             : "-"))
                     </td>
                     <td>

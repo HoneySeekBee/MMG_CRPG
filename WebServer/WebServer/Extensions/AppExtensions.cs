@@ -45,6 +45,7 @@ using Application.Combat.Engine.TickSystems;
 using Application.StageReward;
 using Application.Common.Interface;
 using Infrastructure.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace WebServer.Extensions
 {
@@ -58,6 +59,7 @@ namespace WebServer.Extensions
             // 공통
             s.AddRazorPages();
             s.AddControllers();
+            s.AddControllers().AddProtoBufNet();
             s.AddEndpointsApiExplorer();
             s.AddSwaggerGen(o =>
             {
