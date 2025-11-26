@@ -2684,6 +2684,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1372554824}
   m_CullTransparentMesh: 1
+--- !u!1 &1401543957
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1401543958}
+  - component: {fileID: 1401543959}
+  m_Layer: 5
+  m_Name: Ping
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1401543958
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1401543957}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1495939541}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1401543959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1401543957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b12f7757fe4ddaa498f8540b34c19fb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1495939540
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2839,6 +2887,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2558707949007190388, guid: 758131cc978604ada8dc526080f4acdf, type: 3}
       insertIndex: -1
       addedObject: {fileID: 621187581}
+    - targetCorrespondingSourceObject: {fileID: 2558707949007190388, guid: 758131cc978604ada8dc526080f4acdf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1401543958}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2755516192515038566, guid: 758131cc978604ada8dc526080f4acdf, type: 3}
       insertIndex: -1
@@ -2886,6 +2937,7 @@ MonoBehaviour:
   panelBattleMap: {fileID: 77692367}
   popupRoot: {fileID: 1495939541}
   _currentBattleId: 0
+  _scheduler: {fileID: 1401543959}
   FadeInOut: {fileID: 1495939545}
   Loading: {fileID: 621187582}
 --- !u!114 &1495939544

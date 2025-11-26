@@ -35,7 +35,8 @@ namespace AdminTool.Controllers
             if (!ModelState.IsValid) return View("~/Views/AdminAuth/Login.cshtml", vm);
 
             // WebAPI에 로그인 요청
-            var api = _http.CreateClient("GameApi");
+            var api = _http.CreateClient("GameApi"); 
+            api.DefaultRequestHeaders.Add("X-Admin-Login", "true");
             var resp = await api.PostAsJsonAsync("/api/auth/login",
                 new LoginUserRequest(vm.Account, vm.Password), ct);
 
@@ -61,8 +62,7 @@ namespace AdminTool.Controllers
     {
         new Claim(ClaimTypes.NameIdentifier, dto.User.Id.ToString()),
         new Claim(ClaimTypes.Name, dto.User.Account),
-        // 필요하면 역할/권한
-        // new Claim(ClaimTypes.Role, "admin"),
+        new Claim(ClaimTypes.Role, "admin")  
     };
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             await HttpContext.SignInAsync(

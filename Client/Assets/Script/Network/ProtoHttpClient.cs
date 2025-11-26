@@ -33,7 +33,7 @@ namespace Game.Network
 
         private IEnumerator Send<T>(string method, string path, byte[] body, MessageParser<T> parser, Action<ApiResult<T>> cb)
             where T : IMessage<T>
-        {
+        { 
             int attempts = 0; ApiResult<T> last = default;
 
             while (attempts <= _config.RetryCount)

@@ -21,46 +21,69 @@ namespace Infrastructure.Services
 
         public async Task UpdateHeartbeatAsync(string serverId, ServerStatus status, CancellationToken ct = default)
         {
-            var hbKey = $"server:{serverId}:heartbeat";
-            var statusKey = $"server:{serverId}:status";
+            var key = $"server:status:{serverId}";
+            var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            await _db.HashSetAsync(key, new HashEntry[] { new("lastUpdated", now), new("onlineUsers", status.OnlineUsers), new("requestCount", status.RequestCount), new("version", status.Version) });
+            // 서버 생존 시간 갱신 (3초 TTL)
+            await _db.KeyExpireAsync(key, TimeSpan.FromSeconds(3));
 
-            // heartbeat: 5초 TTL
-            await _db.StringSetAsync(hbKey, "1", TimeSpan.FromSeconds(5));
-
-            // status JSON 기록
-            var json = JsonSerializer.Serialize(status);
-            await _db.StringSetAsync(statusKey, json);
-
-            // 서버 목록 등록
-            if (string.IsNullOrWhiteSpace(serverId))
-                throw new ArgumentException("serverId cannot be null or empty");
-            await _db.SetAddAsync("server:list", serverId);
         }
-
         public async Task<List<string>> GetServerIdsAsync(CancellationToken ct = default)
         {
-            var ids = await _db.SetMembersAsync("server:list");
-            return ids.Select(x => (string)x).ToList();
-        }
+            var ids = new List<string>();
+            var serverKeyPrefix = "server:status:";
 
+            var server = _db.Multiplexer.GetServer(_db.Multiplexer.GetEndPoints().First());
+
+            // 패턴으로 모든 서버 상태 key 찾기
+            foreach (var key in server.Keys(pattern: $"{serverKeyPrefix}*"))
+            {
+                // key = "server:status:game01"
+                var fullKey = key.ToString();
+
+                // serverId = "game01" 추출
+                var serverId = fullKey.Substring(serverKeyPrefix.Length);
+                ids.Add(serverId);
+            }
+
+            return ids;
+        }
         public async Task<ServerStatusInfo?> GetServerStatusAsync(string serverId, CancellationToken ct = default)
         {
-            var hb = await _db.StringGetAsync($"server:{serverId}:heartbeat");
-            var json = await _db.StringGetAsync($"server:{serverId}:status");
+            var key = $"server:status:{serverId}";
 
-            if (json.IsNullOrEmpty) return null;
+            // TTL 기반이므로 key가 없으면 Dead
+            if (!await _db.KeyExistsAsync(key))
+                return null;
 
-            var status = JsonSerializer.Deserialize<ServerStatus>(json!)!;
-            var alive = hb.HasValue;
+            var entries = await _db.HashGetAllAsync(key);
+            if (entries.Length == 0)
+                return null;
+
+            var dict = entries.ToDictionary(
+                x => x.Name.ToString(),
+                x => x.Value.ToString()
+            );
+
+            var lastUpdated = long.Parse(dict["lastUpdated"]);
+            var onlineUsers = int.Parse(dict["onlineUsers"]);
+            var requestCount = long.Parse(dict["requestCount"]);
+            var version = dict["version"];
+
+            // 순서를 올바르게 배치함
+            var status = new ServerStatus(
+                RequestCount: requestCount,
+                OnlineUsers: onlineUsers,
+                Version: version
+            );
 
             return new ServerStatusInfo(
                 ServerId: serverId,
-                Alive: alive,
+                Alive: true,
                 Status: status,
-                LastUpdated: DateTimeOffset.UtcNow.ToUnixTimeSeconds()
+                LastUpdated: lastUpdated
             );
         }
-
         public async Task<List<ServerStatusInfo>> GetAllServersAsync(CancellationToken ct = default)
         {
             var result = new List<ServerStatusInfo>();

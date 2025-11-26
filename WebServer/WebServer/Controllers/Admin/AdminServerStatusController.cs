@@ -21,7 +21,11 @@ namespace WebServer.Controllers.Admin
         public async Task<IActionResult> GetAllServerStatus(CancellationToken ct)
         {
             var servers = await _tracker.GetAllServersAsync(ct);
-            return Ok(servers);
+            var sorted = servers
+              .OrderByDescending(s => s.Alive)
+              .ThenByDescending(s => s.LastUpdated);
+
+            return Ok(sorted);
         }
 
         // 단일 서버 상태 조회
