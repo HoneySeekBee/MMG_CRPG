@@ -25,7 +25,9 @@ public class Program
         builder.Services.AddHealthChecks();
         builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
         {
-            return ConnectionMultiplexer.Connect("localhost:6379");
+            var cfg = sp.GetRequiredService<IConfiguration>();
+            var redisConn = cfg.GetValue<string>("Redis");
+            return ConnectionMultiplexer.Connect(redisConn);
         });
         builder.Services.AddHostedService<HeartbeatService>(); 
         builder.Services.AddGrpcServices();
@@ -50,7 +52,7 @@ public class Program
             app.UseHsts();
         }
 
-        app.UseHttpsRedirection();
+        //app.UseHttpsRedirection();
 
         // 정적 파일 + 강 캐시 헤더(이미지)
         app.UseStaticFiles(new StaticFileOptions
