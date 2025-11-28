@@ -38,6 +38,7 @@ namespace Game.Network
 
             while (attempts <= _config.RetryCount)
             {
+                Debug.Log($"[SEND] : {_config.BaseUrl + path}");
                 using (var req = new UnityWebRequest(_config.BaseUrl + path, method))
                 {
                     if (body != null)
