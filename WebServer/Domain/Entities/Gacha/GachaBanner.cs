@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Domain.Entities.Gacha
 {
     public sealed class GachaBanner
     {
@@ -27,7 +27,10 @@ namespace Domain.Entities
         public short Priority { get; private set; }         // 클수록 우선
         public GachaBannerStatus Status { get; private set; } = GachaBannerStatus.Live;
         public bool IsActive { get; private set; } = true;
-
+        public int CostCurrencyId { get; private set; }
+        public string CostCurrencyCode { get; private set; } = default!;
+        public int Cost { get; private set; }
+        public int TicketItemId { get; private set; }
         // --- 계산/편의 ---
         public bool IsLiveNow(DateTimeOffset? now = null)
         {
@@ -44,16 +47,19 @@ namespace Domain.Entities
 
         // --- 팩토리 ---
         public static GachaBanner Create(
-            string key,
-            string title,
-            int gachaPoolId,
-            DateTimeOffset? startsAt = null,
-            DateTimeOffset? endsAt = null,
-            string? subtitle = null,
-            int? portraitId = null,
-            short priority = 0,
-            GachaBannerStatus status = GachaBannerStatus.Live,
-            bool isActive = true)
+     string key,
+     string title,
+     int gachaPoolId,
+     DateTimeOffset? startsAt = null,
+     DateTimeOffset? endsAt = null,
+     string? subtitle = null,
+     int? portraitId = null,
+     short priority = 0,
+     GachaBannerStatus status = GachaBannerStatus.Live,
+     bool isActive = true,
+     int costCurrencyId = 0, 
+     int cost = 0,
+     int ticketItemId = 0)
         {
             if (string.IsNullOrWhiteSpace(key))
                 throw new ArgumentException("key is required", nameof(key));
@@ -65,22 +71,32 @@ namespace Domain.Entities
             var start = startsAt ?? DateTimeOffset.UtcNow;
             if (endsAt is { } e && e <= start)
                 throw new ArgumentException("EndsAt must be greater than StartsAt", nameof(endsAt));
-
             return new GachaBanner
             {
                 Key = key.Trim(),
                 Title = title.Trim(),
-                Subtitle = string.IsNullOrWhiteSpace(subtitle) ? null : subtitle.Trim(),
+                Subtitle = subtitle,
                 PortraitId = portraitId,
                 GachaPoolId = gachaPoolId,
                 StartsAt = start,
                 EndsAt = endsAt,
                 Priority = priority,
                 Status = status,
-                IsActive = isActive
+                IsActive = isActive,
+
+                CostCurrencyId = costCurrencyId, 
+                Cost = cost,
+                TicketItemId = ticketItemId
             };
         }
 
+        // 비용 업데이트 
+        public void SetCosts(int currencyId, int cost, int ticketItemId)
+        {
+            CostCurrencyId = currencyId;
+            Cost = cost;
+            TicketItemId = ticketItemId;
+        }
         // --- 동작 메서드(명령) ---
         public void Rename(string title, string? subtitle = null)
         {

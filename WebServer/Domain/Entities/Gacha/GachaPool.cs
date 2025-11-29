@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Domain.Entities.Gacha
 {
     /// <summary>
     ///  가차 풀 : 뽑기 확률 관련 엔티티

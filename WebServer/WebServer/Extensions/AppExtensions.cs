@@ -5,7 +5,7 @@ using Application.UserInventory;
 using Application.UserCharacter;
 using Application.UserCurrency;
 using Infrastructure.Caching;
-using Infrastructure.Repositories; 
+using Infrastructure.Repositories;
 using Domain.Services;
 using Application.Icons;
 using Application.Portraits;
@@ -19,8 +19,6 @@ using Application.Combat;
 using Application.Currency;
 using Application.Elements;
 using Application.Factions;
-using Application.GachaBanner;
-using Application.GachaPool;
 using Application.Rarities;
 using Application.Roles;
 using Application.SkillLevels;
@@ -45,6 +43,11 @@ using Application.StageReward;
 using Application.Common.Interface;
 using Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Application.Gacha.GachaBanner;
+using Application.Gacha.GachaPool;
+using Application.Gacha.GachaDraw;
+using Application.Gacha;
+using ProtoBuf.Meta;
 
 namespace WebServer.Extensions
 {
@@ -98,7 +101,6 @@ namespace WebServer.Extensions
             s.AddSingleton<IStagesCache, StagesCache>();
             s.AddSingleton<IMonsterCache, MonsterCache>();
             s.AddSingleton<RedisServerStatusTracker>();
-
             // 도메인/리포지토리/서비스 (Scoped)
 
             // 아이콘/초상화
@@ -192,6 +194,9 @@ namespace WebServer.Extensions
             s.AddScoped<IGachaBannerService, GachaBannerService>();
             s.AddScoped<IGachaPoolRepository, GachaPoolRepository>();
             s.AddScoped<IGachaPoolService, GachaPoolService>();
+            s.AddScoped<IGachaDrawService, GachaDrawService>();
+            s.AddScoped<IGachaDrawLogRepository, GachaDrawLogRepository>(); 
+            s.AddScoped<IGachaCacheService, RedisGachaCacheService>();
 
             // 스테이지
             s.AddScoped<IStagesRepository, EfStagesRepository>();

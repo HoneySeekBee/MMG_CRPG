@@ -1,10 +1,12 @@
 ﻿using Domain.Entities;
 using Domain.Entities.Characters;
 using Domain.Entities.Contents;
+using Domain.Entities.Gacha;
 using Domain.Entities.Monsters;
 using Domain.Entities.User;
 using Infrastructure.Persistence.Configurations.Characters;
 using Infrastructure.Persistence.Configurations.Contents;
+using Infrastructure.Persistence.Configurations.Gacha;
 using Infrastructure.Persistence.Configurations.Items;
 using Infrastructure.Persistence.Configurations.MasterData;
 using Infrastructure.Persistence.Configurations.Monsters;
@@ -61,7 +63,7 @@ namespace Infrastructure.Persistence
 
         public DbSet<GachaPool> GachaPools => Set<GachaPool>();
         public DbSet<GachaPoolEntry> GachaPoolEntries => Set<GachaPoolEntry>();
-
+        public DbSet<GachaDrawLog> GachaDrawLogs => Set<GachaDrawLog>();
         public DbSet<Synergy> Synergies => Set<Synergy>();
         public DbSet<SynergyRule> SynergyRules => Set<SynergyRule>();
         public DbSet<SynergyBonus> SynergyBonuses => Set<SynergyBonus>();
@@ -156,6 +158,12 @@ namespace Infrastructure.Persistence
 
             #endregion
 
+            #region Gacha
+            modelBuilder.ApplyConfiguration(new GachaDrawLogConfiguration());
+            modelBuilder.ApplyConfiguration(new GachaBannerConfiguration());
+            modelBuilder.ApplyConfiguration(new GachaPoolConfiguration());
+            modelBuilder.ApplyConfiguration(new GachaPoolEntryConfiguration());
+            #endregion
 
             var et = modelBuilder.Model.FindEntityType(typeof(CharacterModel))!;
             var prop = et.FindProperty(nameof(CharacterModel.BodyType))!;
@@ -175,9 +183,7 @@ namespace Infrastructure.Persistence
             Modeling_StatTypes(modelBuilder);
             Modeling_ItemType(modelBuilder);
             Modeling_EquipSlot(modelBuilder);
-            Modeling_Currency(modelBuilder);
-            Modeling_GatchaBanner(modelBuilder);
-            Modeling_GachaPool(modelBuilder);
+            Modeling_Currency(modelBuilder);  
 
             Modeling_Synergy(modelBuilder);
             OnModelCreating_User(modelBuilder);
@@ -402,66 +408,7 @@ namespace Infrastructure.Persistence
                 e.Property(x => x.Name).IsRequired();
                 e.HasIndex(x => x.Code).IsUnique();
             });
-        }
-        private void Modeling_GatchaBanner(ModelBuilder b)
-        {
-            b.Entity<GachaBanner>(e =>
-            {
-                e.ToTable("GachaBanner");
-                e.HasKey(x => x.Id);
-                e.Property(x => x.Id).HasColumnName("BannerId");
-                e.HasIndex(x => x.Key).IsUnique();
-                e.Property(x => x.Status).HasConversion<short>();   // smallint 매핑
-                e.Property(x => x.StartsAt).HasColumnName("StartsAt");
-                e.Property(x => x.EndsAt).HasColumnName("EndsAt");
-                // 필요한 컬럼 매핑 추가…
-            });
-        }
-        public void Modeling_GachaPool(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<GachaPool>(g =>
-            {
-                g.ToTable("GachaPool");
-                g.HasKey(x => x.PoolId);
-                g.Property(x => x.PoolId).ValueGeneratedOnAdd();
-                g.Property(x => x.Name).IsRequired();
-
-                g.Property(x => x.ScheduleStart).IsRequired().HasColumnType("timestamp with time zone");
-                g.Property(x => x.ScheduleEnd).IsRequired(false).HasColumnType("timestamp with time zone");
-
-                g.Property(x => x.PityJson).HasColumnType("jsonb");
-                g.Property(x => x.Config).HasColumnType("jsonb");
-                g.Property(x => x.TablesVersion);
-
-                // 읽기 전용 컬렉션 백킹 필드
-                g.Metadata.FindNavigation(nameof(GachaPool.Entries))!
-                 .SetPropertyAccessMode(PropertyAccessMode.Field);
-
-                // 네비게이션을 이용해 "하나의 관계"로 고정
-                g.HasMany(x => x.Entries)
-                 .WithOne()                       // GachaPoolEntry에 네비가 없으니 WithOne()
-                 .HasForeignKey(x => x.PoolId)
-                 .IsRequired()
-                 .OnDelete(DeleteBehavior.Cascade);
-            });
-
-            modelBuilder.Entity<GachaPoolEntry>(e =>
-            {
-                e.ToTable("GachaPoolEntry");
-                e.HasKey(x => new { x.PoolId, x.CharacterId });
-
-                e.Property(x => x.PoolId).IsRequired();
-                e.Property(x => x.CharacterId).IsRequired();
-                e.Property(x => x.Grade).IsRequired();
-                e.Property(x => x.RateUp).HasDefaultValue(false);
-                e.Property(x => x.Weight).IsRequired();
-
-                e.HasCheckConstraint("ck_gpe_weight_pos", "\"Weight\" > 0");
-
-                // 안전장치: 혹시 섀도우 속성이 남아있으면 무시
-                e.Ignore("GachaPoolPoolId");   // 섀도우 FK 강제 무시
-            });
-        }
+        }  
         private void Modeling_Synergy(ModelBuilder b)
         {
             b.Entity<Synergy>(ConfigureSynergy);

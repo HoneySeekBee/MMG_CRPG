@@ -13,7 +13,11 @@ message GachaBannerPb {
   int64  endsAtUtc    = 8; // 0이면 무기한
   int32  priority     = 9;
   int32  status       = 10; // 서버 enum -> int
-  bool   isActive     = 11;
+  bool   isActive     = 11;  
+  
+  int32  costCurrencyId = 12;
+  int32  cost            = 13;
+   int32  ticketItemId    = 14;
 }
 
 // 배너 목록
@@ -46,4 +50,29 @@ message GachaCatalogPb {
   int64 version = 1; // 캐싱/버전관리(선택)
   repeated GachaBannerPb banners = 2;
   repeated GachaPoolDetailPb pools = 3;
+}
+
+message GachaDrawRequestPb {
+  string bannerKey = 1;  
+  int32 count = 2;       
+}
+message GachaDrawItemPb {
+    int32 characterId = 1;
+    int32 grade = 2;
+    bool rateUp = 3;
+    bool isNew = 4;       
+    bool isShard = 5;        
+    int32 shardAmount = 6;   
+    bool isGuaranteed = 7;   
+}
+message GachaDrawResultPb {
+    int64 timestampUtc = 1;
+    repeated GachaDrawItemPb items = 2;
+
+    
+    int32 usedTickets = 3;
+    int64 usedCurrency = 4;
+     
+    int32 totalCharacters = 5;
+    int32 totalShards = 6;
 }

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.GachaPool
+namespace Application.Gacha.GachaPool
 {
     public sealed class GachaPoolService : IGachaPoolService
     {
@@ -17,7 +17,7 @@ namespace Application.GachaPool
         public async Task<GachaPoolDto?> GetAsync(int poolId, CancellationToken ct = default)
             => (await _repo.GetByIdAsync(poolId, ct))?.ToDto();
 
-        
+
 
         public async Task<(IReadOnlyList<GachaPoolDto> Items, int Total)> SearchAsync(
             QueryGachaPoolsRequest req, CancellationToken ct = default)
@@ -38,7 +38,7 @@ namespace Application.GachaPool
             if (string.IsNullOrWhiteSpace(req.Name))
                 throw new ArgumentException("name is required", nameof(req.Name));
 
-            var e = Domain.Entities.GachaPool.Create(
+            var e = Domain.Entities.Gacha.GachaPool.Create(
                 name: req.Name,
                 scheduleStart: req.ScheduleStart,
                 scheduleEnd: req.ScheduleEnd,

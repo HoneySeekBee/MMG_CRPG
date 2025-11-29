@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.GachaBanner
+namespace Application.Gacha.GachaBanner
 {
     public sealed class GachaBannerService : IGachaBannerService
     {
@@ -35,8 +35,8 @@ namespace Application.GachaBanner
 
         public async Task<GachaBannerDto> CreateAsync(CreateGachaBannerRequest req, CancellationToken ct = default)
         {
-            var entity = Domain.Entities.GachaBanner.Create(
-                key: req.Key,
+            var entity = Domain.Entities.Gacha.GachaBanner.Create(
+                 key: req.Key,
                 title: req.Title,
                 gachaPoolId: req.GachaPoolId,
                 startsAt: req.StartsAt,
@@ -45,7 +45,10 @@ namespace Application.GachaBanner
                 portraitId: req.PortraitId,
                 priority: req.Priority,
                 status: req.Status,
-                isActive: req.IsActive
+                isActive: req.IsActive,
+                costCurrencyId: req.CostCurrencyId,
+                cost: req.Cost,
+                ticketItemId: req.TicketItemId
             );
 
             await _repo.AddAsync(entity, ct);
@@ -63,6 +66,8 @@ namespace Application.GachaBanner
             entity.Reschedule(req.StartsAt, req.EndsAt);
             entity.SetPriority(req.Priority);
             entity.SetStatus(req.Status);
+            entity.SetCosts(req.CostCurrencyId, req.Cost, req.TicketItemId);
+
 
             if (entity.IsActive != req.IsActive)
             {

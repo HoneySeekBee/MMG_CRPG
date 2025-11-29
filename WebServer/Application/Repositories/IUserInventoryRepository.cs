@@ -13,7 +13,8 @@ namespace Application.Repositories
         Task<UserInven?> GetByKeyAsync(int userId, int itemId, CancellationToken ct);
         Task AddAsync(UserInven entity, CancellationToken ct);
         void Remove(UserInven entity);
-        Task<int> SaveChangesAsync(CancellationToken ct);
+        Task<int> SaveChangesAsync(CancellationToken ct); 
+        Task AddItemAsync(int userId, long itemId, int amount, CancellationToken ct);
     }
 
     public interface IUserInventoryQueryRepository

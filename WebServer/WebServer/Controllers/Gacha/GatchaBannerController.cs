@@ -1,8 +1,8 @@
-﻿using Application.GachaBanner;
+﻿using Application.Gacha.GachaBanner;
 using Domain.Enum;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebServer.Controllers
+namespace WebServer.Controllers.Gacha
 {
     [ApiController]
     [Route("api/[controller]")]
