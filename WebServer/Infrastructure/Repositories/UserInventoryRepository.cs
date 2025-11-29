@@ -32,5 +32,23 @@ namespace Infrastructure.Repositories
 
         public Task<int> SaveChangesAsync(CancellationToken ct)
             => _db.SaveChangesAsync(ct);
+
+        public async Task AddItemAsync(int userId, long itemId, int amount, CancellationToken ct)
+        {
+            var inv = await _db.UserInventories
+                .FirstOrDefaultAsync(x => x.UserId == userId && x.ItemId == itemId, ct);
+
+            if (inv == null)
+            {
+                inv = UserInventory.Create(userId, (int)itemId, amount);
+                await _db.UserInventories.AddAsync(inv, ct);
+            }
+            else
+            {
+                inv.Count += amount;
+            }
+
+            await _db.SaveChangesAsync(ct);
+        }
     }
 }

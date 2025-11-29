@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Entities.Characters;
+using Domain.Entities.Gacha;
 using System;
 using System.Collections.Generic;
 using System.Linq;

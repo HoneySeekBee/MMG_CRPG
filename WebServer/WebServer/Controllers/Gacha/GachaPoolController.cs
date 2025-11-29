@@ -1,7 +1,7 @@
-﻿using Application.GachaPool;
+﻿using Application.Gacha.GachaPool;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebServer.Controllers
+namespace WebServer.Controllers.Gacha
 {
     [ApiController]
     [Route("api/gacha/pools")]

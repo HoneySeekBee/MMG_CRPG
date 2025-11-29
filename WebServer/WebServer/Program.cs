@@ -10,6 +10,8 @@ using WebServer.HostedServices;
 using Amazon.S3;
 using Application.Storage;
 using WebServer.Options;
+using ProtoBuf.Meta;
+using WebServer.Filters;
 
 public class Program
 {
@@ -33,6 +35,7 @@ public class Program
             return ConnectionMultiplexer.Connect(redisConn);
         });
         builder.Services.AddHostedService<HeartbeatService>(); 
+        builder.Services.AddHostedService<GachaCacheWarmupService>(); 
         builder.Services.AddGrpcServices();
         builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
         builder.Services.AddAWSService<IAmazonS3>();
@@ -45,6 +48,10 @@ public class Program
         sp.GetRequiredService<IAmazonS3>(),
         "mmg-crpg-korea-bucket-storage"
     ));
+        builder.Services.AddControllers(options =>
+        {
+            options.Filters.Add<GameExceptionFilter>();
+        });
 
         builder.Services.AddSingleton<IPortraitStorage>(sp =>
             new S3PortraitStorage(

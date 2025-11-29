@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Domain.Entities.Gacha
 {
     /// <summary>
     /// 가차풀에서 캐릭터 당 가중치

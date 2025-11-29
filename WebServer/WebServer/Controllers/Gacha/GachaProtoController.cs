@@ -1,11 +1,11 @@
-﻿using Application.GachaBanner;
-using Application.GachaPool;
+﻿using Application.Gacha.GachaBanner;
+using Application.Gacha.GachaPool;
 using Contracts.Protos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
 
-namespace WebServer.Controllers
+namespace WebServer.Controllers.Gacha
 {
     [ApiController]
     [Route("api/pb/gacha")]
@@ -22,10 +22,8 @@ namespace WebServer.Controllers
             _pools = pools;
         }
 
-        // ─────────────────────────────────────────────────────────────
         // 1) 활성 배너 목록만 (가볍게)
         // GET /api/pb/gacha/active-banners
-        // ─────────────────────────────────────────────────────────────
         [HttpGet("active-banners")]
         public async Task<ActionResult<GachaBannerListPb>> GetActiveBanners(CancellationToken ct)
         {
@@ -40,10 +38,8 @@ namespace WebServer.Controllers
             return Ok(res);
         }
 
-        // ─────────────────────────────────────────────────────────────
         // 2) 특정 풀 상세(엔트리 포함)
         // GET /api/pb/gacha/pools/{poolId}
-        // ─────────────────────────────────────────────────────────────
         [HttpGet("pools/{poolId:int}")]
         public async Task<ActionResult<GachaPoolDetailPb>> GetPoolDetail([FromRoute] int poolId, CancellationToken ct)
         {
@@ -53,11 +49,8 @@ namespace WebServer.Controllers
             return Ok(MapPool(dto));
         }
 
-        // ─────────────────────────────────────────────────────────────
         // 3) 카탈로그(한 방에): 활성 배너 + 참조 풀(중복 제거) 세트
         // GET /api/pb/gacha/catalog
-        //  - 클라가 이 응답 하나만으로 로비 배너/풀 UI 구성 가능
-        // ─────────────────────────────────────────────────────────────
         [HttpGet("catalog")]
         public async Task<ActionResult<GachaCatalogPb>> GetCatalog(CancellationToken ct)
         {
@@ -82,9 +75,7 @@ namespace WebServer.Controllers
             return Ok(res);
         }
 
-        // ─────────────────────────────────────────────────────────────
         // 매핑 헬퍼들
-        // ─────────────────────────────────────────────────────────────
         private static GachaBannerPb MapBanner(GachaBannerDto b) => new()
         {
             Id = b.Id,
@@ -97,9 +88,12 @@ namespace WebServer.Controllers
             EndsAtUtc = b.EndsAt?.ToUnixTimeSeconds() ?? 0,
             Priority = b.Priority,
             Status = (int)b.Status, // enum은 int로 내려서 클라가 매핑
-            IsActive = b.IsActive
+            IsActive = b.IsActive,
+            CostCurrencyId = b.CostCurrencyId,
+            Cost = b.Cost,
+            TicketItemId = b.TicketItemId
         };
-        private static GachaPoolDetailPb MapPool(Application.GachaPool.GachaPoolDetailDto p)
+        private static GachaPoolDetailPb MapPool(GachaPoolDetailDto p)
         {
             // 리플렉션 유틸
             object? Get(string name) => p.GetType().GetProperty(name, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase)?.GetValue(p);
