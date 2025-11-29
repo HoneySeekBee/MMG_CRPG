@@ -2,11 +2,14 @@ using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using WebServer;
-using WebServer.Extensions;  
+using WebServer.Extensions;
 using StackExchange.Redis;
 using Application.Common.Interface;
 using Infrastructure.Services;
 using WebServer.HostedServices;
+using Amazon.S3;
+using Application.Storage;
+using WebServer.Options;
 
 public class Program
 {
@@ -31,7 +34,23 @@ public class Program
         });
         builder.Services.AddHostedService<HeartbeatService>(); 
         builder.Services.AddGrpcServices();
+        builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
+        builder.Services.AddAWSService<IAmazonS3>();
+        builder.Services.Configure<AssetsOptions>(
+    builder.Configuration.GetSection("AssetsOptions"));
 
+
+        builder.Services.AddSingleton<IIconStorage>(sp =>
+    new S3IconStorage(
+        sp.GetRequiredService<IAmazonS3>(),
+        "mmg-crpg-korea-bucket-storage"
+    ));
+
+        builder.Services.AddSingleton<IPortraitStorage>(sp =>
+            new S3PortraitStorage(
+                sp.GetRequiredService<IAmazonS3>(),
+                "mmg-crpg-korea-bucket-storage"
+            ));
         Environment.SetEnvironmentVariable("SERVER_ID", "web-1");
 
         var app = builder.Build();

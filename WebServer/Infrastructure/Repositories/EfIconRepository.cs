@@ -37,10 +37,6 @@ namespace Infrastructure.Repositories
         {
             _db.Icons.Remove(icon);
             await _db.SaveChangesAsync(ct); 
-        }
-
-
-
-
+        } 
     }
 }
