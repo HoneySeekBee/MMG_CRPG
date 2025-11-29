@@ -8,9 +8,9 @@ namespace Application.Storage
 {
     public interface IPortraitStorage
     {
-        Task SaveAsync(string key, Stream content, string contentType, CancellationToken ct = default);
-        Task<bool> ExistsAsync(string key, CancellationToken ct = default);
-        Task DeleteAsync(string key, CancellationToken ct = default);
         string GetPublicUrl(string key, int version);
+        Task SaveAsync(string key, Stream content, string contentType, CancellationToken ct);
+        Task<byte[]> LoadAsync(string key, CancellationToken ct);
+        Task DeleteAsync(string key, CancellationToken ct);
     }
 }

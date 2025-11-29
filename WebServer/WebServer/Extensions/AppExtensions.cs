@@ -5,8 +5,7 @@ using Application.UserInventory;
 using Application.UserCharacter;
 using Application.UserCurrency;
 using Infrastructure.Caching;
-using Infrastructure.Repositories;
-using Infrastructure.Storage;
+using Infrastructure.Repositories; 
 using Domain.Services;
 using Application.Icons;
 using Application.Portraits;
@@ -106,17 +105,17 @@ namespace WebServer.Extensions
             s.AddScoped<IconService>();
             s.AddScoped<IIconRepository, EfIconRepository>();
             s.AddScoped<IPortraitRepository, EfPortraitRepository>();
-            s.AddScoped<IPortraitStorage>(sp =>
-                new LocalPortraitStorage(
-                    sp.GetRequiredService<IWebHostEnvironment>().WebRootPath!,
-                    cfg["PublicBaseUrl"]!));
+            //s.AddScoped<IPortraitStorage>(sp =>
+            //    new LocalPortraitStorage(
+            //        sp.GetRequiredService<IWebHostEnvironment>().WebRootPath!,
+            //        cfg["PublicBaseUrl"]!));
             s.AddScoped<PortraitService>();
 
-            s.AddSingleton<IIconStorage>(sp =>
-            {
-                var env = sp.GetRequiredService<IWebHostEnvironment>();
-                return new LocalIconStorage(env.WebRootPath, cfg["PublicBaseUrl"]);
-            });
+            //s.AddSingleton<IIconStorage>(sp =>
+            //{
+            //    var env = sp.GetRequiredService<IWebHostEnvironment>();
+            //    return new LocalIconStorage(env.WebRootPath, cfg["PublicBaseUrl"]);
+            //});
 
             // 속성/속성상속(원소)
             s.AddScoped<IElementRepository, ElementRepository>();

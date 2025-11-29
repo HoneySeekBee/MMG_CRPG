@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c2e0cf7d5ac7a84b8bb097f5510c16a, type: 3}
   m_Name: local
   m_EditorClassIdentifier: 
-  BaseUrl: http://98.81.215.60
+  BaseUrl: https://mmgcrpg-server.duckdns.org
   DefaultTimeoutSec: 10
   RetryCount: 2
   RetryBackoffSec: 0.5
