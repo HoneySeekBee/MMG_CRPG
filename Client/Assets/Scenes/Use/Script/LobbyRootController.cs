@@ -11,7 +11,7 @@ public class LobbyRootController : MonoBehaviour
     [Header("Tab Buttons")]
     public Button btnLogin, btnMain, btnBattle, btnAdventure, btnShop;
     [Header("Panels (Static)")]
-    public GameObject panelLogin, panelMain, panelBattle, panelAdventure, panelShop, partySet, panelBattleMap;
+    public GameObject panelLogin, panelMain, panelBattle, panelAdventure, panelShop, partySet, panelBattleMap, panelGachaShop;
 
     [Header("Popup Root (for Addressable popups)")]
     [SerializeField] private Transform popupRoot;
@@ -43,7 +43,8 @@ public class LobbyRootController : MonoBehaviour
             ["Adventure"] = panelAdventure,
             ["Shop"] = panelShop,
             ["PartySet"] = partySet,
-            ["BattleMap"] = panelBattleMap
+            ["BattleMap"] = panelBattleMap,
+            ["GachaShop"] = panelGachaShop,
         };
         _onShowActions = new()
         {
@@ -53,6 +54,7 @@ public class LobbyRootController : MonoBehaviour
             ["Adventure"] = () => OpenAdventureLobbyPopup(),
             ["PartySet"] = () => OpenPartySetupPopup(),
             ["BattleMap"] = () => OpenBattleMapPopup(),
+            ["GachaShop"] = () => OpenGachaShopPopup(),
         };
 
         btnLogin.onClick.AddListener(() => Show("Login"));
@@ -193,5 +195,22 @@ public class LobbyRootController : MonoBehaviour
         popup.Set(FadeInOut.Start_FadeIn);
     }
 
+    private async void OpenGachaShopPopup()
+    {
+        const string key = "GachaPopupUI";
+        var popupPool = UIPrefabPool.Instance as UIPopupPool;
+        if (popupPool == null)
+        {
+            popupPool = FindObjectOfType<UIPopupPool>();
+            if (popupPool == null) { Debug.LogError("UIPopupPool not found"); return; }
+        }
+        var popup = await popupPool.ShowPopupAsync<GachaShopPopup>(key, popupRoot);
+        if (popup == null) { Debug.LogError("BattleMapPopup open failed"); return; }
+
+        GachaBannerListPb listpb = new GachaBannerListPb();
+        Debug.Log("listpb 추후 받아오기");
+
+        popup.Set(FadeInOut.Start_FadeIn, listpb);
+    }
 
 }

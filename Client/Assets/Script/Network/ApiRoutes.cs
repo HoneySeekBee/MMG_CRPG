@@ -50,6 +50,11 @@ public static class ApiRoutes
     public static string UserPartyGet(int useId, int partyId) => $"/api/pb/userparty/by-battle?userId={useId}&battleId={partyId}";
     public const string UserPartyBulkAssign = "/api/pb/userparty/bulk-assign";
 
+    #region Gacha
+    public const string GachaDraw = "/api/pb/gacha/draw";
+    public const string GachaCatalog = "/api/pb/gacha/catalog";
+    #endregion
+
     #region Combat
 
     public const string CombatStart = "/api/pb/combat/start";
