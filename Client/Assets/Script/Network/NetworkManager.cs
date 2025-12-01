@@ -17,6 +17,16 @@ public class NetworkManager : MonoBehaviour
             return _partyNetwork;
         }
     }
+    private GachaNetwork _gachaNetwork;
+    public GachaNetwork GachaNetwork
+    {
+        get
+        {
+            if (_gachaNetwork == null)
+                _gachaNetwork = new GachaNetwork();
+            return _gachaNetwork;
+        }
+    }
     public const int BATTLE_ADVENTURE = 1;
     private void Awake()
     {
