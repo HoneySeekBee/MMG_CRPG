@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.3.14" />
     <PackageReference Include="AWSSDK.S3" Version="4.0.13.1" />
+    <PackageReference Include="Dapper" Version="2.1.66" />
     <PackageReference Include="Grpc.AspNetCore" Version="2.71.0" />
     <PackageReference Include="Grpc.Tools" Version="2.76.0">
       <PrivateAssets>all</PrivateAssets>
@@ -36,5 +37,9 @@
     <ProjectReference Include="..\Contracts\Contracts.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
+	
+	<ItemGroup>
+	  <Folder Include="DataSeeds\" />
+	</ItemGroup>
 
 </Project>

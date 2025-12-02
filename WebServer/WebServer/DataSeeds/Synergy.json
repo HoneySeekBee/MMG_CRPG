@@ -1,0 +1,26 @@
+[
+  {
+    "SynergyId": 1,
+    "Key": "trwet",
+    "Name": "qeeq",
+    "Description": "qerqe",
+    "IconId": 1,
+    "Effect": "{\u0022modifiers\u0022: [{\u0022op\u0022: \u0022add_flat\u0022, \u0022stat\u0022: \u0022HP\u0022, \u0022value\u0022: 5}]}",
+    "Stacking": 1,
+    "IsActive": true,
+    "StartAt": "2025-09-09T02:50:00Z",
+    "EndAt": "2026-01-09T02:50:00Z"
+  },
+  {
+    "SynergyId": 2,
+    "Key": "qewrqew1",
+    "Name": "313rewqr",
+    "Description": "qwerqwe",
+    "IconId": 1,
+    "Effect": "{\u0022modifiers\u0022: [{\u0022op\u0022: \u0022add_flat\u0022, \u0022stat\u0022: \u0022HP\u0022, \u0022value\u0022: 5}]}",
+    "Stacking": 1,
+    "IsActive": true,
+    "StartAt": "2025-09-09T03:23:00Z",
+    "EndAt": "2025-09-30T03:23:00Z"
+  }
+]

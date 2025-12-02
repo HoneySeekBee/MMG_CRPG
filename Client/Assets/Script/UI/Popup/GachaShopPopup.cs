@@ -1,6 +1,7 @@
 using Contracts.Protos;
 using Game.Data;
 using Game.Lobby;
+using Game.Managers;
 using Lobby;
 using System;
 using System.Collections;
@@ -35,14 +36,20 @@ public class GachaShopPopup : UIPopup
         activeBanners.Clear();
     }
 
-    public void Set(Action fadeIn, GachaBannerListPb bannerList)
+    public void Set(Action fadeIn, GachaCatalogPb gachaCatalog)
     {
-        Set_Banner(bannerList);
+        Debug.Log($"배너 갯수 {gachaCatalog.Banners.Count}");
+        Set_Banner(gachaCatalog);
         Set_Currency();
+        StartCoroutine(LoadGachaScnee(fadeIn));
+    }
+    private IEnumerator LoadGachaScnee(Action fadeIn)
+    {
+        yield return SceneController.Instance.LoadAdditiveAsync(SceneController.PartySetupSceneName);
         if (fadeIn != null)
             fadeIn.Invoke();
     }
-    private void Set_Banner(GachaBannerListPb bannerList)
+    private void Set_Banner(GachaCatalogPb gachaCatalog)
     {
         // 기존 배너 반환
         foreach (var banner in activeBanners)
@@ -51,7 +58,7 @@ public class GachaShopPopup : UIPopup
         activeBanners.Clear();
 
         // 풀에서 가져와서 생성
-        foreach (var bannerData in bannerList.Banners)
+        foreach (var bannerData in gachaCatalog.Banners)
         {
             GameObject go = pool.Get();
             go.transform.SetParent(BannerParentRect, false);

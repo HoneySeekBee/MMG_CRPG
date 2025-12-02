@@ -1,0 +1,17 @@
+[
+  {
+    "Id": 1,
+    "Code": "GOLD",
+    "Name": "Gold"
+  },
+  {
+    "Id": 2,
+    "Code": "GEM",
+    "Name": "Gem"
+  },
+  {
+    "Id": 3,
+    "Code": "TOKEN",
+    "Name": "Token"
+  }
+]

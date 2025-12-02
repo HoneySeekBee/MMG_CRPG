@@ -1,0 +1,57 @@
+[
+  {
+    "SkillId": 6,
+    "Name": "testse4",
+    "Type": 0,
+    "ElementId": 9,
+    "IconId": 4,
+    "BaseInfo": "{\u0022etc\u0022: \u0022nnnn\u0022}",
+    "IsActive": false,
+    "TargetingType": 0,
+    "AoeShape": 0,
+    "TargetSide": 1,
+    "Tag": [
+      "tet",
+      "new"
+    ]
+  },
+  {
+    "SkillId": 32,
+    "Name": "er1t1t3",
+    "Type": 1,
+    "ElementId": 9,
+    "IconId": 3,
+    "BaseInfo": "{\u0022etc\u0022: \u0022wett\u0022}",
+    "IsActive": true,
+    "TargetingType": 1,
+    "AoeShape": 0,
+    "TargetSide": 2,
+    "Tag": []
+  },
+  {
+    "SkillId": 34,
+    "Name": "\uD30C\uC774\uC5B4\uBCFC",
+    "Type": 1,
+    "ElementId": 9,
+    "IconId": 1,
+    "BaseInfo": "{\u0022etc\u0022: \u0022test\u0022}",
+    "IsActive": true,
+    "TargetingType": 2,
+    "AoeShape": 1,
+    "TargetSide": 2,
+    "Tag": []
+  },
+  {
+    "SkillId": 35,
+    "Name": "test",
+    "Type": 4,
+    "ElementId": 9,
+    "IconId": 2,
+    "BaseInfo": "{\u0022etc\u0022: \u0022etsr\u0022}",
+    "IsActive": true,
+    "TargetingType": 1,
+    "AoeShape": 0,
+    "TargetSide": 1,
+    "Tag": []
+  }
+]

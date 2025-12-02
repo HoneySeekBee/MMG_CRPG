@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
+using System.Data;
 
 public static class PersistenceExtensions
 {
@@ -27,6 +28,12 @@ public static class PersistenceExtensions
             var ds = sp.GetRequiredService<NpgsqlDataSource>();
             Console.WriteLine($"[Startup] DataSource hash = {ds.GetHashCode()}");
             opt.UseNpgsql(ds);
+        });
+        services.AddScoped<IDbConnection>(sp =>
+        {
+            var ds = sp.GetRequiredService<NpgsqlDataSource>();
+            // Dapper가 사용할 새로운 커넥션 반환
+            return ds.CreateConnection();
         });
 
         return services;

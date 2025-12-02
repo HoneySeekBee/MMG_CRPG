@@ -12,13 +12,56 @@ using Application.Storage;
 using WebServer.Options;
 using ProtoBuf.Meta;
 using WebServer.Filters;
+using System.Data;
+using WebServer.Seed;
+using Npgsql;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
-        var builder = WebApplication.CreateBuilder(args);
+        var seedMode = args.Contains("load-seeds");
+        var exportMode = args.Contains("export-seeds");
 
+        var tempBuilder = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json")
+            .AddEnvironmentVariables()
+            .Build();
+
+
+        var seedDir = Path.Combine(Directory.GetCurrentDirectory(), "DataSeeds");
+
+        if (exportMode)
+        {
+            var cs = tempBuilder.GetConnectionString("LocalDevDb")
+                     ?? tempBuilder.GetConnectionString("GameDb");
+
+            if (string.IsNullOrWhiteSpace(cs))
+            {
+                Console.WriteLine("ERROR: Connection string LocalDevDb/GameDb not found.");
+                return;
+            }
+            using var conn = new NpgsqlConnection(cs);
+            await conn.OpenAsync();
+
+            await new SeedExporter(conn, seedDir).ExportAllAsync();
+            Console.WriteLine("Export done.");
+            return;
+        }
+
+
+        if (seedMode)
+        {
+            var cs = tempBuilder.GetConnectionString("GameDb");
+            using var conn = new NpgsqlConnection(cs);
+            await conn.OpenAsync();
+            await new SeedLoader(conn, seedDir).LoadAllAsync();
+            Console.WriteLine("Seed load done.");
+            return;
+        }
+
+        var builder = WebApplication.CreateBuilder(args);
+         
         // 1) 옵션 + 기반
         builder.Services
             .AddPersistence(builder.Configuration)   // DbContext/Factory
@@ -62,6 +105,15 @@ public class Program
 
         var app = builder.Build();
 
+        if (app.Environment.IsDevelopment())
+        {
+            using var scope = app.Services.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<IDbConnection>();
+
+            var loader = new SeedLoader(db, seedDir);
+            await loader.LoadAllAsync();
+        }
+
         // 2) 미들웨어
         if (app.Environment.IsDevelopment())
         {
@@ -88,6 +140,7 @@ public class Program
                 ctx.Context.Response.Headers["Cache-Control"] = "public,max-age=31536000,immutable";
             }
         });
+      
 
         app.UseRouting();
         app.UseCors();

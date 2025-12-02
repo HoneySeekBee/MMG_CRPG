@@ -1,0 +1,1690 @@
+[
+  {
+    "id": 4,
+    "stage_wave_id": 4,
+    "enemy_character_id": 22,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 5,
+    "stage_wave_id": 4,
+    "enemy_character_id": 22,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 6,
+    "stage_wave_id": 5,
+    "enemy_character_id": 22,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 7,
+    "stage_wave_id": 5,
+    "enemy_character_id": 23,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 8,
+    "stage_wave_id": 5,
+    "enemy_character_id": 22,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 9,
+    "stage_wave_id": 6,
+    "enemy_character_id": 23,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 10,
+    "stage_wave_id": 6,
+    "enemy_character_id": 23,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 11,
+    "stage_wave_id": 6,
+    "enemy_character_id": 24,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 12,
+    "stage_wave_id": 6,
+    "enemy_character_id": 23,
+    "level": 1,
+    "slot": 4,
+    "ai_profile": null
+  },
+  {
+    "id": 13,
+    "stage_wave_id": 7,
+    "enemy_character_id": 23,
+    "level": 2,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 14,
+    "stage_wave_id": 7,
+    "enemy_character_id": 23,
+    "level": 2,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 15,
+    "stage_wave_id": 7,
+    "enemy_character_id": 23,
+    "level": 2,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 16,
+    "stage_wave_id": 8,
+    "enemy_character_id": 23,
+    "level": 2,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 17,
+    "stage_wave_id": 8,
+    "enemy_character_id": 23,
+    "level": 2,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 18,
+    "stage_wave_id": 8,
+    "enemy_character_id": 24,
+    "level": 2,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 19,
+    "stage_wave_id": 9,
+    "enemy_character_id": 24,
+    "level": 2,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 164,
+    "stage_wave_id": 56,
+    "enemy_character_id": 5,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 21,
+    "stage_wave_id": 9,
+    "enemy_character_id": 24,
+    "level": 2,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 31,
+    "stage_wave_id": 10,
+    "enemy_character_id": 18,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 32,
+    "stage_wave_id": 10,
+    "enemy_character_id": 18,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 33,
+    "stage_wave_id": 11,
+    "enemy_character_id": 23,
+    "level": 3,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 34,
+    "stage_wave_id": 11,
+    "enemy_character_id": 23,
+    "level": 3,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 35,
+    "stage_wave_id": 11,
+    "enemy_character_id": 23,
+    "level": 3,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 36,
+    "stage_wave_id": 12,
+    "enemy_character_id": 24,
+    "level": 3,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 38,
+    "stage_wave_id": 12,
+    "enemy_character_id": 24,
+    "level": 3,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 39,
+    "stage_wave_id": 12,
+    "enemy_character_id": 24,
+    "level": 3,
+    "slot": 4,
+    "ai_profile": null
+  },
+  {
+    "id": 40,
+    "stage_wave_id": 13,
+    "enemy_character_id": 26,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 41,
+    "stage_wave_id": 13,
+    "enemy_character_id": 26,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 42,
+    "stage_wave_id": 14,
+    "enemy_character_id": 26,
+    "level": 2,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 43,
+    "stage_wave_id": 14,
+    "enemy_character_id": 26,
+    "level": 2,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 44,
+    "stage_wave_id": 14,
+    "enemy_character_id": 26,
+    "level": 2,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 45,
+    "stage_wave_id": 15,
+    "enemy_character_id": 26,
+    "level": 3,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 46,
+    "stage_wave_id": 15,
+    "enemy_character_id": 26,
+    "level": 3,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 47,
+    "stage_wave_id": 15,
+    "enemy_character_id": 26,
+    "level": 3,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 20,
+    "stage_wave_id": 9,
+    "enemy_character_id": 24,
+    "level": 2,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 37,
+    "stage_wave_id": 12,
+    "enemy_character_id": 24,
+    "level": 3,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 48,
+    "stage_wave_id": 16,
+    "enemy_character_id": 23,
+    "level": 3,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 49,
+    "stage_wave_id": 16,
+    "enemy_character_id": 22,
+    "level": 3,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 50,
+    "stage_wave_id": 16,
+    "enemy_character_id": 23,
+    "level": 3,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 51,
+    "stage_wave_id": 17,
+    "enemy_character_id": 26,
+    "level": 3,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 52,
+    "stage_wave_id": 17,
+    "enemy_character_id": 26,
+    "level": 3,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 53,
+    "stage_wave_id": 17,
+    "enemy_character_id": 26,
+    "level": 3,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 54,
+    "stage_wave_id": 18,
+    "enemy_character_id": 24,
+    "level": 3,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 55,
+    "stage_wave_id": 18,
+    "enemy_character_id": 24,
+    "level": 3,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 56,
+    "stage_wave_id": 18,
+    "enemy_character_id": 25,
+    "level": 3,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 57,
+    "stage_wave_id": 19,
+    "enemy_character_id": 19,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 58,
+    "stage_wave_id": 19,
+    "enemy_character_id": 19,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 59,
+    "stage_wave_id": 19,
+    "enemy_character_id": 19,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 60,
+    "stage_wave_id": 20,
+    "enemy_character_id": 19,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 61,
+    "stage_wave_id": 20,
+    "enemy_character_id": 17,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 62,
+    "stage_wave_id": 20,
+    "enemy_character_id": 19,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 63,
+    "stage_wave_id": 21,
+    "enemy_character_id": 17,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 64,
+    "stage_wave_id": 21,
+    "enemy_character_id": 17,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 65,
+    "stage_wave_id": 21,
+    "enemy_character_id": 17,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 66,
+    "stage_wave_id": 22,
+    "enemy_character_id": 17,
+    "level": 2,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 67,
+    "stage_wave_id": 22,
+    "enemy_character_id": 19,
+    "level": 2,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 68,
+    "stage_wave_id": 22,
+    "enemy_character_id": 17,
+    "level": 2,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 69,
+    "stage_wave_id": 23,
+    "enemy_character_id": 17,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 70,
+    "stage_wave_id": 23,
+    "enemy_character_id": 27,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 71,
+    "stage_wave_id": 23,
+    "enemy_character_id": 17,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 72,
+    "stage_wave_id": 24,
+    "enemy_character_id": 27,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 73,
+    "stage_wave_id": 24,
+    "enemy_character_id": 27,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 74,
+    "stage_wave_id": 24,
+    "enemy_character_id": 27,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 75,
+    "stage_wave_id": 25,
+    "enemy_character_id": 27,
+    "level": 2,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 76,
+    "stage_wave_id": 25,
+    "enemy_character_id": 27,
+    "level": 2,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 77,
+    "stage_wave_id": 25,
+    "enemy_character_id": 27,
+    "level": 2,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 78,
+    "stage_wave_id": 26,
+    "enemy_character_id": 28,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 79,
+    "stage_wave_id": 26,
+    "enemy_character_id": 27,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 80,
+    "stage_wave_id": 26,
+    "enemy_character_id": 28,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 81,
+    "stage_wave_id": 27,
+    "enemy_character_id": 27,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 82,
+    "stage_wave_id": 27,
+    "enemy_character_id": 27,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 83,
+    "stage_wave_id": 27,
+    "enemy_character_id": 29,
+    "level": 2,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 84,
+    "stage_wave_id": 28,
+    "enemy_character_id": 27,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 85,
+    "stage_wave_id": 28,
+    "enemy_character_id": 27,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 86,
+    "stage_wave_id": 28,
+    "enemy_character_id": 29,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 87,
+    "stage_wave_id": 29,
+    "enemy_character_id": 29,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 88,
+    "stage_wave_id": 29,
+    "enemy_character_id": 29,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 89,
+    "stage_wave_id": 29,
+    "enemy_character_id": 29,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 90,
+    "stage_wave_id": 30,
+    "enemy_character_id": 29,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 91,
+    "stage_wave_id": 30,
+    "enemy_character_id": 29,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 92,
+    "stage_wave_id": 30,
+    "enemy_character_id": 30,
+    "level": 2,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 93,
+    "stage_wave_id": 31,
+    "enemy_character_id": 29,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 94,
+    "stage_wave_id": 31,
+    "enemy_character_id": 30,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 95,
+    "stage_wave_id": 31,
+    "enemy_character_id": 29,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 96,
+    "stage_wave_id": 32,
+    "enemy_character_id": 29,
+    "level": 2,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 97,
+    "stage_wave_id": 32,
+    "enemy_character_id": 30,
+    "level": 2,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 98,
+    "stage_wave_id": 32,
+    "enemy_character_id": 27,
+    "level": 2,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 99,
+    "stage_wave_id": 33,
+    "enemy_character_id": 30,
+    "level": 2,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 100,
+    "stage_wave_id": 33,
+    "enemy_character_id": 30,
+    "level": 2,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 101,
+    "stage_wave_id": 33,
+    "enemy_character_id": 30,
+    "level": 2,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 102,
+    "stage_wave_id": 34,
+    "enemy_character_id": 14,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 103,
+    "stage_wave_id": 34,
+    "enemy_character_id": 11,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 104,
+    "stage_wave_id": 34,
+    "enemy_character_id": 11,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 105,
+    "stage_wave_id": 35,
+    "enemy_character_id": 14,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 106,
+    "stage_wave_id": 35,
+    "enemy_character_id": 14,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 107,
+    "stage_wave_id": 35,
+    "enemy_character_id": 14,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 108,
+    "stage_wave_id": 36,
+    "enemy_character_id": 14,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 109,
+    "stage_wave_id": 36,
+    "enemy_character_id": 16,
+    "level": 2,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 110,
+    "stage_wave_id": 36,
+    "enemy_character_id": 11,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 111,
+    "stage_wave_id": 37,
+    "enemy_character_id": 15,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 112,
+    "stage_wave_id": 37,
+    "enemy_character_id": 11,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 113,
+    "stage_wave_id": 37,
+    "enemy_character_id": 14,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 114,
+    "stage_wave_id": 38,
+    "enemy_character_id": 15,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 115,
+    "stage_wave_id": 38,
+    "enemy_character_id": 14,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 116,
+    "stage_wave_id": 38,
+    "enemy_character_id": 11,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 117,
+    "stage_wave_id": 39,
+    "enemy_character_id": 14,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 118,
+    "stage_wave_id": 39,
+    "enemy_character_id": 16,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 119,
+    "stage_wave_id": 39,
+    "enemy_character_id": 15,
+    "level": 2,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 120,
+    "stage_wave_id": 40,
+    "enemy_character_id": 15,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 121,
+    "stage_wave_id": 40,
+    "enemy_character_id": 14,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 122,
+    "stage_wave_id": 40,
+    "enemy_character_id": 16,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 123,
+    "stage_wave_id": 41,
+    "enemy_character_id": 12,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 124,
+    "stage_wave_id": 41,
+    "enemy_character_id": 13,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 125,
+    "stage_wave_id": 41,
+    "enemy_character_id": 12,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 126,
+    "stage_wave_id": 42,
+    "enemy_character_id": 12,
+    "level": 2,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 127,
+    "stage_wave_id": 42,
+    "enemy_character_id": 13,
+    "level": 2,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 128,
+    "stage_wave_id": 42,
+    "enemy_character_id": 12,
+    "level": 2,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 129,
+    "stage_wave_id": 43,
+    "enemy_character_id": 12,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 130,
+    "stage_wave_id": 43,
+    "enemy_character_id": 13,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 131,
+    "stage_wave_id": 43,
+    "enemy_character_id": 14,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 132,
+    "stage_wave_id": 44,
+    "enemy_character_id": 12,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 133,
+    "stage_wave_id": 44,
+    "enemy_character_id": 16,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 134,
+    "stage_wave_id": 44,
+    "enemy_character_id": 13,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 135,
+    "stage_wave_id": 45,
+    "enemy_character_id": 12,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 136,
+    "stage_wave_id": 45,
+    "enemy_character_id": 15,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 137,
+    "stage_wave_id": 45,
+    "enemy_character_id": 13,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 138,
+    "stage_wave_id": 46,
+    "enemy_character_id": 13,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 139,
+    "stage_wave_id": 46,
+    "enemy_character_id": 13,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 140,
+    "stage_wave_id": 46,
+    "enemy_character_id": 15,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 141,
+    "stage_wave_id": 47,
+    "enemy_character_id": 12,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 142,
+    "stage_wave_id": 47,
+    "enemy_character_id": 15,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 143,
+    "stage_wave_id": 47,
+    "enemy_character_id": 13,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 144,
+    "stage_wave_id": 48,
+    "enemy_character_id": 31,
+    "level": 2,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 145,
+    "stage_wave_id": 49,
+    "enemy_character_id": 2,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 146,
+    "stage_wave_id": 49,
+    "enemy_character_id": 2,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 147,
+    "stage_wave_id": 49,
+    "enemy_character_id": 2,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 148,
+    "stage_wave_id": 50,
+    "enemy_character_id": 2,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 149,
+    "stage_wave_id": 50,
+    "enemy_character_id": 4,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 150,
+    "stage_wave_id": 50,
+    "enemy_character_id": 2,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 151,
+    "stage_wave_id": 51,
+    "enemy_character_id": 4,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 152,
+    "stage_wave_id": 51,
+    "enemy_character_id": 1,
+    "level": 2,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 153,
+    "stage_wave_id": 51,
+    "enemy_character_id": 2,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 154,
+    "stage_wave_id": 52,
+    "enemy_character_id": 2,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 155,
+    "stage_wave_id": 52,
+    "enemy_character_id": 1,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 156,
+    "stage_wave_id": 52,
+    "enemy_character_id": 4,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 157,
+    "stage_wave_id": 53,
+    "enemy_character_id": 2,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 158,
+    "stage_wave_id": 53,
+    "enemy_character_id": 2,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 159,
+    "stage_wave_id": 53,
+    "enemy_character_id": 4,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 160,
+    "stage_wave_id": 54,
+    "enemy_character_id": 5,
+    "level": 2,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 162,
+    "stage_wave_id": 55,
+    "enemy_character_id": 5,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 163,
+    "stage_wave_id": 56,
+    "enemy_character_id": 1,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 165,
+    "stage_wave_id": 56,
+    "enemy_character_id": 5,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 166,
+    "stage_wave_id": 57,
+    "enemy_character_id": 5,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 167,
+    "stage_wave_id": 57,
+    "enemy_character_id": 5,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 168,
+    "stage_wave_id": 57,
+    "enemy_character_id": 5,
+    "level": 2,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 177,
+    "stage_wave_id": 61,
+    "enemy_character_id": 5,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 161,
+    "stage_wave_id": 55,
+    "enemy_character_id": 4,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 170,
+    "stage_wave_id": 58,
+    "enemy_character_id": 1,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 171,
+    "stage_wave_id": 58,
+    "enemy_character_id": 4,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 172,
+    "stage_wave_id": 58,
+    "enemy_character_id": 4,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 173,
+    "stage_wave_id": 59,
+    "enemy_character_id": 5,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 174,
+    "stage_wave_id": 59,
+    "enemy_character_id": 5,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 175,
+    "stage_wave_id": 59,
+    "enemy_character_id": 5,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 176,
+    "stage_wave_id": 60,
+    "enemy_character_id": 6,
+    "level": 2,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 178,
+    "stage_wave_id": 61,
+    "enemy_character_id": 6,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 179,
+    "stage_wave_id": 61,
+    "enemy_character_id": 5,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 180,
+    "stage_wave_id": 62,
+    "enemy_character_id": 6,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 181,
+    "stage_wave_id": 62,
+    "enemy_character_id": 6,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 182,
+    "stage_wave_id": 62,
+    "enemy_character_id": 6,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 183,
+    "stage_wave_id": 63,
+    "enemy_character_id": 6,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 184,
+    "stage_wave_id": 63,
+    "enemy_character_id": 7,
+    "level": 2,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 185,
+    "stage_wave_id": 63,
+    "enemy_character_id": 6,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 186,
+    "stage_wave_id": 64,
+    "enemy_character_id": 8,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 187,
+    "stage_wave_id": 64,
+    "enemy_character_id": 8,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 188,
+    "stage_wave_id": 65,
+    "enemy_character_id": 9,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 189,
+    "stage_wave_id": 65,
+    "enemy_character_id": 8,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 190,
+    "stage_wave_id": 66,
+    "enemy_character_id": 8,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 191,
+    "stage_wave_id": 66,
+    "enemy_character_id": 9,
+    "level": 2,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 192,
+    "stage_wave_id": 66,
+    "enemy_character_id": 8,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 193,
+    "stage_wave_id": 67,
+    "enemy_character_id": 8,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 194,
+    "stage_wave_id": 67,
+    "enemy_character_id": 8,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 195,
+    "stage_wave_id": 67,
+    "enemy_character_id": 8,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 196,
+    "stage_wave_id": 68,
+    "enemy_character_id": 8,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 197,
+    "stage_wave_id": 68,
+    "enemy_character_id": 9,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 198,
+    "stage_wave_id": 68,
+    "enemy_character_id": 9,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 199,
+    "stage_wave_id": 69,
+    "enemy_character_id": 10,
+    "level": 2,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 200,
+    "stage_wave_id": 70,
+    "enemy_character_id": 8,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 201,
+    "stage_wave_id": 70,
+    "enemy_character_id": 8,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 202,
+    "stage_wave_id": 70,
+    "enemy_character_id": 8,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 203,
+    "stage_wave_id": 71,
+    "enemy_character_id": 9,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 204,
+    "stage_wave_id": 71,
+    "enemy_character_id": 9,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 205,
+    "stage_wave_id": 71,
+    "enemy_character_id": 9,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 206,
+    "stage_wave_id": 72,
+    "enemy_character_id": 10,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 207,
+    "stage_wave_id": 72,
+    "enemy_character_id": 10,
+    "level": 2,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 208,
+    "stage_wave_id": 73,
+    "enemy_character_id": 20,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 209,
+    "stage_wave_id": 73,
+    "enemy_character_id": 20,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 210,
+    "stage_wave_id": 74,
+    "enemy_character_id": 20,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 211,
+    "stage_wave_id": 74,
+    "enemy_character_id": 20,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 212,
+    "stage_wave_id": 74,
+    "enemy_character_id": 20,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 213,
+    "stage_wave_id": 75,
+    "enemy_character_id": 20,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 214,
+    "stage_wave_id": 75,
+    "enemy_character_id": 20,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 215,
+    "stage_wave_id": 75,
+    "enemy_character_id": 20,
+    "level": 2,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 216,
+    "stage_wave_id": 76,
+    "enemy_character_id": 20,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 217,
+    "stage_wave_id": 76,
+    "enemy_character_id": 20,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 218,
+    "stage_wave_id": 76,
+    "enemy_character_id": 20,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 219,
+    "stage_wave_id": 77,
+    "enemy_character_id": 20,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 220,
+    "stage_wave_id": 77,
+    "enemy_character_id": 20,
+    "level": 1,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 221,
+    "stage_wave_id": 77,
+    "enemy_character_id": 20,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  },
+  {
+    "id": 222,
+    "stage_wave_id": 78,
+    "enemy_character_id": 20,
+    "level": 1,
+    "slot": 1,
+    "ai_profile": null
+  },
+  {
+    "id": 223,
+    "stage_wave_id": 78,
+    "enemy_character_id": 21,
+    "level": 2,
+    "slot": 2,
+    "ai_profile": null
+  },
+  {
+    "id": 224,
+    "stage_wave_id": 78,
+    "enemy_character_id": 20,
+    "level": 1,
+    "slot": 3,
+    "ai_profile": null
+  }
+]

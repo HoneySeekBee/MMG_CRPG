@@ -65,6 +65,7 @@
     <Compile Include="Assets\Script\UI\ItemType\ItemDetailUI.cs" />
     <Compile Include="Assets\Script\UI\Popup\AdventureDetailPopup.cs" />
     <Compile Include="Assets\Script\UI\Popup\PartySetupPopup.cs" />
+    <Compile Include="Assets\Script\UI\Popup\GachaResultPopup.cs" />
     <Compile Include="Assets\Script\UI\Gacha\GachaBannerUI.cs" />
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\PlayPopupOpener.cs" />
     <Compile Include="Assets\Script\UI\Popup\StageButtonPopup.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Assets\Script\Cache\MasterDataCache.cs" />
     <Compile Include="Assets\Script\Scenes\Lobby\LobbySceneController.cs" />
     <Compile Include="Assets\Script\UI\User\UserCharacterStatusUI.cs" />
+    <Compile Include="Assets\Script\GamePlay\Gacha\GachaAnimationManager.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\DemonstrationScene\DemonstrationSceneManager.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Character_Controller\PlayerCamera.cs" />
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\BackgroundMusic.cs" />
@@ -226,6 +228,7 @@
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\Movement\MovementStates\IMovementState.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Manager\CharacterManager.cs" />
     <Compile Include="Assets\Script\GamePlay\BattleMapManager.cs" />
+    <Compile Include="Assets\Script\UI\Gacha\GachaNoticeUI.cs" />
     <Compile Include="Assets\Script\UI\FadeInOut.cs" />
     <Compile Include="Assets\Script\Scenes\Lobby\UserCharacterDeatailUI.cs" />
     <Compile Include="Assets\Script\Data\StageProgressManager.cs" />
@@ -243,10 +246,10 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\Art\Shader\ColorOverride.shader" />
-    <None Include="Assets\JMO Assets\Cartoon FX Remaster\CFXR Assets\Shaders\CFXR_SETTINGS.cginc" />
+    <None Include="Assets\ExternalAsset\JMO Assets\Cartoon FX Remaster\CFXR Assets\Shaders\CFXR_SETTINGS.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Shaders\GrayTint.shader" />
-    <None Include="Assets\JMO Assets\Cartoon FX Remaster\CFXR Assets\Shaders\CFXR.cginc" />
+    <None Include="Assets\ExternalAsset\JMO Assets\Cartoon FX Remaster\CFXR Assets\Shaders\CFXR.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
     <None Include="Assets\Art\Shader\InternalAura.shader" />
@@ -262,8 +265,8 @@
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
-    <None Include="Assets\JMO Assets\Cartoon FX Remaster\CFXR Prefabs\Texts\_Make your own text effect.txt" />
-    <None Include="Assets\JMO Assets\Cartoon FX Remaster\CFXR Assets\Shaders\CFXR_PASSES.cginc" />
+    <None Include="Assets\ExternalAsset\JMO Assets\Cartoon FX Remaster\CFXR Prefabs\Texts\_Make your own text effect.txt" />
+    <None Include="Assets\ExternalAsset\JMO Assets\Cartoon FX Remaster\CFXR Assets\Shaders\CFXR_PASSES.cginc" />
     <None Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Fonts\LilitaOne - OFL.txt" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\ExternalAsset\RPGTinyHeroWavePBR\Shader\PBRMaskTint.shader" />
@@ -272,7 +275,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\ExternalAsset\ithappy\Adventure_Land\Render_Pipeline_Convert\Render_Pipeline_Instructions_Unity_2021.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
-    <None Include="Assets\JMO Assets\Cartoon FX Remaster\CFXR Assets\Shaders\CFXR_URP.cginc" />
+    <None Include="Assets\ExternalAsset\JMO Assets\Cartoon FX Remaster\CFXR Assets\Shaders\CFXR_URP.cginc" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
@@ -1150,6 +1153,10 @@
       <HintPath>Library\ScriptAssemblies\Unity.Toonshader.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="com.unity.cinemachine.editor">
+      <HintPath>Library\ScriptAssemblies\com.unity.cinemachine.editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.Postprocessing.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.Postprocessing.Runtime.dll</HintPath>
       <Private>False</Private>
@@ -1302,6 +1309,10 @@
       <HintPath>Library\ScriptAssemblies\Unity.AI.Navigation.Editor.ConversionSystem.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Cinemachine">
+      <HintPath>Library\ScriptAssemblies\Cinemachine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.ScriptableBuildPipeline.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.ScriptableBuildPipeline.Editor.dll</HintPath>
       <Private>False</Private>
@@ -1320,13 +1331,13 @@
       <Project>{079D398E-4AFC-CD7E-7881-F923D075EBD1}</Project>
       <Name>Assembly-CSharp-firstpass</Name>
     </ProjectReference>
-    <ProjectReference Include="CFXRRuntime.csproj">
-      <Project>{84EDE0D0-8E7A-7924-F7CE-DF49719BEB3D}</Project>
-      <Name>CFXRRuntime</Name>
-    </ProjectReference>
     <ProjectReference Include="CFXREditor.csproj">
       <Project>{4CAA2C94-4A60-419A-360D-7506C8EEE66F}</Project>
       <Name>CFXREditor</Name>
+    </ProjectReference>
+    <ProjectReference Include="CFXRRuntime.csproj">
+      <Project>{84EDE0D0-8E7A-7924-F7CE-DF49719BEB3D}</Project>
+      <Name>CFXRRuntime</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

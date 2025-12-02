@@ -1,0 +1,42 @@
+[
+  {
+    "FactionId": 10,
+    "Key": "Faction_discipline",
+    "Label": "\uD48D\uAE30\uC704\uC6D0\uD68C",
+    "IconId": 31,
+    "ColorHex": "#fae045",
+    "SortOrder": 1,
+    "IsActive": true,
+    "Meta": "{\u0022description\u0022: null}"
+  },
+  {
+    "FactionId": 11,
+    "Key": "Faction_Gastronomic",
+    "Label": "\uBBF8\uC2DD\uBD80",
+    "IconId": 32,
+    "ColorHex": "#be8544",
+    "SortOrder": 1,
+    "IsActive": true,
+    "Meta": "{\u0022description\u0022: null}"
+  },
+  {
+    "FactionId": 12,
+    "Key": "Faction_Nemesis",
+    "Label": "\uB124\uBA54\uC2DC\uC2A4 \uC5F0\uAD6C\uD68C",
+    "IconId": 33,
+    "ColorHex": "#48264f",
+    "SortOrder": 1,
+    "IsActive": true,
+    "Meta": "{\u0022description\u0022: null}"
+  },
+  {
+    "FactionId": 13,
+    "Key": "Faction_starlight",
+    "Label": "\uBCC4\uBE5B \uADF9\uB2E8",
+    "IconId": 34,
+    "ColorHex": "#db0606",
+    "SortOrder": 1,
+    "IsActive": true,
+    "Meta": "{\u0022description\u0022: null}"
+  }
+]

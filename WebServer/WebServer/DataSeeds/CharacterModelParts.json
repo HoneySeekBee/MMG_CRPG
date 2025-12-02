@@ -1,0 +1,207 @@
+[
+  {
+    "part_id": 1,
+    "part_key": "ACC_01_Heart",
+    "part_type": "Acc"
+  },
+  {
+    "part_id": 2,
+    "part_key": "ACC_02_Leaf",
+    "part_type": "Acc"
+  },
+  {
+    "part_id": 3,
+    "part_key": "ACC_03_BlackGlass",
+    "part_type": "Acc"
+  },
+  {
+    "part_id": 4,
+    "part_key": "ACC_04_HeavyMetalGlass",
+    "part_type": "Acc"
+  },
+  {
+    "part_id": 5,
+    "part_key": "ACC_05_NerdGlass",
+    "part_type": "Acc"
+  },
+  {
+    "part_id": 6,
+    "part_key": "ACC_06_BunnyEars",
+    "part_type": "Acc"
+  },
+  {
+    "part_id": 7,
+    "part_key": "ACC_07_ShortEars",
+    "part_type": "Acc"
+  },
+  {
+    "part_id": 8,
+    "part_key": "ACC_08_Crown",
+    "part_type": "Acc"
+  },
+  {
+    "part_id": 9,
+    "part_key": "ACC_09_PiratePatch",
+    "part_type": "Acc"
+  },
+  {
+    "part_id": 10,
+    "part_key": "ACC_10_NinjaMask02",
+    "part_type": "Acc"
+  },
+  {
+    "part_id": 11,
+    "part_key": "ACC_11_NinjaMask07",
+    "part_type": "Acc"
+  },
+  {
+    "part_id": 12,
+    "part_key": "Eye_01",
+    "part_type": "Eye"
+  },
+  {
+    "part_id": 13,
+    "part_key": "Eye_02",
+    "part_type": "Eye"
+  },
+  {
+    "part_id": 14,
+    "part_key": "Eye_03",
+    "part_type": "Eye"
+  },
+  {
+    "part_id": 15,
+    "part_key": "Eye_04",
+    "part_type": "Eye"
+  },
+  {
+    "part_id": 16,
+    "part_key": "Eye_05",
+    "part_type": "Eye"
+  },
+  {
+    "part_id": 17,
+    "part_key": "Eye_06",
+    "part_type": "Eye"
+  },
+  {
+    "part_id": 18,
+    "part_key": "Eye_07",
+    "part_type": "Eye"
+  },
+  {
+    "part_id": 19,
+    "part_key": "Eye_08",
+    "part_type": "Eye"
+  },
+  {
+    "part_id": 20,
+    "part_key": "Eye_09",
+    "part_type": "Eye"
+  },
+  {
+    "part_id": 21,
+    "part_key": "Eye_10",
+    "part_type": "Eye"
+  },
+  {
+    "part_id": 22,
+    "part_key": "Eye_11",
+    "part_type": "Eye"
+  },
+  {
+    "part_id": 23,
+    "part_key": "Hair_01_Girl_Long",
+    "part_type": "Hair"
+  },
+  {
+    "part_id": 24,
+    "part_key": "Hair_02_Man_Sharp",
+    "part_type": "Hair"
+  },
+  {
+    "part_id": 25,
+    "part_key": "Hair_03_bobbed",
+    "part_type": "Hair"
+  },
+  {
+    "part_id": 26,
+    "part_key": "Hair_04_Man_Mohican",
+    "part_type": "Hair"
+  },
+  {
+    "part_id": 27,
+    "part_key": "Hair_05_Man_Raised",
+    "part_type": "Hair"
+  },
+  {
+    "part_id": 28,
+    "part_key": "Hair_06_Raised",
+    "part_type": "Hair"
+  },
+  {
+    "part_id": 29,
+    "part_key": "Hair_07_bobbed_2",
+    "part_type": "Hair"
+  },
+  {
+    "part_id": 30,
+    "part_key": "Hair_08_Girl_Tied",
+    "part_type": "Hair"
+  },
+  {
+    "part_id": 31,
+    "part_key": "Hair_09_Girl_Tied_2",
+    "part_type": "Hair"
+  },
+  {
+    "part_id": 32,
+    "part_key": "Hair_10_Girl_Raised",
+    "part_type": "Hair"
+  },
+  {
+    "part_id": 33,
+    "part_key": "Hair_11_Man_Sharp_2",
+    "part_type": "Hair"
+  },
+  {
+    "part_id": 34,
+    "part_key": "Head01_Male",
+    "part_type": "Head"
+  },
+  {
+    "part_id": 35,
+    "part_key": "Head02_Female",
+    "part_type": "Head"
+  },
+  {
+    "part_id": 36,
+    "part_key": "Mouth_01",
+    "part_type": "Mouth"
+  },
+  {
+    "part_id": 37,
+    "part_key": "Mouth_02",
+    "part_type": "Mouth"
+  },
+  {
+    "part_id": 38,
+    "part_key": "Mouth_03",
+    "part_type": "Mouth"
+  },
+  {
+    "part_id": 39,
+    "part_key": "Mouth_04",
+    "part_type": "Mouth"
+  },
+  {
+    "part_id": 40,
+    "part_key": "Mouth_05",
+    "part_type": "Mouth"
+  },
+  {
+    "part_id": 41,
+    "part_key": "Mouth_06",
+    "part_type": "Mouth"
+  }
+]
