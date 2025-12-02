@@ -1,0 +1,164 @@
+[
+  {
+    "id": 4,
+    "stage_id": 5,
+    "item_id": 17,
+    "rate": 1.00000,
+    "min_qty": 1,
+    "max_qty": 3,
+    "first_clear_only": false
+  },
+  {
+    "id": 5,
+    "stage_id": 5,
+    "item_id": 16,
+    "rate": 0.50000,
+    "min_qty": 1,
+    "max_qty": 3,
+    "first_clear_only": false
+  },
+  {
+    "id": 6,
+    "stage_id": 5,
+    "item_id": 15,
+    "rate": 0.20000,
+    "min_qty": 1,
+    "max_qty": 3,
+    "first_clear_only": false
+  },
+  {
+    "id": 7,
+    "stage_id": 6,
+    "item_id": 17,
+    "rate": 1.00000,
+    "min_qty": 1,
+    "max_qty": 3,
+    "first_clear_only": false
+  },
+  {
+    "id": 8,
+    "stage_id": 6,
+    "item_id": 16,
+    "rate": 0.50000,
+    "min_qty": 1,
+    "max_qty": 3,
+    "first_clear_only": false
+  },
+  {
+    "id": 9,
+    "stage_id": 6,
+    "item_id": 15,
+    "rate": 0.20000,
+    "min_qty": 1,
+    "max_qty": 3,
+    "first_clear_only": false
+  },
+  {
+    "id": 10,
+    "stage_id": 7,
+    "item_id": 17,
+    "rate": 1.00000,
+    "min_qty": 1,
+    "max_qty": 3,
+    "first_clear_only": false
+  },
+  {
+    "id": 11,
+    "stage_id": 7,
+    "item_id": 16,
+    "rate": 0.50000,
+    "min_qty": 1,
+    "max_qty": 3,
+    "first_clear_only": false
+  },
+  {
+    "id": 12,
+    "stage_id": 7,
+    "item_id": 15,
+    "rate": 0.20000,
+    "min_qty": 1,
+    "max_qty": 3,
+    "first_clear_only": false
+  },
+  {
+    "id": 13,
+    "stage_id": 8,
+    "item_id": 17,
+    "rate": 1.00000,
+    "min_qty": 1,
+    "max_qty": 3,
+    "first_clear_only": false
+  },
+  {
+    "id": 14,
+    "stage_id": 8,
+    "item_id": 16,
+    "rate": 0.50000,
+    "min_qty": 1,
+    "max_qty": 3,
+    "first_clear_only": false
+  },
+  {
+    "id": 15,
+    "stage_id": 8,
+    "item_id": 15,
+    "rate": 0.20000,
+    "min_qty": 1,
+    "max_qty": 3,
+    "first_clear_only": false
+  },
+  {
+    "id": 16,
+    "stage_id": 9,
+    "item_id": 17,
+    "rate": 1.00000,
+    "min_qty": 1,
+    "max_qty": 3,
+    "first_clear_only": false
+  },
+  {
+    "id": 17,
+    "stage_id": 9,
+    "item_id": 16,
+    "rate": 0.50000,
+    "min_qty": 1,
+    "max_qty": 3,
+    "first_clear_only": false
+  },
+  {
+    "id": 18,
+    "stage_id": 9,
+    "item_id": 15,
+    "rate": 0.20000,
+    "min_qty": 1,
+    "max_qty": 3,
+    "first_clear_only": false
+  },
+  {
+    "id": 19,
+    "stage_id": 10,
+    "item_id": 17,
+    "rate": 1.00000,
+    "min_qty": 1,
+    "max_qty": 3,
+    "first_clear_only": false
+  },
+  {
+    "id": 20,
+    "stage_id": 10,
+    "item_id": 16,
+    "rate": 0.50000,
+    "min_qty": 1,
+    "max_qty": 3,
+    "first_clear_only": false
+  },
+  {
+    "id": 21,
+    "stage_id": 10,
+    "item_id": 15,
+    "rate": 0.20000,
+    "min_qty": 1,
+    "max_qty": 3,
+    "first_clear_only": false
+  }
+]

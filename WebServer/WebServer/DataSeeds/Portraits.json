@@ -1,0 +1,432 @@
+[
+  {
+    "PortraitId": 2,
+    "Key": "por",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "PortraitId": 4,
+    "Key": "cha_seraphine",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 2
+  },
+  {
+    "PortraitId": 5,
+    "Key": "cha_raphael",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 2
+  },
+  {
+    "PortraitId": 6,
+    "Key": "cha_aaron",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 2
+  },
+  {
+    "PortraitId": 7,
+    "Key": "cha_mare",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 2
+  },
+  {
+    "PortraitId": 8,
+    "Key": "cha_tiya",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 2
+  },
+  {
+    "PortraitId": 9,
+    "Key": "cha_elysia",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 2
+  },
+  {
+    "PortraitId": 10,
+    "Key": "cha_raiden",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 2
+  },
+  {
+    "PortraitId": 11,
+    "Key": "cha_hajin",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 2
+  },
+  {
+    "PortraitId": 12,
+    "Key": "cha_doumo",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 2
+  },
+  {
+    "PortraitId": 13,
+    "Key": "cha_ria",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 2
+  },
+  {
+    "PortraitId": 14,
+    "Key": "cha_tomo",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 2
+  },
+  {
+    "PortraitId": 3,
+    "Key": "cha_lumi",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 3
+  },
+  {
+    "PortraitId": 15,
+    "Key": "P_Monster_ActiongOfGod_Blue",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "PortraitId": 16,
+    "Key": "P_Monster_ActiongOfGod_Yellow",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "PortraitId": 17,
+    "Key": "P_Monster_Angry_Prisoner",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "PortraitId": 18,
+    "Key": "P_Monster_Benevolent_Prisoner",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "PortraitId": 19,
+    "Key": "P_Monster_Brave_Golem",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 2
+  },
+  {
+    "PortraitId": 20,
+    "Key": "P_Monster_Contaminated_Bat",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "PortraitId": 21,
+    "Key": "P_Monster_Contaminated_Blue_Fish",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "PortraitId": 22,
+    "Key": "P_Monster_Contaminated_Crab",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "PortraitId": 23,
+    "Key": "P_Monster_Contaminated_Fish",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "PortraitId": 24,
+    "Key": "P_Monster_Contaminated_Green_Fish",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "PortraitId": 25,
+    "Key": "P_Monster_Contaminated_LivingArmor",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "PortraitId": 26,
+    "Key": "P_Monster_Contaminated_Red_Fish",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "PortraitId": 27,
+    "Key": "P_Monster_Contaminated_Red_Mushroom",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "PortraitId": 28,
+    "Key": "P_Monster_Contaminated_Striped_Fish",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "PortraitId": 29,
+    "Key": "P_Monster_Contaminated_Striped_Yellow_Fish",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "PortraitId": 30,
+    "Key": "P_Monster_Contaminated_WoodMask",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "PortraitId": 31,
+    "Key": "P_Monster_Contaminated_WoodMask_Sorcerer",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "PortraitId": 32,
+    "Key": "P_Monster_Filth_Slime",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "PortraitId": 33,
+    "Key": "P_Monster_Frog_King",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "PortraitId": 34,
+    "Key": "P_Monster_General_Slime",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "PortraitId": 35,
+    "Key": "P_Monster_GhostTree",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "PortraitId": 36,
+    "Key": "P_Monster_GhostTree_Candy",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "PortraitId": 37,
+    "Key": "P_Monster_GhostTree_Drain",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "PortraitId": 38,
+    "Key": "P_Monster_GhostTree_Evil",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "PortraitId": 39,
+    "Key": "P_Monster_Guardian_Golem",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "PortraitId": 40,
+    "Key": "P_Monster_Iron_Golem",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "PortraitId": 41,
+    "Key": "P_Monster_King_Slime",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "PortraitId": 42,
+    "Key": "P_Monster_Slime",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "PortraitId": 43,
+    "Key": "P_Monster_Soldier_Slime",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "PortraitId": 44,
+    "Key": "P_Monster_Young_Prisoner",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  }
+]

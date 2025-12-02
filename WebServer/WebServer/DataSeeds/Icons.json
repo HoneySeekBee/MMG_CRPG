@@ -1,0 +1,482 @@
+[
+  {
+    "IconId": 1,
+    "Key": "test1",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 0
+  },
+  {
+    "IconId": 2,
+    "Key": "test2",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 0
+  },
+  {
+    "IconId": 3,
+    "Key": "test3",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 0
+  },
+  {
+    "IconId": 5,
+    "Key": "test5",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 0
+  },
+  {
+    "IconId": 7,
+    "Key": "test7",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 0
+  },
+  {
+    "IconId": 8,
+    "Key": "test8",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 0
+  },
+  {
+    "IconId": 9,
+    "Key": "test9",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 0
+  },
+  {
+    "IconId": 10,
+    "Key": "test10",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 0
+  },
+  {
+    "IconId": 11,
+    "Key": "test11",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 0
+  },
+  {
+    "IconId": 4,
+    "Key": "test4",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 22,
+    "Key": "element_nohave",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 24,
+    "Key": "element_ground",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 25,
+    "Key": "element_physics",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 26,
+    "Key": "element_plant",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 27,
+    "Key": "element_water",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 23,
+    "Key": "element_fire",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 2
+  },
+  {
+    "IconId": 28,
+    "Key": "role_attack",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 29,
+    "Key": "role_depend",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 30,
+    "Key": "role_support",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 31,
+    "Key": "Faction_discipline",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 32,
+    "Key": "Faction_Gastronomic",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 33,
+    "Key": "Faction_Nemesis",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 34,
+    "Key": "Faction_Starlight",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 35,
+    "Key": "Equip_Head",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 36,
+    "Key": "Equip_Clothes",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 37,
+    "Key": "Equip_Boots",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 38,
+    "Key": "Equip_Gloves",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 39,
+    "Key": "Equip_Amulet",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 40,
+    "Key": "item_street_dark_cap",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 41,
+    "Key": "item_street_dark_gloves",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 42,
+    "Key": "item_street_soul_chain",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 43,
+    "Key": "item_street_thunder_jacket",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 44,
+    "Key": "item_street_wind_shooes",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 45,
+    "Key": "item_school_heart_gloves",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 46,
+    "Key": "item_school_jacket",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 47,
+    "Key": "item_school_pedora",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 48,
+    "Key": "item_school_pendant",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 49,
+    "Key": "item_school_shooes",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 50,
+    "Key": "item_old_fedora",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 51,
+    "Key": "item_work_gloves",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 52,
+    "Key": "item_striped_necktie",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 53,
+    "Key": "item_three_color_slippers",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 54,
+    "Key": "item_1934_shirts",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 55,
+    "Key": "item_moss",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 56,
+    "Key": "item_stonepowder",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 57,
+    "Key": "item_crystalfragment",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 58,
+    "Key": "Monster_ActiongOfGod_Blue",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  },
+  {
+    "IconId": 59,
+    "Key": "Monster_ActiongOfGod_Yellow",
+    "Atlas": null,
+    "X": null,
+    "Y": null,
+    "W": null,
+    "H": null,
+    "Version": 1
+  }
+]

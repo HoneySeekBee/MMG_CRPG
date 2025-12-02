@@ -1,0 +1,52 @@
+[
+  {
+    "RarityId": 4,
+    "Stars": 2,
+    "Key": "Rare",
+    "Label": "\uD76C\uAE30",
+    "ColorHex": "#000000",
+    "SortOrder": 1,
+    "IsActive": true,
+    "Meta": "{\u0022description\u0022: null}"
+  },
+  {
+    "RarityId": 3,
+    "Stars": 1,
+    "Key": "normal",
+    "Label": "\uC77C\uBC18",
+    "ColorHex": "#000000",
+    "SortOrder": 1,
+    "IsActive": true,
+    "Meta": "{\u0022description\u0022: \u0022\uC77C\uBC18 \uB4F1\uAE09\uC740 \uD754\uD574\uC694\u0022}"
+  },
+  {
+    "RarityId": 5,
+    "Stars": 3,
+    "Key": "superrare",
+    "Label": "\uC288\uD37C \uB808\uC5B4",
+    "ColorHex": "#000000",
+    "SortOrder": 1,
+    "IsActive": true,
+    "Meta": "{\u0022description\u0022: null}"
+  },
+  {
+    "RarityId": 6,
+    "Stars": 4,
+    "Key": "ultraRare",
+    "Label": "\uC6B8\uD2B8\uB77C \uB808\uC5B4",
+    "ColorHex": "#000000",
+    "SortOrder": 1,
+    "IsActive": true,
+    "Meta": "{\u0022description\u0022: null}"
+  },
+  {
+    "RarityId": 7,
+    "Stars": 5,
+    "Key": "legendary",
+    "Label": "\uC804\uC124",
+    "ColorHex": "#000000",
+    "SortOrder": 1,
+    "IsActive": true,
+    "Meta": "{\u0022description\u0022: null}"
+  }
+]

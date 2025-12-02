@@ -1,0 +1,212 @@
+[
+  {
+    "monster_id": 1,
+    "name": "\uBD84\uB178\uD55C \uC2E0\uB3C4\uC758 \uC601\uD63C",
+    "model_key": "model_faith_ghost_wrath",
+    "element_id": 10,
+    "portrait_id": 17
+  },
+  {
+    "monster_id": 2,
+    "name": "\uC21C\uC218\uD55C \uC2E0\uB3C4\uC758 \uC601\uD63C",
+    "model_key": "model_faith_ghost_pure",
+    "element_id": 12,
+    "portrait_id": 44
+  },
+  {
+    "monster_id": 4,
+    "name": "\uC790\uBE44\uB85C\uC6B4 \uC2E0\uB3C4\uC758 \uC601\uD63C ",
+    "model_key": "model_faith_ghost_mercy",
+    "element_id": 12,
+    "portrait_id": 18
+  },
+  {
+    "monster_id": 5,
+    "name": "\uC18D\uC8C4\uD558\uB294 \uAE30\uC0AC\uC758 \uC601\uD63C",
+    "model_key": "model_faith_knight_penitent",
+    "element_id": 12,
+    "portrait_id": 25
+  },
+  {
+    "monster_id": 6,
+    "name": "\uC2E0\uC758 \uBD84\uB178",
+    "model_key": "model_divine_wrath",
+    "element_id": 12,
+    "portrait_id": 16
+  },
+  {
+    "monster_id": 7,
+    "name": "\uC2E0\uC758 \uC2EC\uD310",
+    "model_key": "model_judgment_of_god",
+    "element_id": 12,
+    "portrait_id": 15
+  },
+  {
+    "monster_id": 9,
+    "name": "\uB0C9\uCCA0\uD55C \uACE8\uB818",
+    "model_key": "model_cold_guardian",
+    "element_id": 14,
+    "portrait_id": 40
+  },
+  {
+    "monster_id": 10,
+    "name": "\uC720\uC801\uC9C0\uC758 \uC218\uD638\uC790",
+    "model_key": "model_ruin_guardian",
+    "element_id": 11,
+    "portrait_id": 39
+  },
+  {
+    "monster_id": 8,
+    "name": "\uC6A9\uAC10\uD55C \uC218\uD638\uC790",
+    "model_key": "model_brave_guardian",
+    "element_id": 11,
+    "portrait_id": 19
+  },
+  {
+    "monster_id": 11,
+    "name": "\uD478\uB978 \uAE38\uB9E8",
+    "model_key": "model_gillman_blue",
+    "element_id": 14,
+    "portrait_id": 21
+  },
+  {
+    "monster_id": 12,
+    "name": "\uC624\uC5FC\uB41C \uD3EC\uC774\uC98C \uAE38\uB9E8",
+    "model_key": "model_gillman_poison",
+    "element_id": 11,
+    "portrait_id": 23
+  },
+  {
+    "monster_id": 13,
+    "name": "\uC624\uC5FC\uB41C \uADF8\uB9B0 \uAE38\uB9E8",
+    "model_key": "model_gillman_contaminated_green",
+    "element_id": 11,
+    "portrait_id": 24
+  },
+  {
+    "monster_id": 14,
+    "name": "\uBD89\uC740 \uAE38\uB9E8",
+    "model_key": "model_gillman_red",
+    "element_id": 14,
+    "portrait_id": 26
+  },
+  {
+    "monster_id": 15,
+    "name": "\uC904\uBB34\uB2AC \uAE38\uB9E8",
+    "model_key": "model_gillman_striped",
+    "element_id": 14,
+    "portrait_id": 28
+  },
+  {
+    "monster_id": 16,
+    "name": "\uB178\uB780 \uC904\uBB34\uB2AC \uAE38\uB9E8",
+    "model_key": "model_gillman_striped_yellow",
+    "element_id": 14,
+    "portrait_id": 29
+  },
+  {
+    "monster_id": 17,
+    "name": "\uD478\uB978 \uBC15\uC950",
+    "model_key": "model_bat_blue",
+    "element_id": 12,
+    "portrait_id": 20
+  },
+  {
+    "monster_id": 18,
+    "name": "\uAC00\uC2DC\uB4F1\uAECD\uC9C8\uAC8C",
+    "model_key": "model_crab_spiked_shell",
+    "element_id": 14,
+    "portrait_id": 22
+  },
+  {
+    "monster_id": 19,
+    "name": "\uBD89\uC740 \uB9F9\uB3C5\uBC84\uC12F",
+    "model_key": "model_mushroom_red_toxic",
+    "element_id": 10,
+    "portrait_id": 27
+  },
+  {
+    "monster_id": 20,
+    "name": "\uC6B0\uB4DC \uB9C8\uC2A4\uD06C\uC871 \uBCD1\uC0AC",
+    "model_key": "model_woodmask_warrior",
+    "element_id": 12,
+    "portrait_id": 30
+  },
+  {
+    "monster_id": 21,
+    "name": "\uC6B0\uB4DC \uB9C8\uC2A4\uD06C\uC871 \uC8FC\uC220\uC0AC",
+    "model_key": "model_woodmask_shaman",
+    "element_id": 13,
+    "portrait_id": 31
+  },
+  {
+    "monster_id": 22,
+    "name": "\uC2AC\uB77C\uC784",
+    "model_key": "model_slime",
+    "element_id": 13,
+    "portrait_id": 42
+  },
+  {
+    "monster_id": 23,
+    "name": "\uC2AC\uB77C\uC784 \uBCD1\uC0AC",
+    "model_key": "model_slime_soldier",
+    "element_id": 13,
+    "portrait_id": 43
+  },
+  {
+    "monster_id": 24,
+    "name": "\uC2AC\uB77C\uC784 \uC7A5\uAD70",
+    "model_key": "model_slime_general",
+    "element_id": 13,
+    "portrait_id": 34
+  },
+  {
+    "monster_id": 25,
+    "name": "\uC2AC\uB77C\uC784 \uD0B9",
+    "model_key": "model_slime_king",
+    "element_id": 13,
+    "portrait_id": 41
+  },
+  {
+    "monster_id": 26,
+    "name": "\uC624\uC5FC\uB41C \uC2AC\uB77C\uC784",
+    "model_key": "model_slime_contaminated",
+    "element_id": 11,
+    "portrait_id": 32
+  },
+  {
+    "monster_id": 27,
+    "name": "\uC720\uB839 \uB098\uBB34",
+    "model_key": "model_ghosttree",
+    "element_id": 13,
+    "portrait_id": 35
+  },
+  {
+    "monster_id": 28,
+    "name": "\uACE0\uC2A4\uD2B8 \uCE94\uB514 \uD2B8\uB9AC",
+    "model_key": "model_ghosttree_candy",
+    "element_id": 13,
+    "portrait_id": 36
+  },
+  {
+    "monster_id": 29,
+    "name": "\uACE0\uC2A4\uD2B8 \uD2B8\uB9AC \uB4DC\uB808\uC778",
+    "model_key": "model_ghosttree_drain",
+    "element_id": 12,
+    "portrait_id": 37
+  },
+  {
+    "monster_id": 30,
+    "name": "\uC5B4\uB460\uC758 \uACE0\uC2A4\uD2B8 \uD2B8\uB9AC",
+    "model_key": "model_ghosttree_evil",
+    "element_id": 11,
+    "portrait_id": 38
+  },
+  {
+    "monster_id": 31,
+    "name": "\uD504\uB85C\uADF8 \uD0B9",
+    "model_key": "model_frog_king",
+    "element_id": 14,
+    "portrait_id": 33
+  }
+]

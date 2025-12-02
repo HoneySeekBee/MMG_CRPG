@@ -68,7 +68,7 @@ public class LobbyPopup : UIPopup
 
         InventoryBtn.onClick.RemoveAllListeners();
         InventoryBtn.onClick.AddListener(ToggleInventoryPopup);
-
+        AddEvent_GachaShop();
         //  초기 로드 (비활성화 상태로)
         await PreloadPopups();
     }
@@ -184,5 +184,10 @@ public class LobbyPopup : UIPopup
         {
             onBattleLobbyClicked?.Invoke();
         });
+    }
+    public void AddEvent_GachaShop()
+    {
+        GachaBtn.onClick.RemoveAllListeners();
+        GachaBtn.onClick.AddListener(() => LobbyRootController.Instance.Show("GachaShop"));
     }
 }

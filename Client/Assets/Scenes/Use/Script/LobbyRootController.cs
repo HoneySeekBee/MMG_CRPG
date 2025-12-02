@@ -11,7 +11,7 @@ public class LobbyRootController : MonoBehaviour
     [Header("Tab Buttons")]
     public Button btnLogin, btnMain, btnBattle, btnAdventure, btnShop;
     [Header("Panels (Static)")]
-    public GameObject panelLogin, panelMain, panelBattle, panelAdventure, panelShop, partySet, panelBattleMap, panelGachaShop;
+    public GameObject panelLogin, panelMain, panelBattle, panelAdventure, panelShop, partySet, panelBattleMap, panelGachaShop, panelGachaResult;
 
     [Header("Popup Root (for Addressable popups)")]
     [SerializeField] private Transform popupRoot;
@@ -45,6 +45,7 @@ public class LobbyRootController : MonoBehaviour
             ["PartySet"] = partySet,
             ["BattleMap"] = panelBattleMap,
             ["GachaShop"] = panelGachaShop,
+            ["GachaResult"] = panelGachaResult,
         };
         _onShowActions = new()
         {
@@ -54,7 +55,7 @@ public class LobbyRootController : MonoBehaviour
             ["Adventure"] = () => OpenAdventureLobbyPopup(),
             ["PartySet"] = () => OpenPartySetupPopup(),
             ["BattleMap"] = () => OpenBattleMapPopup(),
-            ["GachaShop"] = () => OpenGachaShopPopup(),
+            ["GachaShop"] = () => OpenGachaShopPopup()
         };
 
         btnLogin.onClick.AddListener(() => Show("Login"));
@@ -202,15 +203,64 @@ public class LobbyRootController : MonoBehaviour
         if (popupPool == null)
         {
             popupPool = FindObjectOfType<UIPopupPool>();
+            if (popupPool == null)
+            {
+                Debug.LogError("UIPopupPool not found");
+                return;
+            }
+        }
+
+        // 먼저 팝업만 로드
+        var popup = await popupPool.ShowPopupAsync<GachaShopPopup>(key, popupRoot);
+        if (popup == null)
+        {
+            Debug.LogError("GachaShopPopup open failed");
+            return;
+        }
+
+        // UI는 띄웠으니 서버에서 데이터 불러오기 시작
+        StartCoroutine(LoadGachaCatalogCoroutine(popup));
+    }
+    private IEnumerator LoadGachaCatalogCoroutine(GachaShopPopup popup)
+    {
+        GachaCatalogPb catalog = null;
+
+        // 서버 API 호출
+        yield return NetworkManager.Instance.GachaNetwork.GetCatalogAsync((res) =>
+        {
+            if (!res.Ok)
+            {
+                Debug.LogError("카탈로그 불러오기 실패: " + res.Message);
+                return;
+            }
+
+            catalog = res.Data;  // 서버 응답 저장
+        });
+
+        if (catalog == null)
+        {
+            Debug.LogError("카탈로그 데이터 null");
+            yield break;
+        }
+
+        // UI 업데이트
+        popup.Set(FadeInOut.Start_FadeIn, catalog);
+    }
+    private async void OpenGachaResultPopup(GachaDrawResultPb result)
+    {
+        const string key = "GachaResultPopup";
+        var popupPool = UIPrefabPool.Instance as UIPopupPool;
+        if (popupPool == null)
+        {
+            popupPool = FindObjectOfType<UIPopupPool>();
             if (popupPool == null) { Debug.LogError("UIPopupPool not found"); return; }
         }
-        var popup = await popupPool.ShowPopupAsync<GachaShopPopup>(key, popupRoot);
+        var popup = await popupPool.ShowPopupAsync<GachaResultPopup>(key, popupRoot);
         if (popup == null) { Debug.LogError("BattleMapPopup open failed"); return; }
 
         GachaBannerListPb listpb = new GachaBannerListPb();
         Debug.Log("listpb 추후 받아오기");
 
-        popup.Set(FadeInOut.Start_FadeIn, listpb);
+        popup.Set(FadeInOut.Start_FadeIn, result);
     }
-
 }

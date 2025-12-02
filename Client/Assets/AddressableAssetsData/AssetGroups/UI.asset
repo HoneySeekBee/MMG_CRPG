@@ -32,6 +32,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 38f2c4430285de7448f8912065c850a4
+    m_Address: GachaResultPopup
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 525f1731c1d54734ca0dfb0470abe634
     m_Address: LobbyPopupUI
     m_ReadOnly: 0

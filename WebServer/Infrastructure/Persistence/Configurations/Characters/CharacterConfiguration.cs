@@ -42,12 +42,10 @@ namespace Infrastructure.Persistence.Configurations.Characters
    .HasConversion(utcConverter)
    .IsRequired(false);
             e.Property(x => x.IsLimited).IsRequired().HasDefaultValue(false);
-
-            // Tags: IReadOnlyList<string> → 백필드 _tags 를 text[]로 매핑
             e.Property<List<string>>("_tags")
                 .HasColumnName("Tags")
-                .HasColumnType("text[]")
-                .HasDefaultValueSql("'{}'::text[]")
+                .HasColumnType("jsonb")
+                .HasDefaultValueSql("'[]'::jsonb")
                 .IsRequired();
 
             // Meta: JSON 문자열을 jsonb 로 저장

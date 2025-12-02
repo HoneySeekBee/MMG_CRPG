@@ -69,7 +69,6 @@ message GachaDrawResultPb {
     int64 timestampUtc = 1;
     repeated GachaDrawItemPb items = 2;
 
-    
     int32 usedTickets = 3;
     int64 usedCurrency = 4;
      

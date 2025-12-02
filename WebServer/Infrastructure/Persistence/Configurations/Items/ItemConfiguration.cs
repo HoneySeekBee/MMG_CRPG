@@ -33,7 +33,9 @@ namespace Infrastructure.Persistence.Configurations.Items
             e.Property(x => x.Weight).HasDefaultValue(0);
 
             // string[] -> text[] (Npgsql이 자동 매핑)
-            e.Property(x => x.Tags).HasColumnType("text[]").HasDefaultValue(new string[] { });
+            e.Property(x => x.Tags)
+    .HasColumnType("jsonb")
+    .HasDefaultValueSql("'[]'::jsonb");
 
             // JsonNode -> jsonb
             e.Property(x => x.Meta).HasColumnType("jsonb");
