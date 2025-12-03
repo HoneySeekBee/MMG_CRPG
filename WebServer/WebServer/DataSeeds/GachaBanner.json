@@ -11,8 +11,8 @@
     "Priority": 0,
     "Status": 1,
     "IsActive": true,
-    "cost_currency_id": null,
-    "cost": null,
-    "ticket_item_id": null
+    "cost_currency_id": 2,
+    "cost": 100,
+    "ticket_item_id": 31
   }
 ]

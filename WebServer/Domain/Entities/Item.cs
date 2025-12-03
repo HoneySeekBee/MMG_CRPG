@@ -12,7 +12,7 @@ namespace Domain.Entities
     public sealed class Item
     {
         // [PK & 기본 정보]
-        public long Id { get; private set; }                       // bigserial
+        public int Id { get; private set; }                       // bigserial
         public string Code { get; private set; }                   // UNIQUE, 외부노출용 안전키
         public string Name { get; private set; }                   // 다국어 미사용 가정
         public string Description { get; private set; } = string.Empty;
@@ -54,7 +54,7 @@ namespace Domain.Entities
         private Item() { } // ORM용
 
         public Item(
-            long id,
+            int id,
             string code,
             string name,
             int typeId,
@@ -271,19 +271,19 @@ namespace Domain.Entities
 
     public sealed class ItemStat
     {
-        public long Id { get; private set; }           // DB bigserial (도메인에선 0으로 시작 가능)
-        public long ItemId { get; private set; }
+        public int Id { get; private set; }           // DB bigserial (도메인에선 0으로 시작 가능)
+        public int ItemId { get; private set; }
         public int StatId { get; private set; }        // FK -> StatTypes
         public decimal Value { get; private set; }     // NUMERIC(12,4) 
         public StatType StatType { get; private set; }
         private ItemStat() { }
-        public ItemStat(long itemId, int statId, decimal value)
+        public ItemStat(int itemId, int statId, decimal value)
         {
             ItemId = itemId;
             StatId = statId;
             Update(value);
         }
-        public ItemStat(long itemId, int statId, decimal value, StatType statType) : this(itemId, statId, value)
+        public ItemStat(int itemId, int statId, decimal value, StatType statType) : this(itemId, statId, value)
        => StatType = statType;
 
         public void Update(decimal value)
@@ -294,15 +294,15 @@ namespace Domain.Entities
 
     public sealed class ItemEffect
     {
-        public long Id { get; private set; }
-        public long ItemId { get; private set; }
+        public int Id { get; private set; }
+        public int ItemId { get; private set; }
         public ItemEffectScope Scope { get; private set; }
         public JsonDocument Payload { get; private set; }
         public short SortOrder { get; private set; }
 
         private ItemEffect() { }
 
-        public ItemEffect(long itemId, ItemEffectScope scope, JsonDocument payload, short sortOrder = 0)
+        public ItemEffect(int itemId, ItemEffectScope scope, JsonDocument payload, short sortOrder = 0)
         {
             ItemId = itemId;
             Scope = scope;
@@ -320,15 +320,15 @@ namespace Domain.Entities
 
     public sealed class ItemPrice
     {
-        public long Id { get; private set; }
-        public long ItemId { get; private set; }
+        public int Id { get; private set; }
+        public int ItemId { get; private set; }
         public int CurrencyId { get; private set; }             // FK -> Currencies
         public ItemPriceType PriceType { get; private set; }    // BUY/SELL/UPGRADE/CRAFT
         public long Price { get; private set; }                 // >= 0
 
         private ItemPrice() { }
 
-        public ItemPrice(long itemId, int currencyId, ItemPriceType priceType, long price)
+        public ItemPrice(int itemId, int currencyId, ItemPriceType priceType, long price)
         {
             if (price < 0) throw new ArgumentOutOfRangeException(nameof(price));
             ItemId = itemId;

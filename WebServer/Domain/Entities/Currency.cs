@@ -8,7 +8,7 @@ namespace Domain.Entities
 {
     public sealed class Currency
     {
-        public short Id { get; private set; }          // smallint
+        public int Id { get; private set; }          // smallint
         public string Code { get; private set; } = ""; // UNIQUE
         public string Name { get; private set; } = "";
 

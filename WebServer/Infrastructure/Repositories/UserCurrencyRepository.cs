@@ -14,7 +14,7 @@ namespace Infrastructure.Repositories
     {
         private readonly GameDBContext _db; 
         public UserCurrencyRepository(GameDBContext db) => _db = db;
-        public Task<UserCurrency?> GetAsync(int userId, short cid, CancellationToken ct) =>
+        public Task<UserCurrency?> GetAsync(int userId, int cid, CancellationToken ct) =>
             _db.UserCurrencies.FirstOrDefaultAsync(x => x.UserId == userId && x.CurrencyId == cid, ct);
         public Task<List<UserCurrency>> GetByUserAsync(int userId, CancellationToken ct) =>
             _db.UserCurrencies.Where(x => x.UserId == userId).ToListAsync(ct);

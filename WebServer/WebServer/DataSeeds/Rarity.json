@@ -7,7 +7,9 @@
     "ColorHex": "#000000",
     "SortOrder": 1,
     "IsActive": true,
-    "Meta": "{\u0022description\u0022: null}"
+    "Meta": {
+      "description": null
+    }
   },
   {
     "RarityId": 3,
@@ -17,7 +19,9 @@
     "ColorHex": "#000000",
     "SortOrder": 1,
     "IsActive": true,
-    "Meta": "{\u0022description\u0022: \u0022\uC77C\uBC18 \uB4F1\uAE09\uC740 \uD754\uD574\uC694\u0022}"
+    "Meta": {
+      "description": "\uC77C\uBC18 \uB4F1\uAE09\uC740 \uD754\uD574\uC694"
+    }
   },
   {
     "RarityId": 5,
@@ -27,7 +31,9 @@
     "ColorHex": "#000000",
     "SortOrder": 1,
     "IsActive": true,
-    "Meta": "{\u0022description\u0022: null}"
+    "Meta": {
+      "description": null
+    }
   },
   {
     "RarityId": 6,
@@ -37,7 +43,9 @@
     "ColorHex": "#000000",
     "SortOrder": 1,
     "IsActive": true,
-    "Meta": "{\u0022description\u0022: null}"
+    "Meta": {
+      "description": null
+    }
   },
   {
     "RarityId": 7,
@@ -47,6 +55,8 @@
     "ColorHex": "#000000",
     "SortOrder": 1,
     "IsActive": true,
-    "Meta": "{\u0022description\u0022: null}"
+    "Meta": {
+      "description": null
+    }
   }
 ]

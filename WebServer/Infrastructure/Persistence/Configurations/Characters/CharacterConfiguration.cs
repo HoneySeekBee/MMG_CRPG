@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Domain.Entities;
 using Domain.Entities.Characters;
@@ -42,11 +43,17 @@ namespace Infrastructure.Persistence.Configurations.Characters
    .HasConversion(utcConverter)
    .IsRequired(false);
             e.Property(x => x.IsLimited).IsRequired().HasDefaultValue(false);
+
             e.Property<List<string>>("_tags")
-                .HasColumnName("Tags")
-                .HasColumnType("jsonb")
-                .HasDefaultValueSql("'[]'::jsonb")
-                .IsRequired();
+    .HasColumnName("Tags")
+    .HasColumnType("jsonb")
+    .HasConversion(
+        v => JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),
+        v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions?)null)
+             ?? new List<string>()
+    )
+    .HasDefaultValueSql("'[]'::jsonb")
+    .IsRequired();
 
             // Meta: JSON 문자열을 jsonb 로 저장
             e.Property(x => x.MetaJson)

@@ -33,7 +33,7 @@ namespace Infrastructure.Caching
                     c.IsLimited,
                     c.ReleaseDate,
                     c.FormationNumber,
-                    (IReadOnlyList<string>)(c.Tags ?? new List<string>()),
+                    (IReadOnlyList<string>)(c.Tags ?? Array.Empty<string>()),
                     c.MetaJson,
 
                     // Skills

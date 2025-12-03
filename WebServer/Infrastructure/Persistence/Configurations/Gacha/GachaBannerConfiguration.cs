@@ -20,81 +20,83 @@ namespace Infrastructure.Persistence.Configurations.Gacha
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Id)
-                .HasColumnName("id");
+                .HasColumnName("BannerId");  // DB 그대로
 
-            // Unique Key (운영툴용 Key)
+            // Key
             builder.Property(x => x.Key)
-                .HasColumnName("key")
+                .HasColumnName("Key")
                 .IsRequired();
-
             builder.HasIndex(x => x.Key).IsUnique();
 
-            // Title / Subtitle
+            // Title
             builder.Property(x => x.Title)
-                .HasColumnName("title")
+                .HasColumnName("Title")
                 .IsRequired();
 
+            // Subtitle
             builder.Property(x => x.Subtitle)
-                .HasColumnName("subtitle");
+                .HasColumnName("Subtitle");
 
-            // Portrait Image (nullable)
+            // PortraitId
             builder.Property(x => x.PortraitId)
-                .HasColumnName("portrait_id");
+                .HasColumnName("PortraitId");
 
-            // Gacha Pool 연결
+            // GachaPoolId
             builder.Property(x => x.GachaPoolId)
-                .HasColumnName("gacha_pool_id")
+                .HasColumnName("GachaPoolId")
                 .IsRequired();
 
-            // Schedule
+            // StartsAt
             builder.Property(x => x.StartsAt)
-                .HasColumnName("starts_at")
+                .HasColumnName("StartsAt")
                 .HasColumnType("timestamptz")
                 .IsRequired();
 
+            // EndsAt
             builder.Property(x => x.EndsAt)
-                .HasColumnName("ends_at")
+                .HasColumnName("EndsAt")
                 .HasColumnType("timestamptz");
 
             // Priority
             builder.Property(x => x.Priority)
-                .HasColumnName("priority")
+                .HasColumnName("Priority")
                 .IsRequired();
 
-            // Status (enum → smallint)
+            // Status
             builder.Property(x => x.Status)
-                .HasColumnName("status")
+                .HasColumnName("Status")
                 .HasConversion<short>()
                 .IsRequired();
 
             // IsActive
             builder.Property(x => x.IsActive)
-                .HasColumnName("is_active")
+                .HasColumnName("IsActive")
                 .IsRequired();
 
-            builder.Property<int>("CostCurrencyId")
+            // cost_currency_id (snake_case)
+            builder.Property(x => x.CostCurrencyId)
                 .HasColumnName("cost_currency_id")
-                .IsRequired(false); // 티켓-only 배너 가능
+                .IsRequired();
 
-            builder.Property<int>("Cost")
-                .HasColumnName("cost")
-                .IsRequired(false);
-
-            builder.Property<int>("TicketItemId")
+            // ticket_item_id
+            builder.Property(x => x.TicketItemId)
                 .HasColumnName("ticket_item_id")
-                .IsRequired(false);
+                .IsRequired();
 
-            // 외래키 구성 (Currency, Item은 선택적)
+            // cost
+            builder.Property(x => x.Cost)
+                .HasColumnName("cost")
+                .IsRequired();
+
+            // Relations
             builder.HasOne<Currency>()
                 .WithMany()
-                .HasForeignKey("CostCurrencyId")
-                .HasPrincipalKey(c => c.Id)
+                .HasForeignKey(x => x.CostCurrencyId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne<Item>()
                 .WithMany()
-                .HasForeignKey("TicketItemId")
-                .HasPrincipalKey(i => i.Id)
+                .HasForeignKey(x => x.TicketItemId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

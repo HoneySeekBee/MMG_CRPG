@@ -20,9 +20,7 @@ namespace WebServer.Controllers
         [HttpPost]
         public async Task<IActionResult> Ping(CancellationToken ct)
         { 
-            var userId = User.GetUserId(); // Claims에서 가져오기
-            if (userId == null) return Unauthorized();
-
+            var userId = User.GetUserId(); // Claims에서 가져오기 
             if (User.IsInRole("admin"))
                 return Ok(new { ok = true });
 

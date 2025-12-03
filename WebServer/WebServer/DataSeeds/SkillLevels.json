@@ -2,7 +2,22 @@
   {
     "SkillId": 35,
     "Level": 1,
-    "Values": "{\u0022mods\u0022: [{\u0022op\u0022: \u0022add\u0022, \u0022stat\u0022: \u0022hpMax\u0022, \u0022value\u0022: 15}, {\u0022op\u0022: \u0022add\u0022, \u0022stat\u0022: \u0022def\u0022, \u0022value\u0022: 1}], \u0022power\u0022: null, \u0022duration\u0022: 3}",
+    "Values": {
+      "mods": [
+        {
+          "op": "add",
+          "stat": "hpMax",
+          "value": 15
+        },
+        {
+          "op": "add",
+          "stat": "def",
+          "value": 1
+        }
+      ],
+      "power": null,
+      "duration": 3
+    },
     "Description": null,
     "Materials": null,
     "CostGold": 1
@@ -10,7 +25,17 @@
   {
     "SkillId": 34,
     "Level": 2,
-    "Values": "{\u0022mods\u0022: [], \u0022power\u0022: {\u0022flat\u0022: 2, \u0022hits\u0022: 2, \u0022kind\u0022: \u0022damage\u0022, \u0022hpRate\u0022: 2, \u0022atkRate\u0022: 2}, \u0022duration\u0022: null}",
+    "Values": {
+      "mods": [],
+      "power": {
+        "flat": 2,
+        "hits": 2,
+        "kind": "damage",
+        "hpRate": 2,
+        "atkRate": 2
+      },
+      "duration": null
+    },
     "Description": "Level 2 Skill",
     "Materials": null,
     "CostGold": 2
@@ -18,7 +43,17 @@
   {
     "SkillId": 34,
     "Level": 1,
-    "Values": "{\u0022mods\u0022: [], \u0022power\u0022: {\u0022flat\u0022: 1, \u0022hits\u0022: 4, \u0022kind\u0022: \u0022damage\u0022, \u0022hpRate\u0022: 1.04, \u0022atkRate\u0022: 1.04}, \u0022duration\u0022: null}",
+    "Values": {
+      "mods": [],
+      "power": {
+        "flat": 1,
+        "hits": 4,
+        "kind": "damage",
+        "hpRate": 1.04,
+        "atkRate": 1.04
+      },
+      "duration": null
+    },
     "Description": "level1 skill",
     "Materials": null,
     "CostGold": 2

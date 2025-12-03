@@ -11,18 +11,16 @@
     "Tradable": true,
     "DurabilityMax": 1,
     "Weight": 0,
-    "Tags": [
-      "ett"
-    ],
     "IsActive": true,
-    "Meta": "{}",
+    "Meta": {},
     "CreatedBy": "admin",
     "CreatedAt": "2025-09-07T02:05:53.833847Z",
     "UpdatedAt": "2025-09-07T02:05:53.835086Z",
     "Description": "eqteqeq",
     "Name": "ette",
     "BindType": 0,
-    "EquipType": null
+    "EquipType": null,
+    "Tags": null
   },
   {
     "Id": 9,
@@ -36,18 +34,16 @@
     "Tradable": true,
     "DurabilityMax": 1,
     "Weight": 0,
-    "Tags": [
-      "er"
-    ],
     "IsActive": true,
-    "Meta": "{}",
+    "Meta": {},
     "CreatedBy": "admin",
     "CreatedAt": "2025-09-07T02:13:52.684634Z",
     "UpdatedAt": "2025-09-07T02:13:52.689412Z",
     "Description": "\uAE30\uBCF8 \uAC80\uC785\uB2C8\uB2E4.",
     "Name": "\uAE30\uBCF8\uAC80",
     "BindType": 2,
-    "EquipType": null
+    "EquipType": null,
+    "Tags": null
   },
   {
     "Id": 10,
@@ -61,18 +57,16 @@
     "Tradable": true,
     "DurabilityMax": null,
     "Weight": 0,
-    "Tags": [
-      "head"
-    ],
     "IsActive": true,
-    "Meta": "{}",
+    "Meta": {},
     "CreatedBy": "admin",
     "CreatedAt": "2025-10-25T07:34:12.946585Z",
     "UpdatedAt": "2025-10-25T07:34:12.95088Z",
     "Description": "\uC624\uB798\uB418\uC5B4 \uBCF4\uC774\uB294 \uC911\uC808\uBAA8\uC774\uB2E4.",
     "Name": "\uB0A1\uC740 \uC911\uC808\uBAA8",
     "BindType": 0,
-    "EquipType": 3
+    "EquipType": 3,
+    "Tags": null
   },
   {
     "Id": 11,
@@ -86,18 +80,16 @@
     "Tradable": false,
     "DurabilityMax": null,
     "Weight": 0,
-    "Tags": [
-      "gloves"
-    ],
     "IsActive": true,
-    "Meta": "{}",
+    "Meta": {},
     "CreatedBy": "admin",
     "CreatedAt": "2025-10-25T07:35:14.792577Z",
     "UpdatedAt": "2025-10-25T07:35:14.792588Z",
     "Description": "\uB178\uAC00\uB2E4 \uD544\uC218 \uC544\uC774\uD15C \uBAA9\uC7A5\uAC11",
     "Name": "\uBAA9\uC7A5\uAC11",
     "BindType": 0,
-    "EquipType": 6
+    "EquipType": 6,
+    "Tags": null
   },
   {
     "Id": 12,
@@ -111,18 +103,16 @@
     "Tradable": true,
     "DurabilityMax": null,
     "Weight": 0,
-    "Tags": [
-      "amulet"
-    ],
     "IsActive": true,
-    "Meta": "{}",
+    "Meta": {},
     "CreatedBy": "admin",
     "CreatedAt": "2025-10-25T07:36:38.85313Z",
     "UpdatedAt": "2025-10-25T07:36:38.85464Z",
     "Description": "\uC904\uBB34\uB2AC\uAC00 \uC774\uC05C \uB125\uD0C0\uC774",
     "Name": "\uC904\uBB34\uB2AC \uB125\uD0C0\uC774",
     "BindType": 0,
-    "EquipType": 9
+    "EquipType": 9,
+    "Tags": null
   },
   {
     "Id": 13,
@@ -136,18 +126,16 @@
     "Tradable": true,
     "DurabilityMax": null,
     "Weight": 0,
-    "Tags": [
-      "shooes"
-    ],
     "IsActive": true,
-    "Meta": "{}",
+    "Meta": {},
     "CreatedBy": "admin",
     "CreatedAt": "2025-10-25T07:37:36.11522Z",
     "UpdatedAt": "2025-10-25T07:37:36.115232Z",
     "Description": "\uB300\uC911\uC801\uC778 \uC0BC\uC0C9 \uC2AC\uB9AC\uD37C",
     "Name": "\uC0BC\uC0C9 \uC2AC\uB9AC\uD37C",
     "BindType": 0,
-    "EquipType": 7
+    "EquipType": 7,
+    "Tags": null
   },
   {
     "Id": 14,
@@ -161,18 +149,16 @@
     "Tradable": true,
     "DurabilityMax": null,
     "Weight": 0,
-    "Tags": [
-      "body"
-    ],
     "IsActive": true,
-    "Meta": "{}",
+    "Meta": {},
     "CreatedBy": "admin",
     "CreatedAt": "2025-10-25T07:38:16.81694Z",
     "UpdatedAt": "2025-10-25T07:38:16.81695Z",
     "Description": "1934 \uC154\uCE20",
     "Name": "1934 \uC154\uCE20",
     "BindType": 0,
-    "EquipType": 4
+    "EquipType": 4,
+    "Tags": null
   },
   {
     "Id": 17,
@@ -186,18 +172,16 @@
     "Tradable": true,
     "DurabilityMax": null,
     "Weight": 0,
-    "Tags": [
-      "material"
-    ],
     "IsActive": true,
-    "Meta": "{}",
+    "Meta": {},
     "CreatedBy": "admin",
     "CreatedAt": "2025-11-08T07:30:25.138952Z",
     "UpdatedAt": "2025-11-08T07:30:25.147892Z",
     "Description": "\uD2B9\uBCC4\uD55C \uC9C0\uC5ED\uC5D0\uC11C \uB098\uC628 \uB3CC \uAC00\uB8E8. \uD76C\uBBF8\uD558\uAC8C \uB9C8\uB098\uB97C \uD488\uACE0 \uC788\uC2B5\uB2C8\uB2E4.",
     "Name": "\uB3CC \uAC00\uB8E8",
     "BindType": 0,
-    "EquipType": null
+    "EquipType": null,
+    "Tags": null
   },
   {
     "Id": 15,
@@ -211,18 +195,16 @@
     "Tradable": true,
     "DurabilityMax": null,
     "Weight": 0,
-    "Tags": [
-      "material"
-    ],
     "IsActive": true,
-    "Meta": "{}",
+    "Meta": {},
     "CreatedBy": "admin",
     "CreatedAt": "2025-11-08T07:24:04.20918Z",
     "UpdatedAt": "2025-11-08T07:24:04.214166Z",
     "Description": "\uB9C8\uB098\uB97C \uBA38\uAE08\uC740 \uACB0\uC815 \uD30C\uD3B8\uC774\uB2E4. \uB2E4\uC591\uD55C \uACF3\uC5D0 \uC0AC\uC6A9\uB41C\uB2E4.",
     "Name": "\uACB0\uC815 \uD30C\uD3B8",
     "BindType": 0,
-    "EquipType": null
+    "EquipType": null,
+    "Tags": null
   },
   {
     "Id": 16,
@@ -236,18 +218,16 @@
     "Tradable": true,
     "DurabilityMax": null,
     "Weight": 0,
-    "Tags": [
-      "material"
-    ],
     "IsActive": true,
-    "Meta": "{}",
+    "Meta": {},
     "CreatedBy": "admin",
     "CreatedAt": "2025-11-08T07:27:28.08056Z",
     "UpdatedAt": "2025-11-08T07:27:28.085288Z",
     "Description": "\uC2B5\uD55C \uC9C0\uC5ED\uC5D0\uC11C \uC790\uB77C\uB294 \uC774\uB07C\uC785\uB2C8\uB2E4. \uB9C8\uB098\uB97C \uD76C\uBBF8\uD558\uAC8C \uBA38\uAE08\uACE0 \uC788\uC2B5\uB2C8\uB2E4.",
     "Name": "\uC774\uB07C",
     "BindType": 0,
-    "EquipType": null
+    "EquipType": null,
+    "Tags": null
   },
   {
     "Id": 18,
@@ -261,16 +241,19 @@
     "Tradable": false,
     "DurabilityMax": 0,
     "Weight": 0,
-    "Tags": [],
     "IsActive": true,
-    "Meta": "{\u0022shardValue\u0022: 1, \u0022characterId\u0022: 10}",
+    "Meta": {
+      "shardValue": 1,
+      "characterId": 10
+    },
     "CreatedBy": "system",
     "CreatedAt": "2025-11-29T10:17:20.23947Z",
     "UpdatedAt": "2025-11-29T10:17:20.23947Z",
     "Description": "",
     "Name": "\uB9AC\uC544\uC758 \uD30C\uD3B8",
     "BindType": 0,
-    "EquipType": null
+    "EquipType": null,
+    "Tags": null
   },
   {
     "Id": 19,
@@ -284,16 +267,19 @@
     "Tradable": false,
     "DurabilityMax": 0,
     "Weight": 0,
-    "Tags": [],
     "IsActive": true,
-    "Meta": "{\u0022shardValue\u0022: 1, \u0022characterId\u0022: 11}",
+    "Meta": {
+      "shardValue": 1,
+      "characterId": 11
+    },
     "CreatedBy": "system",
     "CreatedAt": "2025-11-29T10:17:20.23947Z",
     "UpdatedAt": "2025-11-29T10:17:20.23947Z",
     "Description": "",
     "Name": "\uB3C4\uC6B0\uBAA8\uC758 \uD30C\uD3B8",
     "BindType": 0,
-    "EquipType": null
+    "EquipType": null,
+    "Tags": null
   },
   {
     "Id": 20,
@@ -307,16 +293,19 @@
     "Tradable": false,
     "DurabilityMax": 0,
     "Weight": 0,
-    "Tags": [],
     "IsActive": true,
-    "Meta": "{\u0022shardValue\u0022: 1, \u0022characterId\u0022: 12}",
+    "Meta": {
+      "shardValue": 1,
+      "characterId": 12
+    },
     "CreatedBy": "system",
     "CreatedAt": "2025-11-29T10:17:20.23947Z",
     "UpdatedAt": "2025-11-29T10:17:20.23947Z",
     "Description": "",
     "Name": "\uD558\uC9C4\uC758 \uD30C\uD3B8",
     "BindType": 0,
-    "EquipType": null
+    "EquipType": null,
+    "Tags": null
   },
   {
     "Id": 21,
@@ -330,16 +319,19 @@
     "Tradable": false,
     "DurabilityMax": 0,
     "Weight": 0,
-    "Tags": [],
     "IsActive": true,
-    "Meta": "{\u0022shardValue\u0022: 1, \u0022characterId\u0022: 15}",
+    "Meta": {
+      "shardValue": 1,
+      "characterId": 15
+    },
     "CreatedBy": "system",
     "CreatedAt": "2025-11-29T10:17:20.23947Z",
     "UpdatedAt": "2025-11-29T10:17:20.23947Z",
     "Description": "",
     "Name": "\uC544\uB860\uC758 \uD30C\uD3B8",
     "BindType": 0,
-    "EquipType": null
+    "EquipType": null,
+    "Tags": null
   },
   {
     "Id": 22,
@@ -353,16 +345,19 @@
     "Tradable": false,
     "DurabilityMax": 0,
     "Weight": 0,
-    "Tags": [],
     "IsActive": true,
-    "Meta": "{\u0022shardValue\u0022: 1, \u0022characterId\u0022: 21}",
+    "Meta": {
+      "shardValue": 1,
+      "characterId": 21
+    },
     "CreatedBy": "system",
     "CreatedAt": "2025-11-29T10:17:20.23947Z",
     "UpdatedAt": "2025-11-29T10:17:20.23947Z",
     "Description": "",
     "Name": "\uB77C\uD30C\uC5D8\uC758 \uD30C\uD3B8",
     "BindType": 0,
-    "EquipType": null
+    "EquipType": null,
+    "Tags": null
   },
   {
     "Id": 23,
@@ -376,16 +371,19 @@
     "Tradable": false,
     "DurabilityMax": 0,
     "Weight": 0,
-    "Tags": [],
     "IsActive": true,
-    "Meta": "{\u0022shardValue\u0022: 1, \u0022characterId\u0022: 9}",
+    "Meta": {
+      "shardValue": 1,
+      "characterId": 9
+    },
     "CreatedBy": "system",
     "CreatedAt": "2025-11-29T10:17:20.23947Z",
     "UpdatedAt": "2025-11-29T10:17:20.23947Z",
     "Description": "",
     "Name": "\uD1A0\uBAA8\uC758 \uD30C\uD3B8",
     "BindType": 0,
-    "EquipType": null
+    "EquipType": null,
+    "Tags": null
   },
   {
     "Id": 24,
@@ -399,16 +397,19 @@
     "Tradable": false,
     "DurabilityMax": 0,
     "Weight": 0,
-    "Tags": [],
     "IsActive": true,
-    "Meta": "{\u0022shardValue\u0022: 1, \u0022characterId\u0022: 13}",
+    "Meta": {
+      "shardValue": 1,
+      "characterId": 13
+    },
     "CreatedBy": "system",
     "CreatedAt": "2025-11-29T10:17:20.23947Z",
     "UpdatedAt": "2025-11-29T10:17:20.23947Z",
     "Description": "",
     "Name": "\uB808\uC774\uB4E0\uC758 \uD30C\uD3B8",
     "BindType": 0,
-    "EquipType": null
+    "EquipType": null,
+    "Tags": null
   },
   {
     "Id": 25,
@@ -422,16 +423,19 @@
     "Tradable": false,
     "DurabilityMax": 0,
     "Weight": 0,
-    "Tags": [],
     "IsActive": true,
-    "Meta": "{\u0022shardValue\u0022: 1, \u0022characterId\u0022: 14}",
+    "Meta": {
+      "shardValue": 1,
+      "characterId": 14
+    },
     "CreatedBy": "system",
     "CreatedAt": "2025-11-29T10:17:20.23947Z",
     "UpdatedAt": "2025-11-29T10:17:20.23947Z",
     "Description": "",
     "Name": "\uC5D8\uB9AC\uC2DC\uC544\uC758 \uD30C\uD3B8",
     "BindType": 0,
-    "EquipType": null
+    "EquipType": null,
+    "Tags": null
   },
   {
     "Id": 26,
@@ -445,16 +449,19 @@
     "Tradable": false,
     "DurabilityMax": 0,
     "Weight": 0,
-    "Tags": [],
     "IsActive": true,
-    "Meta": "{\u0022shardValue\u0022: 1, \u0022characterId\u0022: 16}",
+    "Meta": {
+      "shardValue": 1,
+      "characterId": 16
+    },
     "CreatedBy": "system",
     "CreatedAt": "2025-11-29T10:17:20.23947Z",
     "UpdatedAt": "2025-11-29T10:17:20.23947Z",
     "Description": "",
     "Name": "\uB9C8\uB808\uC758 \uD30C\uD3B8",
     "BindType": 0,
-    "EquipType": null
+    "EquipType": null,
+    "Tags": null
   },
   {
     "Id": 27,
@@ -468,16 +475,19 @@
     "Tradable": false,
     "DurabilityMax": 0,
     "Weight": 0,
-    "Tags": [],
     "IsActive": true,
-    "Meta": "{\u0022shardValue\u0022: 1, \u0022characterId\u0022: 18}",
+    "Meta": {
+      "shardValue": 1,
+      "characterId": 18
+    },
     "CreatedBy": "system",
     "CreatedAt": "2025-11-29T10:17:20.23947Z",
     "UpdatedAt": "2025-11-29T10:17:20.23947Z",
     "Description": "",
     "Name": "\uD2F0\uC57C\uC758 \uD30C\uD3B8",
     "BindType": 0,
-    "EquipType": null
+    "EquipType": null,
+    "Tags": null
   },
   {
     "Id": 28,
@@ -491,16 +501,19 @@
     "Tradable": false,
     "DurabilityMax": 0,
     "Weight": 0,
-    "Tags": [],
     "IsActive": true,
-    "Meta": "{\u0022shardValue\u0022: 1, \u0022characterId\u0022: 19}",
+    "Meta": {
+      "shardValue": 1,
+      "characterId": 19
+    },
     "CreatedBy": "system",
     "CreatedAt": "2025-11-29T10:17:20.23947Z",
     "UpdatedAt": "2025-11-29T10:17:20.23947Z",
     "Description": "",
     "Name": "\uB8E8\uBBF8\uC758 \uD30C\uD3B8",
     "BindType": 0,
-    "EquipType": null
+    "EquipType": null,
+    "Tags": null
   },
   {
     "Id": 29,
@@ -514,16 +527,19 @@
     "Tradable": false,
     "DurabilityMax": 0,
     "Weight": 0,
-    "Tags": [],
     "IsActive": true,
-    "Meta": "{\u0022shardValue\u0022: 1, \u0022characterId\u0022: 20}",
+    "Meta": {
+      "shardValue": 1,
+      "characterId": 20
+    },
     "CreatedBy": "system",
     "CreatedAt": "2025-11-29T10:17:20.23947Z",
     "UpdatedAt": "2025-11-29T10:17:20.23947Z",
     "Description": "",
     "Name": "\uC138\uB77C\uD540\uC758 \uD30C\uD3B8",
     "BindType": 0,
-    "EquipType": null
+    "EquipType": null,
+    "Tags": null
   },
   {
     "Id": 31,
@@ -537,15 +553,15 @@
     "Tradable": false,
     "DurabilityMax": 0,
     "Weight": 0,
-    "Tags": [],
     "IsActive": true,
-    "Meta": "{}",
+    "Meta": {},
     "CreatedBy": null,
     "CreatedAt": "2025-11-29T10:48:43.091173Z",
     "UpdatedAt": "2025-11-29T10:48:43.091173Z",
     "Description": "",
     "Name": "\uBF51\uAE30 \uD2F0\uCF13",
     "BindType": 0,
-    "EquipType": null
+    "EquipType": null,
+    "Tags": null
   }
 ]

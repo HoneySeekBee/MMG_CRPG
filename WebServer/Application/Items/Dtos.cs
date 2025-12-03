@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Application.Items
 {
     public sealed record ItemDto(
-        long Id,
+        int Id,
         string Code,
         string Name,
         string Description,
@@ -37,21 +37,21 @@ namespace Application.Items
     );
 
     public sealed record ItemStatDto(
-        long Id,
+        int Id,
         int StatId,
         decimal Value,
         string code
     );
 
     public sealed record ItemEffectDto(
-        long Id,
+        int Id,
         ItemEffectScope Scope,
         JsonDocument Payload,
         short SortOrder
     );
 
     public sealed record ItemPriceDto(
-        long Id,
+        int Id,
         int CurrencyId,
         ItemPriceType PriceType,
         long Price

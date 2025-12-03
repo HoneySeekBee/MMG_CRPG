@@ -27,8 +27,7 @@ namespace Domain.Entities.Gacha
         public short Priority { get; private set; }         // 클수록 우선
         public GachaBannerStatus Status { get; private set; } = GachaBannerStatus.Live;
         public bool IsActive { get; private set; } = true;
-        public int CostCurrencyId { get; private set; }
-        public string CostCurrencyCode { get; private set; } = default!;
+        public int CostCurrencyId { get; private set; } 
         public int Cost { get; private set; }
         public int TicketItemId { get; private set; }
         // --- 계산/편의 ---

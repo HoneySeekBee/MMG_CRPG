@@ -25,7 +25,7 @@ namespace Application.UserCurrency
             var masters = await _cur.GetAllAsync(ct);                 // IReadOnlyList<Currency>
             var rows = await _userCur.GetByUserAsync(userId, ct);     // List<UserCurrency>
             var byId = rows?.ToDictionary(r => r.CurrencyId, r => r.Amount)
-                       ?? new Dictionary<short, long>();
+                       ?? new Dictionary<int, long>();
 
             var result = new List<(string Code, long Amount)>(masters.Count);
             foreach (var m in masters)

@@ -220,8 +220,7 @@ namespace Infrastructure.Persistence
            .IsRequired(false);
 
                 e.Property(x => x.Tag)
-           .HasColumnType("text[]")
-           .HasDefaultValueSql("'{}'::text[]")
+           .HasColumnType("jsonb")
            .IsRequired();
 
                 // 프로퍼티 기반으로 관계를 정의

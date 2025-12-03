@@ -25,7 +25,7 @@ namespace Application.UserCurrency
     }
     public interface IUserCurrencyRepository
     {
-        Task<EntitiyUserCurrency?> GetAsync(int userId, short currencyId, CancellationToken ct);
+        Task<EntitiyUserCurrency?> GetAsync(int userId, int currencyId, CancellationToken ct);
         Task<List<EntitiyUserCurrency>> GetByUserAsync(int userId, CancellationToken ct);
         Task AddAsync(EntitiyUserCurrency row, CancellationToken ct);
         Task<int> SaveChangesAsync(CancellationToken ct);

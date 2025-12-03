@@ -5,7 +5,9 @@
     "Type": 0,
     "ElementId": 9,
     "IconId": 4,
-    "BaseInfo": "{\u0022etc\u0022: \u0022nnnn\u0022}",
+    "BaseInfo": {
+      "etc": "nnnn"
+    },
     "IsActive": false,
     "TargetingType": 0,
     "AoeShape": 0,
@@ -21,7 +23,9 @@
     "Type": 1,
     "ElementId": 9,
     "IconId": 3,
-    "BaseInfo": "{\u0022etc\u0022: \u0022wett\u0022}",
+    "BaseInfo": {
+      "etc": "wett"
+    },
     "IsActive": true,
     "TargetingType": 1,
     "AoeShape": 0,
@@ -34,7 +38,9 @@
     "Type": 1,
     "ElementId": 9,
     "IconId": 1,
-    "BaseInfo": "{\u0022etc\u0022: \u0022test\u0022}",
+    "BaseInfo": {
+      "etc": "test"
+    },
     "IsActive": true,
     "TargetingType": 2,
     "AoeShape": 1,
@@ -47,7 +53,9 @@
     "Type": 4,
     "ElementId": 9,
     "IconId": 2,
-    "BaseInfo": "{\u0022etc\u0022: \u0022etsr\u0022}",
+    "BaseInfo": {
+      "etc": "etsr"
+    },
     "IsActive": true,
     "TargetingType": 1,
     "AoeShape": 0,
