@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Application.Currency
 {
-    public sealed record CurrencyDto(short Id, string Code, string Name);
+    public sealed record CurrencyDto(int Id, string Code, string Name);
 }

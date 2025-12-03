@@ -87,7 +87,7 @@ namespace WebServer.Controllers.Gacha
             StartsAtUtc = b.StartsAt.ToUnixTimeSeconds(),
             EndsAtUtc = b.EndsAt?.ToUnixTimeSeconds() ?? 0,
             Priority = b.Priority,
-            Status = (int)b.Status, // enum은 int로 내려서 클라가 매핑
+            Status = (int)b.Status,  
             IsActive = b.IsActive,
             CostCurrencyId = b.CostCurrencyId,
             Cost = b.Cost,
@@ -95,74 +95,26 @@ namespace WebServer.Controllers.Gacha
         };
         private static GachaPoolDetailPb MapPool(GachaPoolDetailDto p)
         {
-            // 리플렉션 유틸
-            object? Get(string name) => p.GetType().GetProperty(name, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase)?.GetValue(p);
-
-            // 여러 후보 이름을 순서대로 시도하는 헬퍼
-            T? Pick<T>(params string[] names)
-            {
-                foreach (var n in names)
-                {
-                    var val = Get(n);
-                    if (val is null) continue;
-                    if (val is T t) return t;
-
-                    // DateTime/DateTimeOffset 같은 경우 형변환 보조
-                    if (typeof(T) == typeof(DateTimeOffset?) && val is DateTime dt)
-                        return (T?)(object?)new DateTimeOffset(DateTime.SpecifyKind(dt, DateTimeKind.Utc));
-                    if (typeof(T) == typeof(DateTimeOffset?) && val is DateTimeOffset dto)
-                        return (T?)(object?)dto;
-                    if (typeof(T) == typeof(string) && val is not null)
-                        return (T?)(object?)val.ToString();
-                }
-                return default;
-            }
-
-            // 필드 가져오기(여러 후보명 대응)
-            var poolId = Pick<int>("PoolId", "Id")!;
-            var name = Pick<string>("Name") ?? string.Empty;
-            var tablesVersion = Pick<string>("TablesVersion", "TableVersion", "TablesVer") ?? string.Empty;
-            var pityJson = Pick<string>("PityJson", "Pity") ?? string.Empty;
-            var configJson = Pick<string>("ConfigJson", "Config") ?? string.Empty;
-
-            var startOpt = Pick<DateTimeOffset?>("ScheduleStart", "StartsAt", "StartAt");
-            var endOpt = Pick<DateTimeOffset?>("ScheduleEnd", "EndsAt", "EndAt");
-
-            long startUnix = startOpt?.ToUnixTimeSeconds() ?? 0;
-            long endUnix = endOpt?.ToUnixTimeSeconds() ?? 0;
-
             var pb = new GachaPoolDetailPb
             {
-                PoolId = poolId,
-                Name = name,
-                TablesVersion = tablesVersion,
-                PityJson = pityJson,
-                ConfigJson = configJson,
-                ScheduleStartUtc = startUnix,
-                ScheduleEndUtc = endUnix
+                PoolId = p.Pool.PoolId,
+                Name = p.Pool.Name ?? string.Empty,
+                TablesVersion = p.Pool.TablesVersion ?? string.Empty,
+                PityJson = p.PityJson ?? string.Empty,
+                ConfigJson = p.ConfigJson ?? string.Empty,
+                ScheduleStartUtc = p.Pool.ScheduleStart.ToUnixTimeSeconds(),
+                ScheduleEndUtc = p.Pool.ScheduleEnd?.ToUnixTimeSeconds() ?? 0
             };
 
-            // Entries 컬렉션(이름은 보통 "Entries")
-            var entriesObj = Get("Entries") as System.Collections.IEnumerable;
-            if (entriesObj is not null)
+            foreach (var e in p.Entries)
             {
-                foreach (var e in entriesObj)
+                pb.Entries.Add(new GachaEntryPb
                 {
-                    object? GetE(string prop) => e.GetType().GetProperty(prop, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase)?.GetValue(e);
-
-                    int characterId = (int?)(GetE("CharacterId") ?? 0) ?? 0;
-                    int grade = (int?)(GetE("Grade") ?? 0) ?? 0;
-                    bool rateUp = (bool?)(GetE("RateUp") ?? false) ?? false;
-                    int weight = (int?)(GetE("Weight") ?? 0) ?? 0;
-
-                    pb.Entries.Add(new GachaEntryPb
-                    {
-                        CharacterId = characterId,
-                        Grade = grade,
-                        RateUp = rateUp,
-                        Weight = weight
-                    });
-                }
+                    CharacterId = e.CharacterId,
+                    Grade = e.Grade,     
+                    RateUp = e.RateUp,
+                    Weight = e.Weight
+                });
             }
 
             return pb;

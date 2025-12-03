@@ -19,33 +19,33 @@ namespace Infrastructure.Persistence.Configurations.Gacha
             g.HasKey(x => x.PoolId);
 
             g.Property(x => x.PoolId)
-                .HasColumnName("pool_id")
+                .HasColumnName("PoolId")
                 .ValueGeneratedOnAdd();
 
             g.Property(x => x.Name)
-                .HasColumnName("name")
+                .HasColumnName("Name")
                 .IsRequired();
 
             g.Property(x => x.ScheduleStart)
-                .HasColumnName("schedule_start")
+                .HasColumnName("ScheduleStart")
                 .HasColumnType("timestamptz")
                 .IsRequired();
 
             g.Property(x => x.ScheduleEnd)
-                .HasColumnName("schedule_end")
+                .HasColumnName("ScheduleEnd")
                 .HasColumnType("timestamptz")
                 .IsRequired(false);
 
             g.Property(x => x.PityJson)
-                .HasColumnName("pity_json")
+                .HasColumnName("PityJson")
                 .HasColumnType("jsonb");
 
             g.Property(x => x.Config)
-                .HasColumnName("config_json")
+                .HasColumnName("Config")
                 .HasColumnType("jsonb");
 
             g.Property(x => x.TablesVersion)
-                .HasColumnName("tables_version");
+                .HasColumnName("TablesVersion");
 
             // Entries 네비게이션(Readonly backing field)
             g.Metadata.FindNavigation(nameof(GachaPool.Entries))!

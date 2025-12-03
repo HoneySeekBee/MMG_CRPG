@@ -1149,12 +1149,12 @@
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.Toonshader">
-      <HintPath>Library\ScriptAssemblies\Unity.Toonshader.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="com.unity.cinemachine.editor">
       <HintPath>Library\ScriptAssemblies\com.unity.cinemachine.editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Toonshader">
+      <HintPath>Library\ScriptAssemblies\Unity.Toonshader.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Postprocessing.Runtime">
@@ -1233,6 +1233,14 @@
       <HintPath>Library\ScriptAssemblies\Unity.TestTools.CodeCoverage.Editor.OpenCover.Mono.Reflection.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Unity.Addressables">
+      <HintPath>Library\ScriptAssemblies\Unity.Addressables.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.SettingsProvider.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.SettingsProvider.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.Performance.Profile-Analyzer.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Performance.Profile-Analyzer.Editor.dll</HintPath>
       <Private>False</Private>
@@ -1255,10 +1263,6 @@
     </Reference>
     <Reference Include="Unity.AI.Navigation.Updater">
       <HintPath>Library\ScriptAssemblies\Unity.AI.Navigation.Updater.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.SettingsProvider.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.SettingsProvider.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.TestTools.CodeCoverage.Editor">
@@ -1321,23 +1325,19 @@
       <HintPath>Library\ScriptAssemblies\Unity.VSCode.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.Addressables">
-      <HintPath>Library\ScriptAssemblies\Unity.Addressables.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
       <Project>{079D398E-4AFC-CD7E-7881-F923D075EBD1}</Project>
       <Name>Assembly-CSharp-firstpass</Name>
     </ProjectReference>
-    <ProjectReference Include="CFXREditor.csproj">
-      <Project>{4CAA2C94-4A60-419A-360D-7506C8EEE66F}</Project>
-      <Name>CFXREditor</Name>
-    </ProjectReference>
     <ProjectReference Include="CFXRRuntime.csproj">
       <Project>{84EDE0D0-8E7A-7924-F7CE-DF49719BEB3D}</Project>
       <Name>CFXRRuntime</Name>
+    </ProjectReference>
+    <ProjectReference Include="CFXREditor.csproj">
+      <Project>{4CAA2C94-4A60-419A-360D-7506C8EEE66F}</Project>
+      <Name>CFXREditor</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

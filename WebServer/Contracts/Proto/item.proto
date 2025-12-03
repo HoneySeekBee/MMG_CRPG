@@ -33,7 +33,7 @@ enum StatOpPb {
 
 // [ Item  ]
 message ItemStatMessage {
-  int64 id     = 1;
+  int32 id     = 1;
   int32 stat_id = 2;
   double value = 3;  
   string code = 4; 
@@ -41,20 +41,20 @@ message ItemStatMessage {
 }
 
 message ItemEffectMessage {
-  int64 id              = 1;
+  int32 id              = 1;
   ItemEffectScopePb scope = 2;
   string payload_json   = 3; 
   int32 sort_order      = 4;
 }
 
 message ItemPriceMessage {
-  int64 id              = 1;
+  int32 id              = 1;
   int32 currency_id     = 2;
   ItemPriceTypePb price_type = 3;
   int64 price           = 4;
 } 
 message ItemSummaryMessage {
-  int64 id        = 1;
+  int32 id        = 1;
   string code     = 2;
   string name     = 3;
   int32 type_id   = 4;
@@ -65,7 +65,7 @@ message ItemSummaryMessage {
   string icon_url = 20; // º±≈√
 }
 message ItemMessage {
-  int64 id            = 1;
+  int32 id            = 1;
   string code         = 2;
   string name         = 3;
   string description  = 4;

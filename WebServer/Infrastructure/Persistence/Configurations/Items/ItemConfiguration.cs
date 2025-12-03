@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Persistence.Configurations.Items
@@ -35,6 +36,10 @@ namespace Infrastructure.Persistence.Configurations.Items
             // string[] -> text[] (Npgsql이 자동 매핑)
             e.Property(x => x.Tags)
     .HasColumnType("jsonb")
+    .HasConversion(
+        v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
+        v => JsonSerializer.Deserialize<string[]>(v, (JsonSerializerOptions)null) ?? Array.Empty<string>()
+    )
     .HasDefaultValueSql("'[]'::jsonb");
 
             // JsonNode -> jsonb

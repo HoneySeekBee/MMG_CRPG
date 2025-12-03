@@ -7,7 +7,9 @@
     "ColorHex": "#fae045",
     "SortOrder": 1,
     "IsActive": true,
-    "Meta": "{\u0022description\u0022: null}"
+    "Meta": {
+      "description": null
+    }
   },
   {
     "FactionId": 11,
@@ -17,7 +19,9 @@
     "ColorHex": "#be8544",
     "SortOrder": 1,
     "IsActive": true,
-    "Meta": "{\u0022description\u0022: null}"
+    "Meta": {
+      "description": null
+    }
   },
   {
     "FactionId": 12,
@@ -27,7 +31,9 @@
     "ColorHex": "#48264f",
     "SortOrder": 1,
     "IsActive": true,
-    "Meta": "{\u0022description\u0022: null}"
+    "Meta": {
+      "description": null
+    }
   },
   {
     "FactionId": 13,
@@ -37,6 +43,8 @@
     "ColorHex": "#db0606",
     "SortOrder": 1,
     "IsActive": true,
-    "Meta": "{\u0022description\u0022: null}"
+    "Meta": {
+      "description": null
+    }
   }
 ]

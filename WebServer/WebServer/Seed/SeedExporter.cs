@@ -24,7 +24,7 @@ namespace WebServer.Seed
 
             // 필요한 테이블 목록 (여기만 수정하면 됨)
             var tables = new[]
-              { 
+              {
                 "Battles",
                 "Chapters",
                 "CharacterExp",
@@ -41,7 +41,7 @@ namespace WebServer.Seed
                 "ElementAffinity",
                 "EquipSlots",
                 "Faction",
-                "GachaBanner", 
+                "GachaBanner",
                 "GachaPool",
                 "GachaPoolEntry",
                 "Icons",
@@ -54,9 +54,10 @@ namespace WebServer.Seed
                 "Monsters",
                 "Portraits",
                 "Rarity",
-                "Role",  
+                "Role",
                 "SkillLevels",
                 "Skills",
+
                 "StageBatches",
                 "StageDrops",
                 "StageFirstClearRewards",
@@ -65,16 +66,45 @@ namespace WebServer.Seed
                 "StageWaves",
                 "Stages",
                 "StatTypes",
+
                 "Synergy",
                 "SynergyBonus",
                 "SynergyRule",
-                "SynergyTarget",     
+                "SynergyTarget",
             };
             foreach (var table in tables)
             {
                 var rows = await _db.QueryAsync($"SELECT * FROM \"{table}\"");
 
-                var json = JsonSerializer.Serialize(rows,
+                var normalized = new List<Dictionary<string, object?>>();
+
+                foreach (var row in rows)
+                {
+                    var dict = new Dictionary<string, object?>();
+
+                    foreach (var prop in (IDictionary<string, object?>)row)
+                    {
+                        if (prop.Value is string s && IsJsonObjectString(s))
+                        {
+                            try
+                            {
+                                dict[prop.Key] = JsonDocument.Parse(s).RootElement.Clone();
+                            }
+                            catch
+                            {
+                                dict[prop.Key] = s; // JSON이 아닌 경우 그대로
+                            }
+                        }
+                        else
+                        {
+                            dict[prop.Key] = prop.Value;
+                        }
+                    }
+
+                    normalized.Add(dict);
+                }
+
+                var json = JsonSerializer.Serialize(normalized,
                     new JsonSerializerOptions { WriteIndented = true });
 
                 var path = Path.Combine(_outputDir, $"{table}.json");
@@ -83,7 +113,13 @@ namespace WebServer.Seed
                 Console.WriteLine($"[SeedExporter] Exported {table} → {path}");
             }
 
-            Console.WriteLine("\n=== Seed Export Completed ===\n");
+            static bool IsJsonObjectString(string s)
+            {
+                s = s.Trim();
+                return (s.StartsWith("{") && s.EndsWith("}")) ||
+                       (s.StartsWith("[") && s.EndsWith("]"));
+            }
+
         }
     }
 }

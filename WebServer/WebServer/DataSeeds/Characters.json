@@ -11,8 +11,8 @@
     "ReleaseDate": "2025-10-21T07:55:00Z",
     "IsLimited": false,
     "Meta": null,
-    "Tags": [],
-    "formation_position": 1
+    "formation_position": 1,
+    "Tags": null
   },
   {
     "CharacterId": 11,
@@ -26,8 +26,8 @@
     "ReleaseDate": "2025-10-21T07:56:00Z",
     "IsLimited": false,
     "Meta": null,
-    "Tags": [],
-    "formation_position": 1
+    "formation_position": 1,
+    "Tags": null
   },
   {
     "CharacterId": 12,
@@ -41,8 +41,8 @@
     "ReleaseDate": "2025-10-21T07:57:00Z",
     "IsLimited": false,
     "Meta": null,
-    "Tags": [],
-    "formation_position": 1
+    "formation_position": 1,
+    "Tags": null
   },
   {
     "CharacterId": 15,
@@ -56,8 +56,8 @@
     "ReleaseDate": "2025-10-21T07:58:00Z",
     "IsLimited": false,
     "Meta": null,
-    "Tags": [],
-    "formation_position": 1
+    "formation_position": 1,
+    "Tags": null
   },
   {
     "CharacterId": 21,
@@ -71,8 +71,8 @@
     "ReleaseDate": "2025-10-21T08:03:00Z",
     "IsLimited": false,
     "Meta": null,
-    "Tags": [],
-    "formation_position": 1
+    "formation_position": 1,
+    "Tags": null
   },
   {
     "CharacterId": 9,
@@ -86,12 +86,8 @@
     "ReleaseDate": "2025-10-20T22:54:00Z",
     "IsLimited": false,
     "Meta": null,
-    "Tags": [
-      "gastronomic",
-      "plant",
-      "attack"
-    ],
-    "formation_position": 2
+    "formation_position": 2,
+    "Tags": null
   },
   {
     "CharacterId": 13,
@@ -105,8 +101,8 @@
     "ReleaseDate": "2025-10-21T07:57:00Z",
     "IsLimited": false,
     "Meta": null,
-    "Tags": [],
-    "formation_position": 2
+    "formation_position": 2,
+    "Tags": null
   },
   {
     "CharacterId": 14,
@@ -120,8 +116,8 @@
     "ReleaseDate": "2025-10-21T07:58:00Z",
     "IsLimited": false,
     "Meta": null,
-    "Tags": [],
-    "formation_position": 3
+    "formation_position": 3,
+    "Tags": null
   },
   {
     "CharacterId": 16,
@@ -135,8 +131,8 @@
     "ReleaseDate": "2025-10-21T07:58:00Z",
     "IsLimited": false,
     "Meta": null,
-    "Tags": [],
-    "formation_position": 3
+    "formation_position": 3,
+    "Tags": null
   },
   {
     "CharacterId": 18,
@@ -150,8 +146,8 @@
     "ReleaseDate": "2025-10-20T22:59:00Z",
     "IsLimited": false,
     "Meta": null,
-    "Tags": [],
-    "formation_position": 2
+    "formation_position": 2,
+    "Tags": null
   },
   {
     "CharacterId": 19,
@@ -165,8 +161,8 @@
     "ReleaseDate": "2025-10-21T08:02:00Z",
     "IsLimited": false,
     "Meta": null,
-    "Tags": [],
-    "formation_position": 3
+    "formation_position": 3,
+    "Tags": null
   },
   {
     "CharacterId": 20,
@@ -180,7 +176,7 @@
     "ReleaseDate": "2025-10-21T08:02:00Z",
     "IsLimited": false,
     "Meta": null,
-    "Tags": [],
-    "formation_position": 3
+    "formation_position": 3,
+    "Tags": null
   }
 ]

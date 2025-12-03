@@ -15,6 +15,8 @@ RUN dotnet restore WebServer/WebServer.csproj
 COPY . .
 
 RUN dotnet publish WebServer/WebServer.csproj -c Release -o /app/out
+
+
 COPY WebServer/DataSeeds /app/out/DataSeeds
 
 FROM base AS final

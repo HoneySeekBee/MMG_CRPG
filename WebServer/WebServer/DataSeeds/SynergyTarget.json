@@ -1,1 +1,52 @@
-[]
+[
+  {
+    "SynergyId": 5,
+    "TargetType": 2,
+    "TargetId": 0
+  },
+  {
+    "SynergyId": 6,
+    "TargetType": 0,
+    "TargetId": 0
+  },
+  {
+    "SynergyId": 7,
+    "TargetType": 0,
+    "TargetId": 0
+  },
+  {
+    "SynergyId": 8,
+    "TargetType": 0,
+    "TargetId": 0
+  },
+  {
+    "SynergyId": 9,
+    "TargetType": 0,
+    "TargetId": 0
+  },
+  {
+    "SynergyId": 10,
+    "TargetType": 0,
+    "TargetId": 0
+  },
+  {
+    "SynergyId": 11,
+    "TargetType": 0,
+    "TargetId": 0
+  },
+  {
+    "SynergyId": 12,
+    "TargetType": 0,
+    "TargetId": 0
+  },
+  {
+    "SynergyId": 14,
+    "TargetType": 0,
+    "TargetId": 0
+  },
+  {
+    "SynergyId": 16,
+    "TargetType": 0,
+    "TargetId": 0
+  }
+]

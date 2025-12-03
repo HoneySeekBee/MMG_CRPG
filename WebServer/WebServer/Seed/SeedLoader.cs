@@ -26,7 +26,8 @@ namespace WebServer.Seed
         private static readonly HashSet<string> JsonbColumns = new()
 {
     "Meta",
-    "Tags"
+    "Tags",
+    "Effect"
 };
 
         private object? Normalize(JsonElement elem)
@@ -35,6 +36,13 @@ namespace WebServer.Seed
             {
                 case JsonValueKind.String:
                     var s = elem.GetString()!;
+                    // 문자열이 JSON 객체/배열처럼 보이면 JsonDocument 로 변환
+                    if ((s.StartsWith("{") && s.EndsWith("}")) ||
+                        (s.StartsWith("[") && s.EndsWith("]")))
+                    {
+                        try { return JsonDocument.Parse(s); }
+                        catch { Console.WriteLine("[Normalize] 실패"); }
+                    }
                     if (DateTime.TryParse(s, out var dt))
                         return dt;
                     return s;
@@ -95,24 +103,38 @@ namespace WebServer.Seed
             {
                 string col = kv.Key;
                 object? val = kv.Value;
-
-                // 1) JSON Document일 때 → jsonb
-                if (val is JsonDocument doc)
+                if (JsonbColumns.Contains(col))
                 {
-                    cmd.Parameters.Add(new NpgsqlParameter(col, NpgsqlDbType.Jsonb)
+                    if (val is JsonDocument doc)
                     {
-                        Value = doc.RootElement.GetRawText()
-                    });
-                }
-                // 2) jsonb 컬럼인데 값이 null 일 때
-                else if (JsonbColumns.Contains(col))
-                {
-                    cmd.Parameters.Add(new NpgsqlParameter(col, NpgsqlDbType.Jsonb)
+                        cmd.Parameters.Add(new NpgsqlParameter(col, NpgsqlDbType.Jsonb)
+                        {
+                            Value = doc.RootElement.GetRawText()
+                        });
+                    }
+                    else if (val is string s)
                     {
-                        Value = DBNull.Value
-                    });
+                        // 문자열이지만 JSON literal "{}" 또는 "[]" 같은 형태인 경우 jsonb로 직접 캐스팅
+                        cmd.Parameters.Add(new NpgsqlParameter(col, NpgsqlDbType.Jsonb)
+                        {
+                            Value = s
+                        });
+                    }
+                    else if (val == null)
+                    {
+                        cmd.Parameters.Add(new NpgsqlParameter(col, NpgsqlDbType.Jsonb)
+                        {
+                            Value = DBNull.Value
+                        });
+                    }
+                    else
+                    {
+                        cmd.Parameters.Add(new NpgsqlParameter(col, NpgsqlDbType.Jsonb)
+                        {
+                            Value = JsonSerializer.Serialize(val)
+                        });
+                    }
                 }
-                // 3) 기본 타입
                 else
                 {
                     cmd.Parameters.AddWithValue(col, val ?? DBNull.Value);
@@ -135,11 +157,22 @@ namespace WebServer.Seed
             {
                 "Icons",
                 "Portraits",
+
                 "Element",
+                "ElementAffinity",
                 "Faction",
                 "EquipSlots",
                 "Currencies",
+                "Rarity",
+                "Role",
+
                 "StatTypes",
+                "ItemType",
+
+                "Synergy",
+                "SynergyBonus",
+                "SynergyRule",
+                "SynergyTarget",
 
                 "Characters",
                 "CharacterExp",
@@ -149,29 +182,45 @@ namespace WebServer.Seed
                 "CharacterPromotion",
                 "CharacterPromotionMaterials",
                 "CharacterStatProgression",
-                "CharacterSkills",
-                "Battles",
-                "Chapters",
-                "Stages",
+                "CharacterSkills",  
 
-                "ItemType",
                 "Item",
                 "ItemStat",
                 "ItemEffect",
                 "ItemPrice",
+
+
+                "Monsters",
+                "MonsterStatProgression",
+
+                "Battles",
+                "Chapters",
+                "Stages",
+                "StageBatches",
+                "StageDrops",
+                "StageFirstClearRewards",
+                "StageRequirements",
+                "StageWaves",
+                "StageWaveEnemies",
+
                 "GachaBanner",
                 "GachaPool",
-                "GachaPoolEntry"
+                "GachaPoolEntry",
+
+
             };
             files = files
-                 .OrderBy(f =>
-                 {
-                     var name = Path.GetFileNameWithoutExtension(f);
-                     var idx = loadOrder.IndexOf(name);
-                     return idx < 0 ? 999 : idx;
-                 })
-                 .ThenBy(f => f)
-                 .ToArray();
+      .OrderBy(f =>
+      {
+          var name = Path.GetFileNameWithoutExtension(f);
+          var idx = loadOrder.FindIndex(x =>
+              string.Equals(x, name, StringComparison.OrdinalIgnoreCase));
+          if (idx < 0)
+              Console.WriteLine($"[WARN] File {name} is not in loadOrder!");
+          return idx < 0 ? 999 : idx;
+      })
+      .ThenBy(f => f)
+      .ToArray();
 
             foreach (var file in files)
             {

@@ -19,33 +19,29 @@ namespace Infrastructure.Persistence.Configurations.Gacha
             e.HasKey(x => new { x.PoolId, x.CharacterId });
 
             e.Property(x => x.PoolId)
-                .HasColumnName("pool_id")
+                .HasColumnName("PoolId")
                 .IsRequired();
 
             e.Property(x => x.CharacterId)
-                .HasColumnName("character_id")
+                .HasColumnName("CharacterId")
                 .IsRequired();
 
             e.Property(x => x.Grade)
-                .HasColumnName("grade")
+                .HasColumnName("Grade")
                 .IsRequired();
 
             e.Property(x => x.RateUp)
-                .HasColumnName("rate_up")
+                .HasColumnName("RateUp")
                 .HasDefaultValue(false);
 
             e.Property(x => x.Weight)
-                .HasColumnName("weight")
+                .HasColumnName("Weight")
                 .IsRequired();
 
-            // Check Constraint
             e.HasCheckConstraint(
-                "ck_gpe_weight_pos",
-                "\"weight\" > 0"
-            );
-
-            // 섀도우 FK 무시
-            e.Ignore("GachaPoolPoolId");
+    "ck_gpe_weight_pos",
+    "\"Weight\" > 0"
+); 
         }
     }
 }
