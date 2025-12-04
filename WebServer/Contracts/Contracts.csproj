@@ -1,4 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<LangVersion>latest</LangVersion>
@@ -11,16 +12,20 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Protobuf Include="Proto\**\*.proto" ProtoRoot="Proto" GrpcServices="None" />
+		<Protobuf Include="Proto\**\*.proto"
+				  ProtoRoot="Proto"
+				  GrpcServices="None"
+				  CompileOutputs="true"
+				  OutputDir="Generated" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="Proto\Service\inventory_service.proto" />
-	  <None Remove="Proto\Service\wallet_service.proto" />
+		<None Remove="Proto\Service\inventory_service.proto" />
+		<None Remove="Proto\Service\wallet_service.proto" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Proto\Contents\" />
+		<Folder Include="Proto\Contents\" />
 	</ItemGroup>
 
 	<Target Name="CopyContractsToUnity" AfterTargets="Build">
@@ -29,6 +34,8 @@
 		</PropertyGroup>
 		<MakeDir Directories="$(UnityPluginsDir)" />
 		<Copy SourceFiles="$(TargetDir)Contracts.dll" DestinationFolder="$(UnityPluginsDir)" />
-		<Copy SourceFiles="$(TargetDir)Contracts.pdb" DestinationFolder="$(UnityPluginsDir)" Condition="Exists('$(TargetDir)Contracts.pdb')" />
+		<Copy SourceFiles="$(TargetDir)Contracts.pdb" DestinationFolder="$(UnityPluginsDir)"
+			  Condition="Exists('$(TargetDir)Contracts.pdb')" />
 	</Target>
+
 </Project>

@@ -84,19 +84,18 @@ namespace Application.Gacha.GachaDraw
                 if (entry.Grade >= 4)
                     hasGuaranteed = true;
             }
-
             bool guaranteeApplied = false;
-            if (count >= 10 && !hasGuaranteed)
-            {
-                var guarantee = pool.Entries
-                                    .Where(e => e.Grade >= 4)
-                                    .OrderByDescending(e => e.Grade)
-                                    .First();
 
-                pulledEntries[count - 1] = guarantee;
+            var highGrades = pool.Entries.Where(e => e.Grade >= 4).ToList();
+
+            if (count >= 10 && !hasGuaranteed && highGrades.Count > 0)
+            {
+                pulledEntries[count - 1] = highGrades
+                    .OrderByDescending(e => e.Grade)
+                    .First();
+
                 guaranteeApplied = true;
             }
-
             // 5) 결과 아이템 변환
             var results = new List<DrawResultItemDto>(count);
 

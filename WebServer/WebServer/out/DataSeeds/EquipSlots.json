@@ -1,0 +1,47 @@
+[
+  {
+    "Code": "HEAD",
+    "Name": "\uBAA8\uC790",
+    "SortOrder": 1,
+    "CreatedAt": "2025-09-07T00:59:13.217929Z",
+    "UpdatedAt": "2025-10-24T06:52:16.909024Z",
+    "Id": 3,
+    "IconId": 35
+  },
+  {
+    "Code": "CLOTHES",
+    "Name": "\uC637",
+    "SortOrder": 2,
+    "CreatedAt": "2025-09-07T00:59:13.217929Z",
+    "UpdatedAt": "2025-10-24T06:52:16.909024Z",
+    "Id": 4,
+    "IconId": 36
+  },
+  {
+    "Code": "GLOVES",
+    "Name": "\uC7A5\uAC11",
+    "SortOrder": 4,
+    "CreatedAt": "2025-09-07T00:59:13.217929Z",
+    "UpdatedAt": "2025-10-24T06:52:16.909024Z",
+    "Id": 6,
+    "IconId": 38
+  },
+  {
+    "Code": "BOOTS",
+    "Name": "\uC2E0\uBC1C",
+    "SortOrder": 3,
+    "CreatedAt": "2025-09-07T00:59:13.217929Z",
+    "UpdatedAt": "2025-10-24T06:52:16.909024Z",
+    "Id": 7,
+    "IconId": 37
+  },
+  {
+    "Code": "AMULET",
+    "Name": "\uBAA9\uAC78\uC774",
+    "SortOrder": 5,
+    "CreatedAt": "2025-09-07T00:59:13.217929Z",
+    "UpdatedAt": "2025-10-24T06:52:16.909024Z",
+    "Id": 9,
+    "IconId": 39
+  }
+]

@@ -1,0 +1,152 @@
+[
+  {
+    "id": 1,
+    "stage_id": 5,
+    "required_stage_id": null,
+    "min_account_level": 1
+  },
+  {
+    "id": 2,
+    "stage_id": 6,
+    "required_stage_id": 5,
+    "min_account_level": 1
+  },
+  {
+    "id": 3,
+    "stage_id": 7,
+    "required_stage_id": 6,
+    "min_account_level": 1
+  },
+  {
+    "id": 4,
+    "stage_id": 8,
+    "required_stage_id": 7,
+    "min_account_level": 1
+  },
+  {
+    "id": 5,
+    "stage_id": 9,
+    "required_stage_id": 8,
+    "min_account_level": 1
+  },
+  {
+    "id": 6,
+    "stage_id": 10,
+    "required_stage_id": 9,
+    "min_account_level": 1
+  },
+  {
+    "id": 7,
+    "stage_id": 11,
+    "required_stage_id": 10,
+    "min_account_level": 1
+  },
+  {
+    "id": 8,
+    "stage_id": 12,
+    "required_stage_id": 11,
+    "min_account_level": 1
+  },
+  {
+    "id": 9,
+    "stage_id": 13,
+    "required_stage_id": 12,
+    "min_account_level": 1
+  },
+  {
+    "id": 10,
+    "stage_id": 14,
+    "required_stage_id": 13,
+    "min_account_level": 1
+  },
+  {
+    "id": 11,
+    "stage_id": 15,
+    "required_stage_id": 14,
+    "min_account_level": 1
+  },
+  {
+    "id": 12,
+    "stage_id": 16,
+    "required_stage_id": 15,
+    "min_account_level": 1
+  },
+  {
+    "id": 13,
+    "stage_id": 17,
+    "required_stage_id": 16,
+    "min_account_level": 1
+  },
+  {
+    "id": 14,
+    "stage_id": 18,
+    "required_stage_id": 17,
+    "min_account_level": 1
+  },
+  {
+    "id": 15,
+    "stage_id": 19,
+    "required_stage_id": 18,
+    "min_account_level": 1
+  },
+  {
+    "id": 16,
+    "stage_id": 20,
+    "required_stage_id": 19,
+    "min_account_level": 1
+  },
+  {
+    "id": 17,
+    "stage_id": 21,
+    "required_stage_id": 20,
+    "min_account_level": 1
+  },
+  {
+    "id": 18,
+    "stage_id": 22,
+    "required_stage_id": 21,
+    "min_account_level": 1
+  },
+  {
+    "id": 19,
+    "stage_id": 23,
+    "required_stage_id": 22,
+    "min_account_level": 1
+  },
+  {
+    "id": 20,
+    "stage_id": 24,
+    "required_stage_id": 23,
+    "min_account_level": 1
+  },
+  {
+    "id": 21,
+    "stage_id": 25,
+    "required_stage_id": 24,
+    "min_account_level": 1
+  },
+  {
+    "id": 22,
+    "stage_id": 26,
+    "required_stage_id": 25,
+    "min_account_level": 1
+  },
+  {
+    "id": 23,
+    "stage_id": 27,
+    "required_stage_id": 26,
+    "min_account_level": 1
+  },
+  {
+    "id": 24,
+    "stage_id": 28,
+    "required_stage_id": 27,
+    "min_account_level": 1
+  },
+  {
+    "id": 25,
+    "stage_id": 29,
+    "required_stage_id": 28,
+    "min_account_level": 1
+  }
+]

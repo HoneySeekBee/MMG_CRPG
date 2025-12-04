@@ -1,0 +1,182 @@
+[
+  {
+    "AttackerElementId": 9,
+    "DefenderElementId": 9,
+    "Multiplier": 1.00
+  },
+  {
+    "AttackerElementId": 9,
+    "DefenderElementId": 10,
+    "Multiplier": 1.00
+  },
+  {
+    "AttackerElementId": 9,
+    "DefenderElementId": 11,
+    "Multiplier": 1.00
+  },
+  {
+    "AttackerElementId": 9,
+    "DefenderElementId": 12,
+    "Multiplier": 1.00
+  },
+  {
+    "AttackerElementId": 9,
+    "DefenderElementId": 13,
+    "Multiplier": 1.00
+  },
+  {
+    "AttackerElementId": 9,
+    "DefenderElementId": 14,
+    "Multiplier": 1.00
+  },
+  {
+    "AttackerElementId": 10,
+    "DefenderElementId": 9,
+    "Multiplier": 1.00
+  },
+  {
+    "AttackerElementId": 10,
+    "DefenderElementId": 10,
+    "Multiplier": 1.00
+  },
+  {
+    "AttackerElementId": 10,
+    "DefenderElementId": 11,
+    "Multiplier": 1.00
+  },
+  {
+    "AttackerElementId": 10,
+    "DefenderElementId": 12,
+    "Multiplier": 1.00
+  },
+  {
+    "AttackerElementId": 10,
+    "DefenderElementId": 13,
+    "Multiplier": 1.50
+  },
+  {
+    "AttackerElementId": 10,
+    "DefenderElementId": 14,
+    "Multiplier": 0.50
+  },
+  {
+    "AttackerElementId": 11,
+    "DefenderElementId": 9,
+    "Multiplier": 1.00
+  },
+  {
+    "AttackerElementId": 11,
+    "DefenderElementId": 10,
+    "Multiplier": 1.00
+  },
+  {
+    "AttackerElementId": 11,
+    "DefenderElementId": 11,
+    "Multiplier": 1.00
+  },
+  {
+    "AttackerElementId": 11,
+    "DefenderElementId": 12,
+    "Multiplier": 1.00
+  },
+  {
+    "AttackerElementId": 11,
+    "DefenderElementId": 13,
+    "Multiplier": 0.50
+  },
+  {
+    "AttackerElementId": 11,
+    "DefenderElementId": 14,
+    "Multiplier": 1.50
+  },
+  {
+    "AttackerElementId": 12,
+    "DefenderElementId": 9,
+    "Multiplier": 1.00
+  },
+  {
+    "AttackerElementId": 12,
+    "DefenderElementId": 10,
+    "Multiplier": 1.00
+  },
+  {
+    "AttackerElementId": 12,
+    "DefenderElementId": 11,
+    "Multiplier": 1.00
+  },
+  {
+    "AttackerElementId": 12,
+    "DefenderElementId": 12,
+    "Multiplier": 1.00
+  },
+  {
+    "AttackerElementId": 12,
+    "DefenderElementId": 13,
+    "Multiplier": 1.00
+  },
+  {
+    "AttackerElementId": 12,
+    "DefenderElementId": 14,
+    "Multiplier": 1.00
+  },
+  {
+    "AttackerElementId": 13,
+    "DefenderElementId": 9,
+    "Multiplier": 1.00
+  },
+  {
+    "AttackerElementId": 13,
+    "DefenderElementId": 10,
+    "Multiplier": 0.50
+  },
+  {
+    "AttackerElementId": 13,
+    "DefenderElementId": 11,
+    "Multiplier": 1.50
+  },
+  {
+    "AttackerElementId": 13,
+    "DefenderElementId": 12,
+    "Multiplier": 1.00
+  },
+  {
+    "AttackerElementId": 13,
+    "DefenderElementId": 13,
+    "Multiplier": 1.00
+  },
+  {
+    "AttackerElementId": 13,
+    "DefenderElementId": 14,
+    "Multiplier": 1.00
+  },
+  {
+    "AttackerElementId": 14,
+    "DefenderElementId": 9,
+    "Multiplier": 1.00
+  },
+  {
+    "AttackerElementId": 14,
+    "DefenderElementId": 10,
+    "Multiplier": 1.50
+  },
+  {
+    "AttackerElementId": 14,
+    "DefenderElementId": 11,
+    "Multiplier": 0.50
+  },
+  {
+    "AttackerElementId": 14,
+    "DefenderElementId": 12,
+    "Multiplier": 1.00
+  },
+  {
+    "AttackerElementId": 14,
+    "DefenderElementId": 13,
+    "Multiplier": 1.00
+  },
+  {
+    "AttackerElementId": 14,
+    "DefenderElementId": 14,
+    "Multiplier": 1.00
+  }
+]

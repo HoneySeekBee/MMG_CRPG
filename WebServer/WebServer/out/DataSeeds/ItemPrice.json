@@ -1,0 +1,72 @@
+[
+  {
+    "Id": 2,
+    "ItemId": 8,
+    "CurrencyId": 1,
+    "Price": 5,
+    "PriceType": 0
+  },
+  {
+    "Id": 3,
+    "ItemId": 9,
+    "CurrencyId": 2,
+    "Price": 5,
+    "PriceType": 0
+  },
+  {
+    "Id": 4,
+    "ItemId": 10,
+    "CurrencyId": 2,
+    "Price": 100,
+    "PriceType": 1
+  },
+  {
+    "Id": 5,
+    "ItemId": 11,
+    "CurrencyId": 2,
+    "Price": 100,
+    "PriceType": 1
+  },
+  {
+    "Id": 6,
+    "ItemId": 12,
+    "CurrencyId": 2,
+    "Price": 0,
+    "PriceType": 1
+  },
+  {
+    "Id": 7,
+    "ItemId": 13,
+    "CurrencyId": 2,
+    "Price": 0,
+    "PriceType": 1
+  },
+  {
+    "Id": 8,
+    "ItemId": 14,
+    "CurrencyId": 2,
+    "Price": 0,
+    "PriceType": 0
+  },
+  {
+    "Id": 9,
+    "ItemId": 15,
+    "CurrencyId": 2,
+    "Price": 0,
+    "PriceType": 0
+  },
+  {
+    "Id": 10,
+    "ItemId": 16,
+    "CurrencyId": 2,
+    "Price": 1,
+    "PriceType": 1
+  },
+  {
+    "Id": 11,
+    "ItemId": 17,
+    "CurrencyId": 2,
+    "Price": 1,
+    "PriceType": 1
+  }
+]

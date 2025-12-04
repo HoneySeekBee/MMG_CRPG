@@ -1,0 +1,74 @@
+[
+  {
+    "Id": 1,
+    "ItemId": 8,
+    "StatId": 2,
+    "Value": 1.0000
+  },
+  {
+    "Id": 2,
+    "ItemId": 9,
+    "StatId": 3,
+    "Value": 5.0000
+  },
+  {
+    "Id": 3,
+    "ItemId": 10,
+    "StatId": 6,
+    "Value": 0.1000
+  },
+  {
+    "Id": 4,
+    "ItemId": 11,
+    "StatId": 3,
+    "Value": 10.0000
+  },
+  {
+    "Id": 5,
+    "ItemId": 12,
+    "StatId": 1,
+    "Value": 10.0000
+  },
+  {
+    "Id": 6,
+    "ItemId": 12,
+    "StatId": 4,
+    "Value": 5.0000
+  },
+  {
+    "Id": 7,
+    "ItemId": 13,
+    "StatId": 4,
+    "Value": 5.0000
+  },
+  {
+    "Id": 8,
+    "ItemId": 13,
+    "StatId": 7,
+    "Value": 0.0100
+  },
+  {
+    "Id": 9,
+    "ItemId": 14,
+    "StatId": 4,
+    "Value": 15.0000
+  },
+  {
+    "Id": 10,
+    "ItemId": 15,
+    "StatId": 3,
+    "Value": 0.0000
+  },
+  {
+    "Id": 11,
+    "ItemId": 16,
+    "StatId": 2,
+    "Value": 3.0000
+  },
+  {
+    "Id": 12,
+    "ItemId": 17,
+    "StatId": 2,
+    "Value": 2.0000
+  }
+]

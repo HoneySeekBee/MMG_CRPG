@@ -1,0 +1,86 @@
+[
+  {
+    "PoolId": 10,
+    "CharacterId": 10,
+    "Grade": 2,
+    "RateUp": false,
+    "Weight": 50
+  },
+  {
+    "PoolId": 10,
+    "CharacterId": 11,
+    "Grade": 3,
+    "RateUp": false,
+    "Weight": 25
+  },
+  {
+    "PoolId": 10,
+    "CharacterId": 12,
+    "Grade": 1,
+    "RateUp": false,
+    "Weight": 175
+  },
+  {
+    "PoolId": 10,
+    "CharacterId": 15,
+    "Grade": 1,
+    "RateUp": false,
+    "Weight": 175
+  },
+  {
+    "PoolId": 10,
+    "CharacterId": 21,
+    "Grade": 3,
+    "RateUp": false,
+    "Weight": 25
+  },
+  {
+    "PoolId": 10,
+    "CharacterId": 9,
+    "Grade": 1,
+    "RateUp": false,
+    "Weight": 175
+  },
+  {
+    "PoolId": 10,
+    "CharacterId": 13,
+    "Grade": 2,
+    "RateUp": false,
+    "Weight": 50
+  },
+  {
+    "PoolId": 10,
+    "CharacterId": 14,
+    "Grade": 3,
+    "RateUp": false,
+    "Weight": 25
+  },
+  {
+    "PoolId": 10,
+    "CharacterId": 16,
+    "Grade": 2,
+    "RateUp": false,
+    "Weight": 50
+  },
+  {
+    "PoolId": 10,
+    "CharacterId": 18,
+    "Grade": 3,
+    "RateUp": false,
+    "Weight": 25
+  },
+  {
+    "PoolId": 10,
+    "CharacterId": 19,
+    "Grade": 1,
+    "RateUp": false,
+    "Weight": 175
+  },
+  {
+    "PoolId": 10,
+    "CharacterId": 20,
+    "Grade": 2,
+    "RateUp": false,
+    "Weight": 50
+  }
+]

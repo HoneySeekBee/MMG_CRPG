@@ -1,0 +1,158 @@
+[
+  {
+    "weapon_id": 1,
+    "code": "Weapon_01_Bow",
+    "display_name": "\uD65C \uC774\uB2E4. ",
+    "is_two_handed": true
+  },
+  {
+    "weapon_id": 2,
+    "code": "Weapon_02_OHS_Niddle",
+    "display_name": "\uD55C\uC190 \uCC0C\uB974\uAE30 \uD2B9\uD654 \uBC14\uB298 \uAC19\uC774 \uC0DD\uAE34 \uBB34\uAE30\uC774\uB2E4. ",
+    "is_two_handed": false
+  },
+  {
+    "weapon_id": 3,
+    "code": "Weapon_03_OHS_Sword_01",
+    "display_name": "\uD3C9\uBC94\uD55C \uD55C\uC190\uAC80 1",
+    "is_two_handed": false
+  },
+  {
+    "weapon_id": 4,
+    "code": "Weapon_04_OHS_Sword_02",
+    "display_name": "\uD359\uBC24\uD78C \uD78C\uC190\uAC80 2",
+    "is_two_handed": false
+  },
+  {
+    "weapon_id": 5,
+    "code": "Weapon_05_OHS_Sword_03",
+    "display_name": "\uD3C9\uBC94\uD55C \uD55C\uC190\uAC80 3 \uB3D9\uC591\uD488 \uAC80\uC774\uB2E4.",
+    "is_two_handed": false
+  },
+  {
+    "weapon_id": 6,
+    "code": "Weapon_06_OHS_Axe_01",
+    "display_name": "\uD3C9\uBC94\uD55C \uD55C\uC190 \uB3C4\uB07C 1",
+    "is_two_handed": false
+  },
+  {
+    "weapon_id": 7,
+    "code": "Weapon_07_OHS_Hammer_01",
+    "display_name": "\uD3C9\uBC94\uD55C \uD55C\uC190 \uB9DD\uCE58",
+    "is_two_handed": false
+  },
+  {
+    "weapon_id": 8,
+    "code": "Weapon_08_OHS_Sword_04",
+    "display_name": "\uD359\uBC24\uD78C \uB3C4",
+    "is_two_handed": false
+  },
+  {
+    "weapon_id": 9,
+    "code": "Weapon_09_OHS_Axe_02",
+    "display_name": "\uD3C9\uBC94\uD55C \uD55C\uC190 \uB3C4\uB07C 02",
+    "is_two_handed": false
+  },
+  {
+    "weapon_id": 10,
+    "code": "Weapon_10_OHS_Hammer_02",
+    "display_name": "\uD3C9\uBC94\uD55C \uD55C\uC190 \uB9DD\uCE58 02",
+    "is_two_handed": false
+  },
+  {
+    "weapon_id": 11,
+    "code": "Weapon_11_Shield02",
+    "display_name": "\uD3C9\uBC94\uD55C \uD55C\uC190 \uBC29\uD328 2",
+    "is_two_handed": false
+  },
+  {
+    "weapon_id": 12,
+    "code": "Weapon_12_Shield03",
+    "display_name": "\uD3C9\uBC94\uD55C \uD55C\uC190 \uBC29\uD328 03",
+    "is_two_handed": false
+  },
+  {
+    "weapon_id": 13,
+    "code": "Weapon_13_Shield04",
+    "display_name": "\uD3C9\uBC94\uD55C \uD55C\uC190 \uBC29\uD328 04",
+    "is_two_handed": false
+  },
+  {
+    "weapon_id": 14,
+    "code": "Weapon_14_Shield09",
+    "display_name": "\uD3C9\uBC94\uD55C \uD55C\uC190 \uBC29\uD328 09",
+    "is_two_handed": false
+  },
+  {
+    "weapon_id": 15,
+    "code": "Weapon_15_THS_Sword_01",
+    "display_name": "\uD3C9\uBC94\uD55C \uC591\uC190\uAC80 01",
+    "is_two_handed": true
+  },
+  {
+    "weapon_id": 16,
+    "code": "Weapon_16_THS_Sword_02",
+    "display_name": "\uD3C9\uBC94\uD55C \uC591\uC190\uAC80 02",
+    "is_two_handed": true
+  },
+  {
+    "weapon_id": 17,
+    "code": "Weapon_17_THS_Sword_03",
+    "display_name": "\uD3C9\uBC94\uD55C \uC591\uC190\uAC80 03",
+    "is_two_handed": true
+  },
+  {
+    "weapon_id": 18,
+    "code": "Weapon_18_Spear_01",
+    "display_name": "\uD3C9\uBC94\uD55C \uCC3D",
+    "is_two_handed": false
+  },
+  {
+    "weapon_id": 19,
+    "code": "Weapon_19_Spear_02",
+    "display_name": "\uD3C9\uBC94\uD55C \uCC3D 02",
+    "is_two_handed": false
+  },
+  {
+    "weapon_id": 20,
+    "code": "Weapon_20_Wand_01",
+    "display_name": "\uD3C9\uBC94\uD55C \uC644\uB4DC 01",
+    "is_two_handed": false
+  },
+  {
+    "weapon_id": 21,
+    "code": "Weapon_21_Wand_02",
+    "display_name": "\uD3C9\uBC94\uD55C \uC644\uB4DC 02",
+    "is_two_handed": false
+  },
+  {
+    "weapon_id": 22,
+    "code": "Weapon_22_Wand_03",
+    "display_name": "\uD3C9\uBC94\uD55C \uC644\uB4DC 03",
+    "is_two_handed": false
+  },
+  {
+    "weapon_id": 23,
+    "code": "Weapon_23_Wand_04",
+    "display_name": "\uD3C9\uBC94\uD55C \uC644\uB4DC 04",
+    "is_two_handed": false
+  },
+  {
+    "weapon_id": 24,
+    "code": "Weapon_24_Wand_05",
+    "display_name": "\uD3C9\uBC94\uD55C \uC644\uB4DC 05",
+    "is_two_handed": false
+  },
+  {
+    "weapon_id": 25,
+    "code": "Weapon_25_Wand_06",
+    "display_name": "\uD3C9\uBC94\uD55C \uC644\uB4DC 06",
+    "is_two_handed": false
+  },
+  {
+    "weapon_id": 26,
+    "code": "Weapon_26_Wand_07",
+    "display_name": "\uD3C9\uBC94\uD55C \uC644\uB4DC 07",
+    "is_two_handed": false
+  }
+]

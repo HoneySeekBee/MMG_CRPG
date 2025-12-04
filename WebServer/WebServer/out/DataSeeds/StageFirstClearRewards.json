@@ -1,0 +1,38 @@
+[
+  {
+    "id": 6,
+    "stage_id": 5,
+    "item_id": 10,
+    "qty": 1
+  },
+  {
+    "id": 7,
+    "stage_id": 6,
+    "item_id": 14,
+    "qty": 1
+  },
+  {
+    "id": 8,
+    "stage_id": 7,
+    "item_id": 14,
+    "qty": 1
+  },
+  {
+    "id": 9,
+    "stage_id": 8,
+    "item_id": 13,
+    "qty": 1
+  },
+  {
+    "id": 10,
+    "stage_id": 9,
+    "item_id": 12,
+    "qty": 1
+  },
+  {
+    "id": 11,
+    "stage_id": 10,
+    "item_id": 11,
+    "qty": 1
+  }
+]
