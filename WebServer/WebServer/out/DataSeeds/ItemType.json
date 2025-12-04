@@ -1,0 +1,38 @@
+[
+  {
+    "Id": 15,
+    "Code": "ETC",
+    "Name": "\uAE30\uD0C0",
+    "CreatedAt": "2025-09-07T01:04:12.835644Z",
+    "UpdatedAt": "2025-10-01T06:00:59.597536Z",
+    "SlotId": 4,
+    "Active": true
+  },
+  {
+    "Id": 13,
+    "Code": "MATERIAL",
+    "Name": "\uC7AC\uB8CC",
+    "CreatedAt": "2025-09-07T01:04:12.835644Z",
+    "UpdatedAt": "2025-10-01T06:00:59.597536Z",
+    "SlotId": 4,
+    "Active": true
+  },
+  {
+    "Id": 16,
+    "Code": "USABLE",
+    "Name": "\uC18C\uBE44",
+    "CreatedAt": "2025-10-01T06:00:59.597536Z",
+    "UpdatedAt": "2025-10-01T06:00:59.597536Z",
+    "SlotId": 4,
+    "Active": true
+  },
+  {
+    "Id": 17,
+    "Code": "EQUIP",
+    "Name": "\uC7A5\uBE44",
+    "CreatedAt": "2025-10-01T06:00:59.597536Z",
+    "UpdatedAt": "2025-10-01T06:00:59.597536Z",
+    "SlotId": 4,
+    "Active": true
+  }
+]

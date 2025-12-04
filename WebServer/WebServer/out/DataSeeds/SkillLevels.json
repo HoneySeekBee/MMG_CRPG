@@ -1,0 +1,61 @@
+[
+  {
+    "SkillId": 35,
+    "Level": 1,
+    "Values": {
+      "mods": [
+        {
+          "op": "add",
+          "stat": "hpMax",
+          "value": 15
+        },
+        {
+          "op": "add",
+          "stat": "def",
+          "value": 1
+        }
+      ],
+      "power": null,
+      "duration": 3
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 1
+  },
+  {
+    "SkillId": 34,
+    "Level": 2,
+    "Values": {
+      "mods": [],
+      "power": {
+        "flat": 2,
+        "hits": 2,
+        "kind": "damage",
+        "hpRate": 2,
+        "atkRate": 2
+      },
+      "duration": null
+    },
+    "Description": "Level 2 Skill",
+    "Materials": null,
+    "CostGold": 2
+  },
+  {
+    "SkillId": 34,
+    "Level": 1,
+    "Values": {
+      "mods": [],
+      "power": {
+        "flat": 1,
+        "hits": 4,
+        "kind": "damage",
+        "hpRate": 1.04,
+        "atkRate": 1.04
+      },
+      "duration": null
+    },
+    "Description": "level1 skill",
+    "Materials": null,
+    "CostGold": 2
+  }
+]

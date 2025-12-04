@@ -1,0 +1,82 @@
+[
+  {
+    "Scope": 1,
+    "Metric": 2,
+    "RefId": 1,
+    "RequiredCnt": 0,
+    "Extra": {},
+    "SynergyId": 5
+  },
+  {
+    "Scope": 0,
+    "Metric": 0,
+    "RefId": 10,
+    "RequiredCnt": 0,
+    "Extra": {},
+    "SynergyId": 6
+  },
+  {
+    "Scope": 0,
+    "Metric": 0,
+    "RefId": 14,
+    "RequiredCnt": 0,
+    "Extra": {},
+    "SynergyId": 7
+  },
+  {
+    "Scope": 0,
+    "Metric": 0,
+    "RefId": 13,
+    "RequiredCnt": 0,
+    "Extra": {},
+    "SynergyId": 8
+  },
+  {
+    "Scope": 0,
+    "Metric": 0,
+    "RefId": 11,
+    "RequiredCnt": 0,
+    "Extra": {},
+    "SynergyId": 9
+  },
+  {
+    "Scope": 0,
+    "Metric": 0,
+    "RefId": 12,
+    "RequiredCnt": 0,
+    "Extra": {},
+    "SynergyId": 10
+  },
+  {
+    "Scope": 0,
+    "Metric": 1,
+    "RefId": 10,
+    "RequiredCnt": 0,
+    "Extra": {},
+    "SynergyId": 11
+  },
+  {
+    "Scope": 0,
+    "Metric": 1,
+    "RefId": 11,
+    "RequiredCnt": 0,
+    "Extra": {},
+    "SynergyId": 12
+  },
+  {
+    "Scope": 0,
+    "Metric": 1,
+    "RefId": 12,
+    "RequiredCnt": 0,
+    "Extra": {},
+    "SynergyId": 14
+  },
+  {
+    "Scope": 0,
+    "Metric": 1,
+    "RefId": 13,
+    "RequiredCnt": 0,
+    "Extra": {},
+    "SynergyId": 16
+  }
+]

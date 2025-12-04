@@ -41,5 +41,8 @@
 	<ItemGroup>
 	  <Folder Include="DataSeeds\" />
 	</ItemGroup>
-
+	<ItemGroup>
+		<None Include="..\Contracts\bin\Release\netstandard2.0\Contracts.dll"
+			  CopyToOutputDirectory="Always" />
+	</ItemGroup>
 </Project>

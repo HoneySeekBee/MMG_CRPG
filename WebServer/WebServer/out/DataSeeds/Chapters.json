@@ -1,0 +1,52 @@
+[
+  {
+    "chapter_id": 2,
+    "battle_id": 1,
+    "chapter_num": 1,
+    "name": "\uB85C\uBE44\uC559 \uC5B8\uB355 \uD0D0\uD5D8",
+    "description": "\uD559\uC6D0 \uADFC\uCC98\uC5D0 \uC788\uB294 \uB85C\uBE44\uC559 \uC5B8\uB355\uC744 \uD0D0\uD5D8 \uD574\uBCF4\uC790.",
+    "is_active": true,
+    "created_at": "2025-11-05T04:08:38.967363Z",
+    "updated_at": "2025-11-05T04:08:38.967363Z"
+  },
+  {
+    "chapter_id": 6,
+    "battle_id": 1,
+    "chapter_num": 2,
+    "name": "\uD06C\uB8E8\uADF8 \uC232",
+    "description": "\uC5EC\uB7EC \uBAAC\uC2A4\uD130\uB4E4\uC774 \uB098\uC624\uB294 \uD06C\uB8E8\uADF8 \uC232\uC744 \uD0D0\uD5D8\uD574\uBCF4\uC790.",
+    "is_active": true,
+    "created_at": "2025-11-05T04:13:00.384414Z",
+    "updated_at": "2025-11-05T04:13:00.384414Z"
+  },
+  {
+    "chapter_id": 7,
+    "battle_id": 1,
+    "chapter_num": 3,
+    "name": "\uD504\uB85C\uACE0 \uAC15",
+    "description": "\uD504\uB85C\uACE0 \uAC15\uC744 \uD0D0\uD5D8\uD574 \uBCF4\uC790.",
+    "is_active": true,
+    "created_at": "2025-11-05T04:13:00.384414Z",
+    "updated_at": "2025-11-05T04:13:00.384414Z"
+  },
+  {
+    "chapter_id": 8,
+    "battle_id": 1,
+    "chapter_num": 4,
+    "name": "\uBCF4\uB85C\uB3C4 \uC2E0\uC804",
+    "description": "\uBCF4\uB85C\uB3C4 \uC2E0\uC804\uC744 \uD0D0\uD5D8\uD574\uBCF4\uC790. ",
+    "is_active": true,
+    "created_at": "2025-11-05T04:13:00.384414Z",
+    "updated_at": "2025-11-05T04:13:00.384414Z"
+  },
+  {
+    "chapter_id": 9,
+    "battle_id": 1,
+    "chapter_num": 5,
+    "name": "\uD504\uB78C \uC720\uC801\uC9C0",
+    "description": "\uD504\uB78C \uC720\uC801\uC9C0\uB97C \uD0D0\uD5D8\uD574\uBCF4\uC790.",
+    "is_active": true,
+    "created_at": "2025-11-05T04:13:00.384414Z",
+    "updated_at": "2025-11-05T04:13:00.384414Z"
+  }
+]

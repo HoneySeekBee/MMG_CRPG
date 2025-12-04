@@ -49,18 +49,18 @@ public class GachaAnimationManager : MonoBehaviour
     }
 
     // =========== 가챠 실행 ===========
-    public void PlayGacha()
+    public void PlayGacha(Action action = null)
     {
-        StartCoroutine(_Play());
+        StartCoroutine(_Play(action));
     }
 
-    private IEnumerator _Play()
+    private IEnumerator _Play(Action action = null)
     {
         ParentObj.SetActive(true);
         yield return null;
 
         Init();
-        StartCoroutine(Show_Animation());
+        StartCoroutine(Show_Animation(action));
     }
 
     public void DisableGacha()
@@ -119,7 +119,7 @@ public class GachaAnimationManager : MonoBehaviour
 
     // =========== 연출 ===========
 
-    private IEnumerator Show_Animation()
+    private IEnumerator Show_Animation(Action action = null)
     {
         PrepareFlagsDeployIdle();
 
@@ -152,7 +152,8 @@ public class GachaAnimationManager : MonoBehaviour
 
             yield return Wait(0.5f);
         }
-
+        if(action != null)
+            action.Invoke();
         Debug.Log("가챠 연출 끝!");
     }
 

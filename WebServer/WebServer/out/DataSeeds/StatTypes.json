@@ -1,0 +1,44 @@
+[
+  {
+    "Id": 1,
+    "Code": "HP",
+    "Name": "\uCCB4\uB825",
+    "IsPercent": false
+  },
+  {
+    "Id": 2,
+    "Code": "MP",
+    "Name": "\uB9C8\uB098",
+    "IsPercent": false
+  },
+  {
+    "Id": 3,
+    "Code": "ATK",
+    "Name": "\uACF5\uACA9\uB825",
+    "IsPercent": false
+  },
+  {
+    "Id": 4,
+    "Code": "DEF",
+    "Name": "\uBC29\uC5B4\uB825",
+    "IsPercent": false
+  },
+  {
+    "Id": 5,
+    "Code": "MATK",
+    "Name": "\uB9C8\uBC95\uACF5\uACA9\uB825",
+    "IsPercent": false
+  },
+  {
+    "Id": 6,
+    "Code": "CRI_RATE",
+    "Name": "\uCE58\uBA85\uD655\uB960",
+    "IsPercent": true
+  },
+  {
+    "Id": 7,
+    "Code": "CRI_DMG",
+    "Name": "\uCE58\uBA85\uD53C\uD574",
+    "IsPercent": true
+  }
+]

@@ -43,6 +43,7 @@ namespace Infrastructure.Auth
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new Claim(ClaimTypes.NameIdentifier,   user.Id.ToString()),
+                new Claim("uid", user.Id.ToString()),
                 new Claim("account",                   user.Account)
             };
 

@@ -1,0 +1,92 @@
+[
+  {
+    "ElementId": 9,
+    "Key": "element_nohave",
+    "Label": "\uBB34\uC18D\uC131",
+    "IconId": 22,
+    "ColorHex": "#FFFFFF",
+    "SortOrder": 1,
+    "IsActive": true,
+    "Meta": {
+      "etc": "",
+      "description": "\uBB34\uC18D\uC131\uC785\uB2C8\uB2E4. \uAE30\uBCF8\uAC12\uC73C\uB85C \uB123\uC5B4\uC57C\uC9C0"
+    },
+    "CreatedAt": "2025-10-21T06:03:51.043122Z",
+    "UpdatedAt": "2025-10-21T06:03:51.043122Z"
+  },
+  {
+    "ElementId": 11,
+    "Key": "element_ground",
+    "Label": "\uB545 \uC18D\uC131",
+    "IconId": 24,
+    "ColorHex": "#b06029",
+    "SortOrder": 1,
+    "IsActive": true,
+    "Meta": {
+      "etc": "",
+      "description": "\uB545\uB545\uD55C \uB545 \uC18D\uC131"
+    },
+    "CreatedAt": "2025-10-21T06:07:32.771091Z",
+    "UpdatedAt": "2025-10-21T06:07:32.771091Z"
+  },
+  {
+    "ElementId": 12,
+    "Key": "element_physics",
+    "Label": "\uBB3C\uB9AC \uC18D\uC131",
+    "IconId": 25,
+    "ColorHex": "#000000",
+    "SortOrder": 1,
+    "IsActive": true,
+    "Meta": {
+      "etc": "",
+      "description": "\uB0A8\uC790\uB294 \uC5ED\uC2DC \uBB3C\uB9AC"
+    },
+    "CreatedAt": "2025-10-21T06:08:07.49491Z",
+    "UpdatedAt": "2025-10-21T06:08:07.49491Z"
+  },
+  {
+    "ElementId": 13,
+    "Key": "element_plant",
+    "Label": "\uD480 \uC18D\uC131",
+    "IconId": 26,
+    "ColorHex": "#4b6d19",
+    "SortOrder": 1,
+    "IsActive": true,
+    "Meta": {
+      "etc": "",
+      "description": "\uD480\uD480\uD480~~"
+    },
+    "CreatedAt": "2025-10-21T06:08:47.904695Z",
+    "UpdatedAt": "2025-10-21T06:08:47.904695Z"
+  },
+  {
+    "ElementId": 14,
+    "Key": "element_water",
+    "Label": "\uBB3C \uC18D\uC131 ",
+    "IconId": 27,
+    "ColorHex": "#5ed0fe",
+    "SortOrder": 1,
+    "IsActive": true,
+    "Meta": {
+      "etc": "",
+      "description": "\uB0B4\uAC00 \uBB3C\uB85C \uBCF4\uC774\uB2C8"
+    },
+    "CreatedAt": "2025-10-21T06:09:27.640053Z",
+    "UpdatedAt": "2025-10-21T06:09:27.640053Z"
+  },
+  {
+    "ElementId": 10,
+    "Key": "element_fire",
+    "Label": "\uBD88 \uC18D\uC131",
+    "IconId": 23,
+    "ColorHex": "#ff0000",
+    "SortOrder": 1,
+    "IsActive": true,
+    "Meta": {
+      "etc": "",
+      "description": "\uB728\uAC70\uC6B4 \uBD88\uC18D\uC131"
+    },
+    "CreatedAt": "2025-10-21T06:06:45.781664Z",
+    "UpdatedAt": "2025-10-21T08:09:59.668655Z"
+  }
+]

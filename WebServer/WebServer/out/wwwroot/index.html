@@ -1,0 +1,202 @@
+﻿<!doctype html>
+<meta charset="utf-8" />
+<title>RPG Backend Demo</title>
+<style>
+    :root {
+        --gap: 12px
+    }
+
+    body {
+        font-family: system-ui,Segoe UI,Apple SD Gothic Neo,Malgun Gothic,sans-serif;
+        margin: 24px;
+        max-width: 960px
+    }
+
+    .row {
+        display: flex;
+        gap: var(--gap);
+        flex-wrap: wrap;
+        align-items: center
+    }
+
+    button, select {
+        padding: 8px 12px
+    }
+
+        button[disabled] {
+            opacity: .5;
+            cursor: not-allowed
+        }
+
+    pre {
+        background: #f6f6f6;
+        padding: 12px;
+        border-radius: 8px;
+        white-space: pre-wrap
+    }
+
+    small.mono {
+        font-family: ui-monospace,Menlo,Consolas,monospace;
+        color: #666
+    }
+</style>
+
+<h1>RPG Backend Demo</h1>
+<p class="row">
+    <a href="/swagger" target="_blank">Swagger</a>
+    <a href="/health" target="_blank">Health</a>
+    <a href="/version" target="_blank">Version</a>
+</p>
+
+<div class="row" style="margin:8px 0 var(--gap)">
+    <label>
+        Pool:
+        <select id="pool" disabled></select>
+    </label>
+    <button id="btnChars" disabled>캐릭터 목록</button>
+    <button id="btnRoll" disabled>가챠 10회</button>
+    <button id="btnCombat" disabled>전투 시뮬</button>
+    <small id="status" class="mono"></small>
+</div>
+
+<h3>결과</h3>
+<pre id="out">여기에 결과가 나옵니다.</pre>
+
+<script>
+    /* ====== 라우트 설정(프로젝트에 맞게 필요시 수정) ====== */
+    const POOL_LIST_URL = '/api/gachapool';   // Swagger에서 "가챠 풀 목록 GET" 주소로 맞추세요
+    const CHAR_LIST_URL = '/api/characters';  // 캐릭터 목록 GET 주소
+    const ROLL_URL = '/api/test/gacha/roll';
+    const COMBAT_URL = '/api/test/combat/simulate';
+    const FALLBACK_POOL_ID = 9;               // 드롭다운이 비어있을 때 사용할 기본 PoolId
+
+    /* ====== 유틸 ====== */
+    const $ = sel => document.querySelector(sel);
+    function show(data) { $('#out').textContent = JSON.stringify(data, null, 2); }
+    function setStatus(msg) { $('#status').textContent = msg || ''; }
+    async function j(url, opt) {
+        const r = await fetch(url, opt);
+        if (!r.ok) throw new Error(await r.text());
+        return r.json();
+    }
+
+    /* ====== 상태 ====== */
+    const state = {
+        charsById: {},        // { [id]: name }
+        initDone: false
+    };
+
+    /* ====== 초기화 ====== */
+    async function init() {
+        setStatus('초기화 중…');
+        const poolSel = $('#pool');
+
+        // 1) 가챠 풀 목록 로딩 (실패해도 폴백 동작하도록 try/catch)
+        try {
+            const pools = await j(POOL_LIST_URL);
+            const list = (pools?.items ?? pools ?? []);
+            for (const p of list) {
+                const id = p.poolId ?? p.id ?? p.PoolId ?? p.Id;
+                const name = p.name ?? p.Name ?? 'Pool';
+                if (typeof id === 'number' || /^\d+$/.test(String(id))) {
+                    const opt = document.createElement('option');
+                    opt.value = Number(id);
+                    opt.text = `#${opt.value} ${name}`;
+                    poolSel.add(opt);
+                }
+            }
+            // 9번이 있으면 자동 선택
+            const target = Array.from(poolSel.options).find(o => Number(o.value) === FALLBACK_POOL_ID);
+            if (target) poolSel.value = target.value;
+            poolSel.disabled = poolSel.options.length === 0;
+        } catch (e) {
+            console.warn('Pool list load failed:', e);
+            poolSel.disabled = true; // 드롭다운 없이 폴백 사용
+        }
+
+        // 2) 캐릭터 목록 캐시
+        try {
+            const list = await j(CHAR_LIST_URL);
+            const items = (list?.items ?? list ?? []);
+            for (const c of items) {
+                const id = c.id ?? c.characterId ?? c.Id ?? c.CharacterId;
+                const name = c.name ?? c.Name ?? `#${id}`;
+                if (id != null) state.charsById[Number(id)] = String(name);
+            }
+        } catch (e) {
+            console.warn('Character list load failed:', e);
+        }
+
+        // 3) 버튼 활성화
+        $('#btnChars').disabled = false;
+        $('#btnRoll').disabled = false;
+        $('#btnCombat').disabled = Object.keys(state.charsById).length < 2; // 전투는 최소 2명 필요
+        state.initDone = true;
+        setStatus('');
+    }
+
+    /* ====== 헬퍼 ====== */
+    function getSelectedPoolId() {
+        const sel = $('#pool');
+        const v = sel && !sel.disabled ? Number(sel.value) : NaN;
+        return Number.isFinite(v) ? v : FALLBACK_POOL_ID; // 드롭다운이 비어있으면 9번 폴백
+    }
+
+    /* ====== 액션 ====== */
+    async function onGetChars() {
+        try {
+            setStatus('캐릭터 조회…');
+            const res = await j(CHAR_LIST_URL);
+            show(res);
+        } catch (e) {
+            show({ error: '캐릭터 목록 로드 실패', detail: String(e) });
+        } finally {
+            setStatus('');
+        }
+    }
+
+    async function onRoll() {
+        try {
+            setStatus('가챠 진행…');
+            const poolId = getSelectedPoolId();
+            const res = await j(ROLL_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({ poolId, count: 10 })
+            });
+            // ID → 이름 매핑 추가
+            res.names = (res.characterIds || []).map(id => state.charsById[id] ?? `#${id}`);
+            show(res);
+        } catch (e) {
+            show({ error: '가챠 실패', detail: String(e) });
+        } finally {
+            setStatus('');
+        }
+    }
+
+    async function onCombat() {
+        try {
+            setStatus('전투 시뮬…');
+            const ids = Object.keys(state.charsById).map(x => Number(x)).slice(0, 2);
+            const body = { allies: [{ characterId: ids[0], level: 10 }], enemies: [{ characterId: ids[1], level: 6 }] };
+            const res = await j(COMBAT_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            show(res);
+        } catch (e) {
+            show({ error: '전투 시뮬 실패', detail: String(e) });
+        } finally {
+            setStatus('');
+        }
+    }
+
+    /* ====== 이벤트 바인딩 ====== */
+    $('#btnChars').addEventListener('click', onGetChars);
+    $('#btnRoll').addEventListener('click', onRoll);
+    $('#btnCombat').addEventListener('click', onCombat);
+
+    /* ====== 시작 ====== */
+    init();
+</script>

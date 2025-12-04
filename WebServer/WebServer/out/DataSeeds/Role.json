@@ -1,0 +1,38 @@
+[
+  {
+    "RoleId": 8,
+    "Key": "role_attack",
+    "Label": "\uACF5\uACA9 \uC18D\uC131",
+    "IconId": 28,
+    "ColorHex": "#ff0000",
+    "SortOrder": 1,
+    "IsActive": true,
+    "Meta": {
+      "description": "\uBABB \uBA39\uC5B4\uB3C4 \uC77C\uB2E8 \uACF5\uACA9"
+    }
+  },
+  {
+    "RoleId": 9,
+    "Key": "role_depend",
+    "Label": "\uBC29\uC5B4 \uC5ED\uD560",
+    "IconId": 29,
+    "ColorHex": "#00ff11",
+    "SortOrder": 1,
+    "IsActive": true,
+    "Meta": {
+      "description": null
+    }
+  },
+  {
+    "RoleId": 10,
+    "Key": "role_support",
+    "Label": "\uC11C\uD3EC\uD130 \uC5ED\uD560",
+    "IconId": 30,
+    "ColorHex": "#feb4b4",
+    "SortOrder": 1,
+    "IsActive": true,
+    "Meta": {
+      "description": null
+    }
+  }
+]

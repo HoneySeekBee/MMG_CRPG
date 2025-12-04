@@ -1,0 +1,11 @@
+[
+  {
+    "id": 1,
+    "name": "Adventure",
+    "active": true,
+    "scene_key": "Adventure",
+    "check_multi": false,
+    "created_at": "2025-11-05T04:04:58.576523Z",
+    "updated_at": "2025-11-05T04:04:58.576523Z"
+  }
+]

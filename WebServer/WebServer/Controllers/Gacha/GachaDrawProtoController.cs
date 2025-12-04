@@ -1,5 +1,6 @@
 ﻿using Application.Gacha.GachaDraw;
 using Contracts.Protos;
+using Google.Protobuf;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProtoBuf;
@@ -9,6 +10,8 @@ namespace WebServer.Controllers.Gacha
     [ApiController]
     [Authorize]
     [Route("api/pb/gacha")]
+    [Authorize]
+    [Produces("application/x-protobuf")]
     public sealed class GachaDrawProtoController : ControllerBase
     {
         private readonly IGachaDrawService _drawService;
@@ -23,10 +26,8 @@ namespace WebServer.Controllers.Gacha
             // 1) protobuf 요청 파싱
             using var ms = new MemoryStream();
             await Request.Body.CopyToAsync(ms, ct);
-            ms.Position = 0;
 
-            var req = Serializer.Deserialize<GachaDrawRequestPb>(ms);
-
+            var req = GachaDrawRequestPb.Parser.ParseFrom(ms.ToArray()); 
             // 2) UserId (JWT)
             int userId = int.Parse(User.FindFirst("uid")!.Value);
 
@@ -63,7 +64,7 @@ namespace WebServer.Controllers.Gacha
 
             // 5) protobuf 직렬화하여 반환
             var outStream = new MemoryStream();
-            Serializer.Serialize(outStream, pb);
+            pb.WriteTo(outStream);  
 
             return File(outStream.ToArray(), "application/x-protobuf");
         }

@@ -28,7 +28,11 @@ public class UserCharacterUI : MonoBehaviour
         MasterDataCache MasterData = MasterDataCache.Instance;
         // FactionBG는 아이콘이 아니라 그냥 색상만 참조하면 된다. 
 
-        PortraitsImage.sprite = MasterData.PortraitSprites[ThisCharacter.PortraitId ?? 0];
+        if (ThisCharacter.PortraitId == 0)
+            PortraitsImage.sprite = null;
+        else
+            PortraitsImage.sprite = MasterData.PortraitSprites[ThisCharacter.PortraitId ?? 0];
+
         ElementIconImage.sprite = MasterData.IconSprites[MasterData.ElementDictionary[ThisCharacter.ElementId].IconId];
         RoleIconImage.sprite = MasterData.IconSprites[MasterData.RoleDictionary[ThisCharacter.RoleId].IconId];
         NameText.text = ThisCharacter.Name;

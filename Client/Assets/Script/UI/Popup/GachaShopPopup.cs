@@ -6,6 +6,7 @@ using Lobby;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,11 +30,7 @@ public class GachaShopPopup : UIPopup
 
     private void OnDisable()
     {
-        // 생성된 모든 배너 UI 반환
-        foreach (var banner in activeBanners)
-            pool.Return(banner.gameObject);
-
-        activeBanners.Clear();
+        ReturnAllBanners();
     }
 
     public void Set(Action fadeIn, GachaCatalogPb gachaCatalog)
@@ -42,6 +39,19 @@ public class GachaShopPopup : UIPopup
         Set_Banner(gachaCatalog);
         Set_Currency();
         StartCoroutine(LoadGachaScnee(fadeIn));
+    }
+    private void ReturnAllBanners()
+    {
+        foreach (var banner in activeBanners)
+        {
+            if (banner != null)
+            {
+                banner.transform.SetParent(null, false);  
+                pool.Return(banner.gameObject);
+            }
+        }
+
+        activeBanners.Clear();
     }
     private IEnumerator LoadGachaScnee(Action fadeIn)
     {
@@ -68,6 +78,11 @@ public class GachaShopPopup : UIPopup
 
             activeBanners.Add(ui);
         }
+        if (activeBanners.Count > 0)
+        {
+            var firstToggle = activeBanners[0].GetComponent<Toggle>();
+            firstToggle.isOn = true; // 자동 선택
+        }
     }
     private void Set_Currency()
     {
@@ -78,11 +93,44 @@ public class GachaShopPopup : UIPopup
     public void Set_Btn(GachaBannerPb data, Sprite bannerImage)
     {
         BannerBG.gameObject.SetActive(true);
-        BannerBG.sprite = bannerImage;
+        BannerBG.sprite = bannerImage; // 이거는 나중에 해주자. ( 현재 해당 이미지 투명도 0으로 해놓았다. ) 
 
         Gacha_One.onClick.RemoveAllListeners();
         Gacha_Ten.onClick.RemoveAllListeners();
-        Gacha_One.onClick.AddListener(() => Console.WriteLine($"뽑기 1회 : {data.Title}"));
+
+        GachaNetwork network = NetworkManager.Instance.GachaNetwork;
+        Gacha_One.onClick.AddListener(() =>
+        {
+            Debug.Log($"뽑기 1회 : {data.Title}");
+            StartCoroutine(network.DrawAsync(data.Key, 1, (res) =>
+            {
+                if (!res.Ok)
+                {
+                    Debug.LogError($"Draw 실패: {res.Message}");
+                    return;
+                }
+
+                LobbyRootController.Instance.GachaResult(res.Data);
+                LobbyRootController.Instance.Show("GachaResult");
+            }));
+        });
+
+        Gacha_Ten.onClick.AddListener(() =>
+        {
+            Debug.Log($"뽑기 10회 : {data.Title}");
+            StartCoroutine(network.DrawAsync(data.Key, 10, (res) =>
+            {
+                if (!res.Ok)
+                {
+                    Debug.LogError($"Draw 실패: {res.Message}");
+                    return;
+                }
+
+                LobbyRootController.Instance.GachaResult(res.Data);
+                LobbyRootController.Instance.Show("GachaResult");
+            }));
+        });
         Gacha_Ten.onClick.AddListener(() => Console.WriteLine($"뽑기 10회 : {data.Title}"));
     }
+  
 }

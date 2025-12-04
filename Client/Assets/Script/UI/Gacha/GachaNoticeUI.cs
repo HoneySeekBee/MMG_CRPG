@@ -21,6 +21,7 @@ public class GachaNoticeUI : MonoBehaviour
         {
             coroutine = StartCoroutine(ShowOverlap(getOverlap));
         }
+        CharacterImage.sprite = characterImage;
         Sprite yellowStar = UIImageCache.Instance.Get(UIImageCache.YellowStarKey);
         Sprite grayStar = UIImageCache.Instance.Get(UIImageCache.GrayStarKey);
         for (int i = 0; i < CharacterStars.Length; i++)
