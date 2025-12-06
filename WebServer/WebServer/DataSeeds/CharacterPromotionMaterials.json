@@ -1,1 +1,146 @@
-[]
+[
+  {
+    "CharacterId": 9,
+    "Tier": 1,
+    "ItemId": 23,
+    "Count": 20
+  },
+  {
+    "CharacterId": 9,
+    "Tier": 2,
+    "ItemId": 23,
+    "Count": 50
+  },
+  {
+    "CharacterId": 10,
+    "Tier": 1,
+    "ItemId": 18,
+    "Count": 20
+  },
+  {
+    "CharacterId": 10,
+    "Tier": 2,
+    "ItemId": 18,
+    "Count": 50
+  },
+  {
+    "CharacterId": 11,
+    "Tier": 1,
+    "ItemId": 19,
+    "Count": 20
+  },
+  {
+    "CharacterId": 11,
+    "Tier": 2,
+    "ItemId": 19,
+    "Count": 50
+  },
+  {
+    "CharacterId": 12,
+    "Tier": 1,
+    "ItemId": 20,
+    "Count": 20
+  },
+  {
+    "CharacterId": 12,
+    "Tier": 2,
+    "ItemId": 20,
+    "Count": 50
+  },
+  {
+    "CharacterId": 13,
+    "Tier": 1,
+    "ItemId": 24,
+    "Count": 20
+  },
+  {
+    "CharacterId": 13,
+    "Tier": 2,
+    "ItemId": 24,
+    "Count": 50
+  },
+  {
+    "CharacterId": 14,
+    "Tier": 1,
+    "ItemId": 25,
+    "Count": 20
+  },
+  {
+    "CharacterId": 14,
+    "Tier": 2,
+    "ItemId": 25,
+    "Count": 50
+  },
+  {
+    "CharacterId": 15,
+    "Tier": 1,
+    "ItemId": 21,
+    "Count": 20
+  },
+  {
+    "CharacterId": 15,
+    "Tier": 2,
+    "ItemId": 21,
+    "Count": 50
+  },
+  {
+    "CharacterId": 16,
+    "Tier": 1,
+    "ItemId": 26,
+    "Count": 20
+  },
+  {
+    "CharacterId": 16,
+    "Tier": 2,
+    "ItemId": 26,
+    "Count": 50
+  },
+  {
+    "CharacterId": 18,
+    "Tier": 1,
+    "ItemId": 27,
+    "Count": 20
+  },
+  {
+    "CharacterId": 18,
+    "Tier": 2,
+    "ItemId": 27,
+    "Count": 50
+  },
+  {
+    "CharacterId": 19,
+    "Tier": 1,
+    "ItemId": 28,
+    "Count": 20
+  },
+  {
+    "CharacterId": 19,
+    "Tier": 2,
+    "ItemId": 28,
+    "Count": 50
+  },
+  {
+    "CharacterId": 20,
+    "Tier": 1,
+    "ItemId": 29,
+    "Count": 20
+  },
+  {
+    "CharacterId": 20,
+    "Tier": 2,
+    "ItemId": 29,
+    "Count": 50
+  },
+  {
+    "CharacterId": 21,
+    "Tier": 1,
+    "ItemId": 22,
+    "Count": 20
+  },
+  {
+    "CharacterId": 21,
+    "Tier": 2,
+    "ItemId": 22,
+    "Count": 50
+  }
+]

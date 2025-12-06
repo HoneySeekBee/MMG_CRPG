@@ -1,1 +1,338 @@
-[]
+[
+  {
+    "CharacterId": 9,
+    "SkillId": 37,
+    "Slot": 1,
+    "UnlockTier": 0,
+    "UnlockLevel": 1
+  },
+  {
+    "CharacterId": 9,
+    "SkillId": 38,
+    "Slot": 2,
+    "UnlockTier": 1,
+    "UnlockLevel": 5
+  },
+  {
+    "CharacterId": 9,
+    "SkillId": 39,
+    "Slot": 3,
+    "UnlockTier": 2,
+    "UnlockLevel": 10
+  },
+  {
+    "CharacterId": 9,
+    "SkillId": 40,
+    "Slot": 4,
+    "UnlockTier": 0,
+    "UnlockLevel": 1
+  },
+  {
+    "CharacterId": 10,
+    "SkillId": 41,
+    "Slot": 1,
+    "UnlockTier": 0,
+    "UnlockLevel": 1
+  },
+  {
+    "CharacterId": 10,
+    "SkillId": 42,
+    "Slot": 2,
+    "UnlockTier": 1,
+    "UnlockLevel": 5
+  },
+  {
+    "CharacterId": 10,
+    "SkillId": 43,
+    "Slot": 3,
+    "UnlockTier": 2,
+    "UnlockLevel": 10
+  },
+  {
+    "CharacterId": 10,
+    "SkillId": 44,
+    "Slot": 4,
+    "UnlockTier": 0,
+    "UnlockLevel": 1
+  },
+  {
+    "CharacterId": 11,
+    "SkillId": 45,
+    "Slot": 1,
+    "UnlockTier": 0,
+    "UnlockLevel": 1
+  },
+  {
+    "CharacterId": 11,
+    "SkillId": 46,
+    "Slot": 2,
+    "UnlockTier": 1,
+    "UnlockLevel": 5
+  },
+  {
+    "CharacterId": 11,
+    "SkillId": 47,
+    "Slot": 3,
+    "UnlockTier": 2,
+    "UnlockLevel": 10
+  },
+  {
+    "CharacterId": 11,
+    "SkillId": 48,
+    "Slot": 4,
+    "UnlockTier": 0,
+    "UnlockLevel": 1
+  },
+  {
+    "CharacterId": 12,
+    "SkillId": 49,
+    "Slot": 1,
+    "UnlockTier": 0,
+    "UnlockLevel": 1
+  },
+  {
+    "CharacterId": 12,
+    "SkillId": 50,
+    "Slot": 2,
+    "UnlockTier": 1,
+    "UnlockLevel": 5
+  },
+  {
+    "CharacterId": 12,
+    "SkillId": 51,
+    "Slot": 3,
+    "UnlockTier": 2,
+    "UnlockLevel": 10
+  },
+  {
+    "CharacterId": 12,
+    "SkillId": 52,
+    "Slot": 4,
+    "UnlockTier": 0,
+    "UnlockLevel": 1
+  },
+  {
+    "CharacterId": 13,
+    "SkillId": 53,
+    "Slot": 1,
+    "UnlockTier": 0,
+    "UnlockLevel": 1
+  },
+  {
+    "CharacterId": 13,
+    "SkillId": 54,
+    "Slot": 2,
+    "UnlockTier": 1,
+    "UnlockLevel": 5
+  },
+  {
+    "CharacterId": 13,
+    "SkillId": 55,
+    "Slot": 3,
+    "UnlockTier": 2,
+    "UnlockLevel": 10
+  },
+  {
+    "CharacterId": 13,
+    "SkillId": 56,
+    "Slot": 4,
+    "UnlockTier": 0,
+    "UnlockLevel": 1
+  },
+  {
+    "CharacterId": 14,
+    "SkillId": 61,
+    "Slot": 1,
+    "UnlockTier": 0,
+    "UnlockLevel": 1
+  },
+  {
+    "CharacterId": 14,
+    "SkillId": 62,
+    "Slot": 2,
+    "UnlockTier": 1,
+    "UnlockLevel": 5
+  },
+  {
+    "CharacterId": 14,
+    "SkillId": 63,
+    "Slot": 3,
+    "UnlockTier": 2,
+    "UnlockLevel": 10
+  },
+  {
+    "CharacterId": 14,
+    "SkillId": 64,
+    "Slot": 4,
+    "UnlockTier": 0,
+    "UnlockLevel": 1
+  },
+  {
+    "CharacterId": 15,
+    "SkillId": 65,
+    "Slot": 1,
+    "UnlockTier": 0,
+    "UnlockLevel": 1
+  },
+  {
+    "CharacterId": 15,
+    "SkillId": 66,
+    "Slot": 2,
+    "UnlockTier": 1,
+    "UnlockLevel": 5
+  },
+  {
+    "CharacterId": 15,
+    "SkillId": 67,
+    "Slot": 3,
+    "UnlockTier": 2,
+    "UnlockLevel": 10
+  },
+  {
+    "CharacterId": 15,
+    "SkillId": 68,
+    "Slot": 4,
+    "UnlockTier": 0,
+    "UnlockLevel": 1
+  },
+  {
+    "CharacterId": 16,
+    "SkillId": 89,
+    "Slot": 1,
+    "UnlockTier": 0,
+    "UnlockLevel": 1
+  },
+  {
+    "CharacterId": 16,
+    "SkillId": 90,
+    "Slot": 2,
+    "UnlockTier": 1,
+    "UnlockLevel": 5
+  },
+  {
+    "CharacterId": 16,
+    "SkillId": 91,
+    "Slot": 3,
+    "UnlockTier": 2,
+    "UnlockLevel": 10
+  },
+  {
+    "CharacterId": 16,
+    "SkillId": 92,
+    "Slot": 4,
+    "UnlockTier": 0,
+    "UnlockLevel": 1
+  },
+  {
+    "CharacterId": 18,
+    "SkillId": 73,
+    "Slot": 1,
+    "UnlockTier": 0,
+    "UnlockLevel": 1
+  },
+  {
+    "CharacterId": 18,
+    "SkillId": 74,
+    "Slot": 2,
+    "UnlockTier": 1,
+    "UnlockLevel": 5
+  },
+  {
+    "CharacterId": 18,
+    "SkillId": 75,
+    "Slot": 3,
+    "UnlockTier": 2,
+    "UnlockLevel": 10
+  },
+  {
+    "CharacterId": 18,
+    "SkillId": 76,
+    "Slot": 4,
+    "UnlockTier": 0,
+    "UnlockLevel": 1
+  },
+  {
+    "CharacterId": 19,
+    "SkillId": 77,
+    "Slot": 1,
+    "UnlockTier": 0,
+    "UnlockLevel": 1
+  },
+  {
+    "CharacterId": 19,
+    "SkillId": 78,
+    "Slot": 2,
+    "UnlockTier": 1,
+    "UnlockLevel": 5
+  },
+  {
+    "CharacterId": 19,
+    "SkillId": 79,
+    "Slot": 3,
+    "UnlockTier": 2,
+    "UnlockLevel": 10
+  },
+  {
+    "CharacterId": 19,
+    "SkillId": 80,
+    "Slot": 4,
+    "UnlockTier": 0,
+    "UnlockLevel": 1
+  },
+  {
+    "CharacterId": 20,
+    "SkillId": 81,
+    "Slot": 1,
+    "UnlockTier": 0,
+    "UnlockLevel": 1
+  },
+  {
+    "CharacterId": 20,
+    "SkillId": 82,
+    "Slot": 2,
+    "UnlockTier": 1,
+    "UnlockLevel": 5
+  },
+  {
+    "CharacterId": 20,
+    "SkillId": 83,
+    "Slot": 3,
+    "UnlockTier": 2,
+    "UnlockLevel": 10
+  },
+  {
+    "CharacterId": 20,
+    "SkillId": 84,
+    "Slot": 4,
+    "UnlockTier": 0,
+    "UnlockLevel": 1
+  },
+  {
+    "CharacterId": 21,
+    "SkillId": 85,
+    "Slot": 1,
+    "UnlockTier": 0,
+    "UnlockLevel": 1
+  },
+  {
+    "CharacterId": 21,
+    "SkillId": 86,
+    "Slot": 2,
+    "UnlockTier": 1,
+    "UnlockLevel": 5
+  },
+  {
+    "CharacterId": 21,
+    "SkillId": 87,
+    "Slot": 3,
+    "UnlockTier": 2,
+    "UnlockLevel": 10
+  },
+  {
+    "CharacterId": 21,
+    "SkillId": 88,
+    "Slot": 4,
+    "UnlockTier": 0,
+    "UnlockLevel": 1
+  }
+]

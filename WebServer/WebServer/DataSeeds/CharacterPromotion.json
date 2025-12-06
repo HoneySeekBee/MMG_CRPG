@@ -1,1 +1,338 @@
-[]
+[
+  {
+    "CharacterId": 9,
+    "Tier": 1,
+    "MaxLevel": 10,
+    "Bonus": {
+      "HP": 0,
+      "ATK": 5,
+      "DEF": 0,
+      "SPD": 5,
+      "CritRate": 0,
+      "CritDamage": 0
+    },
+    "CostGold": 500
+  },
+  {
+    "CharacterId": 9,
+    "Tier": 2,
+    "MaxLevel": 10,
+    "Bonus": {
+      "HP": 0,
+      "ATK": 10,
+      "DEF": 0,
+      "SPD": 10,
+      "CritRate": 0,
+      "CritDamage": 0
+    },
+    "CostGold": 1000
+  },
+  {
+    "CharacterId": 10,
+    "Tier": 1,
+    "MaxLevel": 10,
+    "Bonus": {
+      "HP": 10,
+      "ATK": 5,
+      "DEF": 5,
+      "SPD": 0,
+      "CritRate": 0,
+      "CritDamage": 0
+    },
+    "CostGold": 500
+  },
+  {
+    "CharacterId": 10,
+    "Tier": 2,
+    "MaxLevel": 10,
+    "Bonus": {
+      "HP": 20,
+      "ATK": 10,
+      "DEF": 10,
+      "SPD": 0,
+      "CritRate": 0,
+      "CritDamage": 0
+    },
+    "CostGold": 1000
+  },
+  {
+    "CharacterId": 11,
+    "Tier": 1,
+    "MaxLevel": 10,
+    "Bonus": {
+      "HP": 25,
+      "ATK": 5,
+      "DEF": 5,
+      "SPD": 0,
+      "CritRate": 0,
+      "CritDamage": 0
+    },
+    "CostGold": 500
+  },
+  {
+    "CharacterId": 11,
+    "Tier": 2,
+    "MaxLevel": 10,
+    "Bonus": {
+      "HP": 50,
+      "ATK": 10,
+      "DEF": 10,
+      "SPD": 0,
+      "CritRate": 0,
+      "CritDamage": 0
+    },
+    "CostGold": 1000
+  },
+  {
+    "CharacterId": 12,
+    "Tier": 1,
+    "MaxLevel": 10,
+    "Bonus": {
+      "HP": 5,
+      "ATK": 3,
+      "DEF": 3,
+      "SPD": 3,
+      "CritRate": 0,
+      "CritDamage": 0
+    },
+    "CostGold": 500
+  },
+  {
+    "CharacterId": 12,
+    "Tier": 2,
+    "MaxLevel": 10,
+    "Bonus": {
+      "HP": 10,
+      "ATK": 5,
+      "DEF": 5,
+      "SPD": 5,
+      "CritRate": 0,
+      "CritDamage": 0
+    },
+    "CostGold": 1000
+  },
+  {
+    "CharacterId": 13,
+    "Tier": 1,
+    "MaxLevel": 10,
+    "Bonus": {
+      "HP": 0,
+      "ATK": 5,
+      "DEF": 5,
+      "SPD": 0,
+      "CritRate": 0,
+      "CritDamage": 0
+    },
+    "CostGold": 500
+  },
+  {
+    "CharacterId": 13,
+    "Tier": 2,
+    "MaxLevel": 10,
+    "Bonus": {
+      "HP": 0,
+      "ATK": 10,
+      "DEF": 10,
+      "SPD": 0,
+      "CritRate": 0,
+      "CritDamage": 0
+    },
+    "CostGold": 1000
+  },
+  {
+    "CharacterId": 14,
+    "Tier": 1,
+    "MaxLevel": 10,
+    "Bonus": {
+      "HP": 0,
+      "ATK": 10,
+      "DEF": 0,
+      "SPD": 0,
+      "CritRate": 0,
+      "CritDamage": 0
+    },
+    "CostGold": 500
+  },
+  {
+    "CharacterId": 14,
+    "Tier": 2,
+    "MaxLevel": 10,
+    "Bonus": {
+      "HP": 0,
+      "ATK": 15,
+      "DEF": 0,
+      "SPD": 5,
+      "CritRate": 0,
+      "CritDamage": 0
+    },
+    "CostGold": 1000
+  },
+  {
+    "CharacterId": 15,
+    "Tier": 1,
+    "MaxLevel": 10,
+    "Bonus": {
+      "HP": 10,
+      "ATK": 0,
+      "DEF": 5,
+      "SPD": 0,
+      "CritRate": 0,
+      "CritDamage": 0
+    },
+    "CostGold": 500
+  },
+  {
+    "CharacterId": 15,
+    "Tier": 2,
+    "MaxLevel": 10,
+    "Bonus": {
+      "HP": 20,
+      "ATK": 0,
+      "DEF": 10,
+      "SPD": 0,
+      "CritRate": 0,
+      "CritDamage": 0
+    },
+    "CostGold": 1000
+  },
+  {
+    "CharacterId": 16,
+    "Tier": 1,
+    "MaxLevel": 10,
+    "Bonus": {
+      "HP": 0,
+      "ATK": 5,
+      "DEF": 0,
+      "SPD": 5,
+      "CritRate": 0,
+      "CritDamage": 0
+    },
+    "CostGold": 500
+  },
+  {
+    "CharacterId": 16,
+    "Tier": 2,
+    "MaxLevel": 10,
+    "Bonus": {
+      "HP": 0,
+      "ATK": 5,
+      "DEF": 5,
+      "SPD": 10,
+      "CritRate": 0,
+      "CritDamage": 0
+    },
+    "CostGold": 1000
+  },
+  {
+    "CharacterId": 18,
+    "Tier": 1,
+    "MaxLevel": 10,
+    "Bonus": {
+      "HP": 0,
+      "ATK": 5,
+      "DEF": 5,
+      "SPD": 5,
+      "CritRate": 0,
+      "CritDamage": 0
+    },
+    "CostGold": 500
+  },
+  {
+    "CharacterId": 18,
+    "Tier": 2,
+    "MaxLevel": 10,
+    "Bonus": {
+      "HP": 0,
+      "ATK": 10,
+      "DEF": 10,
+      "SPD": 10,
+      "CritRate": 0,
+      "CritDamage": 0
+    },
+    "CostGold": 1000
+  },
+  {
+    "CharacterId": 19,
+    "Tier": 1,
+    "MaxLevel": 10,
+    "Bonus": {
+      "HP": 0,
+      "ATK": 5,
+      "DEF": 0,
+      "SPD": 5,
+      "CritRate": 0,
+      "CritDamage": 0
+    },
+    "CostGold": 500
+  },
+  {
+    "CharacterId": 19,
+    "Tier": 2,
+    "MaxLevel": 10,
+    "Bonus": {
+      "HP": 0,
+      "ATK": 10,
+      "DEF": 0,
+      "SPD": 10,
+      "CritRate": 0,
+      "CritDamage": 0
+    },
+    "CostGold": 1000
+  },
+  {
+    "CharacterId": 20,
+    "Tier": 1,
+    "MaxLevel": 10,
+    "Bonus": {
+      "HP": 0,
+      "ATK": 5,
+      "DEF": 0,
+      "SPD": 5,
+      "CritRate": 0,
+      "CritDamage": 0
+    },
+    "CostGold": 500
+  },
+  {
+    "CharacterId": 20,
+    "Tier": 2,
+    "MaxLevel": 10,
+    "Bonus": {
+      "HP": 0,
+      "ATK": 10,
+      "DEF": 0,
+      "SPD": 10,
+      "CritRate": 0,
+      "CritDamage": 0
+    },
+    "CostGold": 1000
+  },
+  {
+    "CharacterId": 21,
+    "Tier": 1,
+    "MaxLevel": 10,
+    "Bonus": {
+      "HP": 10,
+      "ATK": 0,
+      "DEF": 5,
+      "SPD": 5,
+      "CritRate": 0,
+      "CritDamage": 0
+    },
+    "CostGold": 500
+  },
+  {
+    "CharacterId": 21,
+    "Tier": 2,
+    "MaxLevel": 10,
+    "Bonus": {
+      "HP": 10,
+      "ATK": 5,
+      "DEF": 5,
+      "SPD": 10,
+      "CritRate": 0,
+      "CritDamage": 0
+    },
+    "CostGold": 1000
+  }
+]

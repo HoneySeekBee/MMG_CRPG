@@ -27,7 +27,8 @@ namespace WebServer.Seed
 {
     "Meta",
     "Tags",
-    "Effect"
+    "Effect", 
+    "Bonus"
 };
 
         private object? Normalize(JsonElement elem)
@@ -169,6 +170,9 @@ namespace WebServer.Seed
                 "StatTypes",
                 "ItemType",
 
+                "Skills",
+                "SkillLevels",
+
                 "Synergy",
                 "SynergyBonus",
                 "SynergyRule",
@@ -230,6 +234,8 @@ namespace WebServer.Seed
                 var rows =
                     JsonSerializer.Deserialize<List<Dictionary<string, JsonElement>>>(json)!;
 
+                var pks = await GetPrimaryKeysAsync(table);
+
                 foreach (var row in rows)
                 {
                     var normalized = row.ToDictionary(
@@ -238,11 +244,10 @@ namespace WebServer.Seed
                     );
 
                     var cleaned = RemoveNulls(normalized);
-
                     if (!cleaned.Any())
                         continue;
 
-                    var sql = BuildSql(table, cleaned);
+                    var sql = BuildUpsertSql(table, pks, cleaned);
                     await ExecuteWithParamsAsync(sql, cleaned);
                 }
 
@@ -250,6 +255,51 @@ namespace WebServer.Seed
             }
 
             Console.WriteLine("\n=== Seed Load Completed ===\n");
-        } 
+        }
+        private async Task<List<string>> GetPrimaryKeysAsync(string table)
+        {
+            string sql = $@"
+        SELECT a.attname
+        FROM   pg_index i
+        JOIN   pg_class c ON c.oid = i.indrelid
+        JOIN   pg_attribute a ON a.attrelid = c.oid AND a.attnum = ANY(i.indkey)
+        WHERE  c.relname = @table AND i.indisprimary;
+    ";
+
+            var keys = await _db.QueryAsync<string>(sql, new { table });
+            return keys.ToList();
+        }
+
+        private string BuildUpsertSql(string table, List<string> pks, Dictionary<string, object?> row)
+        {
+            var columns = row.Keys.ToList();
+
+            string insertCols = string.Join(",", columns.Select(c => $"\"{c}\""));
+            string insertVals = string.Join(",", columns.Select(c =>
+                EnumColumnTypes.ContainsKey(c) ? $"@{c}::\"{EnumColumnTypes[c]}\"" : $"@{c}"
+            ));
+
+            string conflict = string.Join(",", pks.Select(c => $"\"{c}\""));
+
+            var updateCols = columns
+                .Where(c => !pks.Contains(c))
+                .Select(c =>
+                    EnumColumnTypes.ContainsKey(c)
+                        ? $"\"{c}\" = EXCLUDED.\"{c}\"::\"{EnumColumnTypes[c]}\""    
+                        : $"\"{c}\" = EXCLUDED.\"{c}\""
+                );
+
+            string updateSql = updateCols.Any()
+                ? "DO UPDATE SET " + string.Join(",", updateCols)
+                : "DO NOTHING";
+
+            return $@"
+        INSERT INTO ""{table}"" ({insertCols})
+        VALUES ({insertVals})
+        ON CONFLICT ({conflict})
+        {updateSql};
+    ";
+        }
+
     }
 }
