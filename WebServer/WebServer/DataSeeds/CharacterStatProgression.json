@@ -8,7 +8,7 @@
     "SPD": 10,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 2
+    "Range": 3
   },
   {
     "CharacterId": 9,
@@ -19,7 +19,7 @@
     "SPD": 20,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 2
+    "Range": 3
   },
   {
     "CharacterId": 9,
@@ -30,7 +30,7 @@
     "SPD": 30,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 2
+    "Range": 3
   },
   {
     "CharacterId": 9,
@@ -41,7 +41,7 @@
     "SPD": 40,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 2
+    "Range": 3
   },
   {
     "CharacterId": 9,
@@ -52,7 +52,7 @@
     "SPD": 50,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 2
+    "Range": 3
   },
   {
     "CharacterId": 9,
@@ -63,7 +63,7 @@
     "SPD": 60,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 2
+    "Range": 3
   },
   {
     "CharacterId": 9,
@@ -74,7 +74,7 @@
     "SPD": 70,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 2
+    "Range": 3
   },
   {
     "CharacterId": 9,
@@ -85,7 +85,7 @@
     "SPD": 80,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 2
+    "Range": 3
   },
   {
     "CharacterId": 9,
@@ -96,117 +96,7 @@
     "SPD": 90,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 2
-  },
-  {
-    "CharacterId": 16,
-    "Level": 1,
-    "HP": 120,
-    "ATK": 10,
-    "DEF": 10,
-    "SPD": 10,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 5
-  },
-  {
-    "CharacterId": 16,
-    "Level": 2,
-    "HP": 130,
-    "ATK": 20,
-    "DEF": 20,
-    "SPD": 20,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 5
-  },
-  {
-    "CharacterId": 16,
-    "Level": 3,
-    "HP": 140,
-    "ATK": 30,
-    "DEF": 30,
-    "SPD": 30,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 5
-  },
-  {
-    "CharacterId": 16,
-    "Level": 4,
-    "HP": 150,
-    "ATK": 40,
-    "DEF": 40,
-    "SPD": 40,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 5
-  },
-  {
-    "CharacterId": 16,
-    "Level": 5,
-    "HP": 200,
-    "ATK": 50,
-    "DEF": 50,
-    "SPD": 50,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 5
-  },
-  {
-    "CharacterId": 16,
-    "Level": 6,
-    "HP": 200,
-    "ATK": 60,
-    "DEF": 60,
-    "SPD": 60,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 5
-  },
-  {
-    "CharacterId": 16,
-    "Level": 7,
-    "HP": 200,
-    "ATK": 70,
-    "DEF": 70,
-    "SPD": 70,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 5
-  },
-  {
-    "CharacterId": 16,
-    "Level": 8,
-    "HP": 200,
-    "ATK": 80,
-    "DEF": 80,
-    "SPD": 80,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 5
-  },
-  {
-    "CharacterId": 16,
-    "Level": 9,
-    "HP": 200,
-    "ATK": 90,
-    "DEF": 90,
-    "SPD": 90,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 5
-  },
-  {
-    "CharacterId": 18,
-    "Level": 1,
-    "HP": 200,
-    "ATK": 10,
-    "DEF": 10,
-    "SPD": 10,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 2
+    "Range": 3
   },
   {
     "CharacterId": 11,
@@ -217,7 +107,7 @@
     "SPD": 10,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
     "CharacterId": 11,
@@ -228,7 +118,7 @@
     "SPD": 20,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
     "CharacterId": 11,
@@ -239,7 +129,7 @@
     "SPD": 30,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
     "CharacterId": 11,
@@ -250,7 +140,7 @@
     "SPD": 40,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
     "CharacterId": 11,
@@ -261,7 +151,7 @@
     "SPD": 50,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
     "CharacterId": 11,
@@ -272,7 +162,7 @@
     "SPD": 60,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
     "CharacterId": 11,
@@ -283,7 +173,7 @@
     "SPD": 70,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
     "CharacterId": 11,
@@ -294,7 +184,7 @@
     "SPD": 80,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
     "CharacterId": 11,
@@ -305,117 +195,7 @@
     "SPD": 90,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
-  },
-  {
-    "CharacterId": 18,
-    "Level": 2,
-    "HP": 215,
-    "ATK": 20,
-    "DEF": 20,
-    "SPD": 20,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
     "Range": 2
-  },
-  {
-    "CharacterId": 18,
-    "Level": 3,
-    "HP": 230,
-    "ATK": 30,
-    "DEF": 30,
-    "SPD": 30,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 2
-  },
-  {
-    "CharacterId": 18,
-    "Level": 4,
-    "HP": 245,
-    "ATK": 40,
-    "DEF": 40,
-    "SPD": 40,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 2
-  },
-  {
-    "CharacterId": 18,
-    "Level": 5,
-    "HP": 260,
-    "ATK": 50,
-    "DEF": 50,
-    "SPD": 50,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 2
-  },
-  {
-    "CharacterId": 18,
-    "Level": 6,
-    "HP": 275,
-    "ATK": 60,
-    "DEF": 60,
-    "SPD": 60,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 2
-  },
-  {
-    "CharacterId": 18,
-    "Level": 7,
-    "HP": 300,
-    "ATK": 70,
-    "DEF": 70,
-    "SPD": 70,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 2
-  },
-  {
-    "CharacterId": 18,
-    "Level": 8,
-    "HP": 310,
-    "ATK": 80,
-    "DEF": 80,
-    "SPD": 80,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 2
-  },
-  {
-    "CharacterId": 18,
-    "Level": 9,
-    "HP": 320,
-    "ATK": 90,
-    "DEF": 90,
-    "SPD": 90,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 2
-  },
-  {
-    "CharacterId": 18,
-    "Level": 10,
-    "HP": 350,
-    "ATK": 100,
-    "DEF": 100,
-    "SPD": 100,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 2
-  },
-  {
-    "CharacterId": 19,
-    "Level": 1,
-    "HP": 100,
-    "ATK": 10,
-    "DEF": 10,
-    "SPD": 10,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 5
   },
   {
     "CharacterId": 11,
@@ -426,7 +206,7 @@
     "SPD": 100,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
     "CharacterId": 12,
@@ -437,7 +217,7 @@
     "SPD": 10,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
     "CharacterId": 12,
@@ -448,7 +228,7 @@
     "SPD": 20,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
     "CharacterId": 12,
@@ -459,7 +239,7 @@
     "SPD": 30,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
     "CharacterId": 12,
@@ -470,7 +250,7 @@
     "SPD": 40,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
     "CharacterId": 12,
@@ -481,7 +261,7 @@
     "SPD": 50,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
     "CharacterId": 12,
@@ -492,7 +272,7 @@
     "SPD": 60,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
     "CharacterId": 12,
@@ -503,7 +283,7 @@
     "SPD": 70,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
     "CharacterId": 12,
@@ -514,7 +294,7 @@
     "SPD": 80,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
     "CharacterId": 12,
@@ -525,7 +305,7 @@
     "SPD": 90,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
     "CharacterId": 12,
@@ -536,7 +316,7 @@
     "SPD": 100,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
     "CharacterId": 13,
@@ -547,7 +327,7 @@
     "SPD": 10,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
     "CharacterId": 13,
@@ -558,7 +338,7 @@
     "SPD": 20,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
     "CharacterId": 13,
@@ -569,7 +349,7 @@
     "SPD": 30,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
     "CharacterId": 13,
@@ -580,7 +360,7 @@
     "SPD": 40,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
     "CharacterId": 13,
@@ -591,7 +371,7 @@
     "SPD": 50,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
     "CharacterId": 13,
@@ -602,7 +382,7 @@
     "SPD": 60,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
     "CharacterId": 13,
@@ -613,7 +393,7 @@
     "SPD": 70,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
     "CharacterId": 13,
@@ -624,7 +404,7 @@
     "SPD": 80,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
     "CharacterId": 13,
@@ -635,7 +415,7 @@
     "SPD": 90,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
     "CharacterId": 13,
@@ -646,403 +426,7 @@
     "SPD": 100,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
-  },
-  {
-    "CharacterId": 15,
-    "Level": 1,
-    "HP": 200,
-    "ATK": 10,
-    "DEF": 10,
-    "SPD": 10,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 1
-  },
-  {
-    "CharacterId": 15,
-    "Level": 2,
-    "HP": 210,
-    "ATK": 20,
-    "DEF": 20,
-    "SPD": 20,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 1
-  },
-  {
-    "CharacterId": 15,
-    "Level": 3,
-    "HP": 220,
-    "ATK": 30,
-    "DEF": 30,
-    "SPD": 30,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 1
-  },
-  {
-    "CharacterId": 15,
-    "Level": 4,
-    "HP": 230,
-    "ATK": 40,
-    "DEF": 40,
-    "SPD": 40,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 1
-  },
-  {
-    "CharacterId": 15,
-    "Level": 5,
-    "HP": 300,
-    "ATK": 50,
-    "DEF": 50,
-    "SPD": 50,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 1
-  },
-  {
-    "CharacterId": 15,
-    "Level": 6,
-    "HP": 310,
-    "ATK": 60,
-    "DEF": 60,
-    "SPD": 60,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 1
-  },
-  {
-    "CharacterId": 15,
-    "Level": 7,
-    "HP": 320,
-    "ATK": 70,
-    "DEF": 70,
-    "SPD": 70,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 1
-  },
-  {
-    "CharacterId": 19,
-    "Level": 2,
-    "HP": 110,
-    "ATK": 20,
-    "DEF": 20,
-    "SPD": 20,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 5
-  },
-  {
-    "CharacterId": 19,
-    "Level": 3,
-    "HP": 120,
-    "ATK": 30,
-    "DEF": 30,
-    "SPD": 30,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 5
-  },
-  {
-    "CharacterId": 19,
-    "Level": 4,
-    "HP": 130,
-    "ATK": 40,
-    "DEF": 40,
-    "SPD": 40,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 5
-  },
-  {
-    "CharacterId": 19,
-    "Level": 5,
-    "HP": 150,
-    "ATK": 50,
-    "DEF": 50,
-    "SPD": 50,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 5
-  },
-  {
-    "CharacterId": 19,
-    "Level": 6,
-    "HP": 160,
-    "ATK": 60,
-    "DEF": 60,
-    "SPD": 60,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 5
-  },
-  {
-    "CharacterId": 19,
-    "Level": 7,
-    "HP": 170,
-    "ATK": 70,
-    "DEF": 70,
-    "SPD": 70,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 5
-  },
-  {
-    "CharacterId": 19,
-    "Level": 8,
-    "HP": 180,
-    "ATK": 80,
-    "DEF": 80,
-    "SPD": 80,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 5
-  },
-  {
-    "CharacterId": 19,
-    "Level": 9,
-    "HP": 190,
-    "ATK": 90,
-    "DEF": 90,
-    "SPD": 90,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 5
-  },
-  {
-    "CharacterId": 10,
-    "Level": 1,
-    "HP": 150,
-    "ATK": 10,
-    "DEF": 10,
-    "SPD": 10,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 1
-  },
-  {
-    "CharacterId": 10,
-    "Level": 2,
-    "HP": 175,
-    "ATK": 20,
-    "DEF": 20,
-    "SPD": 20,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 1
-  },
-  {
-    "CharacterId": 10,
-    "Level": 3,
-    "HP": 200,
-    "ATK": 30,
-    "DEF": 30,
-    "SPD": 30,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 1
-  },
-  {
-    "CharacterId": 10,
-    "Level": 4,
-    "HP": 225,
-    "ATK": 40,
-    "DEF": 40,
-    "SPD": 40,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 1
-  },
-  {
-    "CharacterId": 10,
-    "Level": 5,
-    "HP": 250,
-    "ATK": 50,
-    "DEF": 50,
-    "SPD": 50,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 1
-  },
-  {
-    "CharacterId": 10,
-    "Level": 6,
-    "HP": 275,
-    "ATK": 60,
-    "DEF": 60,
-    "SPD": 60,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 1
-  },
-  {
-    "CharacterId": 10,
-    "Level": 7,
-    "HP": 300,
-    "ATK": 70,
-    "DEF": 70,
-    "SPD": 70,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 1
-  },
-  {
-    "CharacterId": 10,
-    "Level": 8,
-    "HP": 325,
-    "ATK": 80,
-    "DEF": 80,
-    "SPD": 80,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 1
-  },
-  {
-    "CharacterId": 10,
-    "Level": 9,
-    "HP": 350,
-    "ATK": 90,
-    "DEF": 90,
-    "SPD": 90,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 1
-  },
-  {
-    "CharacterId": 10,
-    "Level": 10,
-    "HP": 375,
-    "ATK": 100,
-    "DEF": 100,
-    "SPD": 100,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 1
-  },
-  {
-    "CharacterId": 15,
-    "Level": 8,
-    "HP": 330,
-    "ATK": 80,
-    "DEF": 80,
-    "SPD": 80,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 1
-  },
-  {
-    "CharacterId": 15,
-    "Level": 9,
-    "HP": 340,
-    "ATK": 90,
-    "DEF": 90,
-    "SPD": 90,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 1
-  },
-  {
-    "CharacterId": 15,
-    "Level": 10,
-    "HP": 350,
-    "ATK": 100,
-    "DEF": 100,
-    "SPD": 100,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 1
-  },
-  {
-    "CharacterId": 21,
-    "Level": 3,
-    "HP": 300,
-    "ATK": 30,
-    "DEF": 30,
-    "SPD": 30,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 1
-  },
-  {
-    "CharacterId": 21,
-    "Level": 4,
-    "HP": 300,
-    "ATK": 40,
-    "DEF": 40,
-    "SPD": 40,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 1
-  },
-  {
-    "CharacterId": 21,
-    "Level": 5,
-    "HP": 350,
-    "ATK": 50,
-    "DEF": 50,
-    "SPD": 50,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 1
-  },
-  {
-    "CharacterId": 21,
-    "Level": 6,
-    "HP": 350,
-    "ATK": 60,
-    "DEF": 60,
-    "SPD": 60,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 1
-  },
-  {
-    "CharacterId": 21,
-    "Level": 7,
-    "HP": 350,
-    "ATK": 70,
-    "DEF": 70,
-    "SPD": 70,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 1
-  },
-  {
-    "CharacterId": 21,
-    "Level": 8,
-    "HP": 350,
-    "ATK": 80,
-    "DEF": 80,
-    "SPD": 80,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 1
-  },
-  {
-    "CharacterId": 21,
-    "Level": 9,
-    "HP": 350,
-    "ATK": 90,
-    "DEF": 90,
-    "SPD": 90,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 1
-  },
-  {
-    "CharacterId": 21,
-    "Level": 10,
-    "HP": 350,
-    "ATK": 100,
-    "DEF": 100,
-    "SPD": 100,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
     "CharacterId": 9,
@@ -1053,6 +437,116 @@
     "SPD": 100,
     "CriRate": 0.10,
     "CriDamage": 1.50,
+    "Range": 3
+  },
+  {
+    "CharacterId": 10,
+    "Level": 1,
+    "HP": 150,
+    "ATK": 10,
+    "DEF": 10,
+    "SPD": 10,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 2
+  },
+  {
+    "CharacterId": 10,
+    "Level": 2,
+    "HP": 175,
+    "ATK": 20,
+    "DEF": 20,
+    "SPD": 20,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 2
+  },
+  {
+    "CharacterId": 10,
+    "Level": 3,
+    "HP": 200,
+    "ATK": 30,
+    "DEF": 30,
+    "SPD": 30,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 2
+  },
+  {
+    "CharacterId": 10,
+    "Level": 4,
+    "HP": 225,
+    "ATK": 40,
+    "DEF": 40,
+    "SPD": 40,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 2
+  },
+  {
+    "CharacterId": 10,
+    "Level": 5,
+    "HP": 250,
+    "ATK": 50,
+    "DEF": 50,
+    "SPD": 50,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 2
+  },
+  {
+    "CharacterId": 10,
+    "Level": 6,
+    "HP": 275,
+    "ATK": 60,
+    "DEF": 60,
+    "SPD": 60,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 2
+  },
+  {
+    "CharacterId": 10,
+    "Level": 7,
+    "HP": 300,
+    "ATK": 70,
+    "DEF": 70,
+    "SPD": 70,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 2
+  },
+  {
+    "CharacterId": 10,
+    "Level": 8,
+    "HP": 325,
+    "ATK": 80,
+    "DEF": 80,
+    "SPD": 80,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 2
+  },
+  {
+    "CharacterId": 10,
+    "Level": 9,
+    "HP": 350,
+    "ATK": 90,
+    "DEF": 90,
+    "SPD": 90,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 2
+  },
+  {
+    "CharacterId": 10,
+    "Level": 10,
+    "HP": 375,
+    "ATK": 100,
+    "DEF": 100,
+    "SPD": 100,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
     "Range": 2
   },
   {
@@ -1064,7 +558,7 @@
     "SPD": 10,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 5
+    "Range": 8
   },
   {
     "CharacterId": 14,
@@ -1075,10 +569,21 @@
     "SPD": 20,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 5
+    "Range": 8
   },
   {
-    "CharacterId": 14,
+    "CharacterId": 20,
+    "Level": 2,
+    "HP": 110,
+    "ATK": 20,
+    "DEF": 20,
+    "SPD": 20,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 8
+  },
+  {
+    "CharacterId": 20,
     "Level": 3,
     "HP": 120,
     "ATK": 30,
@@ -1086,10 +591,10 @@
     "SPD": 30,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 5
+    "Range": 8
   },
   {
-    "CharacterId": 14,
+    "CharacterId": 20,
     "Level": 4,
     "HP": 130,
     "ATK": 40,
@@ -1097,10 +602,10 @@
     "SPD": 40,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 5
+    "Range": 8
   },
   {
-    "CharacterId": 14,
+    "CharacterId": 20,
     "Level": 5,
     "HP": 140,
     "ATK": 50,
@@ -1108,10 +613,10 @@
     "SPD": 50,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 5
+    "Range": 8
   },
   {
-    "CharacterId": 14,
+    "CharacterId": 20,
     "Level": 6,
     "HP": 150,
     "ATK": 60,
@@ -1119,10 +624,10 @@
     "SPD": 60,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 5
+    "Range": 8
   },
   {
-    "CharacterId": 14,
+    "CharacterId": 20,
     "Level": 7,
     "HP": 160,
     "ATK": 70,
@@ -1130,10 +635,10 @@
     "SPD": 70,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 5
+    "Range": 8
   },
   {
-    "CharacterId": 14,
+    "CharacterId": 20,
     "Level": 8,
     "HP": 170,
     "ATK": 80,
@@ -1141,10 +646,10 @@
     "SPD": 80,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 5
+    "Range": 8
   },
   {
-    "CharacterId": 14,
+    "CharacterId": 20,
     "Level": 9,
     "HP": 180,
     "ATK": 90,
@@ -1152,10 +657,10 @@
     "SPD": 90,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 5
+    "Range": 8
   },
   {
-    "CharacterId": 14,
+    "CharacterId": 20,
     "Level": 10,
     "HP": 200,
     "ATK": 100,
@@ -1163,29 +668,51 @@
     "SPD": 100,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 5
+    "Range": 8
   },
   {
-    "CharacterId": 16,
-    "Level": 10,
-    "HP": 200,
-    "ATK": 100,
-    "DEF": 100,
-    "SPD": 100,
+    "CharacterId": 21,
+    "Level": 1,
+    "HP": 250,
+    "ATK": 10,
+    "DEF": 10,
+    "SPD": 10,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 5
+    "Range": 2
   },
   {
-    "CharacterId": 19,
-    "Level": 10,
-    "HP": 220,
-    "ATK": 100,
-    "DEF": 100,
-    "SPD": 100,
+    "CharacterId": 21,
+    "Level": 2,
+    "HP": 275,
+    "ATK": 20,
+    "DEF": 20,
+    "SPD": 20,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 5
+    "Range": 2
+  },
+  {
+    "CharacterId": 21,
+    "Level": 3,
+    "HP": 300,
+    "ATK": 30,
+    "DEF": 30,
+    "SPD": 30,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 2
+  },
+  {
+    "CharacterId": 21,
+    "Level": 4,
+    "HP": 300,
+    "ATK": 40,
+    "DEF": 40,
+    "SPD": 40,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 2
   },
   {
     "CharacterId": 20,
@@ -1199,18 +726,7 @@
     "Range": 5
   },
   {
-    "CharacterId": 20,
-    "Level": 2,
-    "HP": 110,
-    "ATK": 20,
-    "DEF": 20,
-    "SPD": 20,
-    "CriRate": 0.10,
-    "CriDamage": 1.50,
-    "Range": 5
-  },
-  {
-    "CharacterId": 20,
+    "CharacterId": 14,
     "Level": 3,
     "HP": 120,
     "ATK": 30,
@@ -1218,10 +734,10 @@
     "SPD": 30,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 5
+    "Range": 8
   },
   {
-    "CharacterId": 20,
+    "CharacterId": 14,
     "Level": 4,
     "HP": 130,
     "ATK": 40,
@@ -1229,10 +745,10 @@
     "SPD": 40,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 5
+    "Range": 8
   },
   {
-    "CharacterId": 20,
+    "CharacterId": 14,
     "Level": 5,
     "HP": 140,
     "ATK": 50,
@@ -1240,10 +756,10 @@
     "SPD": 50,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 5
+    "Range": 8
   },
   {
-    "CharacterId": 20,
+    "CharacterId": 14,
     "Level": 6,
     "HP": 150,
     "ATK": 60,
@@ -1251,10 +767,10 @@
     "SPD": 60,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 5
+    "Range": 8
   },
   {
-    "CharacterId": 20,
+    "CharacterId": 14,
     "Level": 7,
     "HP": 160,
     "ATK": 70,
@@ -1262,10 +778,10 @@
     "SPD": 70,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 5
+    "Range": 8
   },
   {
-    "CharacterId": 20,
+    "CharacterId": 14,
     "Level": 8,
     "HP": 170,
     "ATK": 80,
@@ -1273,10 +789,10 @@
     "SPD": 80,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 5
+    "Range": 8
   },
   {
-    "CharacterId": 20,
+    "CharacterId": 14,
     "Level": 9,
     "HP": 180,
     "ATK": 90,
@@ -1284,10 +800,10 @@
     "SPD": 90,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 5
+    "Range": 8
   },
   {
-    "CharacterId": 20,
+    "CharacterId": 14,
     "Level": 10,
     "HP": 200,
     "ATK": 100,
@@ -1295,28 +811,512 @@
     "SPD": 100,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 5
+    "Range": 8
   },
   {
-    "CharacterId": 21,
+    "CharacterId": 15,
     "Level": 1,
-    "HP": 250,
+    "HP": 200,
     "ATK": 10,
     "DEF": 10,
     "SPD": 10,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
   },
   {
-    "CharacterId": 21,
+    "CharacterId": 15,
     "Level": 2,
-    "HP": 275,
+    "HP": 210,
     "ATK": 20,
     "DEF": 20,
     "SPD": 20,
     "CriRate": 0.10,
     "CriDamage": 1.50,
-    "Range": 1
+    "Range": 2
+  },
+  {
+    "CharacterId": 15,
+    "Level": 3,
+    "HP": 220,
+    "ATK": 30,
+    "DEF": 30,
+    "SPD": 30,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 2
+  },
+  {
+    "CharacterId": 15,
+    "Level": 4,
+    "HP": 230,
+    "ATK": 40,
+    "DEF": 40,
+    "SPD": 40,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 2
+  },
+  {
+    "CharacterId": 15,
+    "Level": 5,
+    "HP": 300,
+    "ATK": 50,
+    "DEF": 50,
+    "SPD": 50,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 2
+  },
+  {
+    "CharacterId": 15,
+    "Level": 6,
+    "HP": 310,
+    "ATK": 60,
+    "DEF": 60,
+    "SPD": 60,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 2
+  },
+  {
+    "CharacterId": 15,
+    "Level": 7,
+    "HP": 320,
+    "ATK": 70,
+    "DEF": 70,
+    "SPD": 70,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 2
+  },
+  {
+    "CharacterId": 15,
+    "Level": 8,
+    "HP": 330,
+    "ATK": 80,
+    "DEF": 80,
+    "SPD": 80,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 2
+  },
+  {
+    "CharacterId": 15,
+    "Level": 9,
+    "HP": 340,
+    "ATK": 90,
+    "DEF": 90,
+    "SPD": 90,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 2
+  },
+  {
+    "CharacterId": 15,
+    "Level": 10,
+    "HP": 350,
+    "ATK": 100,
+    "DEF": 100,
+    "SPD": 100,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 2
+  },
+  {
+    "CharacterId": 16,
+    "Level": 1,
+    "HP": 120,
+    "ATK": 10,
+    "DEF": 10,
+    "SPD": 10,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 8
+  },
+  {
+    "CharacterId": 16,
+    "Level": 2,
+    "HP": 130,
+    "ATK": 20,
+    "DEF": 20,
+    "SPD": 20,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 8
+  },
+  {
+    "CharacterId": 16,
+    "Level": 3,
+    "HP": 140,
+    "ATK": 30,
+    "DEF": 30,
+    "SPD": 30,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 8
+  },
+  {
+    "CharacterId": 16,
+    "Level": 4,
+    "HP": 150,
+    "ATK": 40,
+    "DEF": 40,
+    "SPD": 40,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 8
+  },
+  {
+    "CharacterId": 16,
+    "Level": 5,
+    "HP": 200,
+    "ATK": 50,
+    "DEF": 50,
+    "SPD": 50,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 8
+  },
+  {
+    "CharacterId": 16,
+    "Level": 6,
+    "HP": 200,
+    "ATK": 60,
+    "DEF": 60,
+    "SPD": 60,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 8
+  },
+  {
+    "CharacterId": 16,
+    "Level": 7,
+    "HP": 200,
+    "ATK": 70,
+    "DEF": 70,
+    "SPD": 70,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 8
+  },
+  {
+    "CharacterId": 16,
+    "Level": 8,
+    "HP": 200,
+    "ATK": 80,
+    "DEF": 80,
+    "SPD": 80,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 8
+  },
+  {
+    "CharacterId": 16,
+    "Level": 9,
+    "HP": 200,
+    "ATK": 90,
+    "DEF": 90,
+    "SPD": 90,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 8
+  },
+  {
+    "CharacterId": 16,
+    "Level": 10,
+    "HP": 200,
+    "ATK": 100,
+    "DEF": 100,
+    "SPD": 100,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 8
+  },
+  {
+    "CharacterId": 18,
+    "Level": 1,
+    "HP": 200,
+    "ATK": 10,
+    "DEF": 10,
+    "SPD": 10,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 3
+  },
+  {
+    "CharacterId": 18,
+    "Level": 2,
+    "HP": 215,
+    "ATK": 20,
+    "DEF": 20,
+    "SPD": 20,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 3
+  },
+  {
+    "CharacterId": 18,
+    "Level": 3,
+    "HP": 230,
+    "ATK": 30,
+    "DEF": 30,
+    "SPD": 30,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 3
+  },
+  {
+    "CharacterId": 18,
+    "Level": 4,
+    "HP": 245,
+    "ATK": 40,
+    "DEF": 40,
+    "SPD": 40,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 3
+  },
+  {
+    "CharacterId": 18,
+    "Level": 5,
+    "HP": 260,
+    "ATK": 50,
+    "DEF": 50,
+    "SPD": 50,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 3
+  },
+  {
+    "CharacterId": 18,
+    "Level": 6,
+    "HP": 275,
+    "ATK": 60,
+    "DEF": 60,
+    "SPD": 60,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 3
+  },
+  {
+    "CharacterId": 18,
+    "Level": 7,
+    "HP": 300,
+    "ATK": 70,
+    "DEF": 70,
+    "SPD": 70,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 3
+  },
+  {
+    "CharacterId": 18,
+    "Level": 8,
+    "HP": 310,
+    "ATK": 80,
+    "DEF": 80,
+    "SPD": 80,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 3
+  },
+  {
+    "CharacterId": 18,
+    "Level": 9,
+    "HP": 320,
+    "ATK": 90,
+    "DEF": 90,
+    "SPD": 90,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 3
+  },
+  {
+    "CharacterId": 18,
+    "Level": 10,
+    "HP": 350,
+    "ATK": 100,
+    "DEF": 100,
+    "SPD": 100,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 3
+  },
+  {
+    "CharacterId": 19,
+    "Level": 1,
+    "HP": 100,
+    "ATK": 10,
+    "DEF": 10,
+    "SPD": 10,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 8
+  },
+  {
+    "CharacterId": 19,
+    "Level": 2,
+    "HP": 110,
+    "ATK": 20,
+    "DEF": 20,
+    "SPD": 20,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 8
+  },
+  {
+    "CharacterId": 19,
+    "Level": 3,
+    "HP": 120,
+    "ATK": 30,
+    "DEF": 30,
+    "SPD": 30,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 8
+  },
+  {
+    "CharacterId": 19,
+    "Level": 4,
+    "HP": 130,
+    "ATK": 40,
+    "DEF": 40,
+    "SPD": 40,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 8
+  },
+  {
+    "CharacterId": 19,
+    "Level": 5,
+    "HP": 150,
+    "ATK": 50,
+    "DEF": 50,
+    "SPD": 50,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 8
+  },
+  {
+    "CharacterId": 19,
+    "Level": 6,
+    "HP": 160,
+    "ATK": 60,
+    "DEF": 60,
+    "SPD": 60,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 8
+  },
+  {
+    "CharacterId": 19,
+    "Level": 7,
+    "HP": 170,
+    "ATK": 70,
+    "DEF": 70,
+    "SPD": 70,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 8
+  },
+  {
+    "CharacterId": 19,
+    "Level": 8,
+    "HP": 180,
+    "ATK": 80,
+    "DEF": 80,
+    "SPD": 80,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 8
+  },
+  {
+    "CharacterId": 19,
+    "Level": 9,
+    "HP": 190,
+    "ATK": 90,
+    "DEF": 90,
+    "SPD": 90,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 8
+  },
+  {
+    "CharacterId": 19,
+    "Level": 10,
+    "HP": 220,
+    "ATK": 100,
+    "DEF": 100,
+    "SPD": 100,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 8
+  },
+  {
+    "CharacterId": 21,
+    "Level": 5,
+    "HP": 350,
+    "ATK": 50,
+    "DEF": 50,
+    "SPD": 50,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 2
+  },
+  {
+    "CharacterId": 21,
+    "Level": 6,
+    "HP": 350,
+    "ATK": 60,
+    "DEF": 60,
+    "SPD": 60,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 2
+  },
+  {
+    "CharacterId": 21,
+    "Level": 7,
+    "HP": 350,
+    "ATK": 70,
+    "DEF": 70,
+    "SPD": 70,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 2
+  },
+  {
+    "CharacterId": 21,
+    "Level": 8,
+    "HP": 350,
+    "ATK": 80,
+    "DEF": 80,
+    "SPD": 80,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 2
+  },
+  {
+    "CharacterId": 21,
+    "Level": 9,
+    "HP": 350,
+    "ATK": 90,
+    "DEF": 90,
+    "SPD": 90,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 2
+  },
+  {
+    "CharacterId": 21,
+    "Level": 10,
+    "HP": 350,
+    "ATK": 100,
+    "DEF": 100,
+    "SPD": 100,
+    "CriRate": 0.10,
+    "CriDamage": 1.50,
+    "Range": 2
   }
 ]

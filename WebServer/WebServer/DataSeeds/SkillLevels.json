@@ -57,5 +57,3027 @@
     "Description": "level1 skill",
     "Materials": null,
     "CostGold": 2
+  },
+  {
+    "SkillId": 38,
+    "Level": 5,
+    "Values": {
+      "extra": {
+        "bleedDamage": 10
+      },
+      "range": {
+        "max": 3.00,
+        "min": 1.50
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 38,
+    "Level": 6,
+    "Values": {
+      "extra": {
+        "bleedDamage": 10
+      },
+      "range": {
+        "max": 3.45,
+        "min": 1.725
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 38,
+    "Level": 7,
+    "Values": {
+      "extra": {
+        "bleedDamage": 10
+      },
+      "range": {
+        "max": 3.54,
+        "min": 1.77
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 38,
+    "Level": 8,
+    "Values": {
+      "extra": {
+        "bleedDamage": 10
+      },
+      "range": {
+        "max": 3.63,
+        "min": 1.815
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 38,
+    "Level": 9,
+    "Values": {
+      "extra": {
+        "bleedDamage": 10
+      },
+      "range": {
+        "max": 3.72,
+        "min": 1.86
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 38,
+    "Level": 10,
+    "Values": {
+      "extra": {
+        "bleedDamage": 10
+      },
+      "range": {
+        "max": 3.81,
+        "min": 1.905
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 37,
+    "Level": 1,
+    "Values": {
+      "range": {
+        "max": 3.00,
+        "min": 1.50
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 37,
+    "Level": 2,
+    "Values": {
+      "range": {
+        "max": 3.09,
+        "min": 1.545
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 37,
+    "Level": 3,
+    "Values": {
+      "range": {
+        "max": 3.18,
+        "min": 1.59
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 37,
+    "Level": 4,
+    "Values": {
+      "range": {
+        "max": 3.27,
+        "min": 1.635
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 37,
+    "Level": 5,
+    "Values": {
+      "range": {
+        "max": 3.36,
+        "min": 1.68
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 39,
+    "Level": 10,
+    "Values": {
+      "extra": {
+        "delayedMultiplier": 1.5
+      },
+      "range": {
+        "max": 3.00,
+        "min": 1.50
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 40,
+    "Level": 1,
+    "Values": {
+      "extra": {
+        "atkPerMissingHpPercent": 2
+      },
+      "passive": "HP\uAC00 \uB0AE\uC744\uC218\uB85D ATK \uC99D\uAC00"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 40,
+    "Level": 2,
+    "Values": {
+      "extra": {
+        "atkPerMissingHpPercent": 2
+      },
+      "passive": "HP\uAC00 \uB0AE\uC744\uC218\uB85D ATK \uC99D\uAC00"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 40,
+    "Level": 3,
+    "Values": {
+      "extra": {
+        "atkPerMissingHpPercent": 2
+      },
+      "passive": "HP\uAC00 \uB0AE\uC744\uC218\uB85D ATK \uC99D\uAC00"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 40,
+    "Level": 4,
+    "Values": {
+      "extra": {
+        "atkPerMissingHpPercent": 2
+      },
+      "passive": "HP\uAC00 \uB0AE\uC744\uC218\uB85D ATK \uC99D\uAC00"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 40,
+    "Level": 5,
+    "Values": {
+      "extra": {
+        "atkPerMissingHpPercent": 2
+      },
+      "passive": "HP\uAC00 \uB0AE\uC744\uC218\uB85D ATK \uC99D\uAC00"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 40,
+    "Level": 6,
+    "Values": {
+      "extra": {
+        "atkPerMissingHpPercent": 2
+      },
+      "passive": "HP\uAC00 \uB0AE\uC744\uC218\uB85D ATK \uC99D\uAC00"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 40,
+    "Level": 7,
+    "Values": {
+      "extra": {
+        "atkPerMissingHpPercent": 2
+      },
+      "passive": "HP\uAC00 \uB0AE\uC744\uC218\uB85D ATK \uC99D\uAC00"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 40,
+    "Level": 8,
+    "Values": {
+      "extra": {
+        "atkPerMissingHpPercent": 2
+      },
+      "passive": "HP\uAC00 \uB0AE\uC744\uC218\uB85D ATK \uC99D\uAC00"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 40,
+    "Level": 9,
+    "Values": {
+      "extra": {
+        "atkPerMissingHpPercent": 2
+      },
+      "passive": "HP\uAC00 \uB0AE\uC744\uC218\uB85D ATK \uC99D\uAC00"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 40,
+    "Level": 10,
+    "Values": {
+      "extra": {
+        "atkPerMissingHpPercent": 2
+      },
+      "passive": "HP\uAC00 \uB0AE\uC744\uC218\uB85D ATK \uC99D\uAC00"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 41,
+    "Level": 1,
+    "Values": {
+      "formula": "ATK * 1.5"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 41,
+    "Level": 2,
+    "Values": {
+      "formula": "ATK * 1.5"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 41,
+    "Level": 3,
+    "Values": {
+      "formula": "ATK * 1.5"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 41,
+    "Level": 4,
+    "Values": {
+      "formula": "ATK * 1.5"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 41,
+    "Level": 5,
+    "Values": {
+      "formula": "ATK * 1.5"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 42,
+    "Level": 5,
+    "Values": {
+      "extra": {
+        "hpBuff": 10,
+        "duration": 5
+      },
+      "formula": "ATK * 1.5 \u002B 10"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 42,
+    "Level": 6,
+    "Values": {
+      "extra": {
+        "hpBuff": 10,
+        "duration": 5
+      },
+      "formula": "ATK * 1.545 \u002B 10"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 42,
+    "Level": 7,
+    "Values": {
+      "extra": {
+        "hpBuff": 10,
+        "duration": 5
+      },
+      "formula": "ATK * 1.59 \u002B 10"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 42,
+    "Level": 8,
+    "Values": {
+      "extra": {
+        "hpBuff": 10,
+        "duration": 5
+      },
+      "formula": "ATK * 1.635 \u002B 10"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 42,
+    "Level": 9,
+    "Values": {
+      "extra": {
+        "hpBuff": 10,
+        "duration": 5
+      },
+      "formula": "ATK * 1.68 \u002B 10"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 42,
+    "Level": 10,
+    "Values": {
+      "extra": {
+        "hpBuff": 10,
+        "duration": 5
+      },
+      "formula": "ATK * 1.725 \u002B 10"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 43,
+    "Level": 10,
+    "Values": {
+      "hits": 2,
+      "extra": {
+        "hpBuff": 20,
+        "duration": 5
+      },
+      "formula": "ATK * 1.5"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 44,
+    "Level": 1,
+    "Values": {
+      "extra": {
+        "hpPercent": 10
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 44,
+    "Level": 2,
+    "Values": {
+      "extra": {
+        "hpPercent": 10
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 44,
+    "Level": 3,
+    "Values": {
+      "extra": {
+        "hpPercent": 10
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 44,
+    "Level": 4,
+    "Values": {
+      "extra": {
+        "hpPercent": 10
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 44,
+    "Level": 5,
+    "Values": {
+      "extra": {
+        "hpPercent": 10
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 44,
+    "Level": 6,
+    "Values": {
+      "extra": {
+        "hpPercent": 10
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 44,
+    "Level": 7,
+    "Values": {
+      "extra": {
+        "hpPercent": 10
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 44,
+    "Level": 8,
+    "Values": {
+      "extra": {
+        "hpPercent": 10
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 44,
+    "Level": 9,
+    "Values": {
+      "extra": {
+        "hpPercent": 10
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 44,
+    "Level": 10,
+    "Values": {
+      "extra": {
+        "hpPercent": 10
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 45,
+    "Level": 1,
+    "Values": {
+      "formula": "ATK * 1 \u002B HP * 0.2"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 45,
+    "Level": 2,
+    "Values": {
+      "formula": "ATK * 1 \u002B HP * 0.2"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 45,
+    "Level": 3,
+    "Values": {
+      "formula": "ATK * 1 \u002B HP * 0.2"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 45,
+    "Level": 4,
+    "Values": {
+      "formula": "ATK * 1 \u002B HP * 0.2"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 45,
+    "Level": 5,
+    "Values": {
+      "formula": "ATK * 1 \u002B HP * 0.2"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 46,
+    "Level": 5,
+    "Values": {
+      "extra": {
+        "pathDamage": true
+      },
+      "formula": "ATK * 1.2 \u002B HP * 0.2"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 46,
+    "Level": 6,
+    "Values": {
+      "extra": {
+        "pathDamage": true
+      },
+      "formula": "ATK * 1.236 \u002B HP * 0.2"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 46,
+    "Level": 7,
+    "Values": {
+      "extra": {
+        "pathDamage": true
+      },
+      "formula": "ATK * 1.272 \u002B HP * 0.2"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 46,
+    "Level": 8,
+    "Values": {
+      "extra": {
+        "pathDamage": true
+      },
+      "formula": "ATK * 1.308 \u002B HP * 0.2"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 46,
+    "Level": 9,
+    "Values": {
+      "extra": {
+        "pathDamage": true
+      },
+      "formula": "ATK * 1.344 \u002B HP * 0.2"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 46,
+    "Level": 10,
+    "Values": {
+      "extra": {
+        "pathDamage": true
+      },
+      "formula": "ATK * 1.380 \u002B HP * 0.2"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 47,
+    "Level": 10,
+    "Values": {
+      "extra": {
+        "aoeRange": 1
+      },
+      "formula": "ATK * 1.2 \u002B HP * 0.3"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 48,
+    "Level": 1,
+    "Values": {
+      "extra": {
+        "healPercent": 20
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 48,
+    "Level": 2,
+    "Values": {
+      "extra": {
+        "healPercent": 20
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 48,
+    "Level": 3,
+    "Values": {
+      "extra": {
+        "healPercent": 20
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 48,
+    "Level": 4,
+    "Values": {
+      "extra": {
+        "healPercent": 20
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 48,
+    "Level": 5,
+    "Values": {
+      "extra": {
+        "healPercent": 20
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 48,
+    "Level": 6,
+    "Values": {
+      "extra": {
+        "healPercent": 20
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 48,
+    "Level": 7,
+    "Values": {
+      "extra": {
+        "healPercent": 20
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 48,
+    "Level": 8,
+    "Values": {
+      "extra": {
+        "healPercent": 20
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 48,
+    "Level": 9,
+    "Values": {
+      "extra": {
+        "healPercent": 20
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 48,
+    "Level": 10,
+    "Values": {
+      "extra": {
+        "healPercent": 20
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 49,
+    "Level": 1,
+    "Values": {
+      "formula": "ATK * 1.3"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 49,
+    "Level": 2,
+    "Values": {
+      "formula": "ATK * 1.3"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 49,
+    "Level": 3,
+    "Values": {
+      "formula": "ATK * 1.3"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 49,
+    "Level": 4,
+    "Values": {
+      "formula": "ATK * 1.3"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 49,
+    "Level": 5,
+    "Values": {
+      "formula": "ATK * 1.3"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 50,
+    "Level": 5,
+    "Values": {
+      "formula": "ATK * 1.5"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 50,
+    "Level": 6,
+    "Values": {
+      "formula": "ATK * 1.545"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 50,
+    "Level": 7,
+    "Values": {
+      "formula": "ATK * 1.591"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 50,
+    "Level": 8,
+    "Values": {
+      "formula": "ATK * 1.639"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 50,
+    "Level": 9,
+    "Values": {
+      "formula": "ATK * 1.688"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 50,
+    "Level": 10,
+    "Values": {
+      "formula": "ATK * 1.739"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 51,
+    "Level": 10,
+    "Values": {
+      "hits": 2,
+      "formula": "ATK * 1.5"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 52,
+    "Level": 1,
+    "Values": {
+      "extra": {
+        "perAllyBonus": {
+          "ATK": 1,
+          "DEF": 1,
+          "SPD": 1
+        }
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 52,
+    "Level": 2,
+    "Values": {
+      "extra": {
+        "perAllyBonus": {
+          "ATK": 1,
+          "DEF": 1,
+          "SPD": 1
+        }
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 52,
+    "Level": 3,
+    "Values": {
+      "extra": {
+        "perAllyBonus": {
+          "ATK": 1,
+          "DEF": 1,
+          "SPD": 1
+        }
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 52,
+    "Level": 4,
+    "Values": {
+      "extra": {
+        "perAllyBonus": {
+          "ATK": 1,
+          "DEF": 1,
+          "SPD": 1
+        }
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 52,
+    "Level": 5,
+    "Values": {
+      "extra": {
+        "perAllyBonus": {
+          "ATK": 1,
+          "DEF": 1,
+          "SPD": 1
+        }
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 52,
+    "Level": 6,
+    "Values": {
+      "extra": {
+        "perAllyBonus": {
+          "ATK": 1,
+          "DEF": 1,
+          "SPD": 1
+        }
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 52,
+    "Level": 7,
+    "Values": {
+      "extra": {
+        "perAllyBonus": {
+          "ATK": 1,
+          "DEF": 1,
+          "SPD": 1
+        }
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 52,
+    "Level": 8,
+    "Values": {
+      "extra": {
+        "perAllyBonus": {
+          "ATK": 1,
+          "DEF": 1,
+          "SPD": 1
+        }
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 52,
+    "Level": 9,
+    "Values": {
+      "extra": {
+        "perAllyBonus": {
+          "ATK": 1,
+          "DEF": 1,
+          "SPD": 1
+        }
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 52,
+    "Level": 10,
+    "Values": {
+      "extra": {
+        "perAllyBonus": {
+          "ATK": 1,
+          "DEF": 1,
+          "SPD": 1
+        }
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 53,
+    "Level": 1,
+    "Values": {
+      "healMultiplier": 2.0
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 53,
+    "Level": 2,
+    "Values": {
+      "healMultiplier": 2.1
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 53,
+    "Level": 3,
+    "Values": {
+      "healMultiplier": 2.2
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 53,
+    "Level": 4,
+    "Values": {
+      "healMultiplier": 2.3
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 53,
+    "Level": 5,
+    "Values": {
+      "healMultiplier": 2.4
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 54,
+    "Level": 5,
+    "Values": {
+      "healMultiplier": 2.0
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 54,
+    "Level": 6,
+    "Values": {
+      "healMultiplier": 2.1
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 54,
+    "Level": 7,
+    "Values": {
+      "healMultiplier": 2.2
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 54,
+    "Level": 8,
+    "Values": {
+      "healMultiplier": 2.3
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 54,
+    "Level": 9,
+    "Values": {
+      "healMultiplier": 2.4
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 54,
+    "Level": 10,
+    "Values": {
+      "healMultiplier": 2.5
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 55,
+    "Level": 10,
+    "Values": {
+      "revive": true,
+      "revivePercent": 100
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 56,
+    "Level": 1,
+    "Values": {
+      "shieldPerAlly": 0.02,
+      "selfHpCostPercent": 50
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 56,
+    "Level": 2,
+    "Values": {
+      "shieldPerAlly": 0.02,
+      "selfHpCostPercent": 50
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 56,
+    "Level": 3,
+    "Values": {
+      "shieldPerAlly": 0.02,
+      "selfHpCostPercent": 50
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 56,
+    "Level": 4,
+    "Values": {
+      "shieldPerAlly": 0.02,
+      "selfHpCostPercent": 50
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 56,
+    "Level": 5,
+    "Values": {
+      "shieldPerAlly": 0.02,
+      "selfHpCostPercent": 50
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 56,
+    "Level": 6,
+    "Values": {
+      "shieldPerAlly": 0.02,
+      "selfHpCostPercent": 50
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 56,
+    "Level": 7,
+    "Values": {
+      "shieldPerAlly": 0.02,
+      "selfHpCostPercent": 50
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 56,
+    "Level": 8,
+    "Values": {
+      "shieldPerAlly": 0.02,
+      "selfHpCostPercent": 50
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 56,
+    "Level": 9,
+    "Values": {
+      "shieldPerAlly": 0.02,
+      "selfHpCostPercent": 50
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 56,
+    "Level": 10,
+    "Values": {
+      "shieldPerAlly": 0.02,
+      "selfHpCostPercent": 50
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 61,
+    "Level": 1,
+    "Values": {
+      "hits": 1,
+      "damageMultiplier": 1.5
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 61,
+    "Level": 2,
+    "Values": {
+      "hits": 1,
+      "damageMultiplier": 1.6
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 61,
+    "Level": 3,
+    "Values": {
+      "hits": 1,
+      "damageMultiplier": 1.7
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 61,
+    "Level": 4,
+    "Values": {
+      "hits": 1,
+      "damageMultiplier": 1.8
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 61,
+    "Level": 5,
+    "Values": {
+      "hits": 1,
+      "damageMultiplier": 1.9
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 62,
+    "Level": 5,
+    "Values": {
+      "hits": 2,
+      "damageMultiplier": 1.5
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 62,
+    "Level": 6,
+    "Values": {
+      "hits": 2,
+      "damageMultiplier": 1.6
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 62,
+    "Level": 7,
+    "Values": {
+      "hits": 2,
+      "damageMultiplier": 1.7
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 62,
+    "Level": 8,
+    "Values": {
+      "hits": 2,
+      "damageMultiplier": 1.8
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 62,
+    "Level": 9,
+    "Values": {
+      "hits": 2,
+      "damageMultiplier": 1.9
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 62,
+    "Level": 10,
+    "Values": {
+      "hits": 2,
+      "damageMultiplier": 2.0
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 63,
+    "Level": 10,
+    "Values": {
+      "hits": 3,
+      "damageMultiplier": 1.5
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 64,
+    "Level": 1,
+    "Values": {
+      "cooldownReduceSec": 1
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 64,
+    "Level": 2,
+    "Values": {
+      "cooldownReduceSec": 1
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 64,
+    "Level": 3,
+    "Values": {
+      "cooldownReduceSec": 1
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 64,
+    "Level": 4,
+    "Values": {
+      "cooldownReduceSec": 1
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 64,
+    "Level": 5,
+    "Values": {
+      "cooldownReduceSec": 1
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 64,
+    "Level": 6,
+    "Values": {
+      "cooldownReduceSec": 1
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 64,
+    "Level": 7,
+    "Values": {
+      "cooldownReduceSec": 1
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 64,
+    "Level": 8,
+    "Values": {
+      "cooldownReduceSec": 1
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 64,
+    "Level": 9,
+    "Values": {
+      "cooldownReduceSec": 1
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 64,
+    "Level": 10,
+    "Values": {
+      "cooldownReduceSec": 1
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 65,
+    "Level": 1,
+    "Values": {
+      "hits": 1,
+      "defBonus": 5,
+      "duration": 3,
+      "damageFormula": "ATK \u002B DEF * 0.5"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 65,
+    "Level": 2,
+    "Values": {
+      "hits": 1,
+      "defBonus": 6,
+      "duration": 3,
+      "damageFormula": "ATK \u002B DEF * 0.5"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 65,
+    "Level": 3,
+    "Values": {
+      "hits": 1,
+      "defBonus": 7,
+      "duration": 3,
+      "damageFormula": "ATK \u002B DEF * 0.5"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 65,
+    "Level": 4,
+    "Values": {
+      "hits": 1,
+      "defBonus": 8,
+      "duration": 3,
+      "damageFormula": "ATK \u002B DEF * 0.5"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 65,
+    "Level": 5,
+    "Values": {
+      "hits": 1,
+      "defBonus": 9,
+      "duration": 3,
+      "damageFormula": "ATK \u002B DEF * 0.5"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 66,
+    "Level": 5,
+    "Values": {
+      "hits": 1,
+      "defBonus": 10,
+      "duration": 3,
+      "damageFormula": "ATK \u002B DEF * 0.5"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 66,
+    "Level": 6,
+    "Values": {
+      "hits": 1,
+      "defBonus": 11,
+      "duration": 3,
+      "damageFormula": "ATK \u002B DEF * 0.5"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 66,
+    "Level": 7,
+    "Values": {
+      "hits": 1,
+      "defBonus": 12,
+      "duration": 3,
+      "damageFormula": "ATK \u002B DEF * 0.5"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 66,
+    "Level": 8,
+    "Values": {
+      "hits": 1,
+      "defBonus": 13,
+      "duration": 3,
+      "damageFormula": "ATK \u002B DEF * 0.5"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 66,
+    "Level": 9,
+    "Values": {
+      "hits": 1,
+      "defBonus": 14,
+      "duration": 3,
+      "damageFormula": "ATK \u002B DEF * 0.5"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 66,
+    "Level": 10,
+    "Values": {
+      "hits": 1,
+      "defBonus": 15,
+      "duration": 3,
+      "damageFormula": "ATK \u002B DEF * 0.5"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 67,
+    "Level": 10,
+    "Values": {
+      "hits": 1,
+      "defBonus": 20,
+      "duration": 3,
+      "damageFormula": "ATK \u002B DEF * 0.5"
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 68,
+    "Level": 1,
+    "Values": {
+      "defPerUse": 5,
+      "maxStacks": 3
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 68,
+    "Level": 2,
+    "Values": {
+      "defPerUse": 5,
+      "maxStacks": 3
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 68,
+    "Level": 3,
+    "Values": {
+      "defPerUse": 5,
+      "maxStacks": 3
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 68,
+    "Level": 4,
+    "Values": {
+      "defPerUse": 5,
+      "maxStacks": 3
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 68,
+    "Level": 5,
+    "Values": {
+      "defPerUse": 5,
+      "maxStacks": 3
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 68,
+    "Level": 6,
+    "Values": {
+      "defPerUse": 5,
+      "maxStacks": 3
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 68,
+    "Level": 7,
+    "Values": {
+      "defPerUse": 5,
+      "maxStacks": 3
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 68,
+    "Level": 8,
+    "Values": {
+      "defPerUse": 5,
+      "maxStacks": 3
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 68,
+    "Level": 9,
+    "Values": {
+      "defPerUse": 5,
+      "maxStacks": 3
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 68,
+    "Level": 10,
+    "Values": {
+      "defPerUse": 5,
+      "maxStacks": 3
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 73,
+    "Level": 1,
+    "Values": {
+      "multiplier": 1.50
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 73,
+    "Level": 2,
+    "Values": {
+      "multiplier": 1.545
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 73,
+    "Level": 3,
+    "Values": {
+      "multiplier": 1.59
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 73,
+    "Level": 4,
+    "Values": {
+      "multiplier": 1.635
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 73,
+    "Level": 5,
+    "Values": {
+      "multiplier": 1.68
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 74,
+    "Level": 5,
+    "Values": {
+      "multiplier": 1.70
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 74,
+    "Level": 6,
+    "Values": {
+      "multiplier": 1.751
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 74,
+    "Level": 7,
+    "Values": {
+      "multiplier": 1.802
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 74,
+    "Level": 8,
+    "Values": {
+      "multiplier": 1.853
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 74,
+    "Level": 9,
+    "Values": {
+      "multiplier": 1.904
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 74,
+    "Level": 10,
+    "Values": {
+      "multiplier": 1.955
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 75,
+    "Level": 10,
+    "Values": {
+      "hits": 2,
+      "multiplier": 1.50
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 76,
+    "Level": 1,
+    "Values": {
+      "healPercent": 20
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 76,
+    "Level": 2,
+    "Values": {
+      "healPercent": 20
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 76,
+    "Level": 3,
+    "Values": {
+      "healPercent": 20
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 76,
+    "Level": 4,
+    "Values": {
+      "healPercent": 20
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 76,
+    "Level": 5,
+    "Values": {
+      "healPercent": 20
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 76,
+    "Level": 6,
+    "Values": {
+      "healPercent": 20
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 76,
+    "Level": 7,
+    "Values": {
+      "healPercent": 20
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 76,
+    "Level": 8,
+    "Values": {
+      "healPercent": 20
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 76,
+    "Level": 9,
+    "Values": {
+      "healPercent": 20
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 76,
+    "Level": 10,
+    "Values": {
+      "healPercent": 20
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 77,
+    "Level": 1,
+    "Values": {
+      "multiplier": 1.50
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 77,
+    "Level": 2,
+    "Values": {
+      "multiplier": 1.545
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 77,
+    "Level": 3,
+    "Values": {
+      "multiplier": 1.59
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 77,
+    "Level": 4,
+    "Values": {
+      "multiplier": 1.635
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 77,
+    "Level": 5,
+    "Values": {
+      "multiplier": 1.68
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 78,
+    "Level": 5,
+    "Values": {
+      "multiplier": 1.50,
+      "reduceEnergy": 1
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 78,
+    "Level": 6,
+    "Values": {
+      "multiplier": 1.725,
+      "reduceEnergy": 1
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 78,
+    "Level": 7,
+    "Values": {
+      "multiplier": 1.77,
+      "reduceEnergy": 1
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 78,
+    "Level": 8,
+    "Values": {
+      "multiplier": 1.815,
+      "reduceEnergy": 1
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 78,
+    "Level": 9,
+    "Values": {
+      "multiplier": 1.86,
+      "reduceEnergy": 1
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 78,
+    "Level": 10,
+    "Values": {
+      "multiplier": 1.905,
+      "reduceEnergy": 1
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 79,
+    "Level": 10,
+    "Values": {
+      "isAoe": true,
+      "multiplier": 1.50
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 80,
+    "Level": 1,
+    "Values": {
+      "bonusDamage": 0.5
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 80,
+    "Level": 2,
+    "Values": {
+      "bonusDamage": 0.5
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 80,
+    "Level": 3,
+    "Values": {
+      "bonusDamage": 0.5
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 80,
+    "Level": 4,
+    "Values": {
+      "bonusDamage": 0.5
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 80,
+    "Level": 5,
+    "Values": {
+      "bonusDamage": 0.5
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 80,
+    "Level": 6,
+    "Values": {
+      "bonusDamage": 0.5
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 80,
+    "Level": 7,
+    "Values": {
+      "bonusDamage": 0.5
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 80,
+    "Level": 8,
+    "Values": {
+      "bonusDamage": 0.5
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 80,
+    "Level": 9,
+    "Values": {
+      "bonusDamage": 0.5
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 80,
+    "Level": 10,
+    "Values": {
+      "bonusDamage": 0.5
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 81,
+    "Level": 1,
+    "Values": {
+      "buff": {
+        "atkUp": 0.20
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 81,
+    "Level": 2,
+    "Values": {
+      "buff": {
+        "atkUp": 0.21
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 81,
+    "Level": 3,
+    "Values": {
+      "buff": {
+        "atkUp": 0.22
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 81,
+    "Level": 4,
+    "Values": {
+      "buff": {
+        "atkUp": 0.23
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 81,
+    "Level": 5,
+    "Values": {
+      "buff": {
+        "atkUp": 0.24
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 82,
+    "Level": 5,
+    "Values": {
+      "buff": {
+        "atkUp": 0.25,
+        "cooldownReduce": 1
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 82,
+    "Level": 6,
+    "Values": {
+      "buff": {
+        "atkUp": 0.27,
+        "cooldownReduce": 1
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 82,
+    "Level": 7,
+    "Values": {
+      "buff": {
+        "atkUp": 0.29,
+        "cooldownReduce": 1
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 82,
+    "Level": 8,
+    "Values": {
+      "buff": {
+        "atkUp": 0.31,
+        "cooldownReduce": 1
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 82,
+    "Level": 9,
+    "Values": {
+      "buff": {
+        "atkUp": 0.33,
+        "cooldownReduce": 1
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 82,
+    "Level": 10,
+    "Values": {
+      "buff": {
+        "atkUp": 0.35,
+        "cooldownReduce": 1
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 83,
+    "Level": 10,
+    "Values": {
+      "buff": {
+        "atkUp": 0.40,
+        "resetSkillCooldown": true
+      }
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 84,
+    "Level": 1,
+    "Values": {
+      "atkBonus": 10
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 84,
+    "Level": 2,
+    "Values": {
+      "atkBonus": 10
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 84,
+    "Level": 3,
+    "Values": {
+      "atkBonus": 10
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 84,
+    "Level": 4,
+    "Values": {
+      "atkBonus": 10
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 84,
+    "Level": 5,
+    "Values": {
+      "atkBonus": 10
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 84,
+    "Level": 6,
+    "Values": {
+      "atkBonus": 10
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 84,
+    "Level": 7,
+    "Values": {
+      "atkBonus": 10
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 84,
+    "Level": 8,
+    "Values": {
+      "atkBonus": 10
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 84,
+    "Level": 9,
+    "Values": {
+      "atkBonus": 10
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 84,
+    "Level": 10,
+    "Values": {
+      "atkBonus": 10
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 85,
+    "Level": 1,
+    "Values": {
+      "multiplier": 1.20
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 85,
+    "Level": 2,
+    "Values": {
+      "multiplier": 1.245
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 85,
+    "Level": 3,
+    "Values": {
+      "multiplier": 1.29
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 85,
+    "Level": 4,
+    "Values": {
+      "multiplier": 1.335
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 85,
+    "Level": 5,
+    "Values": {
+      "multiplier": 1.38
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 86,
+    "Level": 5,
+    "Values": {
+      "multiplier": 1.40
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 86,
+    "Level": 6,
+    "Values": {
+      "multiplier": 1.445
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 86,
+    "Level": 7,
+    "Values": {
+      "multiplier": 1.49
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 86,
+    "Level": 8,
+    "Values": {
+      "multiplier": 1.535
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 86,
+    "Level": 9,
+    "Values": {
+      "multiplier": 1.58
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 86,
+    "Level": 10,
+    "Values": {
+      "multiplier": 1.625
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 87,
+    "Level": 10,
+    "Values": {
+      "heal": 20,
+      "multiplier": 1.5,
+      "selfDefBuff": 20
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 88,
+    "Level": 1,
+    "Values": {
+      "bonusDamage": 0.25
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 88,
+    "Level": 2,
+    "Values": {
+      "bonusDamage": 0.25
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 88,
+    "Level": 3,
+    "Values": {
+      "bonusDamage": 0.25
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 88,
+    "Level": 4,
+    "Values": {
+      "bonusDamage": 0.25
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 88,
+    "Level": 5,
+    "Values": {
+      "bonusDamage": 0.25
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 88,
+    "Level": 6,
+    "Values": {
+      "bonusDamage": 0.25
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 88,
+    "Level": 7,
+    "Values": {
+      "bonusDamage": 0.25
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 88,
+    "Level": 8,
+    "Values": {
+      "bonusDamage": 0.25
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 88,
+    "Level": 9,
+    "Values": {
+      "bonusDamage": 0.25
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 88,
+    "Level": 10,
+    "Values": {
+      "bonusDamage": 0.25
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 89,
+    "Level": 1,
+    "Values": {
+      "hits": 1,
+      "multiplier": 1.20,
+      "cooldownReduce": 0.5
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 89,
+    "Level": 2,
+    "Values": {
+      "hits": 1,
+      "multiplier": 1.245,
+      "cooldownReduce": 0.5
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 89,
+    "Level": 3,
+    "Values": {
+      "hits": 1,
+      "multiplier": 1.29,
+      "cooldownReduce": 0.5
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 89,
+    "Level": 4,
+    "Values": {
+      "hits": 1,
+      "multiplier": 1.335,
+      "cooldownReduce": 0.5
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 89,
+    "Level": 5,
+    "Values": {
+      "hits": 1,
+      "multiplier": 1.38,
+      "cooldownReduce": 0.5
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 90,
+    "Level": 5,
+    "Values": {
+      "hits": 2,
+      "multiplier": 1.10,
+      "cooldownReduce": 1.0
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 90,
+    "Level": 6,
+    "Values": {
+      "hits": 2,
+      "multiplier": 1.145,
+      "cooldownReduce": 1.0
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 90,
+    "Level": 7,
+    "Values": {
+      "hits": 2,
+      "multiplier": 1.19,
+      "cooldownReduce": 1.0
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 90,
+    "Level": 8,
+    "Values": {
+      "hits": 2,
+      "multiplier": 1.235,
+      "cooldownReduce": 1.0
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 90,
+    "Level": 9,
+    "Values": {
+      "hits": 2,
+      "multiplier": 1.28,
+      "cooldownReduce": 1.0
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 90,
+    "Level": 10,
+    "Values": {
+      "hits": 2,
+      "multiplier": 1.325,
+      "cooldownReduce": 1.0
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 91,
+    "Level": 10,
+    "Values": {
+      "hits": 3,
+      "multiplier": 1.00,
+      "cooldownReduce": 1.5
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 92,
+    "Level": 1,
+    "Values": {
+      "passive": "attackWeakestEnemy",
+      "autoBuff": true
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 92,
+    "Level": 2,
+    "Values": {
+      "passive": "attackWeakestEnemy",
+      "autoBuff": true
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 92,
+    "Level": 3,
+    "Values": {
+      "passive": "attackWeakestEnemy",
+      "autoBuff": true
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 92,
+    "Level": 4,
+    "Values": {
+      "passive": "attackWeakestEnemy",
+      "autoBuff": true
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 92,
+    "Level": 5,
+    "Values": {
+      "passive": "attackWeakestEnemy",
+      "autoBuff": true
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 92,
+    "Level": 6,
+    "Values": {
+      "passive": "attackWeakestEnemy",
+      "autoBuff": true
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 92,
+    "Level": 7,
+    "Values": {
+      "passive": "attackWeakestEnemy",
+      "autoBuff": true
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 92,
+    "Level": 8,
+    "Values": {
+      "passive": "attackWeakestEnemy",
+      "autoBuff": true
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 92,
+    "Level": 9,
+    "Values": {
+      "passive": "attackWeakestEnemy",
+      "autoBuff": true
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
+  },
+  {
+    "SkillId": 92,
+    "Level": 10,
+    "Values": {
+      "passive": "attackWeakestEnemy",
+      "autoBuff": true
+    },
+    "Description": null,
+    "Materials": null,
+    "CostGold": 0
   }
 ]
