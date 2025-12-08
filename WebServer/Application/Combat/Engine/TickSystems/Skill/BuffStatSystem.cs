@@ -19,64 +19,84 @@ namespace Application.Combat.Engine.TickSystems.Skill
             }
         }
         private void Recalculate(ActorState actor)
-        { 
-            // 1) 기본값 초기화 (Base → Eff) 
-            actor.AtkEff = actor.AtkBase;
-            actor.DefEff = actor.DefBase;
-            actor.SpdEff = actor.SpdBase;
-            actor.CritRateEff = actor.CritRateBase;
-            actor.CritDamageEff = actor.CritDamageBase;
+        {
+            // 1) 모든 버프 효과 값 초기화
+            actor.BuffAtk = 0;
+            actor.BuffDef = 0;
+            actor.BuffCritRate = 0;
+            actor.BuffCritDamage = 0;
+            actor.SpdEff = actor.SpdBase;  // 속도는 Eff 값 직접 보유
             actor.RangeEff = actor.RangeBase;
-             
-            // 2) 버프 계산 
+
+            actor.BuffDamageReduce = 0f;
+            actor.BuffFinalDamageReduce = 0f;
+            actor.BuffDefPenFlat = 0;
+            actor.BuffDefPenPercent = 0f;
+
+            // 2) 버프 재계산
             foreach (var buff in actor.Buffs)
             {
                 float value = buff.Value * buff.Stacks;
 
                 switch (buff.Kind)
                 {
-                    // ===== Buffs ===== //
                     case BuffKind.AtkUp:
-                        actor.AtkEff = (int)(actor.AtkEff * (1 + value));
+                        actor.BuffAtk += (int)(actor.AtkBase * value);
                         break;
 
                     case BuffKind.DefUp:
-                        actor.DefEff = (int)(actor.DefEff * (1 + value));
+                        actor.BuffDef += (int)(actor.DefBase * value);
                         break;
 
                     case BuffKind.SpdUp:
-                        actor.SpdEff = (int)(actor.SpdEff * (1 + value));
+                        actor.SpdEff += (int)(actor.SpdBase * value);
                         break;
 
-                    case BuffKind.CritUp:
-                        actor.CritRateEff += value;
+                    case BuffKind.CritRateUp:
+                        actor.BuffCritRate += value;
                         break;
 
-                    // ===== Debuffs ===== //
+                    case BuffKind.CritDamageUp:
+                        actor.BuffCritDamage += value;
+                        break;
+
                     case BuffKind.AtkDown:
-                        actor.AtkEff = (int)(actor.AtkEff * (1 - value));
+                        actor.BuffAtk -= (int)(actor.AtkBase * value);
                         break;
 
                     case BuffKind.DefDown:
-                        actor.DefEff = (int)(actor.DefEff * (1 - value));
+                        actor.BuffDef -= (int)(actor.DefBase * value);
                         break;
 
+                    case BuffKind.DamageReduce:
+                        actor.BuffDamageReduce += value;
+                        break;
+
+                    case BuffKind.FinalDamageReduce:
+                        actor.BuffFinalDamageReduce += value;
+                        break;
+
+                    case BuffKind.DefPenFlat:
+                        actor.BuffDefPenFlat += (int)value;
+                        break;
+
+                    case BuffKind.DefPenPercent:
+                        actor.BuffDefPenPercent += value;
+                        break;
+
+                    // DOT, CC는 다른 시스템에서 처리
                     case BuffKind.Burn:
                     case BuffKind.Bleed:
                     case BuffKind.Poison:
                     case BuffKind.Stun:
                     case BuffKind.Silence:
-                        // DOT / CC는 별 시스템에서 처리하므로 여기선 스탯 변경 없음
                         break;
                 }
             }
-             
-            // 3) 클램핑 처리 (오류 방지) 
-            actor.AtkEff = Math.Max(1, actor.AtkEff);
-            actor.DefEff = Math.Max(0, actor.DefEff);
+
+            // 3) 클램핑
             actor.SpdEff = Math.Max(1, actor.SpdEff);
-            actor.CritRateEff = Math.Clamp(actor.CritRateEff, 0, 1);
-            actor.CritDamageEff = Math.Max(0, actor.CritDamageEff);
+            actor.BuffCritRate = Math.Clamp(actor.BuffCritRate, 0, 1);
         }
     }
 }

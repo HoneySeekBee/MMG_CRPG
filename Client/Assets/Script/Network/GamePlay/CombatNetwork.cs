@@ -55,7 +55,7 @@ public class CombatNetwork
     public void SendCommand(
     long combatId,
     long actorId,
-    long skillId,
+    int skillId,
     long? targetActorId = null,
     Action<bool> onDone = null)
     {

@@ -23,18 +23,37 @@ namespace Application.Combat.Engine.TickSystems
 
             return Math.Max(1, (int)MathF.Round(rawDamage));
         }
-        public static int ComputeWithCrit(int atk, int def, double critRate, double critDamage, out bool isCrit)
+        public static int ComputeWithCrit(
+             int atk,
+             int def,
+             double critRate,
+             double critDamage,
+             float defPenFlat,
+             float defPenPercent,
+             float damageReducePercent,
+             float finalDamageMultiplier,
+             out bool isCrit)
         {
-            int baseDamage = ComputeBase(atk, def);
+            float effectiveDef = def - defPenFlat;
+            if (effectiveDef < 0) effectiveDef = 0;
+
+            defPenPercent = Math.Clamp(defPenPercent, 0f, 0.9f);
+
+            effectiveDef *= (1f - defPenPercent);
+            if (effectiveDef < 0) effectiveDef = 0;
+
+            int dmg = ComputeBase(atk, (int)effectiveDef);
 
             isCrit = _rng.NextDouble() < critRate;
-
             if (isCrit)
-            {
-                return (int)MathF.Round(baseDamage * (1f + (float)critDamage));
-            }
+                dmg = (int)(dmg * (1f + (float)critDamage));
 
-            return baseDamage;
+            dmg = (int)(dmg * (1f - damageReducePercent));
+
+            dmg = (int)(dmg * finalDamageMultiplier);
+
+            return Math.Max(1, dmg);
         }
+
     }
 }
