@@ -22,22 +22,55 @@ namespace Application.Combat.Engine.TickSystems.Skill
             ActorState caster,
             ActorState target,
             SkillEffect effect,
-            List<CombatLogEventDto> logs)
+            List<CombatLogEventDto> logs,
+            int hitIndex,
+            float extraMultiplier)
         {
             if (effect.Damage != null)
-                _damage.Apply(state, caster, target, effect.Damage, logs);
+                _damage.Apply(
+                    state, caster, target,
+                    effect.Damage,
+                    logs,
+                    hitIndex,
+                    extraMultiplier);
 
             if (effect.Heal != null)
-                _heal.Apply(state, caster, target, effect.Heal, logs);
+                _heal.Apply(
+                    state,
+                    caster,
+                    target,
+                    effect.Heal,
+                    logs
+                );
 
             if (effect.Buff != null)
-                _buff.Apply(state, caster, target, effect.Buff, logs);
-
+                _buff.Apply(
+                    state,
+                    caster,
+                    target,
+                    effect.Buff,
+                    logs
+                );
             if (effect.Debuff != null)
-                _debuff.Apply(state, caster, target, effect.Debuff, logs);
-
+            {
+                _debuff.Apply(
+                    state,
+                    caster,
+                    target,
+                    effect.Debuff,
+                    logs,
+                    hitIndex,           
+                    extraMultiplier   
+                );
+            }
             if (effect.Passive != null)
-                _passive.Apply(state, caster, target, effect.Passive, logs);
+                _passive.Apply(
+                    state,
+                    caster,
+                    target,
+                    effect.Passive,
+                    logs
+                );
         }
     }
 }

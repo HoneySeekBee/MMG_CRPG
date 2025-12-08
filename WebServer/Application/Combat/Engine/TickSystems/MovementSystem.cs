@@ -36,10 +36,36 @@ namespace Application.Combat.Engine.TickSystems
 
             foreach (var actor in actors)
             {
+                if (actor.IsKnockbacked)
+                {
+                    HandleKnockback(actor);
+                    continue; // 원래 이동 시스템 무시
+                }
+                if (actor.Stunned || actor.Frozen || actor.KnockedDown || actor.Rooted)
+                {
+                    continue;
+                }
                 if (anyEnemyAlive)
                     HandleCombatMovement(s, actors, actor, speedPerTick);
                 else
                     HandleReturnToSpawn(s, actors, actor, speedPerTick);
+            }
+        }
+        private void HandleKnockback(ActorState actor)
+        {
+            float tickSeconds = TickMs / 1000f;
+
+            actor.X += actor.KnockbackVX * tickSeconds;
+            actor.Z += actor.KnockbackVZ * tickSeconds;
+
+            actor.KnockbackRemainMs -= (int)TickMs;
+
+            if (actor.KnockbackRemainMs <= 0)
+            {
+                actor.IsKnockbacked = false;
+                actor.KnockbackVX = 0;
+                actor.KnockbackVZ = 0;
+                actor.KnockbackRemainMs = 0;
             }
         }
 
@@ -47,6 +73,13 @@ namespace Application.Combat.Engine.TickSystems
         private void HandleCombatMovement(CombatRuntimeState s, List<ActorState> actors, ActorState actor, float speedPerTick)
         {
             UpdateTarget(s, actor);
+
+            if (actor.Stunned || actor.Frozen || actor.KnockedDown)
+                return;
+
+            if (actor.Rooted)
+                return;
+
             if (actor.TargetActorId == null)
                 return;
 
@@ -69,11 +102,18 @@ namespace Application.Combat.Engine.TickSystems
 
             // 2) 사거리 안이면 이동 금지
             if (dist < stopRange)
+            {
+                // 이동하지 않지만 방향은 유지
+                actor.FacingX = dx / (dist + 0.0001f);
+                actor.FacingZ = dz / (dist + 0.0001f);
                 return;
+            }
 
             // 3) 정상 이동 (아군 방향 보정만 적용)
             float dirX = dx / dist;
             float dirZ = dz / dist;
+            actor.FacingX = dirX;
+            actor.FacingZ = dirZ;
 
             (float sepAX, float sepAZ) = ComputeAllySeparation(actors, actor);
             (float sepEX, float sepEZ) = ComputeEnemySeparation(s, actor);

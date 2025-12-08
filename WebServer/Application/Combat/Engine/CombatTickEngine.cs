@@ -21,7 +21,8 @@ namespace Application.Combat.Engine
         private readonly WaveSystem _wave = new(); 
         private readonly SnapshotBuilder _snapshot = new SnapshotBuilder();
         private readonly BuffTickSystem _buffTicks = new();
-        private readonly BuffStatSystem _buffStats = new();
+        private readonly BuffStatSystem _buffStats = new(); 
+        private readonly CrowdControlSystem _cc = new();
         public List<CombatLogEventDto> Process(CombatRuntimeState state)
         {
             var events = new List<CombatLogEventDto>();
@@ -30,6 +31,9 @@ namespace Application.Combat.Engine
 
             _commands.Run(state, events);
             _ai.Run(state, events);
+
+
+            _cc.Run(state);
             _move.Run(state, events);
 
             _buffTicks.Run(state, events);

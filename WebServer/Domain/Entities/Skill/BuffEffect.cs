@@ -15,6 +15,9 @@ namespace Domain.Entities.Skill
 
         public float Value { get; init; }  
         public int DurationMs { get; init; }  
-        public int MaxStacks { get; init; } = 1;    
+        public int MaxStacks { get; init; } = 1;
+
+        public int? ShieldValue { get; init; } 
+
     }
 }

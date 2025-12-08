@@ -17,7 +17,7 @@ namespace Application.Skills
         // [2] 상세 정보 
         public SkillType Type { get; set; } = SkillType.Unknown;
         public int ElementId { get; set; }
-        public SkillTargetingType TargetingType { get; set; } = SkillTargetingType.Targeting;
+        public SkillTargetingType TargetingType { get; set; } = SkillTargetingType.None;
         public AoeShapeType AoeShape { get; set; } = AoeShapeType.None;
         public TargetSideType TargetSide { get; set; } = TargetSideType.Team;
 

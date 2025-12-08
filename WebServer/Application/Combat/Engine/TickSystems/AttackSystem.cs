@@ -60,12 +60,16 @@ namespace Application.Combat.Engine.TickSystems
                     continue;
                 int baseDmg = DamageFormula.ComputeBase(actor.AtkEff, target.DefEff);
                 int finalDmg = DamageFormula.ComputeWithCrit(
-      actor.AtkEff,
-      target.DefEff,
-      actor.CritRateEff,
-      actor.CritDamageEff,
-      out bool isCrit
-  );
+    actor.AtkEff,
+    target.DefEff,
+    actor.CritRateEff,
+    actor.CritDamageEff,
+    actor.DefPenFlat,
+    actor.DefPenPercent,
+    target.DamageReducePercent,
+    target.FinalDamageMultiplier,
+    out bool isCrit
+);
 
                 int oldHp = target.Hp;
                 // HP 깎고 0으로 클램프만, Dead 플래그는 DeathSystem에서

@@ -18,6 +18,7 @@ namespace Application.Combat.Engine.TickSystems.Skill
                     continue;
 
                 ProcessBuffs(state, actor, logs);
+                ProcessCcDurations(actor);
             }
         }
 
@@ -49,14 +50,41 @@ namespace Application.Combat.Engine.TickSystems.Skill
             {
                 actor.Buffs.Remove(b);
 
+                // 스탯 버프라면 원복
+                if (b.Kind != BuffKind.Shield)
+                {
+                    RemoveStatChange(actor, b.Kind, b.Value);
+                    actor.RecalcStats();
+                }
+                else
+                {
+                    // 쉴드 만료
+                    actor.Shield -= (int)b.Value;
+                    actor.Shield = Math.Max(0, actor.Shield);
+
+                    logs.Add(new CombatLogEventDto(
+                        state.NowMs(),
+                        "shield_expire",
+                        actor.ActorId.ToString(),
+                        actor.ActorId.ToString(),
+                        null,
+                        null,
+                        new Dictionary<string, object?>
+                        {
+                            ["shield"] = actor.Shield
+                        }
+                    ));
+                    continue;
+                }
+
                 logs.Add(new CombatLogEventDto(
-                    TMs: state.NowMs(),
-                    Type: "buff_expire",
-                    Actor: actor.ActorId.ToString(),
-                    Target: null,
-                    Damage: null,
-                    Crit: null,
-                    Extra: new Dictionary<string, object?>
+                    state.NowMs(),
+                    "buff_expire",
+                    actor.ActorId.ToString(),
+                    null,
+                    null,
+                    null,
+                    new Dictionary<string, object?>
                     {
                         ["kind"] = b.Kind.ToString()
                     }
@@ -64,40 +92,118 @@ namespace Application.Combat.Engine.TickSystems.Skill
             }
         }
 
+        // 디버프 종료 
         private void ApplyDotEffect(
-            CombatRuntimeState state,
-            ActorState actor,
-            AppliedBuff buff,
-            List<CombatLogEventDto> logs)
+           CombatRuntimeState state,
+           ActorState actor,
+           AppliedBuff buff,
+           List<CombatLogEventDto> logs)
         {
-            switch (buff.Kind)
+            if (buff.Kind == BuffKind.Bleed)
             {
-                case BuffKind.Bleed:
-                    int dmg = (int)buff.Value;
+                int dmg = (int)buff.Value;
 
-                    int before = actor.Hp;
-                    actor.Hp = Math.Max(0, actor.Hp - dmg);
+                actor.Hp = System.Math.Max(0, actor.Hp - dmg);
 
-                    logs.Add(new CombatLogEventDto(
-                        TMs: state.NowMs(),
-                        Type: "dot_bleed",
-                        Actor: actor.ActorId.ToString(),
-                        Target: actor.ActorId.ToString(),
-                        Damage: dmg,
-                        Crit: null,
-                        Extra: null
-                    ));
-
-                    // 죽음 판정은 DeathSystem에서 감지하게 둠
+                logs.Add(new CombatLogEventDto(
+                    state.NowMs(),
+                    "dot_bleed",
+                    actor.ActorId.ToString(),
+                    actor.ActorId.ToString(),
+                    dmg,
+                    false,
+                    null));
+            }
+        }
+        private void RemoveStatChange(ActorState target, BuffKind kind, float value)
+        {
+            switch (kind)
+            {
+                case BuffKind.AtkUp:
+                    target.BuffAtk -= (int)value;
                     break;
 
-                case BuffKind.Burn:
-                case BuffKind.Poison:
-                    // 나중에 필요하면 추가
+                case BuffKind.DefUp:
+                    target.BuffDef -= (int)value;
                     break;
 
-                default:
+                case BuffKind.CritRateUp:
+                    target.BuffCritRate -= value;
                     break;
+
+                case BuffKind.CritDamageUp:
+                    target.BuffCritDamage -= value;
+                    break;
+
+                case BuffKind.DamageReduce:
+                    target.BuffDamageReduce -= value;
+                    break;
+
+                case BuffKind.FinalDamageReduce:
+                    target.BuffFinalDamageReduce -= value;
+                    break;
+
+                case BuffKind.DefPenFlat:
+                    target.BuffDefPenFlat -= (int)value;
+                    break;
+
+                case BuffKind.DefPenPercent:
+                    target.BuffDefPenPercent -= value;
+                    break;
+            }
+        }
+        private void ProcessCcDurations(ActorState actor)
+        {
+            int tick = 100;
+
+            if (actor.Stunned)
+            {
+                actor.StunMs -= tick;
+                if (actor.StunMs <= 0)
+                {
+                    actor.Stunned = false;
+                    actor.StunMs = 0;
+                }
+            }
+
+            if (actor.Silenced)
+            {
+                actor.SilenceMs -= tick;
+                if (actor.SilenceMs <= 0)
+                {
+                    actor.Silenced = false;
+                    actor.SilenceMs = 0;
+                }
+            }
+
+            if (actor.Rooted)
+            {
+                actor.RootMs -= tick;
+                if (actor.RootMs <= 0)
+                {
+                    actor.Rooted = false;
+                    actor.RootMs = 0;
+                }
+            }
+
+            if (actor.Frozen)
+            {
+                actor.FreezeMs -= tick;
+                if (actor.FreezeMs <= 0)
+                {
+                    actor.Frozen = false;
+                    actor.FreezeMs = 0;
+                }
+            }
+
+            if (actor.KnockedDown)
+            {
+                actor.KnockdownMs -= tick;
+                if (actor.KnockdownMs <= 0)
+                {
+                    actor.KnockedDown = false;
+                    actor.KnockdownMs = 0;
+                }
             }
         }
     }
