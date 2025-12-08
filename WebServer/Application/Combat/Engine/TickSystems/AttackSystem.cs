@@ -53,18 +53,19 @@ namespace Application.Combat.Engine.TickSystems
                 }
 
                 float dist = Distance(actor, target);
-                float effectiveRange = actor.Range + PaddingDist;
-                Console.WriteLine($"[Atk] {actor.ActorId}(Team={actor.Team}) -> {target.ActorId}(Team={target.Team}) dist={dist}, range={actor.Range}");
+                float effectiveRange = actor.RangeBase + PaddingDist;
+                Console.WriteLine($"[Atk] {actor.ActorId}(Team={actor.Team}) -> {target.ActorId}(Team={target.Team}) dist={dist}, range={actor.RangeBase}");
 
                 if (dist > effectiveRange)
                     continue;
-
-                int baseDmg = ComputeBaseDamage(actor.Atk, target.Def);
-
-                bool isCrit = _rng.NextDouble() < actor.CritRate;
-                int finalDmg = isCrit
-                    ? (int)MathF.Round(baseDmg * (1f + (float)actor.CritDamage))
-                    : baseDmg;
+                int baseDmg = DamageFormula.ComputeBase(actor.AtkEff, target.DefEff);
+                int finalDmg = DamageFormula.ComputeWithCrit(
+      actor.AtkEff,
+      target.DefEff,
+      actor.CritRateEff,
+      actor.CritDamageEff,
+      out bool isCrit
+  );
 
                 int oldHp = target.Hp;
                 // HP 깎고 0으로 클램프만, Dead 플래그는 DeathSystem에서
@@ -72,7 +73,7 @@ namespace Application.Combat.Engine.TickSystems
                 if (target.Hp < 0)
                     target.Hp = 0;
 
-                actor.AttackCooldownMs = (int)(actor.AttackIntervalMs * AttackSpeedScale);
+                actor.AttackCooldownMs = (int)(actor.AttackIntervalMsBase * AttackSpeedScale);
 
                 Console.WriteLine(
                     $"[Hit] {actor.ActorId}(T={actor.Team}) -> {target.ActorId}(T={target.Team}), " +
@@ -124,36 +125,6 @@ namespace Application.Combat.Engine.TickSystems
             }
 
             return nearestId;
-        }
-        private int ComputeBaseDamage(int atk, int def)
-        {
-            // float/MathF 써서 실수 연산
-            float fAtk = atk;
-            float fDef = Math.Max(def, 0);  
-
-            // 1. 고정 방어량 (DEF의 20%)
-            float guaranteedBlock = fDef / 5f;          // DEF * 0.2f
-
-            // 2. 남은 80% 방어력
-            float remainingDef = fDef * 4f / 5f;        // DEF * 0.8f
-
-            // 3. 추가 방어 비율 = DEF / 100, 단 최대 0.9 (= 90%)
-            float rateRaw = fDef / 100f;
-            float rate = MathF.Min(rateRaw, 0.9f);
-
-            // 4. 추가 방어량
-            float extraBlock = remainingDef * rate;
-
-            // 5. 총 방어량
-            float totalBlock = guaranteedBlock + extraBlock;
-
-            // 6. 실제 데미지
-            float rawDamage = fAtk - totalBlock;
-
-            // 최소 1 보장 + 반올림
-            int baseDamage = Math.Max(1, (int)MathF.Round(rawDamage));
-
-            return baseDamage;
-        }
+        } 
     }
 }

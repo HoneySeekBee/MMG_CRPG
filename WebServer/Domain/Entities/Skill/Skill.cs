@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Domain.Entities.Skill
 {
     public sealed class Skill
     {
@@ -24,7 +24,7 @@ namespace Domain.Entities
 
         // [3] 기타 
         public bool IsActive { get; set; }
-        public JsonNode? BaseInfo { get;  set; }
+        public JsonNode? BaseInfo { get; set; }
         public string[] Tag { get; private set; } = Array.Empty<string>();
 
         // [4] 스킬별로 스킬 레벨별 추치를 만들 것이다. 

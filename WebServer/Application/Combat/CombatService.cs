@@ -2,6 +2,7 @@
 using Application.Combat.Runtime;
 using Application.Contents.Stages;
 using Application.Repositories;
+using Application.Skills;
 using Application.StageReward;
 using Application.UserCharacter;
 using Application.UserCurrency;
@@ -37,23 +38,14 @@ namespace Application.Combat
         private readonly IWalletService _wallet;
         private readonly IStagesService _stages;
         private readonly IClock _clock;
-
+        private readonly ISkillCache _skillCache;
 
         private const int MaxPageSize = 500;
         private static readonly ConcurrentDictionary<long, CombatRuntimeState> _runtimeStates = new();
 
-        public CombatService(
-       IMasterDataProvider master,
-       ICombatRepository repo,
-       ICombatEngine engine,
-       IUserPartyReader partyReader,
-       IUserCharacterReader userCharacterReader,
-       ICombatTickEngine tickEngine,
-       IUserStageProgressService stageProgress,
-       IStageRewardService stageReward,
-       IWalletService wallet,
-       IStagesService stages,
-       IClock clock)
+        public CombatService(IMasterDataProvider master, ICombatRepository repo, ICombatEngine engine, IUserPartyReader partyReader,
+       IUserCharacterReader userCharacterReader, ICombatTickEngine tickEngine, IUserStageProgressService stageProgress,
+       IStageRewardService stageReward, IWalletService wallet, IStagesService stages, IClock clock, ISkillCache skillCache)
         {
             _master = master;
             _repo = repo;
@@ -67,6 +59,7 @@ namespace Application.Combat
             _wallet = wallet;
             _stages = stages;
             _clock = clock;
+            _skillCache = skillCache;
         }
         public async Task<StartCombatResponse> StartAsync(StartCombatRequest req, CancellationToken ct)
         {
@@ -157,6 +150,13 @@ namespace Application.Combat
             runtimeState.Snapshot = new CombatRuntimeSnapshot();
             runtimeState.MasterPack = pack;
 
+            var skills = _skillCache.GetAll();
+            runtimeState.SkillMaster.Clear();
+            foreach (var s in skills)
+            {
+                runtimeState.SkillMaster[s.SkillId] = s;
+            }
+
             // (8) ActorInitDto 구성
             var actors = new List<ActorInitDto>();
 
@@ -218,13 +218,13 @@ namespace Application.Combat
                     SpawnZ = a.Z,
 
                     Hp = a.Hp,
-                    Atk = def.Atk,
-                    Def = def.Def,
-                    Spd = def.Spd,
-                    Range = def.Range,
-                    AttackIntervalMs = def.AttackIntervalMs,
-                    CritRate = def.CritRate,
-                    CritDamage = def.CritDamage,
+                    AtkBase = def.Atk,
+                    DefBase = def.Def,
+                    SpdBase = def.Spd,
+                    RangeBase = def.Range,
+                    AttackIntervalMsBase = def.AttackIntervalMs,
+                    CritRateBase = def.CritRate,
+                    CritDamageBase = def.CritDamage,
                     AttackCooldownMs = 0,
                     SkillCooldownMs = 0,
                     TargetActorId = null,
@@ -319,7 +319,7 @@ namespace Application.Combat
                 throw new InvalidOperationException("COMBAT_NOT_FINISHED");
 
             // (3) 승패/별 계산 
-            bool success = true; 
+            bool success = true;
             StageStars stars = CalculateStars(state, success);
 
             // (4) 보상 + 진행도 + 지갑 처리 전부 StageRewardService에 위임

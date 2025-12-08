@@ -1,5 +1,6 @@
 ﻿using Application.Repositories;
 using Domain.Entities;
+using Domain.Entities.Skill;
 using System;
 using System.Collections.Generic;
 using System.Linq;

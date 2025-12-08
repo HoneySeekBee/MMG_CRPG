@@ -57,7 +57,7 @@ namespace Application.Combat.Engine.TickSystems
             float dz = target.Z - actor.Z;
             float dist = MathF.Sqrt(dx * dx + dz * dz);
 
-            float stopRange = actor.Range;
+            float stopRange = actor.RangeBase;
             float minCollisionDist = CollisionRadius + EnemyRadius;
 
             // 1) 적과 겹침 → 내 유닛만 뒤로 빼기

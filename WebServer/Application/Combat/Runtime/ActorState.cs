@@ -10,28 +10,40 @@ namespace Application.Combat.Runtime
     {
         public long ActorId { get; init; }
         public int Team { get; init; }
+
         public float X { get; set; }
         public float Z { get; set; }
         public float SpawnX { get; set; }
         public float SpawnZ { get; set; }
+
         public int Hp { get; set; }
+        public int HpMax { get; set; }
         public bool Dead { get; set; }
         public bool ReturningToSpawn { get; set; }
 
-        // 전투 스텟 
-        public int Atk { get; set; }
-        public int Def { get; set; }
-        public int Spd { get; set; }       
-        public float Range { get; set; }
-        public int AttackIntervalMs { get; set; }
-        public double CritRate { get; set; }    // 0.10 이런 식
-        public double CritDamage { get; set; }  // 0.50 = +50%
+        // Base Stat ( 변하지 않는 스텟 )
+        public int AtkBase { get; set; }
+        public int DefBase { get; set; }
+        public int SpdBase { get; set; }
+        public float RangeBase { get; set; }
+        public int AttackIntervalMsBase { get; set; }
+        public double CritRateBase { get; set; }
+        public double CritDamageBase { get; set; }
 
+        // Effective Stat ( 버프 등 반영된 최종값 ) 
+        public int AtkEff { get; set; }
+        public int DefEff { get; set; }
+        public int SpdEff { get; set; }
+        public double CritRateEff { get; set; }
+        public double CritDamageEff { get; set; }
 
+        public float RangeEff { get; set; }
         public int AttackCooldownMs { get; set; }
         public int SkillCooldownMs { get; set; }
 
         public long? TargetActorId { get; set; }
         public int Waveindex { get; set; }
+         
+        public List<AppliedBuff> Buffs { get; } = new();
     }
 }

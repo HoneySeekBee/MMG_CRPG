@@ -33,4 +33,24 @@ namespace Domain.Enum
         Team = 1,
         Enemy = 2, 
     }
+    public enum BuffKind : short
+    {
+        // 버프
+        AtkUp,
+        DefUp,
+        SpdUp,
+        CritUp,
+        HpRegen,
+        Shield,
+        CooldownReduce,
+
+        // 디버프
+        AtkDown,
+        DefDown,
+        Bleed,
+        Burn,
+        Poison,
+        Stun,
+        Silence
+    }
 }

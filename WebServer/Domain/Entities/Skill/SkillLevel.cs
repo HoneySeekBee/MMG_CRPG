@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Domain.Entities.Skill
 {
     public sealed class SkillLevel
     {

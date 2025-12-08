@@ -33,36 +33,37 @@ namespace Combat {
             "X2lkGAcgASgDIj4KF0NvbWJhdEluaXRpYWxTbmFwc2hvdFBiEiMKBmFjdG9y",
             "cxgBIAMoCzITLmNvbWJhdC5BY3RvckluaXRQYiJdChVTdGFydENvbWJhdFJl",
             "c3BvbnNlUGISEQoJY29tYmF0X2lkGAEgASgDEjEKCHNuYXBzaG90GAIgASgL",
-            "Mh8uY29tYmF0LkNvbWJhdEluaXRpYWxTbmFwc2hvdFBiImsKD0NvbWJhdENv",
-            "bW1hbmRQYhIQCghhY3Rvcl9pZBgBIAEoAxIQCghza2lsbF9pZBgCIAEoAxI0",
-            "Cg90YXJnZXRfYWN0b3JfaWQYAyABKAsyGy5nb29nbGUucHJvdG9idWYuSW50",
-            "NjRWYWx1ZSLqAQoQQ29tYmF0TG9nRXZlbnRQYhIMCgR0X21zGAEgASgFEgwK",
-            "BHR5cGUYAiABKAkSDQoFYWN0b3IYAyABKAkSLAoGdGFyZ2V0GAQgASgLMhwu",
-            "Z29vZ2xlLnByb3RvYnVmLlN0cmluZ1ZhbHVlEisKBmRhbWFnZRgFIAEoCzIb",
-            "Lmdvb2dsZS5wcm90b2J1Zi5JbnQzMlZhbHVlEigKBGNyaXQYBiABKAsyGi5n",
-            "b29nbGUucHJvdG9idWYuQm9vbFZhbHVlEiYKBWV4dHJhGAcgASgLMhcuZ29v",
-            "Z2xlLnByb3RvYnVmLlN0cnVjdCKAAQoPQ29tYmF0TG9nUGFnZVBiEhEKCWNv",
-            "bWJhdF9pZBgBIAEoAxInCgVpdGVtcxgCIAMoCzIYLmNvbWJhdC5Db21iYXRM",
-            "b2dFdmVudFBiEjEKC25leHRfY3Vyc29yGAMgASgLMhwuZ29vZ2xlLnByb3Rv",
-            "YnVmLlN0cmluZ1ZhbHVlIn0KEkNvbWJhdExvZ1N1bW1hcnlQYhIRCgljb21i",
-            "YXRfaWQYASABKAMSFAoMdG90YWxfZXZlbnRzGAIgASgFEhMKC2R1cmF0aW9u",
-            "X21zGAMgASgFEhMKC2RhbWFnZV9kb25lGAQgASgFEhQKDGRhbWFnZV90YWtl",
-            "bhgFIAEoBSI2ChNDb21iYXRUaWNrUmVxdWVzdFBiEhEKCWNvbWJhdF9pZBgB",
-            "IAEoAxIMCgR0aWNrGAIgASgFIo0BChRDb21iYXRUaWNrUmVzcG9uc2VQYhIR",
-            "Cgljb21iYXRfaWQYASABKAMSDAoEdGljaxgCIAEoBRIqCghzbmFwc2hvdBgD",
-            "IAEoCzIYLmNvbWJhdC5Db21iYXRTbmFwc2hvdFBiEigKBmV2ZW50cxgEIAMo",
-            "CzIYLmNvbWJhdC5Db21iYXRMb2dFdmVudFBiIn0KD0FjdG9yU25hcHNob3RQ",
-            "YhIQCghhY3Rvcl9pZBgBIAEoAxIJCgF4GAIgASgCEgkKAXoYAyABKAISCgoC",
-            "aHAYBCABKAUSDAoEZGVhZBgFIAEoCBIoCgZldmVudHMYBiADKAsyGC5jb21i",
-            "YXQuQ29tYmF0TG9nRXZlbnRQYiI7ChBDb21iYXRTbmFwc2hvdFBiEicKBmFj",
-            "dG9ycxgBIAMoCzIXLmNvbWJhdC5BY3RvclNuYXBzaG90UGIiOwoVRmluaXNo",
-            "Q29tYmF0UmVxdWVzdFBiEhEKCWNvbWJhdF9pZBgBIAEoAxIPCgd1c2VyX2lk",
-            "GAIgASgFIk0KEVN0YWdlUmV3YXJkSXRlbVBiEg8KB2l0ZW1faWQYASABKAUS",
-            "CwoDcXR5GAIgASgFEhoKEmZpcnN0X2NsZWFyX3Jld2FyZBgDIAEoCCKkAQoW",
-            "RmluaXNoQ29tYmF0UmVzcG9uc2VQYhIQCghzdGFnZV9pZBgBIAEoBRINCgVz",
-            "dGFycxgCIAEoBRITCgtmaXJzdF9jbGVhchgDIAEoCBIqCgdyZXdhcmRzGAQg",
-            "AygLMhkuY29tYmF0LlN0YWdlUmV3YXJkSXRlbVBiEgwKBGdvbGQYBSABKAMS",
-            "CwoDZ2VtGAYgASgDEg0KBXRva2VuGAcgASgDYgZwcm90bzM="));
+            "Mh8uY29tYmF0LkNvbWJhdEluaXRpYWxTbmFwc2hvdFBiIoABCg9Db21iYXRD",
+            "b21tYW5kUGISEAoIYWN0b3JfaWQYASABKAMSEAoIc2tpbGxfaWQYAiABKAUS",
+            "NAoPdGFyZ2V0X2FjdG9yX2lkGAMgASgLMhsuZ29vZ2xlLnByb3RvYnVmLklu",
+            "dDY0VmFsdWUSEwoLc2tpbGxfbGV2ZWwYBCABKAUi6gEKEENvbWJhdExvZ0V2",
+            "ZW50UGISDAoEdF9tcxgBIAEoBRIMCgR0eXBlGAIgASgJEg0KBWFjdG9yGAMg",
+            "ASgJEiwKBnRhcmdldBgEIAEoCzIcLmdvb2dsZS5wcm90b2J1Zi5TdHJpbmdW",
+            "YWx1ZRIrCgZkYW1hZ2UYBSABKAsyGy5nb29nbGUucHJvdG9idWYuSW50MzJW",
+            "YWx1ZRIoCgRjcml0GAYgASgLMhouZ29vZ2xlLnByb3RvYnVmLkJvb2xWYWx1",
+            "ZRImCgVleHRyYRgHIAEoCzIXLmdvb2dsZS5wcm90b2J1Zi5TdHJ1Y3QigAEK",
+            "D0NvbWJhdExvZ1BhZ2VQYhIRCgljb21iYXRfaWQYASABKAMSJwoFaXRlbXMY",
+            "AiADKAsyGC5jb21iYXQuQ29tYmF0TG9nRXZlbnRQYhIxCgtuZXh0X2N1cnNv",
+            "chgDIAEoCzIcLmdvb2dsZS5wcm90b2J1Zi5TdHJpbmdWYWx1ZSJ9ChJDb21i",
+            "YXRMb2dTdW1tYXJ5UGISEQoJY29tYmF0X2lkGAEgASgDEhQKDHRvdGFsX2V2",
+            "ZW50cxgCIAEoBRITCgtkdXJhdGlvbl9tcxgDIAEoBRITCgtkYW1hZ2VfZG9u",
+            "ZRgEIAEoBRIUCgxkYW1hZ2VfdGFrZW4YBSABKAUiNgoTQ29tYmF0VGlja1Jl",
+            "cXVlc3RQYhIRCgljb21iYXRfaWQYASABKAMSDAoEdGljaxgCIAEoBSKNAQoU",
+            "Q29tYmF0VGlja1Jlc3BvbnNlUGISEQoJY29tYmF0X2lkGAEgASgDEgwKBHRp",
+            "Y2sYAiABKAUSKgoIc25hcHNob3QYAyABKAsyGC5jb21iYXQuQ29tYmF0U25h",
+            "cHNob3RQYhIoCgZldmVudHMYBCADKAsyGC5jb21iYXQuQ29tYmF0TG9nRXZl",
+            "bnRQYiJ9Cg9BY3RvclNuYXBzaG90UGISEAoIYWN0b3JfaWQYASABKAMSCQoB",
+            "eBgCIAEoAhIJCgF6GAMgASgCEgoKAmhwGAQgASgFEgwKBGRlYWQYBSABKAgS",
+            "KAoGZXZlbnRzGAYgAygLMhguY29tYmF0LkNvbWJhdExvZ0V2ZW50UGIiOwoQ",
+            "Q29tYmF0U25hcHNob3RQYhInCgZhY3RvcnMYASADKAsyFy5jb21iYXQuQWN0",
+            "b3JTbmFwc2hvdFBiIjsKFUZpbmlzaENvbWJhdFJlcXVlc3RQYhIRCgljb21i",
+            "YXRfaWQYASABKAMSDwoHdXNlcl9pZBgCIAEoBSJNChFTdGFnZVJld2FyZEl0",
+            "ZW1QYhIPCgdpdGVtX2lkGAEgASgFEgsKA3F0eRgCIAEoBRIaChJmaXJzdF9j",
+            "bGVhcl9yZXdhcmQYAyABKAgipAEKFkZpbmlzaENvbWJhdFJlc3BvbnNlUGIS",
+            "EAoIc3RhZ2VfaWQYASABKAUSDQoFc3RhcnMYAiABKAUSEwoLZmlyc3RfY2xl",
+            "YXIYAyABKAgSKgoHcmV3YXJkcxgEIAMoCzIZLmNvbWJhdC5TdGFnZVJld2Fy",
+            "ZEl0ZW1QYhIMCgRnb2xkGAUgASgDEgsKA2dlbRgGIAEoAxINCgV0b2tlbhgH",
+            "IAEoA2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.WrappersReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.StructReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -70,7 +71,7 @@ namespace Combat {
             new pbr::GeneratedClrTypeInfo(typeof(global::Combat.ActorInitPb), global::Combat.ActorInitPb.Parser, new[]{ "ActorId", "Team", "X", "Z", "Hp", "WaveIndex", "MasterId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Combat.CombatInitialSnapshotPb), global::Combat.CombatInitialSnapshotPb.Parser, new[]{ "Actors" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Combat.StartCombatResponsePb), global::Combat.StartCombatResponsePb.Parser, new[]{ "CombatId", "Snapshot" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Combat.CombatCommandPb), global::Combat.CombatCommandPb.Parser, new[]{ "ActorId", "SkillId", "TargetActorId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Combat.CombatCommandPb), global::Combat.CombatCommandPb.Parser, new[]{ "ActorId", "SkillId", "TargetActorId", "SkillLevel" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Combat.CombatLogEventPb), global::Combat.CombatLogEventPb.Parser, new[]{ "TMs", "Type", "Actor", "Target", "Damage", "Crit", "Extra" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Combat.CombatLogPagePb), global::Combat.CombatLogPagePb.Parser, new[]{ "CombatId", "Items", "NextCursor" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Combat.CombatLogSummaryPb), global::Combat.CombatLogSummaryPb.Parser, new[]{ "CombatId", "TotalEvents", "DurationMs", "DamageDone", "DamageTaken" }, null, null, null, null),
@@ -1222,6 +1223,7 @@ namespace Combat {
       actorId_ = other.actorId_;
       skillId_ = other.skillId_;
       TargetActorId = other.TargetActorId;
+      skillLevel_ = other.skillLevel_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1245,10 +1247,10 @@ namespace Combat {
 
     /// <summary>Field number for the "skill_id" field.</summary>
     public const int SkillIdFieldNumber = 2;
-    private long skillId_;
+    private int skillId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public long SkillId {
+    public int SkillId {
       get { return skillId_; }
       set {
         skillId_ = value;
@@ -1269,6 +1271,18 @@ namespace Combat {
     }
 
 
+    /// <summary>Field number for the "skill_level" field.</summary>
+    public const int SkillLevelFieldNumber = 4;
+    private int skillLevel_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int SkillLevel {
+      get { return skillLevel_; }
+      set {
+        skillLevel_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -1287,6 +1301,7 @@ namespace Combat {
       if (ActorId != other.ActorId) return false;
       if (SkillId != other.SkillId) return false;
       if (TargetActorId != other.TargetActorId) return false;
+      if (SkillLevel != other.SkillLevel) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1295,8 +1310,9 @@ namespace Combat {
     public override int GetHashCode() {
       int hash = 1;
       if (ActorId != 0L) hash ^= ActorId.GetHashCode();
-      if (SkillId != 0L) hash ^= SkillId.GetHashCode();
+      if (SkillId != 0) hash ^= SkillId.GetHashCode();
       if (targetActorId_ != null) hash ^= TargetActorId.GetHashCode();
+      if (SkillLevel != 0) hash ^= SkillLevel.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1319,12 +1335,16 @@ namespace Combat {
         output.WriteRawTag(8);
         output.WriteInt64(ActorId);
       }
-      if (SkillId != 0L) {
+      if (SkillId != 0) {
         output.WriteRawTag(16);
-        output.WriteInt64(SkillId);
+        output.WriteInt32(SkillId);
       }
       if (targetActorId_ != null) {
         _single_targetActorId_codec.WriteTagAndValue(output, TargetActorId);
+      }
+      if (SkillLevel != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(SkillLevel);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -1340,12 +1360,16 @@ namespace Combat {
         output.WriteRawTag(8);
         output.WriteInt64(ActorId);
       }
-      if (SkillId != 0L) {
+      if (SkillId != 0) {
         output.WriteRawTag(16);
-        output.WriteInt64(SkillId);
+        output.WriteInt32(SkillId);
       }
       if (targetActorId_ != null) {
         _single_targetActorId_codec.WriteTagAndValue(ref output, TargetActorId);
+      }
+      if (SkillLevel != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(SkillLevel);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -1360,11 +1384,14 @@ namespace Combat {
       if (ActorId != 0L) {
         size += 1 + pb::CodedOutputStream.ComputeInt64Size(ActorId);
       }
-      if (SkillId != 0L) {
-        size += 1 + pb::CodedOutputStream.ComputeInt64Size(SkillId);
+      if (SkillId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(SkillId);
       }
       if (targetActorId_ != null) {
         size += _single_targetActorId_codec.CalculateSizeWithTag(TargetActorId);
+      }
+      if (SkillLevel != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(SkillLevel);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1381,13 +1408,16 @@ namespace Combat {
       if (other.ActorId != 0L) {
         ActorId = other.ActorId;
       }
-      if (other.SkillId != 0L) {
+      if (other.SkillId != 0) {
         SkillId = other.SkillId;
       }
       if (other.targetActorId_ != null) {
         if (targetActorId_ == null || other.TargetActorId != 0L) {
           TargetActorId = other.TargetActorId;
         }
+      }
+      if (other.SkillLevel != 0) {
+        SkillLevel = other.SkillLevel;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1409,7 +1439,7 @@ namespace Combat {
             break;
           }
           case 16: {
-            SkillId = input.ReadInt64();
+            SkillId = input.ReadInt32();
             break;
           }
           case 26: {
@@ -1417,6 +1447,10 @@ namespace Combat {
             if (targetActorId_ == null || value != 0L) {
               TargetActorId = value;
             }
+            break;
+          }
+          case 32: {
+            SkillLevel = input.ReadInt32();
             break;
           }
         }
@@ -1439,7 +1473,7 @@ namespace Combat {
             break;
           }
           case 16: {
-            SkillId = input.ReadInt64();
+            SkillId = input.ReadInt32();
             break;
           }
           case 26: {
@@ -1447,6 +1481,10 @@ namespace Combat {
             if (targetActorId_ == null || value != 0L) {
               TargetActorId = value;
             }
+            break;
+          }
+          case 32: {
+            SkillLevel = input.ReadInt32();
             break;
           }
         }
