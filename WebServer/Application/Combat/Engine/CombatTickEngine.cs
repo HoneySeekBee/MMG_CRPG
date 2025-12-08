@@ -1,5 +1,7 @@
 ﻿using Application.Combat.Engine.TickSystems;
+using Application.Combat.Engine.TickSystems.Skill;
 using Application.Combat.Runtime;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +17,11 @@ namespace Application.Combat.Engine
         private readonly MovementSystem _move = new();
         private readonly AttackSystem _atk = new();
         private readonly DeathSystem _death = new();
+        private readonly SkillSystem _skill = new();
         private readonly WaveSystem _wave = new(); 
-        private readonly SnapshotBuilder _snapshot = new SnapshotBuilder(); 
+        private readonly SnapshotBuilder _snapshot = new SnapshotBuilder();
+        private readonly BuffTickSystem _buffTicks = new();
+        private readonly BuffStatSystem _buffStats = new();
         public List<CombatLogEventDto> Process(CombatRuntimeState state)
         {
             var events = new List<CombatLogEventDto>();
@@ -26,6 +31,11 @@ namespace Application.Combat.Engine
             _commands.Run(state, events);
             _ai.Run(state, events);
             _move.Run(state, events);
+
+            _buffTicks.Run(state, events);
+            _buffStats.Run(state);
+
+            _skill.Run(state, events);
             _atk.Run(state, events);
             _death.Run(state, events);
             _wave.Run(state, events);

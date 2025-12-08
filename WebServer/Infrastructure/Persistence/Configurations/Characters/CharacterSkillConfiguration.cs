@@ -1,5 +1,5 @@
-﻿using Domain.Entities;
-using Domain.Entities.Characters;
+﻿using Domain.Entities.Characters;
+using Domain.Entities.Skill;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;

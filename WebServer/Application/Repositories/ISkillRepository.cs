@@ -1,4 +1,4 @@
-﻿using Domain.Entities;
+﻿using Domain.Entities.Skill;
 using Domain.Enum;
 using System;
 using System.Collections.Generic;

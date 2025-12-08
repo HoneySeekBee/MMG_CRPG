@@ -1,6 +1,7 @@
 ﻿
+using Application.Combat;
 using Application.SkillLevels;
-using Domain.Entities;
+using Domain.Entities.Skill;
 using Domain.Enum;
 using System;
 using System.Collections.Generic;
@@ -94,6 +95,7 @@ namespace Application.Skills
 
         public IReadOnlyList<SkillLevelDto> Levels { get; init; } = new List<SkillLevelDto>();
 
+        public SkillEffect Effect { get; init; }
         public static SkillWithLevelsDto From(Skill s) => new()
         {
             SkillId = s.SkillId,
@@ -107,7 +109,8 @@ namespace Application.Skills
             AoeShape = s.AoeShape,
             Tag = s.Tag ?? Array.Empty<string>(),
             BaseInfo = s.BaseInfo,
-            Levels = s.Levels.Select(SkillLevelDto.From).ToList()
+            Levels = s.Levels.Select(SkillLevelDto.From).ToList(),
+            Effect = SkillEffectParser.Parse(s)
         };
     }
 }

@@ -3,6 +3,7 @@ using Domain.Entities.Characters;
 using Domain.Entities.Contents;
 using Domain.Entities.Gacha;
 using Domain.Entities.Monsters;
+using Domain.Entities.Skill;
 using Domain.Entities.User;
 using Infrastructure.Persistence.Configurations.Characters;
 using Infrastructure.Persistence.Configurations.Contents;

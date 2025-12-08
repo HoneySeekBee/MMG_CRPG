@@ -1,4 +1,5 @@
-﻿using Application.SkillLevels;
+﻿using Application.Combat;
+using Application.SkillLevels;
 using Application.Skills;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +29,7 @@ namespace Infrastructure.Caching
             var list = await db.Skills
                 .AsNoTracking()
                 .OrderBy(s => s.SkillId)
+                .Include(s => s.Levels)
                 .Select(s => new SkillWithLevelsDto
                 {
                     SkillId = s.SkillId,
@@ -58,7 +60,9 @@ namespace Infrastructure.Caching
                             ParentType = s.Type,
                             IsPassive = !s.IsActive, // 규칙에 맞게 조정
                         })
-                        .ToList()
+                        .ToList(),
+
+                    Effect = SkillEffectParser.Parse(s)
                 })
                 // 레벨 수가 많다면 SplitQuery가 도움이 될 수 있음 (상황에 따라)
                 //.AsSplitQuery()

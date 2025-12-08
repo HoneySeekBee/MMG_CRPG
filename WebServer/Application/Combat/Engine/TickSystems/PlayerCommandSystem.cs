@@ -14,22 +14,33 @@ namespace Application.Combat.Engine.TickSystems
             while (state.PendingCommands.Count > 0)
             {
                 var cmd = state.PendingCommands.Dequeue();
-                var actor = state.Snapshot.Actors[cmd.ActorId];
+
+                if (!state.ActiveActors.TryGetValue(cmd.ActorId, out var actor))
+                    continue;
 
                 if (actor.SkillCooldownMs > 0)
                     continue;
 
-                actor.TargetActorId = cmd.TargetActorId;
+                // 쿨 적용
                 actor.SkillCooldownMs = 3000;
 
+                // 스킬 처리 큐로 보내기
+                state.PendingSkillCasts.Enqueue(new PendingSkillCast
+                {
+                    CasterId = cmd.ActorId,
+                    TargetId = cmd.TargetActorId,
+                    SkillId = cmd.SkillId,
+                    SkillLevel = cmd.SkillLevel,
+                });
+
                 evs.Add(new CombatLogEventDto(
-                    TMs: NowMs(state),
-                    Type: "skill_cast",
-                    Actor: actor.ActorId.ToString(),
-                    Target: cmd.TargetActorId?.ToString(),
-                    Damage: null,
-                    Crit: null,
-                    Extra: new Dictionary<string, object?> { ["skillId"] = cmd.SkillId }
+                    NowMs(state),
+                    "skill_cast",
+                    actor.ActorId.ToString(),
+                    cmd.TargetActorId?.ToString(),
+                    null,
+                    null,
+                    new Dictionary<string, object?> { ["skillId"] = cmd.SkillId }
                 ));
             }
         }

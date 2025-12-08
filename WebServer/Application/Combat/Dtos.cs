@@ -32,7 +32,8 @@ namespace Application.Combat
     public sealed record CombatInitialSnapshotDto(
         IReadOnlyList<ActorInitDto> Actors
     );
-    public sealed record CombatCommandDto(long ActorId, long SkillId, long? TargetActorId);
+    public sealed record CombatCommandDto(long ActorId, int SkillId,
+    int SkillLevel, long? TargetActorId);
 
     public sealed record CombatLogSummaryDto(
         long CombatId, int TotalEvents, int DurationMs, int DamageDone, int DamageTaken /* etc */);

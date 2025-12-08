@@ -37,6 +37,7 @@ namespace WebServer.Mappers
             return new Application.Combat.CombatCommandDto(
                 pb.ActorId,
                 pb.SkillId,
+                pb.SkillLevel,
                 pb.TargetActorId.Value
             );
         }

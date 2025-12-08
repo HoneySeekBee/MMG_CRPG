@@ -15,7 +15,7 @@
 		<Protobuf Include="Proto\**\*.proto"
 				  ProtoRoot="Proto"
 				  GrpcServices="None"
-				  CompileOutputs="true"
+				  CompileOutputs="false"
 				  OutputDir="Generated" />
 	</ItemGroup>
 
