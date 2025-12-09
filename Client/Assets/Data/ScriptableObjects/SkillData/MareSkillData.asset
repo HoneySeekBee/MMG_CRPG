@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acb7638b584c9ad4cbcb3e3491526807, type: 3}
+  m_Name: MareSkillData
+  m_EditorClassIdentifier: 
+  fxByBreakthrough:
+  - skillId: 89
+    skillName: "\uC708\uB4DC \uC5D0\uB7EC\uC6B0"
+    skillFx: {fileID: 997526328670155853, guid: 5c380f2119c50d64897fca5cf37f7dde, type: 3}
+    castSound: {fileID: 8300000, guid: a3592dfb22a152641a69e9003480f537, type: 3}
+    hitSound: {fileID: 0}
+  - skillId: 90
+    skillName: "\uB354\uBE14 \uC708\uB4DC \uC5D0\uB85C\uC6B0"
+    skillFx: {fileID: 997526328670155853, guid: f6b08407943c426488136773388b69e5, type: 3}
+    castSound: {fileID: 8300000, guid: a3592dfb22a152641a69e9003480f537, type: 3}
+    hitSound: {fileID: 0}
+  - skillId: 91
+    skillName: "\uD2B8\uB9AC\uD50C \uC708\uB4DC \uC5D0\uB85C\uC6B0"
+    skillFx: {fileID: 997526328670155853, guid: 6468ad91aed5aa446b008e053142fcf4, type: 3}
+    castSound: {fileID: 8300000, guid: a3592dfb22a152641a69e9003480f537, type: 3}
+    hitSound: {fileID: 0}
+  normalAttackFx:
+    skillId: 0
+    skillName: 
+    skillFx: {fileID: 997526328670155853, guid: 2b083f4f80a5b9d4d9796c731d3a99f8, type: 3}
+    castSound: {fileID: 8300000, guid: ddd091d9ef641b9498a7fa03d510954f, type: 3}
+    hitSound: {fileID: 0}
+  criticalAttackFx:
+    skillId: 0
+    skillName: 
+    skillFx: {fileID: 997526328670155853, guid: 2b083f4f80a5b9d4d9796c731d3a99f8, type: 3}
+    castSound: {fileID: 8300000, guid: ddd091d9ef641b9498a7fa03d510954f, type: 3}
+    hitSound: {fileID: 0}
+  weaponTrailFx:
+    skillId: 0
+    skillName: 
+    skillFx: {fileID: 0}
+    castSound: {fileID: 0}
+    hitSound: {fileID: 0}

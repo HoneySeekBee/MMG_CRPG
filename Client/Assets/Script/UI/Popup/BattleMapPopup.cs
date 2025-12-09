@@ -1,5 +1,7 @@
+using Cache;
 using Combat;
 using Contracts.Protos;
+using Game.Data;
 using Game.Managers;
 using Lobby;
 using System;
@@ -8,6 +10,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using WebServer.Protos;
 
 public class BattleMapPopup : UIPopup
 {
@@ -17,7 +20,10 @@ public class BattleMapPopup : UIPopup
     [SerializeField] private Button SpeedBtn;
     [SerializeField] private Button AutoBtn;
     [SerializeField] private TMP_Text TimeText;
+
     [SerializeField] private Transform SkillIconTr;
+    [SerializeField] private SkillButton SkillPrefab;
+    private readonly List<SkillButton> SkillButtons = new();
 
     [SerializeField] private GameObject StartPopup;
 
@@ -41,6 +47,31 @@ public class BattleMapPopup : UIPopup
         FinishPopup.GetComponent<Button>().onClick.AddListener(GoToStage);
         StartCoroutine(BattleMapManager.Instance.Set_BattleMap(fadeIn));
         StartPopup.SetActive(false);
+        Init_SKillBtn();
+    }
+    private void Init_SKillBtn()
+    {
+        // 1) 기존 버튼 모두 비활성화 (풀링 방식)
+        foreach (var btn in SkillButtons)
+            btn.gameObject.SetActive(false); 
+    }
+    public void CreateSkillButton(int characterMasterId, long actorId, int level)
+    {
+        SkillButton btn = SkillButtons.Find(b => !b.gameObject.activeSelf);
+
+        if (btn == null)
+        {
+            btn = Instantiate(SkillPrefab, SkillIconTr);
+            SkillButtons.Add(btn);
+        }
+
+        btn.gameObject.SetActive(true);
+
+        // 캐릭터가 가진 스킬 찾기 (여기서는 1번 스킬만 사용한다고 했으니 아래와 같이)
+        var skillId = CharacterCache.Instance.DetailById[characterMasterId].Skills[0].SkillId;
+        var skillData = SkillCache.Instance.SkillDict[skillId];
+
+        btn.Set(skillData, level, actorId);
     }
 
     public IEnumerator ShowStart()

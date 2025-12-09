@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Contracts.Protos;
 using Client.Systems;
+using Cache;
 
 namespace Game.Scenes.Init
 {

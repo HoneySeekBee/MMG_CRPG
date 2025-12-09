@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acb7638b584c9ad4cbcb3e3491526807, type: 3}
+  m_Name: HajinSkillData
+  m_EditorClassIdentifier: 
+  fxByBreakthrough:
+  - skillId: 49
+    skillName: "\uC2AC\uB798\uC26C"
+    skillFx: {fileID: 1296931278590972169, guid: 16ddd1957c6a7d2479ddeccf33db5653, type: 3}
+    castSound: {fileID: 0}
+    hitSound: {fileID: 8300000, guid: 5552d110c7ec4f146a7882bb99969c8e, type: 3}
+  - skillId: 50
+    skillName: "\uC0E4\uD504 \uC2AC\uB798\uC26C"
+    skillFx: {fileID: 1296931278590972169, guid: cd635282cbfb44b4b8ba43da280edf63, type: 3}
+    castSound: {fileID: 0}
+    hitSound: {fileID: 8300000, guid: 5552d110c7ec4f146a7882bb99969c8e, type: 3}
+  - skillId: 51
+    skillName: "\uB354\uBE14 \uC0E4\uD504 \uC2AC\uB798\uC26C"
+    skillFx: {fileID: 1296931278590972169, guid: ff488a3ba11b28d4fadea6a0ff5ba8d7, type: 3}
+    castSound: {fileID: 0}
+    hitSound: {fileID: 8300000, guid: 5552d110c7ec4f146a7882bb99969c8e, type: 3}
+  normalAttackFx:
+    skillId: 0
+    skillName: 
+    skillFx: {fileID: 0}
+    castSound: {fileID: 0}
+    hitSound: {fileID: 0}
+  criticalAttackFx:
+    skillId: 0
+    skillName: 
+    skillFx: {fileID: 0}
+    castSound: {fileID: 0}
+    hitSound: {fileID: 0}
+  weaponTrailFx:
+    skillId: 0
+    skillName: 
+    skillFx: {fileID: 0}
+    castSound: {fileID: 0}
+    hitSound: {fileID: 0}

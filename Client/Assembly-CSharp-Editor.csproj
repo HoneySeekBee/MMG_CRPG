@@ -61,64 +61,65 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\SlotValidation\SlotToggledRule.cs" />
-    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\LayerMaskUtility.cs" />
-    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Character\CustomizableCharacter.cs" />
-    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Character\Slot.cs" />
-    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\SlotGroupEntry.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\SlotEntry.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Randomizer\Steps\Impl\FacesStep.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Randomizer\Steps\Impl\PantsStep.cs" />
+    <Compile Include="Assets\ExternalAsset\VFX\Hovl Studio\HSFiles\Scripts\Editor\ShaderChanger.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Randomizer\Steps\Impl\HatStep.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Editor\ObstaclePathEditor.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\SlotSorter.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Randomizer\Steps\Impl\BodyStep.cs" />
-    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Randomizer\RandomCharacterGenerator.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Randomizer\Steps\Impl\CostumeStep.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\FullBodyEntry.cs" />
-    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\SlotValidation\FullBodyToggledRule.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\FaceEditor\FacePickerEditor.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Randomizer\StepResult.cs" />
-    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Randomizer\Steps\Impl\ShortsStep.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Character\SlotGroup.cs" />
-    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Randomizer\Steps\IRandomizerStep.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Randomizer\Steps\Impl\FaceAccessoriesStep.cs" />
-    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Randomizer\Steps\Impl\GlassesStep.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Randomizer\Steps\Impl\EarsStep.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Character\SlotVariant.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Character\FullBodySlot.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Randomizer\Steps\Impl\HairstyleStep.cs" />
-    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\SlotValidation\SlotValidator.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Randomizer\Steps\Impl\HatSingleStep.cs" />
+    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Character\PreviewCreator.cs" />
+    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\CharacterCustomizationWindow.cs" />
+    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\MaterialManagement\MaterialProvider.cs" />
+    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\AssetLoader.cs" />
+    <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Editor\JumpObstacleEditor.cs" />
+    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Randomizer\Steps\Impl\GlovesStep.cs" />
+    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Randomizer\Steps\Impl\SocksStep.cs" />
+    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\SlotValidation\ISlotValidationRules.cs" />
+    <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Editor\ObstacleCreateManagerEditor.cs" />
+    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Character\SlotLibraryLoader.cs" />
+    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Character\BaseMeshAccessor.cs" />
+    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\MaterialManagement\MaterialOnDemand.cs" />
+    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Character\SlotBase.cs" />
+    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\LayerMaskUtility.cs" />
+    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Character\CustomizableCharacter.cs" />
+    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Character\Slot.cs" />
+    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\SlotGroupEntry.cs" />
+    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Randomizer\RandomCharacterGenerator.cs" />
+    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\SlotValidation\FullBodyToggledRule.cs" />
+    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Randomizer\Steps\Impl\ShortsStep.cs" />
+    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Randomizer\Steps\IRandomizerStep.cs" />
+    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Randomizer\Steps\Impl\GlassesStep.cs" />
+    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\SlotValidation\SlotValidator.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\SlotType.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\FaceEditor\FaceLoader.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Randomizer\Steps\Impl\StepBase.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\AssetsPath.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Randomizer\Steps\Impl\ShoesStep.cs" />
-    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Character\PreviewCreator.cs" />
-    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\CharacterCustomizationWindow.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\GroupType.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\SlotLibrary.cs" />
-    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\MaterialManagement\MaterialProvider.cs" />
-    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\AssetLoader.cs" />
-    <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Editor\JumpObstacleEditor.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Randomizer\Steps\Impl\HairWithHatsStep.cs" />
-    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Randomizer\Steps\Impl\GlovesStep.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Character\FullBodyVariant.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\MaterialManagement\MaterialPaths.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\SavedSlot.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Randomizer\Steps\Impl\SlotStepBase.cs" />
-    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Randomizer\Steps\Impl\SocksStep.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\SlotName.cs" />
-    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\SlotValidation\ISlotValidationRules.cs" />
-    <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Editor\ObstacleCreateManagerEditor.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\PartsEditor.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Randomizer\Steps\Impl\OutfitStep.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Randomizer\Steps\Impl\HatsWithHairStep.cs" />
-    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Character\SlotLibraryLoader.cs" />
-    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Character\BaseMeshAccessor.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Randomizer\Steps\Impl\OutwearStep.cs" />
-    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\MaterialManagement\MaterialOnDemand.cs" />
-    <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Editor\Character\SlotBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -1061,10 +1062,6 @@
       <HintPath>Library\ScriptAssemblies\Unity.Recorder.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.EditorCoroutines.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.EditorCoroutines.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.RenderPipelines.Core.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.Runtime.dll</HintPath>
       <Private>False</Private>
@@ -1089,16 +1086,88 @@
       <HintPath>Library\ScriptAssemblies\Unity.ResourceManager.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.Timeline.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Timeline.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.ScriptableBuildPipeline">
       <HintPath>Library\ScriptAssemblies\Unity.ScriptableBuildPipeline.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Unity.Rider.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.2D.Sprite.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Core.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.Flow">
+      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Flow.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.TestTools.CodeCoverage.Editor.OpenCover.Mono.Reflection">
+      <HintPath>Library\ScriptAssemblies\Unity.TestTools.CodeCoverage.Editor.OpenCover.Mono.Reflection.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Performance.Profile-Analyzer.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Performance.Profile-Analyzer.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.PlasticSCM.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.PlasticSCM.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.TestTools.CodeCoverage.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.TestTools.CodeCoverage.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.FilmInternalUtilities.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.FilmInternalUtilities.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Toonshader.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Toonshader.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Recorder">
+      <HintPath>Library\ScriptAssemblies\Unity.Recorder.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.AI.Navigation.Editor.ConversionSystem">
+      <HintPath>Library\ScriptAssemblies\Unity.AI.Navigation.Editor.ConversionSystem.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.VSCode.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.VSCode.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.EditorCoroutines.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.EditorCoroutines.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Timeline.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Timeline.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.VisualScripting.Shared.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Shared.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.ShaderGraph.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.ShaderGraph.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.VisualStudio.Editor">
@@ -1121,24 +1190,8 @@
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Core.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.Rider.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.2D.Sprite.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.RenderPipelines.Core.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.Flow">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Flow.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.VisualScripting.Flow.Editor">
@@ -1149,24 +1202,12 @@
       <HintPath>Library\ScriptAssemblies\Unity.Timeline.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.TestTools.CodeCoverage.Editor.OpenCover.Mono.Reflection">
-      <HintPath>Library\ScriptAssemblies\Unity.TestTools.CodeCoverage.Editor.OpenCover.Mono.Reflection.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.Addressables">
-      <HintPath>Library\ScriptAssemblies\Unity.Addressables.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.VisualScripting.SettingsProvider.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.SettingsProvider.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.Performance.Profile-Analyzer.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Performance.Profile-Analyzer.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
-      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
+    <Reference Include="Unity.Addressables.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Addressables.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.FilmInternalUtilities">
@@ -1177,16 +1218,8 @@
       <HintPath>Library\ScriptAssemblies\Unity.TestTools.CodeCoverage.Editor.OpenCover.Model.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.PlasticSCM.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.PlasticSCM.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.AI.Navigation.Updater">
       <HintPath>Library\ScriptAssemblies\Unity.AI.Navigation.Updater.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.TestTools.CodeCoverage.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.TestTools.CodeCoverage.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Postprocessing.Editor">
@@ -1197,28 +1230,12 @@
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.State.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.FilmInternalUtilities.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.FilmInternalUtilities.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.Toonshader.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Toonshader.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.Addressables.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Addressables.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro">
-      <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.Recorder">
-      <HintPath>Library\ScriptAssemblies\Unity.Recorder.dll</HintPath>
+    <Reference Include="Unity.Searcher.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Searcher.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.AI.Navigation.Editor">
@@ -1229,10 +1246,6 @@
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.State.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.AI.Navigation.Editor.ConversionSystem">
-      <HintPath>Library\ScriptAssemblies\Unity.AI.Navigation.Editor.ConversionSystem.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Cinemachine">
       <HintPath>Library\ScriptAssemblies\Cinemachine.dll</HintPath>
       <Private>False</Private>
@@ -1241,8 +1254,8 @@
       <HintPath>Library\ScriptAssemblies\Unity.ScriptableBuildPipeline.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.VSCode.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VSCode.Editor.dll</HintPath>
+    <Reference Include="Unity.Addressables">
+      <HintPath>Library\ScriptAssemblies\Unity.Addressables.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
@@ -1255,13 +1268,13 @@
       <Project>{12F44184-A422-5F27-22E6-507969043F15}</Project>
       <Name>Assembly-CSharp</Name>
     </ProjectReference>
-    <ProjectReference Include="CFXRRuntime.csproj">
-      <Project>{84EDE0D0-8E7A-7924-F7CE-DF49719BEB3D}</Project>
-      <Name>CFXRRuntime</Name>
-    </ProjectReference>
     <ProjectReference Include="CFXREditor.csproj">
       <Project>{4CAA2C94-4A60-419A-360D-7506C8EEE66F}</Project>
       <Name>CFXREditor</Name>
+    </ProjectReference>
+    <ProjectReference Include="CFXRRuntime.csproj">
+      <Project>{84EDE0D0-8E7A-7924-F7CE-DF49719BEB3D}</Project>
+      <Name>CFXRRuntime</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

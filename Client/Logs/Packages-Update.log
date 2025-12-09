@@ -66,3 +66,35 @@ Update Mode: mergeDefaultDependencies
 
 The following packages were added:
   com.unity.toonshader@0.10.0-preview
+
+=== Tue Dec  9 16:31:49 2025
+
+Packages were changed.
+Update Mode: updateDependencies
+
+The following packages were updated:
+  com.unity.shadergraph from version 14.0.9 to 14.0.11
+
+=== Tue Dec  9 16:31:49 2025
+
+Packages were changed.
+Update Mode: mergeDefaultDependencies
+
+The following packages were added:
+  com.unity.shadergraph@14.0.11
+
+=== Tue Dec  9 16:35:51 2025
+
+Packages were changed.
+Update Mode: updateDependencies
+
+The following packages were updated:
+  com.unity.shadergraph from version 14.0.10 to 14.0.11
+
+=== Tue Dec  9 16:36:45 2025
+
+Packages were changed.
+Update Mode: updateDependencies
+
+The following packages were updated:
+  com.unity.shadergraph from version 14.0.10 to 14.0.11

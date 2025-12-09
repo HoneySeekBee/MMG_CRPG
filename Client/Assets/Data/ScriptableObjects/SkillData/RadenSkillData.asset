@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acb7638b584c9ad4cbcb3e3491526807, type: 3}
+  m_Name: RadenSkillData
+  m_EditorClassIdentifier: 
+  fxByBreakthrough:
+  - skillId: 53
+    skillName: "\uD790"
+    skillFx: {fileID: 6543190847932242556, guid: 296b4a04097b4c74389bbdfed6dc1ebe, type: 3}
+    castSound: {fileID: 8300000, guid: b2829fd2d2d65d34bb7fa8a2ebe05381, type: 3}
+    hitSound: {fileID: 0}
+  - skillId: 54
+    skillName: "\uBA54\uAC00\uD790"
+    skillFx: {fileID: 6543190847932242556, guid: 3092b311196bf254fb6da54012a95be8, type: 3}
+    castSound: {fileID: 8300000, guid: b2829fd2d2d65d34bb7fa8a2ebe05381, type: 3}
+    hitSound: {fileID: 0}
+  - skillId: 55
+    skillName: "\uC18C\uC0DD"
+    skillFx: {fileID: 6543190847932242556, guid: 545757010919f1647a8166469a57dbb6, type: 3}
+    castSound: {fileID: 8300000, guid: 8d3f27d3ef0baac459537f32dff6004a, type: 3}
+    hitSound: {fileID: 0}
+  normalAttackFx:
+    skillId: 0
+    skillName: 
+    skillFx: {fileID: 6711413474410208331, guid: 834b311a0c0efd44e8c5014b8005474b, type: 3}
+    castSound: {fileID: 8300000, guid: 60da86adad1cece47b5ccf2f5cf4ada7, type: 3}
+    hitSound: {fileID: 0}
+  criticalAttackFx:
+    skillId: 0
+    skillName: 
+    skillFx: {fileID: 6711413474410208331, guid: 834b311a0c0efd44e8c5014b8005474b, type: 3}
+    castSound: {fileID: 8300000, guid: 60da86adad1cece47b5ccf2f5cf4ada7, type: 3}
+    hitSound: {fileID: 0}
+  weaponTrailFx:
+    skillId: 0
+    skillName: 
+    skillFx: {fileID: 0}
+    castSound: {fileID: 0}
+    hitSound: {fileID: 0}
