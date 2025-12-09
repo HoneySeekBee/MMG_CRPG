@@ -159,7 +159,7 @@ public class CombatNetwork
             onDone?.Invoke(res);
         });
     }
-    public IEnumerator FinishCombatAsync( long combatId,   Action<ApiResult<FinishCombatResponsePb>> onDone)
+    public IEnumerator FinishCombatAsync(long combatId, Action<ApiResult<FinishCombatResponsePb>> onDone)
     {
         var req = new FinishCombatRequestPb
         {
@@ -177,6 +177,33 @@ public class CombatNetwork
             {
                 Debug.LogError($"[CombatNetwork] FinishCombat 실패: {res.Message}");
                 _popup?.Show($"전투 종료 처리 실패: {res.Message}");
+            }
+
+            onDone?.Invoke(res);
+        });
+    }
+    public IEnumerator UseSkillAsync(long combatId, long actorId, int skillId, long? targetActorId, int skillLevel, Action<ApiResult<Empty>> onDone)
+    {
+        var cmd = new CombatCommandPb
+        {
+            ActorId = actorId,
+            SkillId = skillId,
+            SkillLevel = skillLevel
+        };
+
+        if (targetActorId.HasValue)
+            cmd.TargetActorId = targetActorId.Value;
+
+        string url = ApiRoutes.CombatCommand(combatId);
+        // => /api/pb/combat/{combatId}/command
+
+        Debug.Log($"[CombatNetwork] UseSkillAsync → {url} actor={actorId}, skill={skillId}");
+
+        yield return Http.Post(url, cmd, Empty.Parser, (ApiResult<Empty> res) =>
+        {
+            if (!res.Ok)
+            {
+                Debug.LogError($"[CombatNetwork] UseSkill 실패: {res.Message}");
             }
 
             onDone?.Invoke(res);

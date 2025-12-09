@@ -1,3 +1,4 @@
+using Cache;
 using Contracts.Protos;
 using Game.Auth;
 using Game.Data;

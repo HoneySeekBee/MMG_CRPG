@@ -20,6 +20,7 @@ using Google.Protobuf.WellKnownTypes;
 using System;
 using Game.Managers;
 using Game.Data;
+using Game.Core;
 
 public class BattleMapManager : MonoBehaviour
 {
@@ -27,18 +28,20 @@ public class BattleMapManager : MonoBehaviour
 
     // Network
     private CombatNetwork _combatNetwork;
-    private long _combatId;
-    private int _clientTick;
+    private CombatDirector _combatDirector;
+
+    private long _combatId; 
     private StartCombatResponsePb _combatStart;
 
     // Map / Wave 
-    [SerializeField] private Dictionary<int, BatchSlot> monsterSlotByIndex = new();
-
-    private readonly Dictionary<long, GameObject> _actorObjects = new(); //  ActorId → GameObject
-    private readonly List<long> _enemyActorIds = new();
+    private readonly Dictionary<long, GameObject> _actorObjects = new();
     private readonly Dictionary<long, CombatTeam> _actorTeams = new();
-    private readonly Dictionary<long, int> _actorWaveIndex = new();
     private readonly Dictionary<long, ActorLastState> _lastStates = new();
+    private readonly Dictionary<long, Vector3> _playerSpawnPos = new();
+
+    [SerializeField] private Dictionary<int, BatchSlot> monsterSlotByIndex = new();
+    private readonly List<long> _enemyActorIds = new();
+    private readonly Dictionary<long, int> _actorWaveIndex = new();
     private class ActorLastState
     {
         public Vector3 Pos;
@@ -51,7 +54,6 @@ public class BattleMapManager : MonoBehaviour
     private StagePb stageData;
 
     // 맵이동 
-    private readonly Dictionary<long, Vector3> _playerSpawnPos = new(); 
     private bool _waitingReturnBeforeMapMove = false;
     private bool _isMapMoving = false;
     private int _waveIndexForMove = -1;
@@ -59,12 +61,12 @@ public class BattleMapManager : MonoBehaviour
     private bool _endReturnDone = false;
     private bool _stageCleared = false;
 
-
+    private int _clientTick = 0;
+    private bool _battleEnded = false;
 
     [Header("몬스터 관련")]
     [SerializeField] private PartySlot[] monsterSlots;
     private string _logCursor = "";
-    private bool _battleEnded = false;
 
 
     private void Awake()
@@ -121,11 +123,136 @@ public class BattleMapManager : MonoBehaviour
         // [4] UI 연계
         PartyMemeber();
 
-        // [5] 전투 로직/틱 루프 시작 (서버와 동기화)
-        StartCoroutine(TickLoop());    // 서버 스냅샷/이벤트 처리
+        SetupCombatDirector(); // CombatDirect 초기화
+
+        // [5] 전투 로직/틱 루프 시작 (서버와 동기화) 
+        StartCoroutine(TickLoop_CombatDirector()); // CombatDirector 기반 틱 시작 
         StartCoroutine(BattleFlow());  // 연출/카메라/UI 흐름
 
         action?.Invoke();
+    }
+    private void SetupCombatDirector()
+    {
+        _combatDirector = new CombatDirector(_combatNetwork);
+        _combatDirector.Init(_combatId);
+
+        // Snapshot 적용
+        _combatDirector.OnTickApplied += ApplyTickSnapshot;
+
+        // CombatLog Event 처리
+        _combatDirector.OnCombatEvent += HandleCombatEvent;
+
+        // 전투 종료 콜백
+        _combatDirector.OnBattleEnd += () =>
+        {
+            _battleEnded = true;
+            _stageCleared = true;
+        };
+    }
+    private IEnumerator TickLoop_CombatDirector()
+    {
+        Debug.Log("[BattleMap] TickLoop_CombatDirector 시작");
+
+        while (!_battleEnded)
+        {
+            // 맵 이동 중이면 틱 안돌림
+            if (!_combatTickEnabled || _isMapMoving)
+            {
+                yield return null;
+                continue;
+            }
+
+            // CombatDirector가 Tick 처리
+            yield return _combatDirector.Tick();
+
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        Debug.Log("[BattleMap] TickLoop_CombatDirector 종료");
+    }
+    private void HandleCombatEvent(CombatLogEventPb ev)
+    {
+        switch (ev.Type)
+        {
+            case "spawn":
+                HandleSpawnEvent(ev);
+                break;
+
+            case "skill_cast":
+                HandleSkillCastEvent(ev);
+                break;
+
+            case "hit":
+                HandleHitEvent(ev); // 기존 TickLoop에 있던 hit 로직 그대로 유지 가능
+                break;
+
+            case "wave_cleared":
+                HandleWaveClearEvent(ev);
+                break; 
+        }
+    }
+    private void HandleSkillCastEvent(CombatLogEventPb ev)
+    {
+        if (!long.TryParse(ev.Actor, out long casterId))
+            return;
+
+        if (!_actorObjects.TryGetValue(casterId, out var go))
+            return;
+
+        var view = go.GetComponent<CombatActorView>();
+        if (view == null)
+            return;
+
+        int skillId = -1;
+        if (ev.Extra != null && ev.Extra.Fields.TryGetValue("skillId", out var v))
+        {
+            if (v.KindCase == Google.Protobuf.WellKnownTypes.Value.KindOneofCase.NumberValue)
+                skillId = (int)v.NumberValue;
+            else if (v.KindCase == Google.Protobuf.WellKnownTypes.Value.KindOneofCase.StringValue)
+                int.TryParse(v.StringValue, out skillId);
+        }
+
+        Debug.Log($"[BattleMap] SkillCast → caster={casterId}, skillId={skillId}");
+
+        // 공격 애니메이션 실행
+        view.PlayAttack(false);
+
+        // 나중에: 스킬 FX / 사운드 / 카메라 흔들림 추가 가능
+    }
+    private void HandleHitEvent(CombatLogEventPb ev)
+    {
+        if (!long.TryParse(ev.Target, out var targetId))
+            return;
+
+        if (!_actorObjects.TryGetValue(targetId, out var go))
+            return;
+
+        var view = go.GetComponent<CombatActorView>();
+
+        bool isCrit = ev.Crit ?? false;
+        int dmg = ev.Damage?? 0;
+
+        Debug.Log($"[BattleMap] Hit → target={targetId}, dmg={dmg}, crit={isCrit}");
+
+        view.PlayHitFx(isCrit);
+
+        // 나중에 데미지 텍스트 붙이면 됨
+    }
+    private void HandleWaveClearEvent(CombatLogEventPb ev)
+    {
+        int wave = -1;
+
+        if (ev.Extra != null && ev.Extra.Fields.TryGetValue("wave", out var v))
+        {
+            if (v.KindCase == Value.KindOneofCase.StringValue)
+                int.TryParse(v.StringValue, out wave);
+            else if (v.KindCase == Value.KindOneofCase.NumberValue)
+                wave = (int)v.NumberValue;
+        }
+
+        _waitingReturnBeforeMapMove = true;
+        _waveIndexForMove = wave;
+        Debug.Log($"[BattleMap] wave_cleared 수신 wave={wave}");
     }
     private void Set_MonsterSlot()
     {
@@ -177,25 +304,60 @@ public class BattleMapManager : MonoBehaviour
     #region Battle Flow
     private IEnumerator BattleFlow()
     {
-        BattleMapPopup popup = BattleMapPopup.Instance;
+        var popup = BattleMapPopup.Instance;
 
-        // [1] 게임 시작 연출
+        // [1] 전투 시작 연출
         yield return popup.StartCoroutine(popup.ShowStart());
 
         Debug.Log("유저 캐릭터들 등장 애니메이션");
-
-        _isMapMoving = true;
-        yield return Move_Map();
-        _isMapMoving =false; 
-        _combatTickEnabled = true;
-
-        while (!_battleEnded || !_endReturnDone)
+        if (stageData.Batches.Count > 1)
         {
+            _isMapMoving = true;
+            yield return Move_Map();
+            _isMapMoving = false;
+        }
+        _combatTickEnabled = true;
+         
+        while (!_battleEnded)
+        {
+            // 서버에서 wave_cleared 이벤트가 왔는지 체크
+            if (_waitingReturnBeforeMapMove)
+            {
+                _waitingReturnBeforeMapMove = false;
+
+                Debug.Log($"[BattleFlow] 웨이브 {_waveIndexForMove} 클리어 감지 → 플레이어 복귀 시작");
+
+                // [1] 현재 웨이브 종료 → 플레이어 스폰지점으로 복귀
+                yield return StartCoroutine(ReturnPlayersToSpawn());
+
+                // 마지막 웨이브인지 확인
+                bool isLastWave = IsLastWave(_waveIndexForMove);
+                if (!isLastWave)
+                {
+                    // [2] 다음 웨이브를 위한 맵 이동
+                    Debug.Log("[BattleFlow] 다음 웨이브로 맵 이동");
+                    _isMapMoving = true;
+                    yield return Move_Map();
+                    _isMapMoving = false;
+                }
+                else
+                {
+                    // [3] 마지막 웨이브 → 최종 복귀
+                    Debug.Log("[BattleFlow] 마지막 웨이브 종료 → End 복귀 시작");
+                    yield return StartCoroutine(ReturnPlayersToSpawnEnd());
+
+                    // 복귀 완료 → 전투 종료로 이동
+                    break;
+                }
+            }
+
+            // 매프레임 감시
             yield return null;
         }
 
-        Debug.Log("[BattleMap] BattleFlow 종료 (전투 끝)");
-        // [3] 서버에 FinishCombat 요청
+        Debug.Log("[BattleFlow] BattleFlow 종료 감지 → FinishCombat 요청");
+         
+        // [3] 서버에 FinishCombat 요청  
         FinishCombatResponsePb result = null;
         bool done = false;
 
@@ -221,9 +383,9 @@ public class BattleMapManager : MonoBehaviour
         }
 
         ApplyStageClearToClientProgress(result);
-        // [4] 보상 팝업 표시
+
         popup.ShowResult(result);
-         
+
         Debug.Log("[BattleMap] BattleFlow 전체 종료");
     }
     private void ApplyStageClearToClientProgress(FinishCombatResponsePb res)
@@ -235,126 +397,7 @@ public class BattleMapManager : MonoBehaviour
             stageId: res.StageId,
             stars: res.Stars
         );
-    }
-    private IEnumerator TickLoop()
-    {
-        Debug.Log("[BattleMap] TickLoop 시작");
-
-        while (!_battleEnded)
-        {
-            // 1) 아직 전투를 시작하지 말아야 하는 상태면 대기
-            if (!_combatTickEnabled || _isMapMoving)
-            {
-                yield return null;
-                continue;
-            }
-
-            yield return _combatNetwork.TickAsync(
-                _combatId,
-                _clientTick,
-                res =>
-                {
-                    if (!res.Ok)
-                    {
-                        Debug.Log("[TickLoop Error] " + res.Message);
-                        return;
-                    }
-
-                    var snapshot = res.Data.Snapshot;
-                    var events = res.Data.Events;
-
-                    // 스냅샷 적용 (위치/HP/사망 등)
-                    ApplyTickSnapshot(snapshot, events);
-
-                    // 패배 판정: 플레이어가 전멸하면 전투 종료
-                    bool anyPlayerAlive = snapshot.Actors != null &&
-                                          snapshot.Actors.Any(a =>
-                                              _actorTeams.TryGetValue(a.ActorId, out var team) &&
-                                              team == CombatTeam.Player &&
-                                              !a.Dead);
-
-                    if (!anyPlayerAlive)
-                    {
-                        _battleEnded = true;
-                        _endReturnDone = true;
-                        Debug.Log("[BattleMap] 전투 종료: lose");
-                        _clientTick++;
-                        return;
-                    }
-
-                    // 서버 CombatLog 이벤트 처리
-                    foreach (var ev in events)
-                    {
-                        switch (ev.Type)
-                        {
-                            case "wave_cleared":
-                                {
-                                    int evWaveIndex = -1;
-
-                                    if (ev.Extra != null && ev.Extra.Fields.TryGetValue("wave", out var v))
-                                    {
-                                        if (v.KindCase == Value.KindOneofCase.StringValue)
-                                            int.TryParse(v.StringValue, out evWaveIndex);
-                                        else if (v.KindCase == Value.KindOneofCase.NumberValue)
-                                            evWaveIndex = (int)v.NumberValue;
-                                    }
-
-                                    Debug.Log($"[BattleMap] wave_cleared 이벤트 수신. wave={evWaveIndex}"); 
-                                    _waitingReturnBeforeMapMove = true;
-                                    _waveIndexForMove = evWaveIndex;
-
-                                    break;
-                                }
-                            case "stage_cleared":
-                                {
-                                    _battleEnded = true;
-                                    _stageCleared = true;
-                                    Debug.Log("[BattleMap] 스테이지 클리어 (stage_cleared)");
-                                    break;
-                                }
-
-                            case "spawn":
-                                {
-                                    HandleSpawnEvent(ev);
-                                    break;
-                                }
-
-                            case "hit":
-                                {
-                                    // 필요하면 여기서도 이펙트/사운드 처리 추가 가능
-                                    break;
-                                }
-                        }
-                    }
-                    _clientTick++;
-                });
-            if (_waitingReturnBeforeMapMove && !_isMapMoving)
-            {
-                if (AreAllPlayersAtSpawn())
-                {
-                    Debug.Log($"[BattleMap] 플레이어 복귀 완료. 맵 이동 연출 시작 (wave={_waveIndexForMove})");
-                    _waitingReturnBeforeMapMove = false;
-                    _isMapMoving = true;
-
-                    // 맵 이동 끝날 때까지 대기
-                    yield return StartCoroutine(Move_Map());
-
-                    _isMapMoving = false;
-                }
-            }
-            if (_stageCleared)
-            {
-                Debug.Log("[BattleMap] TickLoop: stage cleared, 최종 복귀 연출 시작");
-                yield return StartCoroutine(ReturnPlayersToSpawnEnd());
-
-            }
-
-            // 틱 간 딜레이 (서버 틱 주기와 맞추거나, 연출용으로 조절)
-            yield return new WaitForSeconds(0.1f);
-        }
-
-        Debug.Log("[BattleMap] TickLoop 종료");
-    }
+    } 
     private IEnumerator ReturnPlayersToSpawnEnd()
     {
         if (_endReturnDone)
@@ -387,6 +430,34 @@ public class BattleMapManager : MonoBehaviour
         _stageCleared = false;
         Debug.Log("[BattleMap] ReturnPlayersToSpawnEnd 완료");
     }
+    private IEnumerator ReturnPlayersToSpawn()
+    {
+        var players = GetAlivePlayerActors();
+
+        if (players.Count == 0)
+            yield break;
+
+        float duration = 1.0f;
+
+        foreach (var v in players)
+        {
+            v.PlayMove();
+            Vector3 target = new Vector3(v.SpawnX, 0f, v.SpawnZ);
+            v.transform.DOMove(target, duration);
+        }
+
+        yield return new WaitForSeconds(duration);
+
+        foreach (var v in players)
+            v.PlayIdle();
+
+        Debug.Log("[BattleMap] ReturnPlayersToSpawn 완료");
+    }
+    private bool IsLastWave(int waveIndex)
+    { 
+        return waveIndex >= stageData.Batches.Count - 1;
+    }
+
     private void HandleSpawnEvent(CombatLogEventPb ev)
     {
         Debug.Log($"[SpawnEvent] raw actor={ev.Actor}, target={ev.Target}");
@@ -458,13 +529,7 @@ public class BattleMapManager : MonoBehaviour
             bool didAttackThisTick = eventsThisTick.Any(ev => ev.Type == "hit" && ev.Actor == myId);
             bool gotHitThisTick = eventsThisTick.Any(ev => ev.Type == "hit" && ev.Target == myId);
             bool isCrit = eventsThisTick.Any(ev => ev.Type == "hit" && ev.Target == myId && (ev.Crit ?? false));
-
-            if (didAttackThisTick && !a.Dead)
-                view.PlayAttack(isCrit);
-
-            if (damage > 0 && gotHitThisTick)
-                view.PlayHitFx(isCrit);
-
+              
             // 죽음 처리
             if (!prev.Dead && a.Dead)
                 view.OnDie();
@@ -506,6 +571,11 @@ public class BattleMapManager : MonoBehaviour
             { 
                 _playerSpawnPos[actor.ActorId] = worldPos;
                 actorView.SetSpawnPosition(worldPos);
+
+                // 스킬 아이콘 만들어주기 
+                int characterId = (int)actor.MasterId;
+                int level = GameState.Instance.CurrentUser.UserCharactersDict[characterId].Level;
+                BattleMapPopup.Instance.CreateSkillButton(characterId, actor.ActorId, level);
             }
 
             _actorObjects[actor.ActorId] = go;
@@ -601,5 +671,38 @@ public class BattleMapManager : MonoBehaviour
         }
 
         return result;
+    }
+    public void RequestSkill(long actorId, int skillId)
+    {
+        if (_battleEnded)
+        {
+            Debug.LogWarning("[BattleMap] 전투 종료 후 스킬 사용 불가");
+            return;
+        }
+
+        StartCoroutine(RequestSkillRoutine(actorId, skillId));
+    }
+
+    private IEnumerator RequestSkillRoutine(long actorId, int skillId)
+    {
+        ApiResult<Empty> response = default;
+
+        yield return _combatNetwork.UseSkillAsync(
+            _combatId,
+            actorId,
+            skillId,
+            null,
+            1,
+            res => response = res
+        );
+
+        // OK 여부 체크
+        if (!response.Ok)
+        {
+            Debug.LogError("[BattleMap] 스킬 요청 실패: " + response.Message);
+            yield break;
+        }
+
+        Debug.Log("[BattleMap] 스킬 요청 성공");
     }
 }

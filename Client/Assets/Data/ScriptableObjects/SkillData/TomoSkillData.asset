@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acb7638b584c9ad4cbcb3e3491526807, type: 3}
+  m_Name: TomoSkillData
+  m_EditorClassIdentifier: 
+  fxByBreakthrough:
+  - skillId: 37
+    skillName: "\uD22C\uCC3D"
+    skillFx: {fileID: 1223186538155393123, guid: fcf132203af560b47a9372072a03a1d0, type: 3}
+    castSound: {fileID: 8300000, guid: 93cebddb881d0104e92a2408d0a0ee8c, type: 3}
+    hitSound: {fileID: 8300000, guid: 71dd61c1c0218af43ae448cf1ac76b17, type: 3}
+  - skillId: 38
+    skillName: "\uAC08\uB9DD\uC758 \uCC3D"
+    skillFx: {fileID: 2759120973195926896, guid: 6c8402b1bd7de804e9637aefb331fc9b, type: 3}
+    castSound: {fileID: 8300000, guid: 7ba78a292ac98684a8cbd06b536bca6a, type: 3}
+    hitSound: {fileID: 8300000, guid: 71dd61c1c0218af43ae448cf1ac76b17, type: 3}
+  - skillId: 39
+    skillName: "\uB370\uBAAC \uC2A4\uD53C\uB9BF \uC2A4\uD53C\uC5B4"
+    skillFx: {fileID: 1717827999228881011, guid: bcf4da0ee61183d4db35ca4f07e68d57, type: 3}
+    castSound: {fileID: 8300000, guid: 9611a43549957bb4480ae33c4de18adc, type: 3}
+    hitSound: {fileID: 8300000, guid: 71dd61c1c0218af43ae448cf1ac76b17, type: 3}
+  normalAttackFx:
+    skillId: 0
+    skillName: 
+    skillFx: {fileID: 0}
+    castSound: {fileID: 8300000, guid: 70a6f01b6bdb9fd4f95cb6ab90367199, type: 3}
+    hitSound: {fileID: 0}
+  criticalAttackFx:
+    skillId: 0
+    skillName: 
+    skillFx: {fileID: 0}
+    castSound: {fileID: 8300000, guid: 70a6f01b6bdb9fd4f95cb6ab90367199, type: 3}
+    hitSound: {fileID: 0}
+  weaponTrailFx:
+    skillId: 0
+    skillName: 
+    skillFx: {fileID: 0}
+    castSound: {fileID: 0}
+    hitSound: {fileID: 0}
