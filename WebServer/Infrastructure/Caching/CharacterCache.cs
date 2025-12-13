@@ -20,6 +20,7 @@ namespace Infrastructure.Caching
 
             var list = await db.Characters
                 .AsNoTracking()
+                .AsSplitQuery()
                 .OrderBy(c => c.Id)
                 .Select(c => new CharacterDetailDto( 
                     c.Id,

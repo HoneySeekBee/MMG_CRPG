@@ -67,11 +67,11 @@ namespace Domain.Entities.Skill
         }
 
         public SkillLevel AddOrUpdateLevel(
-            int level,
-            IDictionary<string, object>? values,
-            string? description,
-            IDictionary<string, int>? materials,
-            int costGold)
+      int level,
+      JsonNode? values,
+      string? description,
+      IDictionary<string, int>? materials,
+      int costGold)
         {
             if (level <= 0) throw new ArgumentOutOfRangeException(nameof(level));
             if (costGold < 0) throw new ArgumentOutOfRangeException(nameof(costGold));

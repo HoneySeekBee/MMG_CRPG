@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acb7638b584c9ad4cbcb3e3491526807, type: 3}
   m_Name: LumiSkillData
   m_EditorClassIdentifier: 
+  CharacterId: 19
   fxByBreakthrough:
   - skillId: 77
     skillName: "\uB77C\uC774\uD2B8 \uBCFC"

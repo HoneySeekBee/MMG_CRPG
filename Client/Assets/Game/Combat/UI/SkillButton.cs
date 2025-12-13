@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -46,12 +47,11 @@ public class SkillButton : MonoBehaviour
     {
         if (isCooling)
             return;
-
-        // 스킬 요청
-        BattleMapManager.Instance.RequestSkill(casterActorId, SkillData.SkillId);
-
-        // 쿨타임 시작!
-        StartCooldown(cooldownSeconds);
+        BattleMapManager.Instance.RequestSkill(casterActorId, SkillData.SkillId, ok =>
+        {
+            if (ok)
+                StartCooldown(cooldownSeconds);
+        });
     }
     public void StartCooldown(float coolTime)
     {

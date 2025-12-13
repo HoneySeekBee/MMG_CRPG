@@ -25,7 +25,7 @@ namespace Application.Combat.Engine.TickSystems
 
             int now = NowMs(s);
 
-            // 0) 이미 웨이브 클리어 후, 다음 웨이브 스폰을 기다리는 중이면
+            // 이미 웨이브 클리어 후, 다음 웨이브 스폰을 기다리는 중이면
             if (s.WaitingNextWave)
             {
                 if (!s.NextWaveSpawnMs.HasValue)
@@ -33,8 +33,7 @@ namespace Application.Combat.Engine.TickSystems
                     var players = s.ActiveActors.Values
         .Where(a => a.Team == 0 && !a.Dead && a.Hp > 0)
         .ToList();
-
-                    bool allPlayersAtSpawn = players.All(a => IsAtSpawn(a));
+                    bool allPlayersAtSpawn = players.All(a => a.ArrivedAtSpawn || IsAtSpawn(a));
 
                     if (!allPlayersAtSpawn)
                         return;
@@ -194,6 +193,7 @@ namespace Application.Combat.Engine.TickSystems
                 if (a.Dead || a.Hp <= 0) continue;
 
                 a.ReturningToSpawn = true;
+                a.ArrivedAtSpawn = false;
                 Console.WriteLine($"[WaveSystem] Actor {a.ActorId} set ReturningToSpawn = true (spawn=({a.SpawnX}, {a.SpawnZ}), pos=({a.X}, {a.Z}))");
                 a.TargetActorId = null;
                 a.AttackCooldownMs = 0;

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acb7638b584c9ad4cbcb3e3491526807, type: 3}
   m_Name: AaronSkillData
   m_EditorClassIdentifier: 
+  CharacterId: 15
   fxByBreakthrough:
   - skillId: 66
     skillName: "\uBC29\uD328 \uAF49 \uC950\uAE30"

@@ -77,6 +77,10 @@ public class UserCharactersListUI : UIPopup
             }
 
             var summary = characters[i];
+
+            foreach (var p in MasterDataCache.Instance.PortraitSprites)
+                Debug.Log($"[ÃÊ»óÈ­] {p.Key} : {p.Value.name}");
+
             ui.Set(summary, (data) =>
             {
                 var detailUI = UserCharactersListUI.Instance.UserCharacterDeatailScript;

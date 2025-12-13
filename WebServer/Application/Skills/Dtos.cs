@@ -94,8 +94,7 @@ namespace Application.Skills
         public JsonNode? BaseInfo { get; init; }
 
         public IReadOnlyList<SkillLevelDto> Levels { get; init; } = new List<SkillLevelDto>();
-
-        public SkillEffect Effect { get; init; }
+        public SkillEffect Effect { get; set; } = new();
         public static SkillWithLevelsDto From(Skill s) => new()
         {
             SkillId = s.SkillId,

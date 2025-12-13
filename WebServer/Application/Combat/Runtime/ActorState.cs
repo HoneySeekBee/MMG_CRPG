@@ -20,6 +20,7 @@ namespace Application.Combat.Runtime
         public int HpMax { get; set; }
         public bool Dead { get; set; }
         public bool ReturningToSpawn { get; set; }
+        public bool ArrivedAtSpawn { get; set; }
 
         // Base Stat ( 변하지 않는 스텟 )
         public int AtkBase { get; set; }

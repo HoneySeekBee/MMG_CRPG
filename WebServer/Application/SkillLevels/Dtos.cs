@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace Application.SkillLevels
@@ -12,7 +13,7 @@ namespace Application.SkillLevels
     {
         public int SkillId { get; init; }
         public int Level { get; init; }
-        public IReadOnlyDictionary<string, object>? Values { get; init; }
+        public JsonNode? Values { get; init; }
         public string? Description { get; init; }
         public IReadOnlyDictionary<string, int>? Materials { get; init; }
         public int CostGold { get; init; }

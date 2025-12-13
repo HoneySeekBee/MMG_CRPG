@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acb7638b584c9ad4cbcb3e3491526807, type: 3}
   m_Name: RadenSkillData
   m_EditorClassIdentifier: 
+  CharacterId: 13
   fxByBreakthrough:
   - skillId: 53
     skillName: "\uD790"

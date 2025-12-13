@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acb7638b584c9ad4cbcb3e3491526807, type: 3}
   m_Name: MareSkillData
   m_EditorClassIdentifier: 
+  CharacterId: 16
   fxByBreakthrough:
   - skillId: 89
     skillName: "\uC708\uB4DC \uC5D0\uB7EC\uC6B0"

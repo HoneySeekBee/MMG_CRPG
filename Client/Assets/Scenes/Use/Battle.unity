@@ -659,6 +659,7 @@ MonoBehaviour:
     batchSlot: {fileID: 698205559}
   - slotNum: 9
     batchSlot: {fileID: 698205558}
+  skillFxDb: {fileID: 11400000, guid: b905365f95627d64ba8598cd98494aad, type: 2}
 --- !u!1001 &698205556
 PrefabInstance:
   m_ObjectHideFlags: 0
