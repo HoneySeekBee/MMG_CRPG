@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acb7638b584c9ad4cbcb3e3491526807, type: 3}
   m_Name: SeraphineSkillData
   m_EditorClassIdentifier: 
-  CharacterId: 0
+  CharacterId: 20
   fxByBreakthrough:
   - skillId: 81
     skillName: "\uD654\uC5FC \uBC84\uD504"

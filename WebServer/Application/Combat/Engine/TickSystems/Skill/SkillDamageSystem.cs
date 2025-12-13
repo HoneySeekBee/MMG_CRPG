@@ -13,23 +13,29 @@ namespace Application.Combat.Engine.TickSystems.Skill
         public void Apply(CombatRuntimeState s, ActorState caster, ActorState target,
                   DamageEffect effect, List<CombatLogEventDto> logs, int hitIndex, float extraMultiplier)
         {
+
+            float skillPower =
+                              caster.AtkEff * effect.AtkMultiplier +
+                              caster.HpMax * effect.HpMultiplier +
+                              caster.DefEff * effect.DefMultiplier +
+                              effect.Flat;
+
+            int baseAtk = Math.Max(0, (int)MathF.Round(skillPower));
+
             int dmg = DamageFormula.ComputeWithCrit(
-    caster.AtkEff,
-    target.DefEff,
-    caster.CritRateEff,
-    caster.CritDamageEff,
-    caster.DefPenFlatEff,
-    caster.DefPenPercentEff,
-    target.DamageReducePercent,
-    target.FinalDamageMultiplier,
-    out bool isCrit
-);
+                caster.AtkEff,
+                target.DefEff,
+                caster.CritRateEff,
+                caster.CritDamageEff,
+                caster.DefPenFlatEff,
+                caster.DefPenPercentEff,
+                target.DamageReducePercent,
+                target.FinalDamageMultiplier,
+                out bool isCrit
+            );
 
-            // HP 비례 계수 적용
-            if (effect.HpRatioFactor.HasValue)
-                dmg += (int)(caster.HpMax * effect.HpRatioFactor.Value);
+            dmg *= Math.Max(1, effect.Hits);
 
-            // delayedHit 등의 추가 배수 적용
             dmg = (int)(dmg * extraMultiplier);
             int rawDamage = dmg;
             // 실드가 존재하면 실드 먼저 감소

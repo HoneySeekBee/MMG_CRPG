@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acb7638b584c9ad4cbcb3e3491526807, type: 3}
   m_Name: RiaSkillData
   m_EditorClassIdentifier: 
+  CharacterId: 10
   fxByBreakthrough:
   - skillId: 41
     skillName: "\uAC15\uD0C0"

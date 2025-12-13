@@ -28,8 +28,11 @@ public class UserCharacterUI : MonoBehaviour
         MasterDataCache MasterData = MasterDataCache.Instance;
         // FactionBG는 아이콘이 아니라 그냥 색상만 참조하면 된다. 
 
-        if (ThisCharacter.PortraitId == 0)
+        if (ThisCharacter.PortraitId == null || ThisCharacter.PortraitId == 0 || MasterData.PortraitSprites.ContainsKey(ThisCharacter.PortraitId??0) == false)
+        {
             PortraitsImage.sprite = null;
+            Debug.LogWarning($"[Warning] 캐릭터 초상화 Id 찾기 실패 {ThisCharacter.PortraitId}");
+        }
         else
             PortraitsImage.sprite = MasterData.PortraitSprites[ThisCharacter.PortraitId ?? 0];
 

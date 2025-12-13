@@ -16,17 +16,19 @@ public class GachaShopPopup : UIPopup
     [SerializeField] private ObjectPool pool;
     [SerializeField] private Image BannerBG;
 
-    [Header("Banner")] 
+    [Header("Banner")]
     [SerializeField] private RectTransform BannerParentRect;
     [SerializeField] private ToggleGroup BannerGroup;
     private readonly List<GachaBannerUI> activeBanners = new();
 
-    [Header("Curreny")] 
+    [Header("Curreny")]
     [SerializeField] private CurrencyUI CurrencyUI;
 
     [Header("Buy")]
-    [SerializeField] private Button Gacha_One; 
+    [SerializeField] private Button Gacha_One;
     [SerializeField] private Button Gacha_Ten;
+
+    [SerializeField] private Button Home_Btn;
 
     private void OnDisable()
     {
@@ -39,6 +41,12 @@ public class GachaShopPopup : UIPopup
         Set_Banner(gachaCatalog);
         Set_Currency();
         StartCoroutine(LoadGachaScnee(fadeIn));
+        Home_Btn.onClick.RemoveAllListeners();
+        Home_Btn.onClick.AddListener(() =>
+        {
+            GachaAnimationManager.Instance.DisableGacha();
+            LobbyRootController.Instance.Show("Main");
+        });
     }
     private void ReturnAllBanners()
     {
@@ -46,7 +54,7 @@ public class GachaShopPopup : UIPopup
         {
             if (banner != null)
             {
-                banner.transform.SetParent(null, false);  
+                banner.transform.SetParent(null, false);
                 pool.Return(banner.gameObject);
             }
         }
@@ -86,7 +94,7 @@ public class GachaShopPopup : UIPopup
     }
     private void Set_Currency()
     {
-        var profile = GameState.Instance.CurrentUser.UserProfilePb; 
+        var profile = GameState.Instance.CurrentUser.UserProfilePb;
         CurrencyUI?.Set(profile);
     }
 
@@ -132,5 +140,5 @@ public class GachaShopPopup : UIPopup
         });
         Gacha_Ten.onClick.AddListener(() => Console.WriteLine($"»Ì±â 10È¸ : {data.Title}"));
     }
-  
+
 }

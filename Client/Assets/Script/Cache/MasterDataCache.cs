@@ -8,6 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using UnityEngine; 
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -64,14 +65,16 @@ public class MasterDataCache : MonoBehaviour
                      $"Faction={data.Factions.Count}");
        });
 
-        
-        yield return StartCoroutine(CoLoadIcons(http, popup));
-        yield return StartCoroutine(CoLoadPortraits(http, popup));
-          
+        bool isLoadIcon = false, isLoadPortraits = false;
 
+        StartCoroutine(CoLoadIcons(http, popup, () => isLoadIcon = true));
+        StartCoroutine(CoLoadPortraits (http, popup, () => isLoadPortraits = true));
+
+        while (isLoadIcon == false || isLoadPortraits == false)
+            yield return null; 
     }
     #region Icon / Portrait
-    public IEnumerator CoLoadIcons(ProtoHttpClient http, Popup popup)
+    public IEnumerator CoLoadIcons(ProtoHttpClient http, Popup popup, System.Action onDone)
     {
         yield return http.Get(ApiRoutes.Icons, ListIconsResponse.Parser, (ApiResult<ListIconsResponse> res) =>
         {
@@ -81,10 +84,10 @@ public class MasterDataCache : MonoBehaviour
                 return;
             }
 
-            StartCoroutine(CoDownloadIcons(res.Data.Icons));
+            StartCoroutine(CoDownloadIcons(res.Data.Icons, onDone));
         });
     }
-    private IEnumerator CoDownloadIcons(IEnumerable<IconMessage> list)
+    private IEnumerator CoDownloadIcons(IEnumerable<IconMessage> list, System.Action onDone)
     {
         foreach (var item in list)
         {
@@ -100,24 +103,27 @@ public class MasterDataCache : MonoBehaviour
             var tex = DownloadHandlerTexture.GetContent(req);
             var sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
             IconSprites[item.IconId] = sprite;
-        } 
+        }
+        onDone.Invoke();
     }
 
-    public IEnumerator CoLoadPortraits(ProtoHttpClient http, Popup popup)
+    public IEnumerator CoLoadPortraits(ProtoHttpClient http, Popup popup, System.Action onDone)
     {
+        Debug.Log("초상화 로드 시작");
         yield return http.Get(ApiRoutes.Portraits, ListPortraitsResponse.Parser, (ApiResult<ListPortraitsResponse> res) =>
         {
             if (!res.Ok)
             {
+                Debug.Log($"초상화 로드 실패 {res.Message}");
                 popup?.Show($"초상화 불러오기 실패: {res.Message}");
                 return;
             }
 
-            StartCoroutine(CoDownloadPortraits(res.Data.Portraits));
+            StartCoroutine(CoDownloadPortraits(res.Data.Portraits, onDone));
         });
     }
-    private IEnumerator CoDownloadPortraits(IEnumerable<PortraitMessage> list)
-    {
+    private IEnumerator CoDownloadPortraits(IEnumerable<PortraitMessage> list, System.Action onDone)
+    { 
         foreach (var item in list)
         {
             using var req = UnityWebRequestTexture.GetTexture(item.Url);
@@ -132,7 +138,9 @@ public class MasterDataCache : MonoBehaviour
             var tex = DownloadHandlerTexture.GetContent(req);
             var sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
             PortraitSprites[item.PortraitId] = sprite;
-        } 
+            Debug.Log($"초상화 {item.PortraitId} || {sprite.name}");
+        }
+        onDone.Invoke(); 
     } 
     #endregion
 }

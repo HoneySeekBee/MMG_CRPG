@@ -1,6 +1,7 @@
 ﻿using Application.Combat;
 using Application.SkillLevels;
 using Application.Skills;
+using Domain.Entities.Skill;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -26,6 +27,7 @@ namespace Infrastructure.Caching
         {
             await using var db = await _factory.CreateDbContextAsync(ct);
 
+            // 1) DB에서 스킬 + 레벨 DTO만 가져오기 (Effect는 일단 null/기본값)
             var list = await db.Skills
                 .AsNoTracking()
                 .OrderBy(s => s.SkillId)
@@ -44,7 +46,6 @@ namespace Infrastructure.Caching
                     Tag = s.Tag ?? Array.Empty<string>(),
                     BaseInfo = s.BaseInfo,
 
-                    // 레벨을 같은 Select에서 즉시 투영 (DB 한 방)
                     Levels = s.Levels
                         .OrderBy(l => l.Level)
                         .Select(l => new SkillLevelDto
@@ -55,24 +56,28 @@ namespace Infrastructure.Caching
                             Description = l.Description,
                             Materials = l.Materials,
                             CostGold = l.CostGold,
-
-                            // 부모 정보가 필요하면 여기서 채워두기
                             ParentType = s.Type,
-                            IsPassive = !s.IsActive, // 규칙에 맞게 조정
+                            IsPassive = !s.IsActive,
                         })
                         .ToList(),
-
-                    Effect = SkillEffectParser.Parse(s)
+                     
+                    Effect = new SkillEffect()
                 })
-                // 레벨 수가 많다면 SplitQuery가 도움이 될 수 있음 (상황에 따라)
-                //.AsSplitQuery()
                 .ToListAsync(ct);
 
-            // 원자적 스왑
+            // 2) 메모리에서 대표 레벨(max level) Values로 Effect 파싱
+            foreach (var dto in list)
+            {
+                var maxValues = dto.Levels
+                    .OrderByDescending(x => x.Level)
+                    .Select(x => x.Values)
+                    .FirstOrDefault();
+                dto.Effect = SkillEffectParser.SafeParseEffect(dto.SkillId, maxValues);
+            }
+
             _cache = list;
             Console.WriteLine($"스킬 캐싱하기 {list.Count}개 ");
             _byId = list.ToDictionary(x => x.SkillId);
         }
-         
     }
 }

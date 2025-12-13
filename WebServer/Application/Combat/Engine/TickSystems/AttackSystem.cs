@@ -60,16 +60,16 @@ namespace Application.Combat.Engine.TickSystems
                     continue;
                 int baseDmg = DamageFormula.ComputeBase(actor.AtkEff, target.DefEff);
                 int finalDmg = DamageFormula.ComputeWithCrit(
-    actor.AtkEff,
-    target.DefEff,
-    actor.CritRateEff,
-    actor.CritDamageEff,
-    actor.DefPenFlat,
-    actor.DefPenPercent,
-    target.DamageReducePercent,
-    target.FinalDamageMultiplier,
-    out bool isCrit
-);
+                    actor.AtkEff,
+                    target.DefEff,
+                    actor.CritRateEff,
+                    actor.CritDamageEff,
+                    actor.DefPenFlat,
+                    actor.DefPenPercent,
+                    target.DamageReducePercent,
+                    target.FinalDamageMultiplier,
+                    out bool isCrit
+                );
 
                 int oldHp = target.Hp;
                 // HP 깎고 0으로 클램프만, Dead 플래그는 DeathSystem에서
@@ -84,14 +84,14 @@ namespace Application.Combat.Engine.TickSystems
                     $"dmg={finalDmg}, hp: {oldHp} -> {target.Hp}"
                 );
                 evs.Add(new CombatLogEventDto(
-                    TMs: NowMs(s),
-                    Type: "hit",
-                    Actor: actor.ActorId.ToString(),
-                    Target: target.ActorId.ToString(),
-                    Damage: finalDmg,
-                    Crit: isCrit,
-                    Extra: null
-                ));
+                   NowMs(s),
+                   "normal_attack",
+                   actor.ActorId.ToString(),
+                   target.ActorId.ToString(),
+                   finalDmg,
+                   isCrit,
+                   new Dictionary<string, object?> { ["isNormal"] = true }
+                 ));
             }
         }
         private int NowMs(CombatRuntimeState s)

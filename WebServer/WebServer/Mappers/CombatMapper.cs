@@ -33,12 +33,13 @@ namespace WebServer.Mappers
         }
 
         public static Application.Combat.CombatCommandDto ToDomain(CombatCommandPb pb)
-        {
+        { 
+
             return new Application.Combat.CombatCommandDto(
                 pb.ActorId,
                 pb.SkillId,
                 pb.SkillLevel,
-                pb.TargetActorId.Value
+                pb.TargetActorId
             );
         }
 

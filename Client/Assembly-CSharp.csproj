@@ -60,6 +60,7 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.48f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Game\Combat\Core\CombatVfxPresenter.cs" />
     <Compile Include="Assets\Script\UI\ItemType\ItemDetailUI.cs" />
     <Compile Include="Assets\Game\Combat\Core\CombatDirector.cs" />
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\TintedButton.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\DemonstrationScene\DemonstrationSceneManager.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Character_Controller\PlayerCamera.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\BonusSeekerCharacterState.cs" />
+    <Compile Include="Assets\Game\Combat\Core\CombatActorFactory.cs" />
     <Compile Include="Assets\Script\UI\User\EquipItemWindowUI.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Obstacle\ObstacleBase.cs" />
     <Compile Include="Assets\Script\UI\Popup\GachaShopPopup.cs" />
@@ -211,6 +213,7 @@
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Obstacle\ObstaclePath.cs" />
     <Compile Include="Assets\Script\UI\Popup\LoginPopup.cs" />
     <Compile Include="Assets\Script\Network\RemoteIconLoader.cs" />
+    <Compile Include="Assets\Game\Combat\Core\CombatSnapshotApplier.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\Movement\MovementStates\LadderMovementState.cs" />
     <Compile Include="Assets\Script\Scenes\Init\InitSceneController.cs" />
     <Compile Include="Assets\Script\UI\UIPopup.cs" />
@@ -247,6 +250,7 @@
     <Compile Include="Assets\Script\GamePlay\Character\Monster\MonsterAnimationController.cs" />
     <Compile Include="Assets\Script\Common\Extensions\TaskExtensions.cs" />
     <Compile Include="Assets\Script\GamePlay\Character\Monster\MonsterBase.cs" />
+    <Compile Include="Assets\Data\ScriptableObjects\SkillList\SkillFxDataList.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Obstacle\ObstacleGroup.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\PatrolByPointsCharacterState.cs" />
     <Compile Include="Assets\Script\UI\UIPrefabPool.cs" />

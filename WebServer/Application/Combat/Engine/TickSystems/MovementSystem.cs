@@ -20,15 +20,11 @@ namespace Application.Combat.Engine.TickSystems
         private const float EnemyRadius = 1.6f;
 
         public void Run(CombatRuntimeState s, List<CombatLogEventDto> evs)
-        {
+        { 
             float speedPerTick = MoveSpeedPerSec * (TickMs / 1000f);
 
-            bool anyEnemyAlive = !s.WaitingNextWave &&
-                s.ActiveActors.Values.Any(a =>
-                    a.Team == 1 &&
-                    !a.Dead &&
-                    a.Hp > 0 &&
-                    a.Waveindex == s.CurrentWaveIndex);
+            bool anyEnemyAlive = s.ActiveActors.Values.Any(a =>
+     a.Team == 1 && !a.Dead && a.Hp > 0 && a.Waveindex == s.CurrentWaveIndex);
 
             var actors = s.ActiveActors.Values
                 .Where(a => !a.Dead && a.Hp > 0)
@@ -45,7 +41,7 @@ namespace Application.Combat.Engine.TickSystems
                 {
                     continue;
                 }
-                if (anyEnemyAlive)
+                if (anyEnemyAlive && !s.WaitingNextWave)
                     HandleCombatMovement(s, actors, actor, speedPerTick);
                 else
                     HandleReturnToSpawn(s, actors, actor, speedPerTick);
@@ -108,7 +104,7 @@ namespace Application.Combat.Engine.TickSystems
                 actor.FacingZ = dz / (dist + 0.0001f);
                 return;
             }
-
+             
             // 3) 정상 이동 (아군 방향 보정만 적용)
             float dirX = dx / dist;
             float dirZ = dz / dist;
@@ -208,31 +204,44 @@ namespace Application.Combat.Engine.TickSystems
             float dx = actor.SpawnX - actor.X;
             float dz = actor.SpawnZ - actor.Z;
             float dist = MathF.Sqrt(dx * dx + dz * dz);
-
+             
             if (dist < SpawnSnapRange)
             {
                 actor.X = actor.SpawnX;
                 actor.Z = actor.SpawnZ;
                 actor.ReturningToSpawn = false;
+                actor.ArrivedAtSpawn = true;
+                return;
+            }
+
+            // dist=0 보호
+            if (dist < 0.0001f)
+            {
+                actor.X = actor.SpawnX;
+                actor.Z = actor.SpawnZ;
+                actor.ReturningToSpawn = false;
+                actor.ArrivedAtSpawn = true;
                 return;
             }
 
             float dirX = dx / dist;
             float dirZ = dz / dist;
 
-            (float sepAX, float sepAZ) = ComputeAllySeparation(actors, actor);
+            float step = MathF.Min(speedPerTick, dist); // clamp
+            actor.X += dirX * step;
+            actor.Z += dirZ * step;
 
-            float finalX = dirX + sepAX * 0.5f;
-            float finalZ = dirZ + sepAZ * 0.5f;
+            // 이동 후 스냅(보험)
+            float ndx = actor.SpawnX - actor.X;
+            float ndz = actor.SpawnZ - actor.Z;
+            float ndist = MathF.Sqrt(ndx * ndx + ndz * ndz);
 
-            float len = MathF.Sqrt(finalX * finalX + finalZ * finalZ);
-            if (len > 0.0001f)
+            if (ndist < SpawnSnapRange)
             {
-                finalX /= len;
-                finalZ /= len;
-
-                actor.X += finalX * speedPerTick;
-                actor.Z += finalZ * speedPerTick;
+                actor.X = actor.SpawnX;
+                actor.Z = actor.SpawnZ;
+                actor.ReturningToSpawn = false;
+                actor.ArrivedAtSpawn = true;
             }
         }
 

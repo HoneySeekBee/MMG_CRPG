@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acb7638b584c9ad4cbcb3e3491526807, type: 3}
   m_Name: TiyaSkillData
   m_EditorClassIdentifier: 
+  CharacterId: 18
   fxByBreakthrough:
   - skillId: 73
     skillName: "\uBCA0\uAE30"

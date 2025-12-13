@@ -32,15 +32,16 @@ namespace Infrastructure.Caching.Contents
             await using var db = await _factory.CreateDbContextAsync(ct);
             
             var stages = await db.Stages
-    .AsNoTracking()
-    .Include(s => s.Waves).ThenInclude(w => w.Enemies)
-    .Include(s => s.Drops)
-    .Include(s => s.FirstRewards)
-    .Include(s => s.Requirements)
-    .Include(s => s.Batches)
-    .ToListAsync(ct);
+            .AsNoTracking()
+            .AsSplitQuery()
+            .Include(s => s.Waves).ThenInclude(w => w.Enemies)
+            .Include(s => s.Drops)
+            .Include(s => s.FirstRewards)
+            .Include(s => s.Requirements)
+            .Include(s => s.Batches)
+            .ToListAsync(ct);
 
-            var list = stages.Select(s => s.ToDetailDto()).ToList();
+            var list = stages.Select(ToDetailDto).ToList();
             var byId = list.ToDictionary(x => x.Id);
 
             lock (_gate)

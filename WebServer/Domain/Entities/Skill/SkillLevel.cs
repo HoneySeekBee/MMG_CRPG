@@ -11,8 +11,7 @@ namespace Domain.Entities.Skill
     {
         public int SkillId { get; private set; }
         public int Level { get; private set; }
-
-        public IReadOnlyDictionary<string, object>? Values { get; private set; }
+        public JsonNode? Values { get; private set; }
         public string? Description { get; private set; }
         public IReadOnlyDictionary<string, int>? Materials { get; private set; }
         public int CostGold { get; private set; }
@@ -20,7 +19,7 @@ namespace Domain.Entities.Skill
         private SkillLevel() { }
 
         public SkillLevel(int skillId, int level,
-            IDictionary<string, object>? values,
+            JsonNode? values,
             string? description,
             IDictionary<string, int>? materials,
             int costGold)
@@ -29,22 +28,22 @@ namespace Domain.Entities.Skill
             if (costGold < 0) throw new ArgumentOutOfRangeException(nameof(costGold));
 
             SkillId = skillId;
-            Level = level;
-            Values = values is null ? null : new Dictionary<string, object>(values);
+            Level = level; 
+            Values = values?.DeepClone();
             Description = description?.Trim();
             Materials = materials is null ? null : new Dictionary<string, int>(materials);
             CostGold = costGold;
         }
 
         public void Update(
-            IDictionary<string, object>? values,
+            JsonNode? values,
             string? description,
             IDictionary<string, int>? materials,
             int costGold)
         {
             if (costGold < 0) throw new ArgumentOutOfRangeException(nameof(costGold));
 
-            Values = values is null ? null : new Dictionary<string, object>(values);
+            Values = values;
             Description = description?.Trim();
             Materials = materials is null ? null : new Dictionary<string, int>(materials);
             CostGold = costGold;

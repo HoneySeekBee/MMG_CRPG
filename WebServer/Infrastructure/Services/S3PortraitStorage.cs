@@ -38,12 +38,20 @@ namespace Infrastructure.Services
 
         public async Task<byte[]> LoadAsync(string key, CancellationToken ct)
         {
-            var res = await _s3.GetObjectAsync(_bucketName, $"portraits/{key}.png", ct);
-            using var ms = new MemoryStream();
-            await res.ResponseStream.CopyToAsync(ms, ct);
-            return ms.ToArray();
+            var s3Key = $"portraits/{key}.png";
+            try
+            {
+                var res = await _s3.GetObjectAsync(_bucketName, s3Key, ct);
+                using var ms = new MemoryStream();
+                await res.ResponseStream.CopyToAsync(ms, ct);
+                return ms.ToArray();
+            }
+            catch (AmazonS3Exception e)
+            {
+                Console.WriteLine($"[S3PortraitStorage] GetObject FAIL bucket={_bucketName} key={s3Key} status={e.StatusCode} code={e.ErrorCode} msg={e.Message}");
+                throw;
+            }
         }
-
         public async Task DeleteAsync(string key, CancellationToken ct)
         {
             await _s3.DeleteObjectAsync(_bucketName, $"portraits/{key}.png", ct);
