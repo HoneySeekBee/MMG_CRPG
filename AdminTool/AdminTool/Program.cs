@@ -10,15 +10,7 @@ namespace AdminTool
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container
-
-            builder.Services.AddHttpClient("GameApi", client =>
-            {
-                client.BaseAddress = new Uri(builder.Configuration["GameApiBaseUrl"]!);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(
-                    new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-            })
-            .AddHttpMessageHandler<TokenAttachHandler>();
+             
             builder.Services.AddScoped<AdminTool.Controllers.IStageUiProvider, AdminTool.Controllers.StaticStageUiProvider>();
             builder.Services.AddScoped<ICombatApiClient, CombatApiClient>();
             builder.Services.AddScoped<ICharacterUiProvider, ApiCharacterUiProvider>();
@@ -37,6 +29,20 @@ namespace AdminTool
 });
             builder.Services.AddAuthorization();
 
+            builder.Services.AddMemoryCache();
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddTransient<TokenAttachHandler>();
+            builder.Services.AddHttpClient("GameApi", client =>
+            {
+                client.BaseAddress = new Uri(builder.Configuration["GameApiBaseUrl"]!);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(
+                    new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                client.Timeout = TimeSpan.FromSeconds(10);
+            })
+.AddHttpMessageHandler<TokenAttachHandler>();
+
+            builder.Services.AddSingleton<IAdminAssetCatalog, AdminAssetCatalog>();
             builder.Services.AddSession(o =>
             {
                 o.Cookie.Name = ".AdminTool.Session";
@@ -44,8 +50,7 @@ namespace AdminTool
                 o.Cookie.SecurePolicy = CookieSecurePolicy.None;
                 o.IdleTimeout = TimeSpan.FromHours(2);
             });
-            builder.Services.AddHttpContextAccessor();
-            builder.Services.AddTransient<TokenAttachHandler>();
+            builder.Services.AddSingleton<IAdminAssetUrlBuilder, AdminAssetUrlBuilder>();
 
 
             var app = builder.Build();

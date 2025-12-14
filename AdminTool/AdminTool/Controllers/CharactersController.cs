@@ -9,26 +9,22 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Net;
 using System.Text.Json;
+using AdminTool.Services;
 
 namespace AdminTool.Controllers
 {
     [Route("Characters")]
     public class CharactersController : Controller
     {
-        private readonly IHttpClientFactory _http;
-        private readonly IConfiguration _cfg;
-        private readonly string _assetsBaseUrl;
-        private readonly string _iconsSubdir; 
-        private readonly string _portraitsSubdir;
-        public CharactersController(IHttpClientFactory http, IConfiguration cfg)
+        private readonly IHttpClientFactory _http; 
+        private readonly IAdminAssetUrlBuilder _assetUrl; 
+        private readonly IAdminAssetCatalog _catalog;
+        public CharactersController(IHttpClientFactory http, IAdminAssetUrlBuilder assetUrl, IAdminAssetCatalog catalog)
         {
             _http = http;
-            _cfg = cfg;
-            _assetsBaseUrl = cfg["PublicBaseUrl"]!.TrimEnd('/'); // 예: https://localhost:5001/cdn
-            _iconsSubdir = cfg["Assets:IconsSubdir"] ?? "icons"; // 기본 폴더명
-            _portraitsSubdir = cfg["Assets:PortraitsSubdir"] ?? "portraits";
+            _assetUrl = assetUrl;
+            _catalog = catalog;
         }
-
         [HttpGet("")]
         public async Task<IActionResult> Index([FromQuery] CharacterListFilterVm filter, CancellationToken ct)
         {
@@ -426,8 +422,7 @@ namespace AdminTool.Controllers
                 .ToList();
 
             // 5) Icons  (이미 Skills에서 쓰던 /api/icons 재활용)
-            var icons = await TryGet<List<IconVm>>(api, "api/icons", ct) ?? new();
-          
+           
             vm.IconChoices = await LoadIconPickListAsync(ct, vm.IconId);
             vm.Icons = vm.IconChoices
             .Select(i => new SelectListItem(i.Key, i.IconId.ToString(), i.IconId == vm.IconId))
@@ -451,33 +446,24 @@ namespace AdminTool.Controllers
         }
         private async Task<List<IconPickItem>> LoadIconPickListAsync(CancellationToken ct, int? selected = null)
         {
-            var client = _http.CreateClient("GameApi");
-            var apiIcons = await client.GetFromJsonAsync<List<IconVm>>("/api/icons", ct) ?? new();
-            var baseUrl = _cfg["PublicBaseUrl"]!.TrimEnd('/');
-            var subdir = _cfg["Assets:IconsSubdir"] ?? "icons";
-
+            var apiIcons = await _catalog.GetIconsAsync(ct);
             return apiIcons.Select(x => new IconPickItem
             {
                 IconId = x.IconId,
                 Key = x.Key,
                 Version = x.Version,
-                Url = $"{baseUrl}/{subdir}/{x.Key}.png?v={x.Version}"
+                Url = _assetUrl.Icon(x.Key, x.Version)   
             }).ToList();
         }
-
         private async Task<List<PortraitPickItem>> LoadPortraitPickListAsync(CancellationToken ct, int? selected = null)
         {
-            var client = _http.CreateClient("GameApi");
-            var apiPorts = await client.GetFromJsonAsync<List<PortraitVm>>("/api/portraits", ct) ?? new();
-            var baseUrl = _cfg["PublicBaseUrl"]!.TrimEnd('/');
-            var subdir = _cfg["Assets:PortraitsSubdir"] ?? "portraits";
-
+            var apiPorts = await _catalog.GetPortraitsAsync(ct);
             return apiPorts.Select(p => new PortraitPickItem
             {
                 PortraitId = p.PortraitId,
                 Key = p.Key,
                 Version = p.Version,
-                Url = $"{baseUrl}/{subdir}/{p.Key}.png?v={p.Version}"
+                Url = _assetUrl.Portrait(p.Key, p.Version)  
             }).ToList();
         }
         private static async Task<T?> TryGet<T>(HttpClient c, string url, CancellationToken ct)

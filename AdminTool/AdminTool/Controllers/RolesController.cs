@@ -1,4 +1,5 @@
 ﻿using AdminTool.Models;
+using AdminTool.Services;
 using Application.Roles;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,24 +8,15 @@ namespace AdminTool.Controllers
     public class RolesController : Controller
     {
         private readonly IHttpClientFactory _http;
+        private readonly IAdminAssetUrlBuilder _assetUrl;
+        private readonly IAdminAssetCatalog _catalog;
 
-
-        private readonly string _assetsBaseUrl;
-
-        private readonly string _assetsPhysicalRoot;
-        private readonly string _iconsSubdir;
-        public RolesController(IHttpClientFactory http, IConfiguration cfg)
+        public RolesController(IHttpClientFactory http, IAdminAssetUrlBuilder assetUrl, IAdminAssetCatalog catalog)
         {
             _http = http;
-
-            _assetsBaseUrl = cfg["PublicBaseUrl"]!.TrimEnd('/');
-
-            _assetsPhysicalRoot = cfg["Assets:PhysicalRoot"]!
-                ?? throw new InvalidOperationException("Assets:PhysicalRoot 설정이 필요합니다.");
-
-            _iconsSubdir = cfg["Assets:IconsSubdir"] ?? "icons";
+            _assetUrl = assetUrl;
+            _catalog = catalog;
         }
-
         // GET: /Roles
         public async Task<IActionResult> Index(bool? isActive, CancellationToken ct)
         {
@@ -38,8 +30,7 @@ namespace AdminTool.Controllers
                        ?? new List<RoleDto>();
 
             // (2) Icons 조회
-            var icons = await client.GetFromJsonAsync<List<IconVm>>("/api/icons", ct)
-                       ?? new List<IconVm>();
+            var icons = await _catalog.GetIconsAsync(ct);
 
             var iconMap = icons.ToDictionary(k => k.IconId, v => (v.Key, v.Version));
 
@@ -49,7 +40,7 @@ namespace AdminTool.Controllers
                 string? iconUrl = null;
                 if (x.IconId.HasValue && iconMap.TryGetValue(x.IconId.Value, out var info))
                 {
-                    iconUrl = $"{_assetsBaseUrl}/{_iconsSubdir}/{info.Key}.png?v={info.Version}";
+                    iconUrl = _assetUrl.Icon(info.Key, info.Version); 
                 }
                 return new RoleVm
                 {
@@ -75,14 +66,14 @@ namespace AdminTool.Controllers
             var client = _http.CreateClient("GameApi");
 
             // 아이콘을 조회
-            var apiIcons = await client.GetFromJsonAsync<List<IconVm>>("/api/icons", ct) ?? new();
+            var apiIcons = await _catalog.GetIconsAsync(ct);
 
             var icons = apiIcons.Select(x => new IconPickItem
             {
                 IconId = x.IconId,
                 Key = x.Key,
                 Version = x.Version,
-                Url = $"{_assetsBaseUrl}/icons/{x.Key}.png?v={x.Version}"
+                Url = _assetUrl.Icon(x.Key, x.Version)
             }).ToList();
 
             var vm = new RoleCreateVm
@@ -135,14 +126,14 @@ namespace AdminTool.Controllers
             if (dto == null) return NotFound();
 
             // 아이콘을 조회
-            var apiIcons = await client.GetFromJsonAsync<List<IconVm>>("/api/icons", ct) ?? new();
+            var apiIcons = await _catalog.GetIconsAsync(ct);
 
             var icons = apiIcons.Select(x => new IconPickItem
             {
                 IconId = x.IconId,
                 Key = x.Key,
                 Version = x.Version,
-                Url = $"{_assetsBaseUrl}/icons/{x.Key}.png?v={x.Version}"
+                Url = _assetUrl.Icon(x.Key, x.Version)
             }).ToList();
 
             var vm = new RoleEditVm
@@ -163,7 +154,21 @@ namespace AdminTool.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, RoleEditVm vm, CancellationToken ct)
         {
-            if (!ModelState.IsValid) return View(vm);
+
+            if (!ModelState.IsValid)
+            {
+                var icons = (await _catalog.GetIconsAsync(ct))
+                    .Select(x => new IconPickItem
+                    {
+                        IconId = x.IconId,
+                        Key = x.Key,
+                        Version = x.Version,
+                        Url = _assetUrl.Icon(x.Key, x.Version)
+                    }).ToList();
+
+                vm.Icons = icons;
+                return View(vm);
+            }
 
             var client = _http.CreateClient("GameApi");
             var req = new UpdateRoleRequest
@@ -183,7 +188,6 @@ namespace AdminTool.Controllers
                 TempData["Error"] = $"수정 실패: {(int)resp.StatusCode} {resp.ReasonPhrase} - {body}";
                 return View(vm);
             }
-
             TempData["Message"] = "Role이 수정되었습니다.";
             return RedirectToAction(nameof(Index));
         }

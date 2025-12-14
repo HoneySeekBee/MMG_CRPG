@@ -4,6 +4,7 @@ using Application.Items;
 using Application.Rarities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using AdminTool.Services;
 using Microsoft.Extensions.Options;
 using System.Net;
 using static AdminTool.Controllers.IconsController;
@@ -14,14 +15,19 @@ namespace AdminTool.Controllers
     public sealed class ItemsController : Controller
     {
         private readonly IHttpClientFactory _http;
-        private readonly string _assetsBaseUrl;
+        private readonly IAdminAssetUrlBuilder _assetUrl;
+        private readonly IAdminAssetCatalog _catalog;
+
+
         private readonly string _assetsPhysicalRoot;
         private readonly string _iconsSubdir;
         private sealed record EquipSlotDto(short Id, string Code, string Name, short SortOrder, int IconId, DateTimeOffset UpdatedAt);
-        public ItemsController(IHttpClientFactory http, IConfiguration cfg)
+        public ItemsController(IHttpClientFactory http, IConfiguration cfg, IAdminAssetUrlBuilder assetUrl, IAdminAssetCatalog catalog)
         {
             _http = http;
-            _assetsBaseUrl = cfg["PublicBaseUrl"]!.TrimEnd('/');
+            _assetUrl = assetUrl;
+            _catalog = catalog;
+
             _assetsPhysicalRoot = cfg["Assets:PhysicalRoot"]!
                 ?? throw new InvalidOperationException("Assets:PhysicalRoot 설정이 필요합니다.");
 
@@ -132,12 +138,14 @@ namespace AdminTool.Controllers
 
             var typesTask = GetPagedItemsOrEmpty<ItemTypeDto>(client, "/api/itemtypes?page=1&pageSize=1000", ct);
             var raritiesTask = GetListOrEmpty<RarityDto>(client, "/api/rarities", ct);
-            var iconsTask = GetListOrEmpty<IconApiDto>(client, "/api/icons", ct);
-            var portraitsTask = GetListOrEmpty<PortraitApiDto>(client, "/api/portraits", ct);
             var statsTask = GetListOrEmpty<StatTypeDto>(client, "/api/stattypes", ct);
             var currenciesTask = GetListOrEmpty<CurrencyDto>(client, "/api/currencies", ct);
             var equipSlotsTask = GetListOrEmpty<EquipSlotDto>(client, "/api/equipslots", ct);
-            await Task.WhenAll(typesTask, raritiesTask, iconsTask, portraitsTask, statsTask, currenciesTask, equipSlotsTask);
+
+            var iconsTask = _catalog.GetIconsAsync(ct);
+            var portraitsTask = _catalog.GetPortraitsAsync(ct);
+
+            await Task.WhenAll(typesTask, raritiesTask, statsTask, currenciesTask, equipSlotsTask, iconsTask, portraitsTask);
 
             ViewBag.TypeOptions = (typesTask.Result ?? new())
                 .OrderBy(x => x.Name)
@@ -150,13 +158,13 @@ namespace AdminTool.Controllers
                 .ToList();
 
             var iconItems = new List<SelectListItem> { new("(none)", "") };
-            iconItems.AddRange((iconsTask.Result ?? new())
+            iconItems.AddRange((iconsTask.Result)
                 .OrderBy(x => x.Key)
                 .Select(x => new SelectListItem($"{x.Key} (#{x.IconId})", x.IconId.ToString())));
             ViewBag.IconOptions = iconItems;
 
             var portraitItems = new List<SelectListItem> { new("(none)", "") };
-            portraitItems.AddRange((portraitsTask.Result ?? new())
+            portraitItems.AddRange((portraitsTask.Result)
                 .OrderBy(x => x.Key)
                 .Select(x => new SelectListItem($"{x.Key} (#{x.PortraitId})", x.PortraitId.ToString())));
             ViewBag.PortraitOptions = portraitItems;
@@ -167,27 +175,27 @@ namespace AdminTool.Controllers
                     text: $"{s.Name} ({s.Code}){(s.IsPercent ? " %" : "")}",
                     value: s.Id.ToString()))
                 .ToList();
+
             ViewBag.CurrencyOptions = (currenciesTask.Result ?? new())
                 .OrderBy(c => c.Code)
                 .Select(c => new SelectListItem($"{c.Code} - {c.Name}", c.Id.ToString()))
                 .ToList();
 
             ViewBag.EquipSlotOptions = (equipSlotsTask.Result ?? new())
-        .OrderBy(x => x.SortOrder).ThenBy(x => x.Name)
-        .Select(x => new SelectListItem(x.Name, x.Id.ToString()))
-        .ToList();
+                .OrderBy(x => x.SortOrder).ThenBy(x => x.Name)
+                .Select(x => new SelectListItem(x.Name, x.Id.ToString()))
+                .ToList();
         }
         private async Task<List<IconPickItem>> LoadIconGridAsync(CancellationToken ct)
         {
-            var client = _http.CreateClient("GameApi");
-            var apiIcons = await client.GetFromJsonAsync<List<IconApiDto>>("/api/icons", ct) ?? new();
-            string BuildIconUrl(string key, int version) => $"{_assetsBaseUrl}/icons/{Uri.EscapeDataString(key)}.png?v={version}";
+            var apiIcons = await _catalog.GetIconsAsync(ct);
+
             return apiIcons.Select(x => new IconPickItem
             {
                 IconId = x.IconId,
                 Key = x.Key,
                 Version = x.Version,
-                Url = BuildIconUrl(x.Key, x.Version)
+                Url = _assetUrl.Icon(x.Key, x.Version)
             }).ToList();
         }
 

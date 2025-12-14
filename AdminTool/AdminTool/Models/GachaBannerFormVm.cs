@@ -1,4 +1,5 @@
-﻿using Application.GachaBanner;
+﻿
+using Application.Gacha.GachaBanner;
 using Domain.Enum;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
@@ -47,6 +48,11 @@ namespace AdminTool.Models
         [Display(Name = "활성화")]
         public bool IsActive { get; set; } = true;
 
+        [Display(Name = "비용")]
+        public int costcurrencyId { get; set; }
+        public int cost { get; set; }
+        public int ticketItemId { get; set; }
+
         // 드롭다운 소스
         public IEnumerable<SelectListItem>? PoolOptions { get; set; }
         public IEnumerable<SelectListItem>? PortraitOptions { get; set; }
@@ -74,6 +80,9 @@ namespace AdminTool.Models
                 Subtitle: Subtitle,
                 PortraitId: PortraitId,
                 Priority: Priority,
+                CostCurrencyId : costcurrencyId,
+                Cost : cost,
+                TicketItemId: ticketItemId,
                 Status: Status,
                 IsActive: IsActive
             );
@@ -91,7 +100,10 @@ namespace AdminTool.Models
                 PortraitId: PortraitId,
                 GachaPoolId: GachaPoolId,
                 StartsAt: startUtc ?? DateTimeOffset.UtcNow, // Required
-                EndsAt: endUtc,
+                EndsAt: endUtc, 
+                CostCurrencyId: costcurrencyId,
+                Cost: cost,
+                TicketItemId: ticketItemId, 
                 Priority: Priority,
                 Status: Status,
                 IsActive: IsActive
@@ -134,6 +146,9 @@ namespace AdminTool.Models
                 StartsAtLocal = startLocal,
                 EndsAtLocal = endLocal,
                 Priority = dto.Priority,
+                costcurrencyId = dto.CostCurrencyId,
+                cost = dto.Cost,
+                ticketItemId = dto.TicketItemId,
                 Status = dto.Status,
                 IsActive = dto.IsActive
             };

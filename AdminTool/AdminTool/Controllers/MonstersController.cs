@@ -1,5 +1,5 @@
 ﻿using AdminTool.Models;
-using Application.Elements;
+using AdminTool.Services; 
 using Application.Monsters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -9,12 +9,14 @@ namespace AdminTool.Controllers
     public class MonstersController : Controller
     {
         private readonly IHttpClientFactory _http;
-        private readonly IConfiguration _cfg;
+        private readonly IAdminAssetCatalog _catalog;
+        private readonly IAdminAssetUrlBuilder _assetUrl;
 
-        public MonstersController(IHttpClientFactory http, IConfiguration cfg)
+        public MonstersController(IHttpClientFactory http, IAdminAssetUrlBuilder assetUrl, IAdminAssetCatalog catalog)
         {
             _http = http;
-            _cfg = cfg;
+            _assetUrl = assetUrl;
+            _catalog = catalog;
         }
 
         // GET: /Monster
@@ -35,9 +37,8 @@ namespace AdminTool.Controllers
             // 여기까지 왔으면 OK
             var apiMonsters = await resp.Content.ReadFromJsonAsync<List<MonsterDtoStub>>(cancellationToken: ct)
                               ?? new List<MonsterDtoStub>();
-            var ports = await client.GetFromJsonAsync<List<PortraitVm>>("/api/portraits", ct) ?? new();
-            var baseUrl = _cfg["PublicBaseUrl"]!.TrimEnd('/');
-            var subdir = _cfg["Assets:PortraitsSubdir"] ?? "portraits";
+            var ports = await _catalog.GetPortraitsAsync(ct);
+            
             vm.Monsters = apiMonsters.Select(m =>
             {
                 string? portraitUrl = null;
@@ -46,7 +47,7 @@ namespace AdminTool.Controllers
                     var p = ports.FirstOrDefault(x => x.PortraitId == m.PortraitId);
                     if (p != null)
                     {
-                        portraitUrl = $"{baseUrl}/{subdir}/{p.Key}.png?v={p.Version}";
+                        portraitUrl = _assetUrl.Portrait(p.Key, p.Version);
                     }
                 }
 
@@ -58,7 +59,7 @@ namespace AdminTool.Controllers
                     ElementId = m.ElementId,
                     PortraitId = m.PortraitId,
                     StatCount = m.Stats?.Count ?? 0,
-                    PortraitUrl = portraitUrl 
+                    PortraitUrl = portraitUrl
                 };
             }).ToList();
             return View(vm);
@@ -167,13 +168,11 @@ namespace AdminTool.Controllers
             string? portraitUrl = null;
             if (dto.PortraitId is not null)
             {
-                var ports = await client.GetFromJsonAsync<List<PortraitVm>>("/api/portraits", ct) ?? new();
+                var ports = await _catalog.GetPortraitsAsync(ct);
                 var p = ports.FirstOrDefault(x => x.PortraitId == dto.PortraitId);
                 if (p != null)
                 {
-                    var baseUrl = _cfg["PublicBaseUrl"]!.TrimEnd('/');
-                    var subdir = _cfg["Assets:PortraitsSubdir"] ?? "portraits";
-                    portraitUrl = $"{baseUrl}/{subdir}/{p.Key}.png?v={p.Version}";
+                    portraitUrl = _assetUrl.Portrait(p.Key, p.Version);
                 }
             }
 
@@ -365,7 +364,7 @@ namespace AdminTool.Controllers
                 }
                 decimal ParsePercent(string s)
                 {
-                    s = s.Trim().Replace("%", ""); 
+                    s = s.Trim().Replace("%", "");
                     return decimal.TryParse(
                         s,
                         System.Globalization.NumberStyles.Any,
@@ -399,7 +398,7 @@ namespace AdminTool.Controllers
                     spd = spd,
                     critRate = critRate,
                     critDamage = critDamage
-                }; 
+                };
                 var resp = await client.PostAsJsonAsync("/api/monster/stat", req, ct);
                 if (resp.IsSuccessStatusCode) ok++;
                 else
@@ -427,21 +426,17 @@ namespace AdminTool.Controllers
         }
         private async Task FillPortraitsAsync(MonsterEditVm vm, CancellationToken ct)
         {
-            var client = _http.CreateClient("GameApi");
-            var apiPorts = await client.GetFromJsonAsync<List<PortraitVm>>("/api/portraits", ct) ?? new();
-
-            var baseUrl = _cfg["PublicBaseUrl"]!.TrimEnd('/');
-            var subdir = _cfg["Assets:PortraitsSubdir"] ?? "portraits";
+            var apiPorts = await _catalog.GetPortraitsAsync(ct);
 
             vm.PortraitChoices = apiPorts
-                .Select(p => new PortraitPickItem
-                {
-                    PortraitId = p.PortraitId,
-                    Key = p.Key,
-                    Version = p.Version,
-                    Url = $"{baseUrl}/{subdir}/{p.Key}.png?v={p.Version}"
-                })
-                .ToList();
+             .Select(p => new PortraitPickItem
+             {
+                 PortraitId = p.PortraitId,
+                 Key = p.Key,
+                 Version = p.Version,
+                 Url = _assetUrl.Portrait(p.Key, p.Version)
+             })
+             .ToList();
 
             if (vm.PortraitId.HasValue)
             {
@@ -494,4 +489,4 @@ namespace AdminTool.Controllers
             public int SortOrder { get; set; }
         }
     }
-} 
+}

@@ -1,4 +1,5 @@
-﻿using AdminTool.Models;
+﻿using AdminTool.Services;
+using AdminTool.Models;
 using Microsoft.AspNetCore.Mvc;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Png;
@@ -9,16 +10,17 @@ namespace AdminTool.Controllers
     public class PortraitsController : Controller
     {
         private readonly IHttpClientFactory _http;
-        private readonly string _assetsBaseUrl;
+        private readonly IAdminAssetUrlBuilder _assetUrl;
+        private readonly IAdminAssetCatalog _catalog;
 
         private readonly string _assetsPhysicalRoot;
         private readonly string _portraitsSubdir;
 
-        public PortraitsController(IHttpClientFactory http, IConfiguration cfg)
+        public PortraitsController(IHttpClientFactory http, IConfiguration cfg, IAdminAssetUrlBuilder assetUrl, IAdminAssetCatalog catalog)
         {
             _http = http;
-
-            _assetsBaseUrl = cfg["PublicBaseUrl"]!.TrimEnd('/');
+            _assetUrl = assetUrl;
+            _catalog = catalog;
 
             _assetsPhysicalRoot = cfg["Assets:PhysicalRoot"]!
                 ?? throw new InvalidOperationException("Assets:PhysicalRoot 설정이 필요합니다.");
@@ -39,19 +41,25 @@ namespace AdminTool.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(CancellationToken ct)
         {
-            var client = _http.CreateClient("GameApi");
-            var items = await client.GetFromJsonAsync<List<PortraitApiDto>>("api/portraits", ct)
-                        ?? new List<PortraitApiDto>();
-
-            var model = items.Select(x => new PortraitVm
+            try
             {
-                PortraitId = x.PortraitId,
-                Key = x.Key,
-                Version = x.Version,
-                Url = $"{_assetsBaseUrl}/{_portraitsSubdir}/{x.Key}.png?v={x.Version}"
-            }).ToList();
+                var items = await _catalog.GetPortraitsAsync(ct);
 
-            return View(model); // Views/Portraits/Index.cshtml
+                var model = items.Select(x => new PortraitVm
+                {
+                    PortraitId = x.PortraitId,
+                    Key = x.Key,
+                    Version = x.Version,
+                    Url = _assetUrl.Portrait(x.Key, x.Version)
+                }).ToList();
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"Portraits 로드 실패: {ex.Message}";
+                return View(new List<PortraitVm>());
+            }
         }
 
         // ============ [2] Create ============
@@ -73,8 +81,7 @@ namespace AdminTool.Controllers
             var client = _http.CreateClient("GameApi");
 
             // 기존 버전 조회
-            var all = await client.GetFromJsonAsync<List<PortraitApiDto>>("api/portraits", ct)
-                      ?? new List<PortraitApiDto>();
+            var all = await _catalog.GetPortraitsAsync(ct);
             var existing = all.FirstOrDefault(p => p.Key == model.Key);
             var newVersion = (existing?.Version ?? 0) + 1;
 
@@ -108,7 +115,7 @@ namespace AdminTool.Controllers
             if (existing == null)
             {
                 var createBody = new { Key = model.Key }; // CreatePortraitCommand와 일치
-                var resp = await client.PostAsJsonAsync("api/portraits", createBody, ct);
+                var resp = await client.PostAsJsonAsync("/api/portraits", createBody, ct);
                 if (!resp.IsSuccessStatusCode)
                 {
                     TempData["Error"] = $"초상화 메타 생성 실패: {resp.StatusCode}";
@@ -119,7 +126,7 @@ namespace AdminTool.Controllers
             else
             {
                 var updateBody = new { Id = existing.PortraitId, Version = newVersion };
-                var resp = await client.PutAsJsonAsync($"api/portraits/{existing.PortraitId}", updateBody, ct);
+                var resp = await client.PutAsJsonAsync($"/api/portraits/{existing.PortraitId}", updateBody, ct);
                 if (!resp.IsSuccessStatusCode)
                 {
                     TempData["Error"] = $"초상화 메타 업데이트 실패: {resp.StatusCode}";
@@ -128,6 +135,7 @@ namespace AdminTool.Controllers
                 TempData["Message"] = $"[{model.Key}] 초상화가 업데이트되었습니다. (v{newVersion})";
             }
 
+            _catalog.InvalidatePortraits();
             return RedirectToAction(nameof(Index));
         }
 
@@ -142,7 +150,7 @@ namespace AdminTool.Controllers
             }
 
             var client = _http.CreateClient("GameApi");
-            var resp = await client.GetAsync($"api/portraits/{id}", ct);
+            var resp = await client.GetAsync($"/api/portraits/{id}", ct);
 
             if (resp.StatusCode == HttpStatusCode.NotFound)
             {
@@ -167,7 +175,7 @@ namespace AdminTool.Controllers
                 PortraitId = dto.PortraitId,
                 Key = dto.Key,
                 CurrentVersion = dto.Version,
-                ImageUrl = $"{_assetsBaseUrl}/{_portraitsSubdir}/{dto.Key}.png?v={dto.Version}"
+                ImageUrl = _assetUrl.Portrait(dto.Key, dto.Version)
             };
             return View(vm); // Views/Portraits/Edit.cshtml
         }
@@ -181,7 +189,7 @@ namespace AdminTool.Controllers
             var client = _http.CreateClient("GameApi");
 
             // 존재 확인
-            var resp = await client.GetAsync($"api/portraits/{model.PortraitId}", ct);
+            var resp = await client.GetAsync($"/api/portraits/{model.PortraitId}", ct);
             if (resp.StatusCode == HttpStatusCode.NotFound)
             {
                 TempData["Error"] = $"초상화(id={model.PortraitId})을 찾을 수 없습니다.";
@@ -235,7 +243,7 @@ namespace AdminTool.Controllers
                 // 버전 +1
                 var newVersion = dto.Version + 1;
                 var updateBody = new { Id = dto.PortraitId, Version = newVersion };
-                var updateResp = await client.PutAsJsonAsync($"api/portraits/{dto.PortraitId}", updateBody, ct);
+                var updateResp = await client.PutAsJsonAsync($"/api/portraits/{dto.PortraitId}", updateBody, ct);
                 if (!updateResp.IsSuccessStatusCode)
                 {
                     TempData["Error"] = $"초상화 메타 업데이트 실패: {updateResp.StatusCode}";
@@ -243,6 +251,7 @@ namespace AdminTool.Controllers
                 }
 
                 TempData["Message"] = $"[{dto.Key}] 초상화가 업데이트되었습니다. (v{newVersion})";
+                _catalog.InvalidatePortraits();
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
@@ -258,11 +267,12 @@ namespace AdminTool.Controllers
         public async Task<IActionResult> Delete(int id, CancellationToken ct)
         {
             var client = _http.CreateClient("GameApi");
-            var resp = await client.DeleteAsync($"api/portraits/{id}", ct);
+            var resp = await client.DeleteAsync($"/api/portraits/{id}", ct);
 
             if (resp.StatusCode is HttpStatusCode.OK or HttpStatusCode.NoContent)
             {
                 TempData["Message"] = $"초상화(id={id})가 삭제되었습니다.";
+                _catalog.InvalidatePortraits();
             }
             else if (resp.StatusCode == HttpStatusCode.NotFound)
             {

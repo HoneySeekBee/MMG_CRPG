@@ -1,4 +1,5 @@
 ﻿using AdminTool.Models;
+using AdminTool.Services;
 using Application.Elements;
 using Application.SkillLevels;
 using Application.Skills;
@@ -17,32 +18,24 @@ namespace AdminTool.Controllers
     public class SkillsController : Controller
     {
         private readonly IHttpClientFactory _http;
-
-        private readonly string _assetsPhysicalRoot;
-        private readonly string _assetsBaseUrl;
-        private readonly string _iconsSubdir;
-
-        public SkillsController(IHttpClientFactory http, IConfiguration cfg)
+        private readonly IAdminAssetUrlBuilder _assetUrl;
+        private readonly IAdminAssetCatalog _catalog;
+        public SkillsController(IHttpClientFactory http, IAdminAssetUrlBuilder assetUrl, IAdminAssetCatalog catalog)
         {
             _http = http;
-
-            _assetsBaseUrl = cfg["PublicBaseUrl"]!.TrimEnd('/');
-
-            _assetsPhysicalRoot = cfg["Assets:PhysicalRoot"]!
-                ?? throw new InvalidOperationException("Assets:PhysicalRoot 설정이 필요합니다.");
-
-            _iconsSubdir = cfg["Assets:IconsSubdir"] ?? "icons";
+            _assetUrl = assetUrl;
+            _catalog = catalog;
         }
 
         public async Task<IActionResult> Index(SkillType? type, int? elementId, string? name,
-     bool? isActive = null,
-     SkillTargetingType? targetingType = null,
-     TargetSideType? targetSide = null,
-     AoeShapeType? aoeShape = null,
-     string[]? tagsAny = null,
-     string sortBy = "Name", bool desc = false,
-     int page = 1, int pageSize = 50,
-     CancellationToken ct = default)
+         bool? isActive = null,
+         SkillTargetingType? targetingType = null,
+         TargetSideType? targetSide = null,
+         AoeShapeType? aoeShape = null,
+         string[]? tagsAny = null,
+         string sortBy = "Name", bool desc = false,
+         int page = 1, int pageSize = 50,
+         CancellationToken ct = default)
         {
             var client = _http.CreateClient("GameApi");
 
@@ -72,13 +65,14 @@ namespace AdminTool.Controllers
 
 
             // (2) 아이템 목록
-            var icons = await client.GetFromJsonAsync<List<IconVm>>("/api/icons", ct) ?? new();
+            var icons = await _catalog.GetIconsAsync(ct);
             var iconMap = icons.ToDictionary(k => k.IconId, v => (v.Key, v.Version));
+
             var itemVms = dtoList.Select(dto =>
             {
                 string? iconUrl = null;
                 if (iconMap.TryGetValue(dto.IconId, out var info))
-                    iconUrl = $"{_assetsBaseUrl}/{_iconsSubdir}/{info.Key}.png?v={info.Version}";
+                    iconUrl = _assetUrl.Icon(info.Key, info.Version);
 
                 return SkillListItemVm.From(dto, iconUrl);
             }).ToList();
@@ -272,15 +266,15 @@ namespace AdminTool.Controllers
         {
             if (id != vm.SkillId || !ModelState.IsValid)
             {
-                ViewBag.IconOptions = await LoadIconPickListAsync(ct, vm.IconId);
                 vm = vm with
                 {
+                    Icons = await LoadIconPickListAsync(ct, vm.IconId),
                     TypeOptions = BuildSkillTypeOptions(vm.Type),
                     ElementOptions = await BuildElementOptionsAsync(vm.ElementId, ct),
                     TargetingTypeOptions = BuildSkillTargetOptions(vm.TargetingType),
                     AoeShapeOptions = BuildAoeShapeType(vm.AoeShape),
                     TargetSideOptions = BuildSkillSideOptions(vm.TargetSide),
-            };
+                };
                 return View(vm);
             }
 
@@ -298,9 +292,9 @@ namespace AdminTool.Controllers
                 if (!resp.IsSuccessStatusCode)
                 {
                     ModelState.AddModelError(string.Empty, $"수정 실패: {(int)resp.StatusCode} {resp.ReasonPhrase}");
-                    ViewBag.IconOptions = await LoadIconPickListAsync(ct, vm.IconId);
                     vm = vm with
                     {
+                        Icons = await LoadIconPickListAsync(ct, vm.IconId),
                         TypeOptions = BuildSkillTypeOptions(vm.Type),
                         ElementOptions = await BuildElementOptionsAsync(vm.ElementId, ct),
                         TargetingTypeOptions = BuildSkillTargetOptions(vm.TargetingType),
@@ -316,9 +310,9 @@ namespace AdminTool.Controllers
             catch (Exception ex)
             {
                 TempData["Error"] = ex.Message;
-                ViewBag.IconOptions = await LoadIconPickListAsync(ct, vm.IconId);
                 vm = vm with
                 {
+                    Icons = await LoadIconPickListAsync(ct, vm.IconId),
                     TypeOptions = BuildSkillTypeOptions(vm.Type),
                     ElementOptions = await BuildElementOptionsAsync(vm.ElementId, ct),
                     TargetingTypeOptions = BuildSkillTargetOptions(vm.TargetingType),
@@ -495,12 +489,12 @@ namespace AdminTool.Controllers
         [HttpPost("{id:int}/Levels", Name = "Skills_CreateLevel")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateLevel(int id, SkillLevelFormVm vm, CancellationToken ct)
-        {
-            // Values/Materials는 JSON 문자열로 들어옴
-            // Values: 자유형 → Dictionary<string, object?> (값은 JsonElement로 들어와도 OK)
-            Dictionary<string, object?>? values = null;
+        { 
+            JsonNode? values = null; 
             if (!string.IsNullOrWhiteSpace(vm.Values))
-                values = JsonSerializer.Deserialize<Dictionary<string, object?>>(vm.Values);
+            {
+                values = JsonNode.Parse(vm.Values);
+            }
 
             // Materials: {"501":3} 형태 → Dictionary<string,int>
             Dictionary<string, int>? materials = null;
@@ -526,11 +520,13 @@ namespace AdminTool.Controllers
         [HttpPost("{id:int}/Levels/{level:int}", Name = "Skills_UpdateLevel")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateLevel(int id, int level, SkillLevelFormVm vm, CancellationToken ct)
-        {
-            Dictionary<string, object?>? values = null;
-            if (!string.IsNullOrWhiteSpace(vm.Values))
-                values = JsonSerializer.Deserialize<Dictionary<string, object?>>(vm.Values);
+        { 
+            JsonNode? values = null;
 
+            if (!string.IsNullOrWhiteSpace(vm.Values))
+            {
+                values = JsonNode.Parse(vm.Values);
+            }
             // Materials: {"501":3} 형태 → Dictionary<string,int>
             Dictionary<string, int>? materials = null;
             if (!string.IsNullOrWhiteSpace(vm.Materials))
@@ -615,22 +611,21 @@ namespace AdminTool.Controllers
                    .ToList();
         private async Task<List<IconPickItem>> LoadIconPickListAsync(CancellationToken ct, int? selectedIconId = null)
         {
-            var client = _http.CreateClient("GameApi");
-            var icons = await client.GetFromJsonAsync<List<IconVm>>("/api/icons", ct) ?? new();
+            var icons = await _catalog.GetIconsAsync(ct);
 
             // ViewBag.IconOptions 용(아이콘 미리보기 URL)
-            ViewBag.SelectedIconUrl = selectedIconId.HasValue
-                ? icons.Where(i => i.IconId == selectedIconId.Value)
-                       .Select(i => $"{_assetsBaseUrl}/{_iconsSubdir}/{i.Key}.png?v={i.Version}")
-                       .FirstOrDefault()
-                : null;
+            var selected = selectedIconId.HasValue
+     ? icons.FirstOrDefault(i => i.IconId == selectedIconId.Value)
+     : null;
+
+            ViewBag.SelectedIconUrl = selected is null ? null : _assetUrl.Icon(selected.Key, selected.Version);
 
             return icons.Select(i => new IconPickItem
             {
                 IconId = i.IconId,
                 Key = i.Key,
                 Version = i.Version,
-                Url = $"{_assetsBaseUrl}/{_iconsSubdir}/{i.Key}.png?v={i.Version}"
+                Url = _assetUrl.Icon(i.Key, i.Version)
             }).ToList();
         }
     }

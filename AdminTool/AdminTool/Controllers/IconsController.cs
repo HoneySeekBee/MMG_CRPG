@@ -8,21 +8,23 @@ using SixLabors.ImageSharp;                    // Image
 using SixLabors.ImageSharp.Formats.Png;
 using System;
 using System.Net;
+using AdminTool.Services;
 
 namespace AdminTool.Controllers
 {
     public class IconsController : Controller
     {
         private readonly IHttpClientFactory _http;
-        private readonly string _assetsBaseUrl;
+        private readonly IAdminAssetUrlBuilder _assetUrl;
+        private readonly IAdminAssetCatalog _catalog;
 
         private readonly string _assetsPhysicalRoot;
         private readonly string _iconsSubdir;
-
-        public IconsController(IHttpClientFactory http, IConfiguration cfg)
+        public IconsController(IHttpClientFactory http, IConfiguration cfg, IAdminAssetUrlBuilder assetUrl, IAdminAssetCatalog catalog)
         {
             _http = http;
-            _assetsBaseUrl = cfg["PublicBaseUrl"]!.TrimEnd('/');
+            _assetUrl = assetUrl;
+            _catalog = catalog;
 
             _assetsPhysicalRoot = cfg["Assets:PhysicalRoot"]!
                 ?? throw new InvalidOperationException("Assets:PhysicalRoot 설정이 필요합니다.");
@@ -35,16 +37,14 @@ namespace AdminTool.Controllers
         // [1] Index
         // Get
         public async Task<IActionResult> Index(CancellationToken ct)
-        {
-            var client = _http.CreateClient("GameApi");
-            var items = await client.GetFromJsonAsync<List<IconApiDto>>("/api/icons", ct)
-                         ?? new List<IconApiDto>();
+        { 
+            var items = await _catalog.GetIconsAsync(ct);
             var model = items.Select(x => new IconVm
             {
                 IconId = x.IconId,
                 Key = x.Key,
                 Version = x.Version,
-                Url = $"{_assetsBaseUrl}/icons/{x.Key}.png?v={x.Version}"
+                Url = _assetUrl.Icon(x.Key, x.Version)
             }).ToList();
             return View(model);
         }
@@ -75,9 +75,7 @@ namespace AdminTool.Controllers
                 return View(model);
             }
             var client = _http.CreateClient("GameApi");
-
-            var all = await client.GetFromJsonAsync<List<IconApiDto>>("/api/icons", ct)
-                      ?? new List<IconApiDto>();
+            var all = await _catalog.GetIconsAsync(ct);
             var existing = all.FirstOrDefault(i => i.Key == model.Key);
             var newVersion = (existing?.Version ?? 0) + 1;
 
@@ -129,6 +127,9 @@ namespace AdminTool.Controllers
             }
 
             TempData["Message"] = $"[{model.Key}] 아이콘이 {(existing == null ? "생성" : "업데이트")}되었습니다. (v{newVersion})";
+
+
+            _catalog.InvalidateIcons();
             return RedirectToAction(nameof(Index));
         }
 
@@ -170,7 +171,7 @@ namespace AdminTool.Controllers
                 IconId = dto.IconId,
                 Key = dto.Key,
                 CurrentVersion = dto.Version,
-                ImageUrl = $"{_assetsBaseUrl}/icons/{dto.Key}.png?v={dto.Version}"
+                ImageUrl = _assetUrl.Icon(dto.Key, dto.Version)
             };
             return View(vm);
         }
@@ -212,7 +213,7 @@ namespace AdminTool.Controllers
             }
             Console.WriteLine("3_Edit");
             // 3) 파일 저장 경로 준비 (WebServer의 wwwroot/icons/[Key].png)
-            var iconsDir = Path.Combine(_assetsPhysicalRoot, _iconsSubdir); // 예: C:\...\WebServer\wwwroot\icons
+            var iconsDir = Path.Combine(_assetsPhysicalRoot, _iconsSubdir);
             Directory.CreateDirectory(iconsDir);
 
             var filePath = Path.Combine(iconsDir, $"{dto.Key}.png");
@@ -250,6 +251,7 @@ namespace AdminTool.Controllers
                 }
 
                 TempData["Message"] = $"[{dto.Key}] 아이콘이 업데이트되었습니다. (v{newVersion})";
+                _catalog.InvalidateIcons();
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
@@ -270,6 +272,7 @@ namespace AdminTool.Controllers
             if (resp.StatusCode == HttpStatusCode.NoContent || resp.StatusCode == HttpStatusCode.OK)
             {
                 TempData["Message"] = $"아이콘(id={id})이 삭제되었습니다.";
+                _catalog.InvalidateIcons();
             }
             else if (resp.StatusCode == HttpStatusCode.NotFound)
             {
@@ -280,7 +283,6 @@ namespace AdminTool.Controllers
                 var body = await resp.Content.ReadAsStringAsync(ct);
                 TempData["Error"] = $"삭제 실패: {(int)resp.StatusCode} {resp.ReasonPhrase} - {body}";
             }
-
             return RedirectToAction(nameof(Index));
         }
     }

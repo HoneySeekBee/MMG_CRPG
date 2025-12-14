@@ -1,6 +1,13 @@
 ﻿@using AdminTool.Models
 @model IEnumerable<AdminTool.Models.PortraitVm>
-
+@if (TempData["Error"] is string err)
+{
+    <div class="alert alert-danger" style="white-space: pre-wrap;">@err</div>
+}
+@if (TempData["Message"] is string msg)
+{
+    <div class="alert alert-success" style="white-space: pre-wrap;">@msg</div>
+}
 <h2>Portraits</h2>
 
 <div class="table-scroll">

@@ -1,4 +1,5 @@
 ﻿using AdminTool.Models;
+using AdminTool.Services;
 using Application.Elements;
 using Application.Icons;
 using Microsoft.AspNetCore.Mvc;
@@ -10,14 +11,16 @@ namespace AdminTool.Controllers
     public class ElementsController : Controller
     {
         private readonly IHttpClientFactory _http;
-        private readonly string _assetsBaseUrl;
+        private readonly IAdminAssetUrlBuilder _assetUrl;
+        private readonly IAdminAssetCatalog _catalog;
 
         private readonly string _assetsPhysicalRoot;
         private readonly string _iconsSubdir;
-        public ElementsController(IHttpClientFactory http, IConfiguration cfg)
+        public ElementsController(IHttpClientFactory http, IConfiguration cfg, IAdminAssetUrlBuilder assetUrl, IAdminAssetCatalog catalog)
         {
             _http = http;
-            _assetsBaseUrl = cfg["PublicBaseUrl"]!.TrimEnd('/');
+            _assetUrl = assetUrl;
+            _catalog = catalog;
 
             _assetsPhysicalRoot = cfg["Assets:PhysicalRoot"]!
                 ?? throw new InvalidOperationException("Assets:PhysicalRoot 설정이 필요합니다.");
@@ -25,28 +28,27 @@ namespace AdminTool.Controllers
             _iconsSubdir = cfg["Assets:IconsSubdir"] ?? "icons";
         }
 
+
         // [1] 읽기 
         public async Task<IActionResult> Index(CancellationToken ct)
         {
             var client = _http.CreateClient("GameApi");
 
-            // (1) Element 조회 
-            var Elements = await client.GetFromJsonAsync<List<Application.Elements.ElementDto>>("/api/element", ct)
-                ?? new List<Application.Elements.ElementDto>();
+            // (1) Element 조회는 그대로 (필요하면 나중에 이것도 캐시 가능)
+            var elements = await client.GetFromJsonAsync<List<ElementDto>>("/api/element", ct)
+                ?? new List<ElementDto>();
 
-            // (2) Icon 조회
-            var icons = await client.GetFromJsonAsync<List<IconVm>>("/api/icons", ct)
-                ?? new List<IconVm>();
+            // (2) Icon 조회는 캐시 사용
+            var icons = await _catalog.GetIconsAsync(ct);
 
             var iconMap = icons.ToDictionary(k => k.IconId, v => (v.Key, v.Version));
 
-            var model = Elements.Select(x =>
+            var model = elements.Select(x =>
             {
                 string? iconUrl = null;
-                if(x.IconId.HasValue && iconMap.TryGetValue(x.IconId.Value, out var info))
-                {
-                    iconUrl = $"{_assetsBaseUrl}/icons/{info.Key}.png?v={info.Version}";
-                }
+                if (x.IconId.HasValue && iconMap.TryGetValue(x.IconId.Value, out var info))
+                    iconUrl = _assetUrl.Icon(info.Key, info.Version);
+
                 return new ElementVm
                 {
                     ElementId = x.ElementId,
@@ -67,36 +69,30 @@ namespace AdminTool.Controllers
         }
         private async Task<List<IconPickItem>> LoadIconsAsync(CancellationToken ct)
         {
-            var client = _http.CreateClient("GameApi");
-            var apiIcons = await client.GetFromJsonAsync<List<IconVm>>("/api/icons", ct) ?? new();
+            var apiIcons = await _catalog.GetIconsAsync(ct);
 
-            var result = apiIcons.Select(x => new IconPickItem
+            return apiIcons.Select(x => new IconPickItem
             {
                 IconId = x.IconId,
                 Key = x.Key,
                 Version = x.Version,
-                Url = $"{_assetsBaseUrl}/icons/{x.Key}.png?v={x.Version}"
+                Url = _assetUrl.Icon(x.Key, x.Version)
             }).ToList();
-             
-            return result; 
         }
         // [2] 쓰기 Create
         // GET
         [HttpGet]
         public async Task<IActionResult> Create(CancellationToken ct)
         {
-            var client = _http.CreateClient("GameApi");
+            var icons = (await _catalog.GetIconsAsync(ct))
+                .Select(x => new IconPickItem
+                {
+                    IconId = x.IconId,
+                    Key = x.Key,
+                    Version = x.Version,
+                    Url = _assetUrl.Icon(x.Key, x.Version)
+                }).ToList();
 
-            // 아이콘을 조회
-            var apiIcons = await client.GetFromJsonAsync<List<IconVm>>("/api/icons", ct) ?? new();
-
-            var icons = apiIcons.Select(x => new IconPickItem
-            {
-                IconId = x.IconId,
-                Key = x.Key,
-                Version = x.Version,
-                Url = $"{_assetsBaseUrl}/icons/{x.Key}.png?v={x.Version}"
-            }).ToList();
             var vm = new ElementCreateVm
             {
                 ColorHex = "#FFFFFF",
@@ -107,7 +103,6 @@ namespace AdminTool.Controllers
 
             return View(vm);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ElementCreateVm vm, CancellationToken ct)
@@ -158,8 +153,7 @@ namespace AdminTool.Controllers
             }
 
             // 2) 아이콘 목록도 함께 조회 (모달 선택용)
-            var icons = await client.GetFromJsonAsync<List<IconDto>>("/api/icons", ct)
-                         ?? new List<IconDto>();
+            var icons = await _catalog.GetIconsAsync(ct);
 
             // 3) Meta JSON → 분리
             string? desc = null, etc = null;
@@ -182,8 +176,10 @@ namespace AdminTool.Controllers
                 Label = dto.Label,
                 IconId = dto.IconId,
                 IconUrl = dto.IconId.HasValue
-                    ? $"{_assetsBaseUrl}/icons/{icons.FirstOrDefault(i => i.IconId == dto.IconId)?.Key}.png"
-                    : null,
+    ? icons.FirstOrDefault(i => i.IconId == dto.IconId.Value) is { } sel
+        ? _assetUrl.Icon(sel.Key, sel.Version)
+        : null
+    : null,
                 ColorHex = dto.ColorHex,
                 SortOrder = dto.SortOrder,
                 Meta = dto.Meta,
@@ -194,7 +190,7 @@ namespace AdminTool.Controllers
                     IconId = x.IconId,
                     Key = x.Key,
                     Version = x.Version,
-                    Url = $"{_assetsBaseUrl}/icons/{x.Key}.png?v={x.Version}"
+                    Url = _assetUrl.Icon(x.Key, x.Version)
                 }).ToList()
             };
 

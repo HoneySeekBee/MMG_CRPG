@@ -1,5 +1,6 @@
 ﻿using AdminTool.Models;
-using Application.GachaBanner;
+using AdminTool.Services;
+using Application.Gacha.GachaBanner;
 using Domain.Enum;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -15,11 +16,13 @@ namespace AdminTool.Controllers
     {
         private readonly IHttpClientFactory _http;
         private readonly IConfiguration _cfg;
+        private readonly IAdminAssetCatalog _catalog;
 
-        public GachaBannersController(IHttpClientFactory http, IConfiguration cfg)
+        public GachaBannersController(IHttpClientFactory http, IConfiguration cfg, IAdminAssetCatalog catalog)
         {
             _http = http;
             _cfg = cfg;
+            _catalog = catalog;
         }
 
         // ─────────────────────────────────────────────────────────────────────
@@ -76,32 +79,16 @@ namespace AdminTool.Controllers
         }
         private async Task<IEnumerable<SelectListItem>> GetPortraitOptionsAsync(CancellationToken ct)
         {
-            var api = _http.CreateClient("GameApi");
+            var rows = await _catalog.GetPortraitsAsync(ct);
 
-            // 기본 경로(웹 API가 제공한다고 가정)
-            const string primaryUrl = "/api/portraits";
-
-            // 혹시 엔드포인트가 다르면 대비용으로 플랜 B를 더해도 됨
-            // const string fallbackUrl = "/api/portrait"; // 필요 시 사용
-
-            try
-            {
-                var rows = await TryGet<List<PortraitRow>>(api, primaryUrl, ct)
-                           ?? new List<PortraitRow>();
-
-                // 이름/키 기준 정렬 후 SelectListItem 변환
-                return rows
-                    .OrderBy(p => p.Key)
-                    .Select(p => new SelectListItem($"{p.Key} (#{p.PortraitId})", p.PortraitId.ToString()))
-                    .ToList();
-            }
-            catch
-            {
-                // API가 죽었거나 형식이 달라도 폼이 깨지지 않도록 빈 목록 반환
-                return Enumerable.Empty<SelectListItem>();
-            }
+            return rows
+                .OrderBy(p => p.Key)
+                .Select(p => new SelectListItem(
+                    $"{p.Key} (#{p.PortraitId})",
+                    p.PortraitId.ToString()
+                ))
+                .ToList();
         }
-
         [HttpPost("Create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(GachaBannerFormVm vm, CancellationToken ct)

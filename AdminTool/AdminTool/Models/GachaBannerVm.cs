@@ -1,4 +1,4 @@
-﻿using Application.GachaBanner;
+﻿using Application.Gacha.GachaBanner;
 using Domain.Enum;
 using System.ComponentModel.DataAnnotations;
 

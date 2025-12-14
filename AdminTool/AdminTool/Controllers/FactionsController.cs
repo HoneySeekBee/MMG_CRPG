@@ -2,21 +2,24 @@
 {
     using System.Net.Http.Json;
     using AdminTool.Models;
+    using AdminTool.Services;
     using Application.Factions;
     using Microsoft.AspNetCore.Mvc;
 
     public class FactionsController : Controller
     {
         private readonly IHttpClientFactory _http;
-        //private readonly ILogger<FactionsController> _logger;
-        private readonly string _assetsBaseUrl;
+        private readonly IAdminAssetUrlBuilder _assetUrl;
+        private readonly IAdminAssetCatalog _catalog;
 
         private readonly string _assetsPhysicalRoot;
         private readonly string _iconsSubdir;
-        public FactionsController(IHttpClientFactory http, IConfiguration cfg)
+        public FactionsController(IHttpClientFactory http, IConfiguration cfg, IAdminAssetUrlBuilder assetUrl, IAdminAssetCatalog catalog)
+
         {
             _http = http;
-            _assetsBaseUrl = cfg["PublicBaseUrl"]!.TrimEnd('/');
+            _assetUrl = assetUrl;
+            _catalog = catalog;
 
             _assetsPhysicalRoot = cfg["Assets:PhysicalRoot"]!
                 ?? throw new InvalidOperationException("Assets:PhysicalRoot 설정이 필요합니다.");
@@ -35,8 +38,7 @@
                        ?? new List<FactionDto>();
 
             // (2) Icons 조회
-            var icons = await client.GetFromJsonAsync<List<IconVm>>("/api/icons", ct)
-                       ?? new List<IconVm>();
+            var icons = await _catalog.GetIconsAsync(ct);
 
             var iconMap = icons.ToDictionary(k => k.IconId, v => (v.Key, v.Version));
 
@@ -46,7 +48,7 @@
                 string? iconUrl = null;
                 if (x.IconId.HasValue && iconMap.TryGetValue(x.IconId.Value, out var info))
                 {
-                    iconUrl = $"{_assetsBaseUrl}/{_iconsSubdir}/{info.Key}.png?v={info.Version}";
+                    iconUrl = _assetUrl.Icon(info.Key, info.Version);
                 }
 
                 return new FactionVm
@@ -69,18 +71,15 @@
         [HttpGet]
         public async Task<IActionResult> Create(CancellationToken ct)
         {
-            var client = _http.CreateClient("GameApi");
-
             // 아이콘을 조회
-            var apiIcons = await client.GetFromJsonAsync<List<IconVm>>("/api/icons", ct) ?? new();
-
-            var icons = apiIcons.Select(x => new IconPickItem
-            {
-                IconId = x.IconId,
-                Key = x.Key,
-                Version = x.Version,
-                Url = $"{_assetsBaseUrl}/icons/{x.Key}.png?v={x.Version}"
-            }).ToList();
+            var icons = (await _catalog.GetIconsAsync(ct))
+     .Select(x => new IconPickItem
+     {
+         IconId = x.IconId,
+         Key = x.Key,
+         Version = x.Version,
+         Url = _assetUrl.Icon(x.Key, x.Version)
+     }).ToList();
             var vm = new FactionCreateVm
             {
                 ColorHex = "#FFFFFF",
@@ -88,7 +87,6 @@
                 Meta = "",
                 Icons = icons,
             };
-
             return View(vm);
         }
 
@@ -132,18 +130,15 @@
             var dto = await client.GetFromJsonAsync<FactionDto>($"/api/factions/{id}", ct);
 
             if (dto == null) return NotFound();
-            // 아이콘을 조회
-            var apiIcons = await client.GetFromJsonAsync<List<IconVm>>("/api/icons", ct) ?? new();
-
-            var icons = apiIcons.Select(x => new IconPickItem
-            {
-                IconId = x.IconId,
-                Key = x.Key,
-                Version = x.Version,
-                Url = $"{_assetsBaseUrl}/icons/{x.Key}.png?v={x.Version}"
-            }).ToList();
-
-
+           
+            var icons = (await _catalog.GetIconsAsync(ct))
+      .Select(x => new IconPickItem
+      {
+          IconId = x.IconId,
+          Key = x.Key,
+          Version = x.Version,
+          Url = _assetUrl.Icon(x.Key, x.Version)
+      }).ToList();
             var vm = new FactionEditVm
             {
                 FactionId = dto.FactionId,
@@ -153,8 +148,7 @@
                 IsActive = dto.IsActive,
                 IconId = dto.IconId,
                 Meta = dto.Meta,
-
-                Icons = icons,
+                Icons = icons
             };
             return View(vm);
         }

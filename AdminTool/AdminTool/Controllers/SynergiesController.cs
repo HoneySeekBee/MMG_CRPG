@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Text;
 using Domain.Entities;
 using System.Text.Json.Serialization;
+using AdminTool.Services;
 
 namespace AdminTool.Controllers
 {
@@ -12,11 +13,8 @@ namespace AdminTool.Controllers
     public class SynergiesController : Controller
     {
         private readonly IHttpClientFactory _http;
-        private readonly IConfiguration _cfg;
-
-
-        private readonly string _assetsBaseUrl;  // 예: https://localhost:5001/cdn
-        private readonly string _iconsSubdir;
+        private readonly IAdminAssetUrlBuilder _assetUrl;
+        private readonly IAdminAssetCatalog _catalog;
         private readonly string _portraitsSubdir;
 
         private static readonly JsonSerializerOptions _json = new(JsonSerializerDefaults.Web)
@@ -24,16 +22,14 @@ namespace AdminTool.Controllers
             WriteIndented = false
         };
 
-        public SynergiesController(IHttpClientFactory http, IConfiguration cfg)
+        public SynergiesController(IHttpClientFactory http, IConfiguration cfg, IAdminAssetUrlBuilder assetUrl, IAdminAssetCatalog catalog)
         {
             _http = http;
-            _cfg = cfg;
+            _assetUrl = assetUrl;
 
-            _assetsBaseUrl = (cfg["PublicBaseUrl"] ?? "").TrimEnd('/');
-            _iconsSubdir = cfg["Assets:IconsSubdir"] ?? "icons";
             _portraitsSubdir = cfg["Assets:PortraitsSubdir"] ?? "portraits";
+            _catalog = catalog;
         }
-
         private HttpClient Api() => _http.CreateClient("GameApi");
         private HttpClient Client() => _http.CreateClient();
 
@@ -76,16 +72,14 @@ namespace AdminTool.Controllers
             var client = Api();
 
             // 1) 아이콘
-            var apiIcons = await client.GetFromJsonAsync<List<IconVm>>("api/icons", ct) ?? new();
-            var baseUrl = _assetsBaseUrl?.TrimEnd('/');
-            var iconDir = string.IsNullOrWhiteSpace(_iconsSubdir) ? "icons" : _iconsSubdir.Trim('/');
+            var icons = await _catalog.GetIconsAsync(ct);
 
-            vm.Icons = apiIcons.Select(x => new IconPickItem
+            vm.Icons = icons.Select(x => new IconPickItem
             {
                 IconId = x.IconId,
                 Key = x.Key,
                 Version = x.Version,
-                Url = $"{baseUrl}/{iconDir}/{x.Key}.png?v={x.Version}"
+                Url = _assetUrl.Icon(x.Key, x.Version)
             }).ToList();
 
             // 2) StatTypes
@@ -111,10 +105,7 @@ namespace AdminTool.Controllers
                 Name = x.Label ?? x.Key ?? x.FactionId.ToString()
             }).ToList();
 
-            // 뷰에서 경로 쓸 경우
-            ViewBag.IconsDir = $"{baseUrl}/{iconDir}";
-            ViewBag.AssetsBaseUrl = _assetsBaseUrl;
-            ViewBag.PortraitsDir = $"{_assetsBaseUrl}/{_portraitsSubdir}";
+           
         }
         private async Task<List<T>> TryGetAsync<T>(string url, CancellationToken ct)
         {

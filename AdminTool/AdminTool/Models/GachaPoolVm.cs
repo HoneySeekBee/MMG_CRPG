@@ -1,4 +1,4 @@
-﻿using Application.GachaPool;
+﻿using Application.Gacha.GachaPool; 
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
