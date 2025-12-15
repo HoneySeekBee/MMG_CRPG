@@ -109,3 +109,17 @@ message FinishCombatResponsePb {
   int64 gem               = 6;
   int64 token             = 7;
 }
+
+message ToggleSpeedRequestPb {
+  int64 combat_id = 1;
+}
+message ToggleSpeedResponsePb {
+  int64 combat_id = 1;
+  CombatSpeedPb speed = 2;
+}
+enum CombatSpeedPb {
+  COMBAT_SPEED_UNSPECIFIED = 0;
+  COMBAT_SPEED_X1 = 1;
+  COMBAT_SPEED_X1_5 = 2;
+  COMBAT_SPEED_X2 = 3;
+}

@@ -12,6 +12,10 @@ public class CharacterAnimationController : MonoBehaviour
         isMove = false;
         animator.runtimeAnimatorController = controller;
     }
+    public void Set_CombatSpeed(float scale)
+    {
+        animator.speed = scale;
+    }
     public void Play_GetHit(bool isCrit)
     {
         isMove = false;

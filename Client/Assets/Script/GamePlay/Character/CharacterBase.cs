@@ -41,6 +41,10 @@ public class CharacterBase : CombatActorView
         Animator.Set_Controller(controller); 
     }
 
+    public override void ApplySpeed(float scale)
+    {
+        Animator.Set_CombatSpeed(scale);
+    }
     public override void PlayMove()
     {
         Animator.PlayMove(1);

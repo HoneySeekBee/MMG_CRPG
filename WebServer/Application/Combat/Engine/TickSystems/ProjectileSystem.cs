@@ -8,17 +8,18 @@ using System.Threading.Tasks;
 namespace Application.Combat.Engine.TickSystems
 {
     public class ProjectileSystem
-    {
-        private const int TickMs = 100; // 서버 틱 기준 맞춰라
-
-        public void Run(CombatRuntimeState s, List<CombatLogEventDto> logs)
+    { 
+        public void Run(CombatRuntimeState s, List<CombatLogEventDto> logs, int dtMs) 
         {
+            if (dtMs <= 0) return;
+
+            float dt = dtMs / 1000f;
             var removeList = new List<ProjectileState>();
 
             foreach (var p in s.Projectiles)
             {
                 // 1) lifetime
-                p.LifetimeMs -= TickMs;
+                p.LifetimeMs -= dtMs;
                 if (p.LifetimeMs <= 0)
                 {
                     removeList.Add(p);
@@ -44,8 +45,7 @@ namespace Application.Combat.Engine.TickSystems
                     }
                 }
 
-                // 3) move
-                float dt = TickMs / 1000f;
+                // 3) move 
                 p.X += p.VX * dt;
                 p.Z += p.VZ * dt;
 
@@ -111,7 +111,8 @@ namespace Application.Combat.Engine.TickSystems
                     // 이미 때린 적이면 스킵
                     if (p.HitActors.Contains(actor.ActorId)) continue;
                     p.HitActors.Add(actor.ActorId);
-
+                    if (!s.ActiveActors.TryGetValue(p.CasterId, out var caster) || caster.Dead)
+                        continue;
                     s.PendingSkillCasts.Enqueue(new PendingSkillCast
                     {
                         CasterId = p.CasterId,
@@ -123,7 +124,7 @@ namespace Application.Combat.Engine.TickSystems
                     });
 
                     logs.Add(new CombatLogEventDto(
-                        s.NowMs(),
+                        s.NowMs,
                         "projectile_aoe_hit",
                         p.CasterId.ToString(),
                         actor.ActorId.ToString(),
@@ -145,6 +146,9 @@ namespace Application.Combat.Engine.TickSystems
              ProjectileState p,
              ActorState target)
         {
+            if (!s.ActiveActors.TryGetValue(p.CasterId, out var caster) || caster.Dead)
+                return;
+
             s.PendingSkillCasts.Enqueue(new PendingSkillCast
             {
                 CasterId = p.CasterId,
@@ -156,7 +160,7 @@ namespace Application.Combat.Engine.TickSystems
             });
 
             logs.Add(new CombatLogEventDto(
-                s.NowMs(),
+                s.NowMs,
                 "projectile_hit",
                 p.CasterId.ToString(),
                 target.ActorId.ToString(),

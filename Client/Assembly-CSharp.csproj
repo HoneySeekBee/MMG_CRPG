@@ -167,6 +167,7 @@
     <Compile Include="Assets\ExternalAsset\VFX\PixPlays\Components\Scripts\BindingPointType.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\CroakusTheGreatBehavior.cs" />
     <Compile Include="Assets\ExternalAsset\VFX\PixPlays\Components\Scripts\VfxSystem\PlayableVfx.cs" />
+    <Compile Include="Assets\Game\Combat\Core\ICombatSpeedAffectable.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\CharacterStateBase.cs" />
     <Compile Include="Assets\Script\UI\Popup\AdventureDetailPopup.cs" />
     <Compile Include="Assets\Script\UI\Popup\PartySetupPopup.cs" />
@@ -202,6 +203,7 @@
     <Compile Include="Assets\Script\UI\Popup\AdventureLobbyPopup.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\CharacterSoundController.cs" />
     <Compile Include="Assets\Script\Network\ApiConfig.cs" />
+    <Compile Include="Assets\Game\Combat\Core\CombatSpeedApplier.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\CandyKingBehavior.cs" />
     <Compile Include="Assets\ExternalAsset\VFX\PixPlays\Components\Scripts\VfxAddons\TrailScaleWithHierarchy.cs" />
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\Transition.cs" />
@@ -240,6 +242,7 @@
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\BlendShapeAnimator.cs" />
     <Compile Include="Assets\Script\Network\PingScheduler.cs" />
     <Compile Include="Assets\Script\Core\Result.cs" />
+    <Compile Include="Assets\Game\Combat\Core\CombatTime.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CroakWater.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\OnDutyGrummy.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\OscillatePosition.cs" />
@@ -265,6 +268,7 @@
     <Compile Include="Assets\Script\UI\ItemSlotUI.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\Movement\MovementStates\IMovementState.cs" />
     <Compile Include="Assets\Script\GamePlay\BattleMapManager.cs" />
+    <Compile Include="Assets\Game\Combat\UI\CombatSpeedBtn.cs" />
     <Compile Include="Assets\Script\UI\FadeInOut.cs" />
     <Compile Include="Assets\Script\Scenes\Lobby\UserCharacterDeatailUI.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\Movement\MovementStates\Obstacles\IObstacleMovementState.cs" />

@@ -421,8 +421,11 @@ namespace Application.Combat
 
             lock (state.SyncRoot)
             {
+                const int BaseTickMs = 100;
+                int tickDeltaMs = (int)(BaseTickMs * state.TimeScale);
+
                 // 1) 틱 처리 → 이벤트 수집
-                evs = _tickEngine.Process(state);
+                evs = _tickEngine.Process(state, tickDeltaMs);
 
                 // 2) 현재 상태 기준 스냅샷 
                 snapshot = _tickEngine.BuildSnapshot(state);
@@ -447,6 +450,29 @@ namespace Application.Combat
 
             // 4) 스냅샷 + 이벤트를 함께 반환
             return new CombatTickResponse(combatId, tick, snapshot, evs);
+        }
+        public enum CombatSpeed
+        {
+            X1,
+            X15,
+            X2
+        }
+        public Task<CombatSpeed> ToggleSpeedAsync(long combatId, CancellationToken ct)
+        {
+            if (!_runtimeStates.TryGetValue(combatId, out var state))
+                throw new KeyNotFoundException($"Combat {combatId} not found");
+
+            lock (state.SyncRoot)
+            {
+                state.Speed = state.Speed switch
+                {
+                    CombatSpeed.X1 => CombatSpeed.X15,
+                    CombatSpeed.X15 => CombatSpeed.X2,
+                    _ => CombatSpeed.X1
+                };
+
+                return Task.FromResult(state.Speed);
+            }
         }
     }
 }

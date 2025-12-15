@@ -23,29 +23,36 @@ namespace Application.Combat.Engine
         private readonly BuffTickSystem _buffTicks = new();
         private readonly BuffStatSystem _buffStats = new(); 
         private readonly CrowdControlSystem _cc = new();
-        public List<CombatLogEventDto> Process(CombatRuntimeState state)
+        private readonly ProjectileSystem _proj = new(); 
+        public List<CombatLogEventDto> Process(CombatRuntimeState state, int dtMs)
         {
             var events = new List<CombatLogEventDto>();
             if (state.BattleEnded)
                 return events;
+             
+            dtMs = Math.Min(dtMs, 200);
+
+            state.Tick++;
+            state.SimTimeMs += dtMs;
 
             _commands.Run(state, events);
             _ai.Run(state, events);
 
+            _cc.Run(state, dtMs);
+            _move.Run(state, events, dtMs);
 
-            _cc.Run(state);
-            _move.Run(state, events);
-
-            _buffTicks.Run(state, events);
+            _buffTicks.Run(state, events, dtMs);
             _buffStats.Run(state);
 
-            _skill.Run(state, events);
-            _atk.Run(state, events);
+            _skill.Run(state, events, dtMs);
+            _proj.Run(state, events, dtMs);
+            _atk.Run(state, events, dtMs);
             _death.Run(state, events);
             _wave.Run(state, events);
 
             return events;
         }
+       
 
         public CombatSnapshotDto BuildSnapshot(CombatRuntimeState s)
             => _snapshot.Build(s);

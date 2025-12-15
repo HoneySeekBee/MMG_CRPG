@@ -604,6 +604,7 @@ GameObject:
   m_Component:
   - component: {fileID: 563282827}
   - component: {fileID: 563282828}
+  - component: {fileID: 563282829}
   m_Layer: 0
   m_Name: BattleMapManager
   m_TagString: Untagged
@@ -660,6 +661,20 @@ MonoBehaviour:
   - slotNum: 9
     batchSlot: {fileID: 698205558}
   skillFxDb: {fileID: 11400000, guid: b905365f95627d64ba8598cd98494aad, type: 2}
+  combatSpeedApplier: {fileID: 563282829}
+--- !u!114 &563282829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 563282826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8df5e0dcd6997ae42b4e5e0947328821, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  includeInactive: 1
 --- !u!1001 &698205556
 PrefabInstance:
   m_ObjectHideFlags: 0

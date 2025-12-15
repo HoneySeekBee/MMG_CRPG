@@ -17,7 +17,8 @@ namespace Application.Combat.Engine.TickSystems.Skill
     public class SkillSystem
     {
         private readonly SkillResolver _resolver = new();
-        public void Run(CombatRuntimeState s, List<CombatLogEventDto> evs)
+
+        public void Run(CombatRuntimeState s, List<CombatLogEventDto> evs, int dtMs)
         {
             int count = s.PendingSkillCasts.Count;
 
@@ -28,7 +29,7 @@ namespace Application.Combat.Engine.TickSystems.Skill
                 // 딜레이 처리
                 if (cast.DelayMs > 0)
                 {
-                    cast.DelayMs -= 100; // tick = 100ms 라고 가정
+                    cast.DelayMs -= dtMs;
                     if (cast.DelayMs > 0)
                     {
                         s.PendingSkillCasts.Enqueue(cast); // 다시 큐에 넣음
@@ -44,13 +45,10 @@ namespace Application.Combat.Engine.TickSystems.Skill
         {
             if (!state.ActiveActors.TryGetValue(cast.CasterId, out var caster))
                 return;
-            if (caster.Stunned || caster.Frozen || caster.KnockedDown)
-                return;
-
             var skill = state.SkillMaster[cast.SkillId];
-            if (caster.Silenced && skill.Type != SkillType.Attack)
-                return;
 
+            if (!CanCastSkill(caster, skill))
+                return;
             var effect = skill.Effect;
             // 투사체 처리
             if (skill.BaseInfo?["projectile"] != null)
@@ -87,7 +85,7 @@ namespace Application.Combat.Engine.TickSystems.Skill
                     );
 
                     evs.Add(new CombatLogEventDto(
-                        state.NowMs(),
+                        state.NowMs,
                         "skill_hit_aoe",
                         caster.ActorId.ToString(),
                         t.ActorId.ToString(),
@@ -131,7 +129,7 @@ namespace Application.Combat.Engine.TickSystems.Skill
                 );
 
                 evs.Add(new CombatLogEventDto(
-                    state.NowMs(),
+                    state.NowMs,
                     "skill_hit",
                     caster.ActorId.ToString(),
                     t.ActorId.ToString(),
@@ -148,21 +146,24 @@ namespace Application.Combat.Engine.TickSystems.Skill
             // 다음 hit 예약
             if (currentHit + 1 < totalHits)
             {
-                state.PendingSkillCasts.Enqueue(new PendingSkillCast
+                if (!caster.Dead)
                 {
-                    CasterId = cast.CasterId,
-                    TargetActorIds = cast.TargetActorIds,
-                    SkillId = cast.SkillId,
-                    HitIndex = currentHit + 1,
-                    ExtraMultiplier = 1.0f,
-                    DelayMs = 100
-                });
+                    state.PendingSkillCasts.Enqueue(new PendingSkillCast
+                    {
+                        CasterId = cast.CasterId,
+                        TargetActorIds = cast.TargetActorIds,
+                        SkillId = cast.SkillId,
+                        HitIndex = currentHit + 1,
+                        ExtraMultiplier = 1.0f,
+                        DelayMs = 100
+                    });
+                }
                 return;
             }
 
             // 딜레이 히트
             var delayed = skill.BaseInfo?["extra"]?["delayedHit"];
-            if (delayed != null)
+            if (delayed != null && caster.Dead == false)
             {
                 float delay = delayed["delay"]!.GetValue<float>();
                 float multiplier = delayed["multiplier"]!.GetValue<float>();
@@ -177,7 +178,14 @@ namespace Application.Combat.Engine.TickSystems.Skill
                     DelayMs = (int)(delay * 1000)
                 });
             }
-        } 
+        }
+        private bool CanCastSkill(ActorState caster, SkillWithLevelsDto skill)
+        {
+            if (caster.Dead) return false;
+            if (caster.Stunned || caster.Frozen || caster.KnockedDown) return false;
+            if (caster.Silenced && skill.Type != SkillType.Attack) return false;
+            return true;
+        }
         private long? AutoSelectTarget(CombatRuntimeState s, ActorState caster, SkillWithLevelsDto skill)
         {
             var actors = s.ActiveActors.Values;
@@ -206,15 +214,7 @@ namespace Application.Combat.Engine.TickSystems.Skill
             return MathF.Sqrt(dx * dx + dz * dz);
         }
 
-        private int NowMs(CombatRuntimeState s)
-        {
-            return (int)(DateTimeOffset.UtcNow - s.StartedAt).TotalMilliseconds;
-        }
-        private void SpawnProjectile(
-     CombatRuntimeState s,
-     ActorState caster,
-     PendingSkillCast cast,
-     SkillWithLevelsDto skill)
+        private void SpawnProjectile(CombatRuntimeState s, ActorState caster, PendingSkillCast cast, SkillWithLevelsDto skill)
         {
             var pInfo = skill.BaseInfo!["projectile"]!;
             float speed = pInfo["speed"].GetValue<float>();

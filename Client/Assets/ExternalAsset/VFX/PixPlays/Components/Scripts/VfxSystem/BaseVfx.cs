@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace PixPlays.ElementalVFX
 {
-    public class BaseVfx : MonoBehaviour
+    public class BaseVfx : MonoBehaviour, ICombatSpeedAffectable
     {
         [SerializeField] float _SafetyDestroy; //Destroy the object after a certan time in case user error keeps it active.
         [SerializeField] float _DestoyDelay; //Wait for effect to finish stopping before destroying the GameObject
@@ -24,6 +24,10 @@ namespace PixPlays.ElementalVFX
         {
             StopAllCoroutines();
             Destroy(gameObject, _DestoyDelay);
+        }
+
+        public virtual void ApplySpeed(float scale)
+        { 
         }
     }
 }

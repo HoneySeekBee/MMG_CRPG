@@ -33,7 +33,7 @@ namespace Application.Combat.Engine.TickSystems.Skill
             target.Hp = Math.Min(target.HpMax, target.Hp + heal);
 
             logs.Add(new CombatLogEventDto(
-                s.NowMs(),
+                s.NowMs,
                 "heal",
                 caster.ActorId.ToString(),
                 target.ActorId.ToString(),

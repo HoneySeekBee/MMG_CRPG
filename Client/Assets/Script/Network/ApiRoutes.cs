@@ -63,6 +63,7 @@ public static class ApiRoutes
     public static string CombatLog(long combatId, string cursor, int size) => $"/api/pb/combat/{combatId}/log?cursor={cursor}&size={size}";
     public static string CombatTick(long combatId) => $"/api/pb/combat/{combatId}/tick";
     public static string CombatFinish(long combatId) => $"/api/pb/combat/{combatId}/finish";
+    public static string CombatToggleSpeed(long combatId) => $"/api/pb/combat/{combatId}/speed/toggle";
     #endregion
 
     public const string Ping = "/api/ping";

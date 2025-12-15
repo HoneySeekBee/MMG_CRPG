@@ -28,6 +28,6 @@ namespace PixPlays.ElementalVFX
         {
             base.Stop();
             _LocationEffect.Stop();
-        }
+        } 
     }
 }

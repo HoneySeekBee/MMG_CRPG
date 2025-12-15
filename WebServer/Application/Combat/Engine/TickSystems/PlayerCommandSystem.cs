@@ -18,6 +18,9 @@ namespace Application.Combat.Engine.TickSystems
                 if (!state.ActiveActors.TryGetValue(cmd.ActorId, out var actor))
                     continue;
 
+                if (actor.Dead)
+                    continue;
+
                 if (actor.SkillCooldownMs > 0)
                     continue;
 

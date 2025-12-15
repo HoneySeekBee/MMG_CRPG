@@ -9,7 +9,6 @@ namespace Application.Combat.Engine.TickSystems
 {
     public sealed class MovementSystem
     {
-        const float TickMs = 25f;
         const float MoveSpeedPerSec = 20.0f;
 
         const float AllySeparationDist = 1.5f;
@@ -18,10 +17,10 @@ namespace Application.Combat.Engine.TickSystems
 
         private const float CollisionRadius = 1.2f;
         private const float EnemyRadius = 1.6f;
-
-        public void Run(CombatRuntimeState s, List<CombatLogEventDto> evs)
-        { 
-            float speedPerTick = MoveSpeedPerSec * (TickMs / 1000f);
+        public void Run(CombatRuntimeState s, List<CombatLogEventDto> evs, int dtMs)
+        {
+            float dtSeconds = dtMs / 1000f;
+            float speedPerTick = MoveSpeedPerSec * dtSeconds;
 
             bool anyEnemyAlive = s.ActiveActors.Values.Any(a =>
      a.Team == 1 && !a.Dead && a.Hp > 0 && a.Waveindex == s.CurrentWaveIndex);
@@ -34,7 +33,7 @@ namespace Application.Combat.Engine.TickSystems
             {
                 if (actor.IsKnockbacked)
                 {
-                    HandleKnockback(actor);
+                    HandleKnockback(actor, dtMs);
                     continue; // 원래 이동 시스템 무시
                 }
                 if (actor.Stunned || actor.Frozen || actor.KnockedDown || actor.Rooted)
@@ -47,14 +46,14 @@ namespace Application.Combat.Engine.TickSystems
                     HandleReturnToSpawn(s, actors, actor, speedPerTick);
             }
         }
-        private void HandleKnockback(ActorState actor)
+        private void HandleKnockback(ActorState actor, int dtMs)
         {
-            float tickSeconds = TickMs / 1000f;
+            float dtSeconds = dtMs / 1000f;
 
-            actor.X += actor.KnockbackVX * tickSeconds;
-            actor.Z += actor.KnockbackVZ * tickSeconds;
+            actor.X += actor.KnockbackVX * dtSeconds;
+            actor.Z += actor.KnockbackVZ * dtSeconds;
 
-            actor.KnockbackRemainMs -= (int)TickMs;
+            actor.KnockbackRemainMs -= dtMs;
 
             if (actor.KnockbackRemainMs <= 0)
             {

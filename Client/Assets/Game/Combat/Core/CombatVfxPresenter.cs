@@ -12,12 +12,14 @@ namespace Game.Combat
         private readonly SkillFxDataList _skillFxDb;
         private readonly Dictionary<long, GameObject> _actorObjects;
         private readonly Dictionary<long, int> _actorMasterIds;
+        private readonly Transform parent;
 
-        public CombatVfxPresenter(SkillFxDataList skillFxDb, Dictionary<long, GameObject> actorObjects, Dictionary<long, int> actorMasterIds)
+        public CombatVfxPresenter(SkillFxDataList skillFxDb, Dictionary<long, GameObject> actorObjects, Dictionary<long, int> actorMasterIds, Transform particleParent)
         {
             _skillFxDb = skillFxDb;
             _actorObjects = actorObjects;
             _actorMasterIds = actorMasterIds;
+            parent = particleParent;
         }
         public void HandleEvent(CombatLogEventPb ev)
         {
@@ -77,7 +79,7 @@ namespace Game.Combat
                     target = targetGo.transform.position;
                 }
 
-                var fx = Object.Instantiate(fxSet.skillFx);
+                var fx = Object.Instantiate(fxSet.skillFx, parent);
 
                 float duration = 2f;
                 float radius = 1f;
@@ -161,7 +163,7 @@ namespace Game.Combat
                     ? targetGo.transform.position
                     : source + attackerGo.transform.forward * 2f;
 
-                var fx = Object.Instantiate(fxSet.skillFx);
+                var fx = Object.Instantiate(fxSet.skillFx, parent);
 
                 float duration = 1.0f;
                 float radius = 0.5f;
@@ -208,7 +210,7 @@ namespace Game.Combat
             {
                 Vector3 pos = targetGo.transform.position;
 
-                var fx = Object.Instantiate(fxSet.skillFx);
+                var fx = Object.Instantiate(fxSet.skillFx, parent);
 
                 var data = new VfxData(
                     source: pos,

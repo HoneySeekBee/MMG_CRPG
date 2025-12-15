@@ -9,11 +9,10 @@ namespace Application.Combat.Engine.TickSystems
 {
     public sealed class AttackSystem
     {
-        private const int TickMs = 100;      // 1틱 = 100ms
         private const float AttackSpeedScale = 2.0f;
         private readonly Random _rng = new(); // TODO: 나중에 Seed/IRandomProvider로 교체
         const float PaddingDist = 1.0f;
-        public void Run(CombatRuntimeState s, List<CombatLogEventDto> evs)
+        public void Run(CombatRuntimeState s, List<CombatLogEventDto> evs, int dtMs)
         {
             foreach (var actor in s.ActiveActors.Values.Where(a => !a.Dead && a.Hp > 0)) // Hp>0 추가
             {
@@ -22,7 +21,7 @@ namespace Application.Combat.Engine.TickSystems
                 // 쿨타임 감소
                 if (actor.AttackCooldownMs > 0)
                 {
-                    actor.AttackCooldownMs = Math.Max(0, actor.AttackCooldownMs - TickMs);
+                    actor.AttackCooldownMs = Math.Max(0, actor.AttackCooldownMs - dtMs);
                     continue;
                 }
 
@@ -84,7 +83,7 @@ namespace Application.Combat.Engine.TickSystems
                     $"dmg={finalDmg}, hp: {oldHp} -> {target.Hp}"
                 );
                 evs.Add(new CombatLogEventDto(
-                   NowMs(s),
+                  s.NowMs,
                    "normal_attack",
                    actor.ActorId.ToString(),
                    target.ActorId.ToString(),
@@ -94,8 +93,6 @@ namespace Application.Combat.Engine.TickSystems
                  ));
             }
         }
-        private int NowMs(CombatRuntimeState s)
-            => (int)(DateTimeOffset.UtcNow - s.StartedAt).TotalMilliseconds;
 
         private float Distance(ActorState a, ActorState b)
         {
@@ -129,6 +126,6 @@ namespace Application.Combat.Engine.TickSystems
             }
 
             return nearestId;
-        } 
+        }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.ParticleSystem;
 namespace PixPlays.ElementalVFX
 {
     public class ProjectileVfx : BaseVfx
@@ -8,7 +9,8 @@ namespace PixPlays.ElementalVFX
         [SerializeField] ParticleSystem _CastEffect;
         [SerializeField] ParticleSystem _HitEffect;
         [SerializeField] ParticleSystem _ProjectileEffect;
-        [SerializeField] float _FlySpeed=1;
+        private ParticleSystem _curParticle;
+        [SerializeField] float _FlySpeed = 1;
         [SerializeField] AnimationCurve _FlyCurve;
         [SerializeField] Vector2 _FlyCurveDirection;
         [SerializeField] bool _RandomizeFlyCurveDirection;
@@ -19,6 +21,17 @@ namespace PixPlays.ElementalVFX
         {
             base.Play(data);
             StartCoroutine(Coroutine_Projectile());
+        }
+        public override void ApplySpeed(float scale)
+        { 
+            var cast = _CastEffect.main;
+            cast.simulationSpeed = scale;
+
+            var hit = _HitEffect.main;
+            hit.simulationSpeed = scale;
+
+            var projectile = _ProjectileEffect.main;
+            projectile.simulationSpeed = scale;
         }
 
         IEnumerator Coroutine_Projectile()
@@ -50,7 +63,7 @@ namespace PixPlays.ElementalVFX
                     _ProjectileEffect.transform.forward = (pos - _ProjectileEffect.transform.position);
                 }
                 _ProjectileEffect.transform.position = pos;
-                lerp += Time.deltaTime/_FlySpeed;
+                lerp += Time.deltaTime / _FlySpeed;
                 yield return null;
             }
             _HitEffect.transform.forward = (_ProjectileEffect.transform.position - _data.Target);
@@ -58,7 +71,7 @@ namespace PixPlays.ElementalVFX
             _ProjectileEffect.transform.position = _data.Target;
             _ProjectileEffect.Stop();
 
-            
+
             _HitEffect.transform.position = _data.Target;
             _HitEffect.gameObject.SetActive(true);
             _HitEffect.Play();

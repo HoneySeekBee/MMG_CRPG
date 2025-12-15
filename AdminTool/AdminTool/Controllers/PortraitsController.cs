@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Png;
 using System.Net;
+using AdminTool.Helper;
 
 namespace AdminTool.Controllers
 {
@@ -13,20 +14,13 @@ namespace AdminTool.Controllers
         private readonly IAdminAssetUrlBuilder _assetUrl;
         private readonly IAdminAssetCatalog _catalog;
 
-        private readonly string _assetsPhysicalRoot;
-        private readonly string _portraitsSubdir;
-
         public PortraitsController(IHttpClientFactory http, IConfiguration cfg, IAdminAssetUrlBuilder assetUrl, IAdminAssetCatalog catalog)
         {
             _http = http;
             _assetUrl = assetUrl;
             _catalog = catalog;
-
-            _assetsPhysicalRoot = cfg["Assets:PhysicalRoot"]!
-                ?? throw new InvalidOperationException("Assets:PhysicalRoot 설정이 필요합니다.");
-
-            _portraitsSubdir = cfg["Assets:PortraitsSubdir"] ?? "portraits";
         }
+
 
         // API DTO (응답 최소셋만 사용)
         public sealed class PortraitApiDto
@@ -79,62 +73,26 @@ namespace AdminTool.Controllers
             }
 
             var client = _http.CreateClient("GameApi");
-
-            // 기존 버전 조회
-            var all = await _catalog.GetPortraitsAsync(ct);
-            var existing = all.FirstOrDefault(p => p.Key == model.Key);
-            var newVersion = (existing?.Version ?? 0) + 1;
-
-            // 물리 저장 (wwwroot/portraits/{key}.png)
-            var dir = Path.Combine(_assetsPhysicalRoot, _portraitsSubdir);
-            Directory.CreateDirectory(dir);
-            var filePath = Path.Combine(dir, $"{model.Key}.png");
-
+            byte[] pngBytes;
             try
             {
-                // SVG 방지(필요 시)
-                if (string.Equals(model.File.ContentType, "image/svg+xml", StringComparison.OrdinalIgnoreCase) ||
-                    string.Equals(Path.GetExtension(model.File.FileName), ".svg", StringComparison.OrdinalIgnoreCase))
-                {
-                    ModelState.AddModelError(nameof(model.File), "SVG는 지원하지 않습니다. PNG/JPG/WebP를 업로드하세요.");
-                    return View(model);
-                }
-
-                using var s = model.File.OpenReadStream();
-                using var img = await Image.LoadAsync(s, ct);
-                var encoder = new PngEncoder { CompressionLevel = PngCompressionLevel.DefaultCompression };
-                await img.SaveAsPngAsync(filePath, encoder, ct);
+                pngBytes = await ImageUploadHelper.ToPngBytesAsync(model.File, ct);
             }
             catch (Exception ex)
             {
                 TempData["Error"] = $"이미지 처리 중 오류: {ex.Message}";
                 return View(model);
             }
-
-            // 메타 생성/갱신
-            if (existing == null)
+            using var form = ImageUploadHelper.BuildUploadForm(model.Key, pngBytes);
+            var uploadResp = await client.PostAsync("/api/portraits/upload", form, ct);
+            if (!uploadResp.IsSuccessStatusCode)
             {
-                var createBody = new { Key = model.Key }; // CreatePortraitCommand와 일치
-                var resp = await client.PostAsJsonAsync("/api/portraits", createBody, ct);
-                if (!resp.IsSuccessStatusCode)
-                {
-                    TempData["Error"] = $"초상화 메타 생성 실패: {resp.StatusCode}";
-                    return View(model);
-                }
-                TempData["Message"] = $"[{model.Key}] 초상화가 생성되었습니다. (v1)";
-            }
-            else
-            {
-                var updateBody = new { Id = existing.PortraitId, Version = newVersion };
-                var resp = await client.PutAsJsonAsync($"/api/portraits/{existing.PortraitId}", updateBody, ct);
-                if (!resp.IsSuccessStatusCode)
-                {
-                    TempData["Error"] = $"초상화 메타 업데이트 실패: {resp.StatusCode}";
-                    return View(model);
-                }
-                TempData["Message"] = $"[{model.Key}] 초상화가 업데이트되었습니다. (v{newVersion})";
+                var body = await uploadResp.Content.ReadAsStringAsync(ct);
+                TempData["Error"] = $"초상화 업로드 실패: {(int)uploadResp.StatusCode} {uploadResp.ReasonPhrase} - {body}";
+                return View(model);
             }
 
+            TempData["Message"] = $"[{model.Key}] 초상화 업로드 완료";
             _catalog.InvalidatePortraits();
             return RedirectToAction(nameof(Index));
         }
@@ -177,7 +135,7 @@ namespace AdminTool.Controllers
                 CurrentVersion = dto.Version,
                 ImageUrl = _assetUrl.Portrait(dto.Key, dto.Version)
             };
-            return View(vm); // Views/Portraits/Edit.cshtml
+            return View(vm);
         }
 
         [HttpPost]
@@ -186,9 +144,15 @@ namespace AdminTool.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
+            if (model.File is null || model.File.Length == 0)
+            {
+                TempData["Message"] = "변경 사항이 없습니다.";
+                return RedirectToAction(nameof(Index));
+            }
+
             var client = _http.CreateClient("GameApi");
 
-            // 존재 확인
+            // Key 확보
             var resp = await client.GetAsync($"/api/portraits/{model.PortraitId}", ct);
             if (resp.StatusCode == HttpStatusCode.NotFound)
             {
@@ -208,57 +172,29 @@ namespace AdminTool.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // 새 파일 없으면 변경 없음
-            if (model.File is null || model.File.Length == 0)
-            {
-                TempData["Message"] = "변경 사항이 없습니다.";
-                return RedirectToAction(nameof(Index));
-            }
-
-            // 저장 경로
-            var dir = Path.Combine(_assetsPhysicalRoot, _portraitsSubdir);
-            Directory.CreateDirectory(dir);
-            var filePath = Path.Combine(dir, $"{dto.Key}.png");
-
+            byte[] pngBytes;
             try
             {
-                if (string.Equals(model.File.ContentType, "image/svg+xml", StringComparison.OrdinalIgnoreCase) ||
-                    string.Equals(Path.GetExtension(model.File.FileName), ".svg", StringComparison.OrdinalIgnoreCase))
-                {
-                    ModelState.AddModelError(nameof(model.File), "SVG는 지원하지 않습니다. PNG/JPG/WebP를 업로드하세요.");
-                    return View(model);
-                }
-
-                using var s = model.File.OpenReadStream();
-                using var img = await Image.LoadAsync(s, ct);
-                var encoder = new PngEncoder { CompressionLevel = PngCompressionLevel.DefaultCompression };
-                await img.SaveAsPngAsync(filePath, encoder, ct);
-
-                if (!System.IO.File.Exists(filePath))
-                {
-                    TempData["Error"] = $"파일 저장 실패: {filePath}";
-                    return View(model);
-                }
-
-                // 버전 +1
-                var newVersion = dto.Version + 1;
-                var updateBody = new { Id = dto.PortraitId, Version = newVersion };
-                var updateResp = await client.PutAsJsonAsync($"/api/portraits/{dto.PortraitId}", updateBody, ct);
-                if (!updateResp.IsSuccessStatusCode)
-                {
-                    TempData["Error"] = $"초상화 메타 업데이트 실패: {updateResp.StatusCode}";
-                    return View(model);
-                }
-
-                TempData["Message"] = $"[{dto.Key}] 초상화가 업데이트되었습니다. (v{newVersion})";
-                _catalog.InvalidatePortraits();
-                return RedirectToAction(nameof(Index));
+                pngBytes = await ImageUploadHelper.ToPngBytesAsync(model.File, ct);
             }
             catch (Exception ex)
             {
                 TempData["Error"] = $"이미지 처리 중 오류: {ex.Message}";
                 return View(model);
             }
+
+            using var form = ImageUploadHelper.BuildUploadForm(dto.Key, pngBytes);
+            var uploadResp = await client.PostAsync("/api/portraits/upload", form, ct);
+            if (!uploadResp.IsSuccessStatusCode)
+            {
+                var body = await uploadResp.Content.ReadAsStringAsync(ct);
+                TempData["Error"] = $"초상화 업로드 실패: {(int)uploadResp.StatusCode} {uploadResp.ReasonPhrase} - {body}";
+                return View(model);
+            }
+
+            TempData["Message"] = $"[{dto.Key}] 초상화 업로드 완료";
+            _catalog.InvalidatePortraits();
+            return RedirectToAction(nameof(Index));
         }
 
         // ============ [4] Delete ============

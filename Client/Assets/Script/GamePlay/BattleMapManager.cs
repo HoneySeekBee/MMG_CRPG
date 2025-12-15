@@ -70,6 +70,8 @@ public class BattleMapManager : MonoBehaviour
     [SerializeField] private SkillFxDataList skillFxDb;
     private readonly Dictionary<long, int> _actorMasterIds = new();
 
+    [SerializeField] private CombatSpeedApplier combatSpeedApplier; // Unity 내부 동작 스피드 적용
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -189,7 +191,7 @@ public class BattleMapManager : MonoBehaviour
             _stageCleared = true;
         };
 
-        _vfx = new CombatVfxPresenter(skillFxDb, _actorObjects, _actorMasterIds);
+        _vfx = new CombatVfxPresenter(skillFxDb, _actorObjects, _actorMasterIds, this.transform);
     }
     private IEnumerator TickLoop_CombatDirector()
     {
@@ -517,7 +519,7 @@ public class BattleMapManager : MonoBehaviour
 
         return defaultValue;
     }
-  
+
     private List<CombatActorView> GetAlivePlayerActors()
     {
         var result = new List<CombatActorView>();
@@ -579,5 +581,21 @@ public class BattleMapManager : MonoBehaviour
         Debug.Log("[BattleMap] 스킬 요청 성공");
         onResult?.Invoke(true);
     }
-
+    public void OnClickSpeedButton()
+    {
+        StartCoroutine(
+            _combatNetwork.ToggleSpeedAsync(
+                _combatId,
+                res =>
+                {
+                    if (res.Ok)
+                    {
+                        BattleMapPopup.Instance.SpeedBtn.UpdateSpeedUI(res.Data.Speed);
+                        CombatTime.SetSpeed(res.Data.Speed);
+                        combatSpeedApplier.RefreshAndApply(CombatTime.TimeScale); 
+                    }
+                }
+            )
+        );
+    }
 }

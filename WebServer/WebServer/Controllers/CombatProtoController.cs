@@ -3,6 +3,7 @@ using Combat;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using WebServer.Mappers;
+using static Application.Combat.CombatService;
 
 namespace WebServer.Controllers
 {
@@ -68,7 +69,30 @@ namespace WebServer.Controllers
             var res = await _service.TickAsync(combatId, req.Tick, ct);
             return CombatProtoMapper.ToPb(res);
         }
+        [HttpPost("{combatId:long}/speed/toggle")]
+        public async Task<ActionResult<ToggleSpeedResponsePb>> ToggleSpeed(
+            long combatId,
+            [FromBody] ToggleSpeedRequestPb req,
+            CancellationToken ct)
+        {
+            if (req.CombatId == 0) req.CombatId = combatId;
+            else if (req.CombatId != combatId)
+                return BadRequest("COMBAT_ID_MISMATCH");
 
+            var newSpeed = await _service.ToggleSpeedAsync(combatId, ct);
+
+            return Ok(new ToggleSpeedResponsePb
+            {
+                CombatId = combatId,
+                Speed = newSpeed switch
+                {
+                    CombatSpeed.X1 => CombatSpeedPb.CombatSpeedX1,
+                    CombatSpeed.X15 => CombatSpeedPb.CombatSpeedX15,
+                    CombatSpeed.X2 => CombatSpeedPb.CombatSpeedX2,
+                    _ => CombatSpeedPb.CombatSpeedUnspecified
+                }
+            });
+        }
         [HttpPost("{combatId:long}/finish")]
         public async Task<ActionResult<FinishCombatResponsePb>> Finish([FromRoute] long combatId, [FromBody] FinishCombatRequestPb req, CancellationToken ct)
         {

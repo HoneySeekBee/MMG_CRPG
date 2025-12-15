@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Application.Combat.CombatService;
 
 namespace Application.Combat
 {
@@ -22,9 +23,7 @@ namespace Application.Combat
         Task<CombatLogSummaryDto> GetSummaryAsync(long combatId, CancellationToken ct);
         Task<CombatTickResponse> TickAsync(long combatId, int tick, CancellationToken ct);
         Task<FinishCombatResponse> FinishAsync(FinishCombatRequest req, CancellationToken ct);
-
-        // 선택: 보상 수령 등
-        // Task<ClaimResponse> ClaimAsync(long combatId, CancellationToken ct);
+        Task<CombatSpeed> ToggleSpeedAsync(long combatId, CancellationToken ct);
     }
     public interface IStageReader { Task<StageDetailDto> GetAsync(long stageId, CancellationToken ct); }
     public interface ICharacterReader { Task<CharacterMasterDto> GetAsync(long characterId, CancellationToken ct); }

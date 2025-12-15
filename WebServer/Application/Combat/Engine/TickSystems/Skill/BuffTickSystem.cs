@@ -10,34 +10,29 @@ namespace Application.Combat.Engine.TickSystems.Skill
 {
     public class BuffTickSystem
     {
-        public void Run(CombatRuntimeState state, List<CombatLogEventDto> logs)
+        public void Run(CombatRuntimeState state, List<CombatLogEventDto> logs, int dtMs)
         {
             foreach (var actor in state.ActiveActors.Values)
             {
                 if (actor.Dead)
                     continue;
 
-                ProcessBuffs(state, actor, logs);
-                ProcessCcDurations(actor);
+                ProcessBuffs(state, actor, logs, dtMs);
             }
         }
-
-        private void ProcessBuffs(
-            CombatRuntimeState state,
-            ActorState actor,
-            List<CombatLogEventDto> logs)
+        private void ProcessBuffs(CombatRuntimeState state, ActorState actor, List<CombatLogEventDto> logs, int dtMs)
         {
             var expired = new List<AppliedBuff>();
 
             foreach (var buff in actor.Buffs)
             {
                 // 1) 지속시간 감소 
-                buff.DurationMs -= 100; // tick이 100ms 기준. 맞게 조정
+                buff.DurationMs -= dtMs;
 
                 // 2) DOT 적용 (Bleed / Burn / Poison)  
                 if (buff.IsDebuff)
                 {
-                    ApplyDotEffect(state, actor, buff, logs);
+                    ApplyDotEffect(state, actor, buff, logs, dtMs);
                 }
 
                 // 3) 만료 체크 
@@ -63,7 +58,7 @@ namespace Application.Combat.Engine.TickSystems.Skill
                     actor.Shield = Math.Max(0, actor.Shield);
 
                     logs.Add(new CombatLogEventDto(
-                        state.NowMs(),
+                        state.NowMs,
                         "shield_expire",
                         actor.ActorId.ToString(),
                         actor.ActorId.ToString(),
@@ -78,7 +73,7 @@ namespace Application.Combat.Engine.TickSystems.Skill
                 }
 
                 logs.Add(new CombatLogEventDto(
-                    state.NowMs(),
+                    state.NowMs,
                     "buff_expire",
                     actor.ActorId.ToString(),
                     null,
@@ -93,20 +88,17 @@ namespace Application.Combat.Engine.TickSystems.Skill
         }
 
         // 디버프 종료 
-        private void ApplyDotEffect(
-           CombatRuntimeState state,
-           ActorState actor,
-           AppliedBuff buff,
-           List<CombatLogEventDto> logs)
+        private void ApplyDotEffect(CombatRuntimeState state, ActorState actor, AppliedBuff buff, List<CombatLogEventDto> logs, int dtMs)
         {
             if (buff.Kind == BuffKind.Bleed)
             {
-                int dmg = (int)buff.Value;
+                int dmg = (int)(buff.Value * (dtMs / 1000f));
+                if (dmg <= 0) return;
 
-                actor.Hp = System.Math.Max(0, actor.Hp - dmg);
+                actor.Hp = Math.Max(0, actor.Hp - dmg);
 
                 logs.Add(new CombatLogEventDto(
-                    state.NowMs(),
+                    state.NowMs,
                     "dot_bleed",
                     actor.ActorId.ToString(),
                     actor.ActorId.ToString(),
@@ -152,59 +144,6 @@ namespace Application.Combat.Engine.TickSystems.Skill
                     break;
             }
         }
-        private void ProcessCcDurations(ActorState actor)
-        {
-            int tick = 100;
 
-            if (actor.Stunned)
-            {
-                actor.StunMs -= tick;
-                if (actor.StunMs <= 0)
-                {
-                    actor.Stunned = false;
-                    actor.StunMs = 0;
-                }
-            }
-
-            if (actor.Silenced)
-            {
-                actor.SilenceMs -= tick;
-                if (actor.SilenceMs <= 0)
-                {
-                    actor.Silenced = false;
-                    actor.SilenceMs = 0;
-                }
-            }
-
-            if (actor.Rooted)
-            {
-                actor.RootMs -= tick;
-                if (actor.RootMs <= 0)
-                {
-                    actor.Rooted = false;
-                    actor.RootMs = 0;
-                }
-            }
-
-            if (actor.Frozen)
-            {
-                actor.FreezeMs -= tick;
-                if (actor.FreezeMs <= 0)
-                {
-                    actor.Frozen = false;
-                    actor.FreezeMs = 0;
-                }
-            }
-
-            if (actor.KnockedDown)
-            {
-                actor.KnockdownMs -= tick;
-                if (actor.KnockdownMs <= 0)
-                {
-                    actor.KnockedDown = false;
-                    actor.KnockdownMs = 0;
-                }
-            }
-        }
     }
 }

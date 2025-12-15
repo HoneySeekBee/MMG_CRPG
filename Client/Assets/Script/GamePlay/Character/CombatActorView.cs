@@ -8,7 +8,7 @@ public enum CombatTeam
     Player = 0,
     Enemy = 1
 }
-public class CombatActorView : MonoBehaviour
+public abstract class CombatActorView : MonoBehaviour, ICombatSpeedAffectable
 {
     [Header("Runtime Info")]
     public long ActorId;        // ¼­¹ö ActorId
@@ -94,4 +94,5 @@ public class CombatActorView : MonoBehaviour
     {
 
     }
+    public abstract void ApplySpeed(float scale);
 }

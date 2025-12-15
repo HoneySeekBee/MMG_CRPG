@@ -12,6 +12,10 @@ public class MonsterAnimationController : MonoBehaviour
         animator = this.GetComponentInChildren<MonsterModelData>().animator;
         Debug.Log($"[Monster] animator : {animator == null}");
     }
+    public void Set_CombatSpeed(float scale)
+    {
+        animator.speed = scale;
+    }
     public void Play_GetHit(bool isCrit)
     {
         isMove = false;

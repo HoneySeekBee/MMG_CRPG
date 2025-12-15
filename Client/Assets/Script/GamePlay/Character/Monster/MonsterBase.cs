@@ -43,4 +43,9 @@ public class MonsterBase : CombatActorView
     {
         Animator.PlayAttack(isCrit);
     }
+
+    public override void ApplySpeed(float scale)
+    {
+        Animator.Set_CombatSpeed(scale);
+    }
 }

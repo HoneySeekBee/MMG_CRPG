@@ -11,6 +11,8 @@ using UnityEditor.PackageManager;
 using UnityEngine;
 public class CombatNetwork
 {
+    public static float TimeScale { get; private set; } = 1f;
+
     private readonly int _userId;
     public ProtoHttpClient Http;
     private Popup _popup;
@@ -208,5 +210,19 @@ public class CombatNetwork
 
             onDone?.Invoke(res);
         });
+    }
+    public IEnumerator ToggleSpeedAsync(long combatId, Action<ApiResult<ToggleSpeedResponsePb>> onDone)
+    {
+        var req = new ToggleSpeedRequestPb
+        {
+            CombatId = combatId
+        };
+
+        yield return Http.Post(
+            ApiRoutes.CombatToggleSpeed(combatId),
+            req,
+            ToggleSpeedResponsePb.Parser,
+            onDone
+        );
     }
 }

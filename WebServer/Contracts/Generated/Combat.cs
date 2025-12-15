@@ -63,10 +63,15 @@ namespace Combat {
             "EAoIc3RhZ2VfaWQYASABKAUSDQoFc3RhcnMYAiABKAUSEwoLZmlyc3RfY2xl",
             "YXIYAyABKAgSKgoHcmV3YXJkcxgEIAMoCzIZLmNvbWJhdC5TdGFnZVJld2Fy",
             "ZEl0ZW1QYhIMCgRnb2xkGAUgASgDEgsKA2dlbRgGIAEoAxINCgV0b2tlbhgH",
-            "IAEoA2IGcHJvdG8z"));
+            "IAEoAyIpChRUb2dnbGVTcGVlZFJlcXVlc3RQYhIRCgljb21iYXRfaWQYASAB",
+            "KAMiUAoVVG9nZ2xlU3BlZWRSZXNwb25zZVBiEhEKCWNvbWJhdF9pZBgBIAEo",
+            "AxIkCgVzcGVlZBgCIAEoDjIVLmNvbWJhdC5Db21iYXRTcGVlZFBiKm4KDUNv",
+            "bWJhdFNwZWVkUGISHAoYQ09NQkFUX1NQRUVEX1VOU1BFQ0lGSUVEEAASEwoP",
+            "Q09NQkFUX1NQRUVEX1gxEAESFQoRQ09NQkFUX1NQRUVEX1gxXzUQAhITCg9D",
+            "T01CQVRfU1BFRURfWDIQA2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.WrappersReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.StructReflection.Descriptor, },
-          new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Combat.CombatSpeedPb), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Combat.StartCombatRequestPb), global::Combat.StartCombatRequestPb.Parser, new[]{ "StageId", "UserId", "BattleId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Combat.ActorInitPb), global::Combat.ActorInitPb.Parser, new[]{ "ActorId", "Team", "X", "Z", "Hp", "WaveIndex", "MasterId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Combat.CombatInitialSnapshotPb), global::Combat.CombatInitialSnapshotPb.Parser, new[]{ "Actors" }, null, null, null, null),
@@ -81,12 +86,24 @@ namespace Combat {
             new pbr::GeneratedClrTypeInfo(typeof(global::Combat.CombatSnapshotPb), global::Combat.CombatSnapshotPb.Parser, new[]{ "Actors" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Combat.FinishCombatRequestPb), global::Combat.FinishCombatRequestPb.Parser, new[]{ "CombatId", "UserId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Combat.StageRewardItemPb), global::Combat.StageRewardItemPb.Parser, new[]{ "ItemId", "Qty", "FirstClearReward" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Combat.FinishCombatResponsePb), global::Combat.FinishCombatResponsePb.Parser, new[]{ "StageId", "Stars", "FirstClear", "Rewards", "Gold", "Gem", "Token" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Combat.FinishCombatResponsePb), global::Combat.FinishCombatResponsePb.Parser, new[]{ "StageId", "Stars", "FirstClear", "Rewards", "Gold", "Gem", "Token" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Combat.ToggleSpeedRequestPb), global::Combat.ToggleSpeedRequestPb.Parser, new[]{ "CombatId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Combat.ToggleSpeedResponsePb), global::Combat.ToggleSpeedResponsePb.Parser, new[]{ "CombatId", "Speed" }, null, null, null, null)
           }));
     }
     #endregion
 
   }
+  #region Enums
+  public enum CombatSpeedPb {
+    [pbr::OriginalName("COMBAT_SPEED_UNSPECIFIED")] CombatSpeedUnspecified = 0,
+    [pbr::OriginalName("COMBAT_SPEED_X1")] CombatSpeedX1 = 1,
+    [pbr::OriginalName("COMBAT_SPEED_X1_5")] CombatSpeedX15 = 2,
+    [pbr::OriginalName("COMBAT_SPEED_X2")] CombatSpeedX2 = 3,
+  }
+
+  #endregion
+
   #region Messages
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class StartCombatRequestPb : pb::IMessage<StartCombatRequestPb>
@@ -4496,6 +4513,423 @@ namespace Combat {
           }
           case 56: {
             Token = input.ReadInt64();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class ToggleSpeedRequestPb : pb::IMessage<ToggleSpeedRequestPb>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<ToggleSpeedRequestPb> _parser = new pb::MessageParser<ToggleSpeedRequestPb>(() => new ToggleSpeedRequestPb());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<ToggleSpeedRequestPb> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Combat.CombatReflection.Descriptor.MessageTypes[15]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ToggleSpeedRequestPb() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ToggleSpeedRequestPb(ToggleSpeedRequestPb other) : this() {
+      combatId_ = other.combatId_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ToggleSpeedRequestPb Clone() {
+      return new ToggleSpeedRequestPb(this);
+    }
+
+    /// <summary>Field number for the "combat_id" field.</summary>
+    public const int CombatIdFieldNumber = 1;
+    private long combatId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public long CombatId {
+      get { return combatId_; }
+      set {
+        combatId_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as ToggleSpeedRequestPb);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(ToggleSpeedRequestPb other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (CombatId != other.CombatId) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (CombatId != 0L) hash ^= CombatId.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (CombatId != 0L) {
+        output.WriteRawTag(8);
+        output.WriteInt64(CombatId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (CombatId != 0L) {
+        output.WriteRawTag(8);
+        output.WriteInt64(CombatId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (CombatId != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(CombatId);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(ToggleSpeedRequestPb other) {
+      if (other == null) {
+        return;
+      }
+      if (other.CombatId != 0L) {
+        CombatId = other.CombatId;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            CombatId = input.ReadInt64();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            CombatId = input.ReadInt64();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class ToggleSpeedResponsePb : pb::IMessage<ToggleSpeedResponsePb>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<ToggleSpeedResponsePb> _parser = new pb::MessageParser<ToggleSpeedResponsePb>(() => new ToggleSpeedResponsePb());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<ToggleSpeedResponsePb> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Combat.CombatReflection.Descriptor.MessageTypes[16]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ToggleSpeedResponsePb() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ToggleSpeedResponsePb(ToggleSpeedResponsePb other) : this() {
+      combatId_ = other.combatId_;
+      speed_ = other.speed_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ToggleSpeedResponsePb Clone() {
+      return new ToggleSpeedResponsePb(this);
+    }
+
+    /// <summary>Field number for the "combat_id" field.</summary>
+    public const int CombatIdFieldNumber = 1;
+    private long combatId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public long CombatId {
+      get { return combatId_; }
+      set {
+        combatId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "speed" field.</summary>
+    public const int SpeedFieldNumber = 2;
+    private global::Combat.CombatSpeedPb speed_ = global::Combat.CombatSpeedPb.CombatSpeedUnspecified;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Combat.CombatSpeedPb Speed {
+      get { return speed_; }
+      set {
+        speed_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as ToggleSpeedResponsePb);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(ToggleSpeedResponsePb other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (CombatId != other.CombatId) return false;
+      if (Speed != other.Speed) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (CombatId != 0L) hash ^= CombatId.GetHashCode();
+      if (Speed != global::Combat.CombatSpeedPb.CombatSpeedUnspecified) hash ^= Speed.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (CombatId != 0L) {
+        output.WriteRawTag(8);
+        output.WriteInt64(CombatId);
+      }
+      if (Speed != global::Combat.CombatSpeedPb.CombatSpeedUnspecified) {
+        output.WriteRawTag(16);
+        output.WriteEnum((int) Speed);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (CombatId != 0L) {
+        output.WriteRawTag(8);
+        output.WriteInt64(CombatId);
+      }
+      if (Speed != global::Combat.CombatSpeedPb.CombatSpeedUnspecified) {
+        output.WriteRawTag(16);
+        output.WriteEnum((int) Speed);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (CombatId != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(CombatId);
+      }
+      if (Speed != global::Combat.CombatSpeedPb.CombatSpeedUnspecified) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Speed);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(ToggleSpeedResponsePb other) {
+      if (other == null) {
+        return;
+      }
+      if (other.CombatId != 0L) {
+        CombatId = other.CombatId;
+      }
+      if (other.Speed != global::Combat.CombatSpeedPb.CombatSpeedUnspecified) {
+        Speed = other.Speed;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            CombatId = input.ReadInt64();
+            break;
+          }
+          case 16: {
+            Speed = (global::Combat.CombatSpeedPb) input.ReadEnum();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            CombatId = input.ReadInt64();
+            break;
+          }
+          case 16: {
+            Speed = (global::Combat.CombatSpeedPb) input.ReadEnum();
             break;
           }
         }

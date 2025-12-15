@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Application.Combat.Engine.TickSystems
 {
     public sealed class WaveSystem
-    {  
+    {
         public void Run(CombatRuntimeState s, List<CombatLogEventDto> evs)
         {
             Console.WriteLine($"[WaveSystem] tick: curWave={s.CurrentWaveIndex}, WaitingNextWave={s.WaitingNextWave}, NextWaveSpawnMs={s.NextWaveSpawnMs}");
@@ -22,8 +22,7 @@ namespace Application.Combat.Engine.TickSystems
                 Console.WriteLine("[WaveSystem] s.MasterPack.Stage is null");
                 return;
             }
-
-            int now = NowMs(s);
+            int now = s.NowMs;
 
             // 이미 웨이브 클리어 후, 다음 웨이브 스폰을 기다리는 중이면
             if (s.WaitingNextWave)
@@ -86,7 +85,8 @@ namespace Application.Combat.Engine.TickSystems
 
             Console.WriteLine($"[WaveSystem] Wave {s.CurrentWaveIndex} cleared. Resetting players to spawn.");
 
-            //  현재 웨이브 적 전부 죽음
+            //  현재 웨이브 적 전부 죽음 
+            CleanupWaveEnemies(s);
             ResetPlayerPositionsToSpawn(s);
 
             evs.Add(new CombatLogEventDto(
@@ -166,7 +166,7 @@ namespace Application.Combat.Engine.TickSystems
                 s.ActiveActors[actorId] = a;
 
                 evs.Add(new CombatLogEventDto(
-                    TMs: NowMs(s),
+                    TMs: s.NowMs,
                     Type: "spawn",
                     Actor: actorId.ToString(),
                     Target: null,
@@ -182,9 +182,16 @@ namespace Application.Combat.Engine.TickSystems
             var dz = a.Z - a.SpawnZ;
             return dx * dx + dz * dz <= radius * radius;
         }
-        private int NowMs(CombatRuntimeState s)
-            => (int)(DateTimeOffset.UtcNow - s.StartedAt).TotalMilliseconds;
-        
+        private void CleanupWaveEnemies(CombatRuntimeState s)
+        {
+            var ids = s.ActiveActors.Values
+                .Where(a => a.Team == 1 && a.Waveindex == s.CurrentWaveIndex)
+                .Select(a => a.ActorId)
+                .ToList();
+
+            foreach (var id in ids)
+                s.ActiveActors.Remove(id);
+        }
         private void ResetPlayerPositionsToSpawn(CombatRuntimeState s)
         {
             foreach (var a in s.ActiveActors.Values)

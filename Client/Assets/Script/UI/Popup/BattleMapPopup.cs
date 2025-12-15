@@ -16,9 +16,7 @@ public class BattleMapPopup : UIPopup
 {
     public static BattleMapPopup Instance { get; private set; }
     [Header("UI")]
-    [SerializeField] private Button PauseBtn;
-    [SerializeField] private Button SpeedBtn;
-    [SerializeField] private Button AutoBtn;
+    public CombatSpeedBtn SpeedBtn;
     [SerializeField] private TMP_Text TimeText;
 
     [SerializeField] private Transform SkillIconTr;
@@ -48,12 +46,13 @@ public class BattleMapPopup : UIPopup
         StartCoroutine(BattleMapManager.Instance.Set_BattleMap(fadeIn));
         StartPopup.SetActive(false);
         Init_SKillBtn();
+        SpeedBtn.Set(BattleMapManager.Instance.OnClickSpeedButton);
     }
     private void Init_SKillBtn()
     {
         // 1) 기존 버튼 모두 비활성화 (풀링 방식)
         foreach (var btn in SkillButtons)
-            btn.gameObject.SetActive(false); 
+            btn.gameObject.SetActive(false);
     }
     public void CreateSkillButton(int characterMasterId, long actorId, int level)
     {

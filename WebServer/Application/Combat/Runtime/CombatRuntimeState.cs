@@ -9,11 +9,22 @@ using Application.SkillLevels;
 using Application.Skills;
 using Domain.Entities.Skill;
 using Domain.Enum;
+using static Application.Combat.CombatService;
 namespace Application.Combat.Runtime
 {
     public sealed class CombatRuntimeState
     { 
         public int Tick { get; set; } = 0;
+        public int SimTimeMs { get; set; }
+        public CombatSpeed Speed { get; set; } = CombatSpeed.X1;
+        public double TimeScale => Speed switch
+        {
+            CombatSpeed.X1 => 1.0,
+            CombatSpeed.X15 => 1.5,
+            CombatSpeed.X2 => 2.0,
+            _ => 1.0
+        };
+        public double SimAccumulatorMs { get; set; } = 0;
         public long CombatId { get; init; }
         public int StageId { get; init; }
         public int UserId { get; set; }
@@ -39,10 +50,7 @@ namespace Application.Combat.Runtime
         public List<ProjectileState> Projectiles { get; set; } = new();
 
 
-        public int NowMs()
-        {
-            return (int)(DateTimeOffset.UtcNow - StartedAt).TotalMilliseconds;
-        }
+        public int NowMs => SimTimeMs;
     }
     public enum CombatBattlePhase
     {

@@ -46,7 +46,7 @@ namespace Application.Combat.Engine.TickSystems.Skill
                 rawDamage -= absorbed;
 
                 logs.Add(new CombatLogEventDto(
-                    s.NowMs(),
+                    s.NowMs,
                     "shield_absorb",
                     caster.ActorId.ToString(),
                     target.ActorId.ToString(),
@@ -68,7 +68,7 @@ namespace Application.Combat.Engine.TickSystems.Skill
 
             // 로그
             logs.Add(new CombatLogEventDto(
-                s.NowMs(),
+                s.NowMs,
                 "damage",
                 caster.ActorId.ToString(),
                 target.ActorId.ToString(),

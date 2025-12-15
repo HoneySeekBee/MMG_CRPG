@@ -9,40 +9,58 @@ namespace Application.Combat.Engine.TickSystems
 {
     public class CrowdControlSystem
     {
-        private const int TickMs = 100;
-
-        public void Run(CombatRuntimeState state)
+        public void Run(CombatRuntimeState state, int dtMs)
         {
             foreach (var a in state.ActiveActors.Values)
             {
                 if (a.StunMs > 0)
                 {
-                    a.StunMs -= TickMs;
-                    if (a.StunMs <= 0) a.Stunned = false;
+                    a.StunMs -= dtMs;
+                    if (a.StunMs <= 0)
+                    {
+                        a.StunMs = 0;
+                        a.Stunned = false;
+                    }
                 }
 
                 if (a.SilenceMs > 0)
                 {
-                    a.SilenceMs -= TickMs;
-                    if (a.SilenceMs <= 0) a.Silenced = false;
+                    a.SilenceMs -= dtMs;
+                    if (a.SilenceMs <= 0)
+                    {
+                        a.SilenceMs = 0;
+                        a.Silenced = false;
+                    }
                 }
 
                 if (a.FreezeMs > 0)
                 {
-                    a.FreezeMs -= TickMs;
-                    if (a.FreezeMs <= 0) a.Frozen = false;
+                    a.FreezeMs -= dtMs;
+                    if (a.FreezeMs <= 0)
+                    {
+                        a.FreezeMs = 0;
+                        a.Frozen = false;
+                    }
                 }
 
                 if (a.RootMs > 0)
                 {
-                    a.RootMs -= TickMs;
-                    if (a.RootMs <= 0) a.Rooted = false;
+                    a.RootMs -= dtMs;
+                    if (a.RootMs <= 0)
+                    {
+                        a.RootMs = 0;
+                        a.Rooted = false;
+                    }
                 }
 
                 if (a.KnockdownMs > 0)
                 {
-                    a.KnockdownMs -= TickMs;
-                    if (a.KnockdownMs <= 0) a.KnockedDown = false;
+                    a.KnockdownMs -= dtMs;
+                    if (a.KnockdownMs <= 0)
+                    {
+                        a.KnockdownMs = 0;
+                        a.KnockedDown = false;
+                    }
                 }
             }
         }

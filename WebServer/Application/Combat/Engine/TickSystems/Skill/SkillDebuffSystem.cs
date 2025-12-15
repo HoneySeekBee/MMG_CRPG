@@ -275,7 +275,7 @@ namespace Application.Combat.Engine.TickSystems.Skill
             Dictionary<string, object?> extra = null)
         {
             logs.Add(new CombatLogEventDto(
-                state.NowMs(),
+                state.NowMs,
                 type,
                 caster.ActorId.ToString(),
                 target.ActorId.ToString(),

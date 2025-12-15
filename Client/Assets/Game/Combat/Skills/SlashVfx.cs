@@ -6,6 +6,14 @@ public class SlashVfx : BaseVfx
 {
     [SerializeField] ParticleSystem[] particles;
 
+    public override void ApplySpeed(float scale)
+    {
+        foreach (var particle in particles)
+        {
+            var main = particle.main;
+            main.simulationSpeed = scale;
+        }
+    }
     public override void Play(VfxData data)
     {
         base.Play(data);

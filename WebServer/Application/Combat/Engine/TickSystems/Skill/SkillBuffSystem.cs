@@ -34,7 +34,7 @@ namespace Application.Combat.Engine.TickSystems.Skill
                 ApplyStatChange(target, effect.Kind, effect.Value);
 
                 logs.Add(new CombatLogEventDto(
-                    s.NowMs(),
+                    s.NowMs,
                     "buff_refresh",
                     caster.ActorId.ToString(),
                     target.ActorId.ToString(),
@@ -66,7 +66,7 @@ namespace Application.Combat.Engine.TickSystems.Skill
             ApplyStatChange(target, effect.Kind, effect.Value);
 
             logs.Add(new CombatLogEventDto(
-                s.NowMs(),
+                s.NowMs,
                 "buff_apply",
                 caster.ActorId.ToString(),
                 target.ActorId.ToString(),
@@ -102,7 +102,7 @@ namespace Application.Combat.Engine.TickSystems.Skill
             });
 
             logs.Add(new CombatLogEventDto(
-                s.NowMs(),
+                s.NowMs,
                 "shield_apply",
                 caster.ActorId.ToString(),
                 target.ActorId.ToString(),
