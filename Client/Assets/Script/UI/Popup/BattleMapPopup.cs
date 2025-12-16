@@ -47,6 +47,8 @@ public class BattleMapPopup : UIPopup
         StartPopup.SetActive(false);
         Init_SKillBtn();
         SpeedBtn.Set(BattleMapManager.Instance.OnClickSpeedButton);
+
+        AudioManager.Instance.PlayBGM("bgm_battle_field");
     }
     private void Init_SKillBtn()
     {
@@ -76,6 +78,7 @@ public class BattleMapPopup : UIPopup
     public IEnumerator ShowStart()
     {
         StartPopup.SetActive(true);
+        AudioManager.Instance.PlaySFX("SFX_Enter");
         yield return new WaitForSeconds(0.5f);
         StartPopup.SetActive(false);
     }

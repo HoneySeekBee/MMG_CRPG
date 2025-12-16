@@ -64,7 +64,7 @@ namespace Game.Combat
 
             // 사운드
             if (fxSet.castSound != null)
-                AudioSource.PlayClipAtPoint(fxSet.castSound, casterGo.transform.position);
+                AudioManager.Instance.PlaySFX(fxSet.castSound); 
 
             // FX
             if (fxSet.skillFx != null)
@@ -147,12 +147,12 @@ namespace Game.Combat
 
             // 사운드 (castSound를 “스윙”으로 쓸지, hitSound를 “피격”으로 쓸지 선택)
             if (fxSet.castSound != null)
-                AudioSource.PlayClipAtPoint(fxSet.castSound, attackerGo.transform.position);
+                AudioManager.Instance.PlaySFX(fxSet.castSound);
 
             if (fxSet.hitSound != null)
             {
-                var pos = targetGo != null ? targetGo.transform.position : attackerGo.transform.position;
-                AudioSource.PlayClipAtPoint(fxSet.hitSound, pos);
+                var pos = targetGo != null ? targetGo.transform.position : attackerGo.transform.position; 
+                AudioManager.Instance.PlaySFX(fxSet.hitSound); 
             }
 
             //  FX (있으면 재생)
@@ -203,7 +203,7 @@ namespace Game.Combat
 
             // 5. 히트 사운드
             if (fxSet.hitSound != null)
-                AudioSource.PlayClipAtPoint(fxSet.hitSound, targetGo.transform.position);
+                AudioManager.Instance.PlaySFX(fxSet.hitSound); 
 
             // 6. 히트 FX (선택)
             if (fxSet.skillFx != null)

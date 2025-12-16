@@ -10,16 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Packed Assets
+  m_Name: SFX_Battle
   m_EditorClassIdentifier: 
-  m_GroupName: Packed Assets
+  m_GroupName: SFX_Battle
   m_Data:
     m_SerializedData: []
-  m_GUID: 36c911e8486fd0e4e9832c885bbdf86a
-  m_SerializeEntries: []
+  m_GUID: 198db80a39d39474999a60e33d4d20dd
+  m_SerializeEntries:
+  - m_GUID: 0e8640968e9e34d43817ea457a37293d
+    m_Address: SFX_Enter
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 70aef510b6431584d83ab967b21d913a, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 6976b1ae3ce61ec419d8937971e3bfdc, type: 2}
-    - {fileID: 11400000, guid: 3b4dcd0eae1d610488cef3a41f39c2ed, type: 2}
+    - {fileID: 11400000, guid: d54abef9f25888e49812509b1f9c0ef8, type: 2}
+    - {fileID: 11400000, guid: 8c549ecc33509eb4db3dc7b6fed03d1c, type: 2}

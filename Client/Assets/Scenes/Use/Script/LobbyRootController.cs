@@ -132,6 +132,7 @@ public class LobbyRootController : MonoBehaviour
 
         FadeInOut.Start_FadeIn();
 
+        AudioManager.Instance.PlayBGM("bgm_lobby_academy");
         popup.Set_BattleLobbyBtn(() => Show("Battle"));
     }
     private async void OpenBattleLobbyPopup()

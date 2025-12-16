@@ -342,6 +342,7 @@ public class BattleMapManager : MonoBehaviour
                 bool isLastWave = IsLastWave(_waveIndexForMove);
                 if (!isLastWave)
                 {
+                    AudioManager.Instance.PlaySFX("SFX_Enter");
                     // [2] 다음 웨이브를 위한 맵 이동
                     Debug.Log("[BattleFlow] 다음 웨이브로 맵 이동");
                     _isMapMoving = true;

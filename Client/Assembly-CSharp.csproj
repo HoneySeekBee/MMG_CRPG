@@ -82,6 +82,7 @@
     <Compile Include="Assets\Script\Scenes\Lobby\UserCharactersListUI.cs" />
     <Compile Include="Assets\Script\Cache\MonsterCache.cs" />
     <Compile Include="Assets\Script\Cache\MasterDataCache.cs" />
+    <Compile Include="Assets\Script\Common\Sound\SFXPlayer.cs" />
     <Compile Include="Assets\Script\UI\User\UserCharacterStatusUI.cs" />
     <Compile Include="Assets\Script\GamePlay\Gacha\GachaAnimationManager.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\DemonstrationScene\DemonstrationSceneManager.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Obstacle\ObstacleBase.cs" />
     <Compile Include="Assets\Script\UI\Popup\GachaShopPopup.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\KingsGrummy.cs" />
+    <Compile Include="Assets\Script\Common\Sound\BGMPlayer.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\Movement\MovementStates\IdleMovementState.cs" />
     <Compile Include="Assets\ExternalAsset\VFX\PixPlays\Components\Scripts\VfxSystem\Shields\Shield.cs" />
     <Compile Include="Assets\Script\GamePlay\Character\Monster\MonsterAppearance.cs" />
@@ -130,6 +132,7 @@
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\Popup.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CroakusTheGreat.cs" />
     <Compile Include="Assets\ExternalAsset\VFX\PixPlays\Components\Scripts\VfxSystem\Shields\ParticleSystemShield.cs" />
+    <Compile Include="Assets\Script\Common\Sound\AudioManager.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Obstacle\ObstacleCreateManager.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Obstacle\Door\DoorComponentBase.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\Movement\MovementStates\RotateMovementState.cs" />
