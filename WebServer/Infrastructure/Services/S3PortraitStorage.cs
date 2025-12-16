@@ -20,8 +20,11 @@ namespace Infrastructure.Services
             _bucketName = bucketName;
         }
 
-        public string GetPublicUrl(string key, int version)
-            => $"/api/image/portraits/{key}?v={version}";
+        public string GetPublicUrl(string key, int version) // AWS S3에 바로 입장하게 하기 
+         => $"https://d3nehzpoo6py80.cloudfront.net/portraits/{key}.png?v={version}";
+
+        //public string GetPublicUrl(string key, int version)
+        //    => $"/api/image/portraits/{key}?v={version}";
 
         public async Task SaveAsync(string key, Stream content, string contentType, CancellationToken ct)
         {
@@ -31,8 +34,8 @@ namespace Infrastructure.Services
                 Key = $"portraits/{key}.png",
                 InputStream = content,
                 ContentType = contentType,
-            };
-
+            }; 
+            put.Headers.CacheControl = "public, max-age=31536000, immutable";
             await _s3.PutObjectAsync(put, ct);
         }
 

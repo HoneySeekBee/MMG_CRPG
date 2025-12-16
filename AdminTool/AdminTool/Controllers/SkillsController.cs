@@ -26,16 +26,16 @@ namespace AdminTool.Controllers
             _assetUrl = assetUrl;
             _catalog = catalog;
         }
-
-        public async Task<IActionResult> Index(SkillType? type, int? elementId, string? name,
-         bool? isActive = null,
-         SkillTargetingType? targetingType = null,
-         TargetSideType? targetSide = null,
-         AoeShapeType? aoeShape = null,
-         string[]? tagsAny = null,
-         string sortBy = "Name", bool desc = false,
-         int page = 1, int pageSize = 50,
-         CancellationToken ct = default)
+        private async Task<List<SkillListItemVm>> FetchItemsAsync(
+               SkillType? type, int? elementId, string? name,
+               bool? isActive,
+               SkillTargetingType? targetingType,
+               TargetSideType? targetSide,
+               AoeShapeType? aoeShape,
+               string[]? tagsAny,
+               string sortBy, bool desc,
+               int page, int pageSize,
+               CancellationToken ct)
         {
             var client = _http.CreateClient("GameApi");
 
@@ -51,24 +51,22 @@ namespace AdminTool.Controllers
                 ["sortBy"] = sortBy,
                 ["desc"] = desc.ToString(),
                 ["page"] = page.ToString(),
-                ["pageSize"] = pageSize.ToString()
+                ["pageSize"] = pageSize.ToString(),
             };
+
             if (tagsAny is { Length: > 0 })
                 for (int i = 0; i < tagsAny.Length; i++)
                     query[$"tagsAny[{i}]"] = tagsAny[i];
 
-            // 확장 검색 엔드포인트를 쓴다면 /api/skills/search 로
             var apiUrl = QueryHelpers.AddQueryString("/api/skills", query);
 
             var dtoList = await client.GetFromJsonAsync<IReadOnlyList<SkillListItemDto>>(apiUrl, ct)
                          ?? Array.Empty<SkillListItemDto>();
 
-
-            // (2) 아이템 목록
             var icons = await _catalog.GetIconsAsync(ct);
             var iconMap = icons.ToDictionary(k => k.IconId, v => (v.Key, v.Version));
 
-            var itemVms = dtoList.Select(dto =>
+            return dtoList.Select(dto =>
             {
                 string? iconUrl = null;
                 if (iconMap.TryGetValue(dto.IconId, out var info))
@@ -76,25 +74,66 @@ namespace AdminTool.Controllers
 
                 return SkillListItemVm.From(dto, iconUrl);
             }).ToList();
+        }
+        public async Task<IActionResult> Index(
+             SkillType? type, int? elementId, string? name,
+             bool? isActive = null,
+             SkillTargetingType? targetingType = null,
+             TargetSideType? targetSide = null,
+             AoeShapeType? aoeShape = null,
+             string[]? tagsAny = null,
+             string sortBy = "Name", bool desc = false,
+             int page = 1, int pageSize =  50, 
+             CancellationToken ct = default)
+        {
+            var itemVms = await FetchItemsAsync(
+                type, elementId, name, isActive,
+                targetingType, targetSide, aoeShape,
+                tagsAny, sortBy, desc,
+                page, pageSize, ct);
 
             var vm = new SkillIndexVm
             {
                 Type = type,
                 ElementId = elementId,
                 NameContains = name,
-                // 페이징/정렬/필터도 VM에 매핑해 UI에 반영
                 Page = page,
                 PageSize = pageSize,
                 Items = itemVms,
+
                 TypeOptions = BuildSkillTypeOptions(type),
                 ElementOptions = await BuildElementOptionsAsync(elementId, ct),
                 TargetingTypeOptions = BuildEnumOptions<SkillTargetingType>(targetingType),
                 TargetSideOptions = BuildEnumOptions<TargetSideType>(targetSide),
                 AoeShapeOptions = BuildEnumOptions<AoeShapeType>(aoeShape)
             };
+
             return View(vm);
         }
-        
+        [HttpGet("More")]
+        public async Task<IActionResult> More(
+            SkillType? type, int? elementId, string? name,
+            bool? isActive = null,
+            SkillTargetingType? targetingType = null,
+            TargetSideType? targetSide = null,
+            AoeShapeType? aoeShape = null,
+            string[]? tagsAny = null,
+            string sortBy = "Name", bool desc = false,
+            int page = 1, int pageSize = 50,
+            CancellationToken ct = default)
+        {
+            var itemVms = await FetchItemsAsync(
+                type, elementId, name, isActive,
+                targetingType, targetSide, aoeShape,
+                tagsAny, sortBy, desc,
+                page, pageSize, ct);
+
+            // 더 이상 없으면 빈 html 반환 → 클라에서 종료 처리
+            if (itemVms.Count == 0) return Content("");
+
+            return PartialView("Partials/_SkillRows", itemVms);
+        }
+
         private static IReadOnlyList<SelectListItem> BuildEnumOptions<TEnum>(TEnum? selected = null)
     where TEnum : struct, Enum
     => Enum.GetValues(typeof(TEnum))

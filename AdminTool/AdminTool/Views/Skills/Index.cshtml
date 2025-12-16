@@ -112,64 +112,69 @@
 
         </tr>
     </thead>
-    <tbody>
+    <tbody id="skillRows">
         @if (!Model.Items.Any())
         {
-            <tr><td colspan="6" class="text-center">No skills found</td></tr>
+            <tr><td colspan="12" class="text-center">No skills found</td></tr>
         }
         else
         {
-            foreach (var x in Model.Items)
-            {
-                <tr>
-                    <td>@x.SkillId</td>
-                    <td>@x.Name</td>
-                    <td>
-                        @if (!string.IsNullOrWhiteSpace(x.IconUrl))
-                        {
-                            <img src="@x.IconUrl" alt="icon" style="width:24px;height:24px;object-fit:contain;" />
-                        }
-                    </td>
-
-                    <td>@x.Type</td>
-                    <td>@x.ElementId</td>
-                    <td>@x.TargetingType</td>
-                    <td>@x.TargetSide</td>
-                    <td>@x.AoeShape</td>
-
-                    <td>@(x.IsActive ? "Active" : "Passive")</td>
-
-                    <td>
-                        @if (x.Tag?.Length > 0)
-                        {
-                            @string.Join(", ", x.Tag)
-                        }
-                    </td>
-                    <td class="text-end text-nowrap">
-                        <a asp-route="Skills_Levels" asp-route-id="@x.SkillId"
-                           class="btn btn-sm btn-outline-primary">
-                            Skill Levels
-                        </a>
-                        <a asp-action="Edit" asp-route-id="@x.SkillId" class="btn btn-sm btn-outline-primary">Edit</a>
-                        <form asp-action="Delete" asp-route-id="@x.SkillId" method="post" class="d-inline">
-                            @Html.AntiForgeryToken()
-                            <button type="submit" class="btn btn-sm btn-outline-danger"
-                                    onclick="return confirm('삭제할까요?');">
-                                Delete
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-            }
+            @await Html.PartialAsync("Partials/_SkillRows", Model.Items)
         }
     </tbody>
-</table>
+    <div id="loadMoreTrigger" style="height:1px;"></div>
 
+</table>
 @section Scripts {
-    <script>
-        // 필터 select 즉시 submit 기능
-        document.querySelectorAll("select[name=type], select[name=elementId]").forEach(sel => {
+    <script> 
+            document.querySelectorAll("select[name=type], select[name=elementId]").forEach(sel => {
             sel.addEventListener("change", () => sel.form.submit());
         });
+         let page = @Model.Page;                 // 보통 1
+    const pageSize = @Model.PageSize;       // 보통 90
+    let loading = false;
+    let ended = false;
+
+    const rowsEl = document.getElementById("skillRows");
+    const trigger = document.getElementById("loadMoreTrigger");
+
+    function buildQuery(nextPage) {
+        const form = document.querySelector("form[method=get]");
+        const params = new URLSearchParams(new FormData(form));
+        params.set("page", nextPage);
+        params.set("pageSize", pageSize);
+        return params.toString();
+    }
+
+    async function loadMore() {
+        if (loading || ended) return;
+        loading = true;
+
+        const nextPage = page + 1;
+        const qs = buildQuery(nextPage);
+
+        const res = await fetch(`@Url.Action("More", "Skills")?${qs}`, {
+            headers: { "X-Requested-With": "XMLHttpRequest" }
+        });
+
+        if (!res.ok) { loading = false; return; }
+
+        const html = (await res.text()).trim();
+        if (!html) {
+            ended = true;
+        } else {
+            rowsEl.insertAdjacentHTML("beforeend", html);
+            page = nextPage;
+        }
+
+        loading = false;
+    }
+
+    const io = new IntersectionObserver(entries => {
+        if (entries.some(e => e.isIntersecting)) loadMore();
+    }, { root: null, rootMargin: "600px" });
+
+    io.observe(trigger);
+
     </script>
 }
