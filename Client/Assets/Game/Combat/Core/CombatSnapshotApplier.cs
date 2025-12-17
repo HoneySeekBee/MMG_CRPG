@@ -17,14 +17,16 @@ namespace Game.Combat
         }
 
         private readonly Dictionary<long, GameObject> _actorObjects;
+        private readonly Dictionary<long, CombatTeam> _actorTeams;
         private readonly Dictionary<long, ActorLastState> _lastStates = new();
 
         // 튜닝값
         private readonly float _moveThreshold;
 
-        public CombatSnapshotApplier(Dictionary<long, GameObject> actorObjects, float moveThreshold = 0.01f)
+        public CombatSnapshotApplier(Dictionary<long, GameObject> actorObjects, Dictionary<long, CombatTeam> actorTeams, float moveThreshold = 0.01f)
         {
             _actorObjects = actorObjects;
+            _actorTeams = actorTeams;
             _moveThreshold = moveThreshold;
         }
 
@@ -38,8 +40,12 @@ namespace Game.Combat
             if (snapshot == null || snapshot.Actors == null)
                 return;
 
+            var seen = new HashSet<long>();
+
             foreach (var a in snapshot.Actors)
             {
+                seen.Add(a.ActorId);
+
                 if (!_actorObjects.TryGetValue(a.ActorId, out var go) || go == null)
                     continue;
 
@@ -73,8 +79,6 @@ namespace Game.Combat
                 if (isMoving) view.PlayMove();
                 else if (!a.Dead) view.PlayIdle();
 
-                // 3) HP 적용
-                int prevHp = prev.Hp;
                 view.SetHp(a.Hp);
 
                 // 4) 죽음 처리 (상태 변화시에만)
@@ -86,6 +90,23 @@ namespace Game.Combat
                 prev.Hp = a.Hp;
                 prev.Dead = a.Dead;
                 _lastStates[a.ActorId] = prev;
+            }
+            foreach (var kv in _actorObjects)
+            {
+                var actorId = kv.Key;
+                var go = kv.Value;
+                if (go == null) continue;
+
+                if (_actorTeams.TryGetValue(actorId, out var team) && team != CombatTeam.Enemy)
+                    continue;
+
+                if (!seen.Contains(actorId))
+                {
+                    if (go.activeSelf)
+                        go.SetActive(false);
+
+                    _lastStates.Remove(actorId); // 다음에 다시 스폰되면 새로 상태 잡도록
+                }
             }
         }
         public static bool HasEventThisTick(IList<CombatLogEventPb> eventsThisTick, string type, string actorId = null, string targetId = null)

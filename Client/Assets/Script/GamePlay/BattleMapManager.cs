@@ -3,25 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Extentions;
-using System.Threading.Tasks;
-using static UnityEngine.Rendering.VirtualTexturing.Debugging;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
-using UnityEngine.UIElements;
-using DG.Tweening;
-using System.CodeDom.Compiler;
-using System.Linq;
+using System.Threading.Tasks; 
+using DG.Tweening; 
 using static PartySetManager;
-using Combat;
-using UnityEngine.TextCore.Text;
-using WebServer.Protos.Monsters;
-using Unity.VisualScripting;
+using Combat; 
 using Google.Protobuf.WellKnownTypes;
-using System;
-using Game.Managers;
+using System; 
 using Game.Data;
-using Game.Core;
-using PixPlays.ElementalVFX;
+using Game.Core; 
 using Game.Combat;
 
 public class BattleMapManager : MonoBehaviour
@@ -175,7 +164,7 @@ public class BattleMapManager : MonoBehaviour
         _combatDirector = new CombatDirector(_combatNetwork);
         _combatDirector.Init(_combatId);
 
-        _snapshotApplier = new CombatSnapshotApplier(_actorObjects);
+        _snapshotApplier = new CombatSnapshotApplier(_actorObjects, _actorTeams);
         _combatDirector.OnTickApplied += (snapshot, eventsThisTick) =>
         {
             _snapshotApplier.Apply(snapshot, eventsThisTick);
