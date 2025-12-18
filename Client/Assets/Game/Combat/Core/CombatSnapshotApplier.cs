@@ -11,34 +11,45 @@ namespace Game.Combat
     {
         private class ActorLastState
         {
-            public Vector3 Pos;
+            public Vector3 RenderPos;
+            public Vector3 TargetPos;
+            public Vector3 Vel; // Damp용 좌표
+             
             public int Hp;
             public bool Dead;
+            public bool Inited;
         }
 
         private readonly Dictionary<long, GameObject> _actorObjects;
         private readonly Dictionary<long, CombatTeam> _actorTeams;
-        private readonly Dictionary<long, ActorLastState> _lastStates = new();
+        private readonly Dictionary<long, ActorLastState> _states = new();
 
         // 튜닝값
         private readonly float _moveThreshold;
-
-        public CombatSnapshotApplier(Dictionary<long, GameObject> actorObjects, Dictionary<long, CombatTeam> actorTeams, float moveThreshold = 0.01f)
+        private readonly float _smoothTime;
+        private readonly float _teleportDistance;
+        public CombatSnapshotApplier(
+           Dictionary<long, GameObject> actorObjects,
+           Dictionary<long, CombatTeam> actorTeams,
+           float moveThreshold = 0.01f,
+           float smoothTime = 0.08f,
+           float teleportDistance = 3.0f)
         {
             _actorObjects = actorObjects;
             _actorTeams = actorTeams;
             _moveThreshold = moveThreshold;
+            _smoothTime = smoothTime;
+            _teleportDistance = teleportDistance;
         }
 
         public void Clear()
         {
-            _lastStates.Clear();
+            _states.Clear();
         }
 
         public void Apply(CombatSnapshotPb snapshot, IList<CombatLogEventPb> eventsThisTick)
         {
-            if (snapshot == null || snapshot.Actors == null)
-                return;
+            if (snapshot?.Actors == null) return;
 
             var seen = new HashSet<long>();
 
@@ -53,44 +64,39 @@ namespace Game.Combat
                 if (view == null)
                     continue;
 
-                // 스냅샷 기준으로 살아있으면 꺼져있던 오브젝트 켜기 (spawn 이벤트 누락 대비)
                 if (!a.Dead && !go.activeSelf)
                     go.SetActive(true);
 
-                if (!_lastStates.TryGetValue(a.ActorId, out var prev))
+                if (!_states.TryGetValue(a.ActorId, out var st))
                 {
-                    prev = new ActorLastState
-                    {
-                        Pos = view.transform.position,
-                        Hp = view.Hp,
-                        Dead = false
-                    };
-                    _lastStates[a.ActorId] = prev;
+                    st = new ActorLastState();
+                    _states[a.ActorId] = st;
                 }
 
-                // 1) 위치 적용
-                var newPos = new Vector3(a.X, 0f, a.Z);
-                float moveDist = Vector3.Distance(prev.Pos, newPos);
+                var newTarget = new Vector3(a.X, 0f, a.Z);
 
-                view.transform.position = newPos;
+                if (!st.Inited)
+                {
+                    st.RenderPos = view.transform.position;
+                    st.TargetPos = newTarget;
+                    st.Hp = view.Hp;
+                    st.Dead = false;
+                    st.Inited = true;
+                }
 
-                // 2) 이동/Idle 애니
-                bool isMoving = moveDist > _moveThreshold && !a.Dead;
-                if (isMoving) view.PlayMove();
-                else if (!a.Dead) view.PlayIdle();
+                st.TargetPos = newTarget;
 
+                // HP/Dead는 즉시 반영해도 무방
                 view.SetHp(a.Hp);
 
-                // 4) 죽음 처리 (상태 변화시에만)
-                if (!prev.Dead && a.Dead)
+                if (!st.Dead && a.Dead)
                     view.OnDie();
 
-                // 상태 저장
-                prev.Pos = newPos;
-                prev.Hp = a.Hp;
-                prev.Dead = a.Dead;
-                _lastStates[a.ActorId] = prev;
+                st.Hp = a.Hp;
+                st.Dead = a.Dead;
             }
+
+            // 보이지 않는 적 비활성화 로직은 유지
             foreach (var kv in _actorObjects)
             {
                 var actorId = kv.Key;
@@ -102,11 +108,53 @@ namespace Game.Combat
 
                 if (!seen.Contains(actorId))
                 {
-                    if (go.activeSelf)
-                        go.SetActive(false);
-
-                    _lastStates.Remove(actorId); // 다음에 다시 스폰되면 새로 상태 잡도록
+                    if (go.activeSelf) go.SetActive(false);
+                    _states.Remove(actorId);
                 }
+            }
+        }
+        public void UpdateRender(float dt)
+        {
+            foreach (var kv in _states)
+            {
+                long actorId = kv.Key;
+                var st = kv.Value;
+
+                if (!_actorObjects.TryGetValue(actorId, out var go) || go == null || !go.activeSelf)
+                    continue;
+
+                var view = go.GetComponent<CombatActorView>();
+                if (view == null) continue;
+
+                var cur = view.transform.position;
+                var target = st.TargetPos;
+
+                float dist = Vector3.Distance(cur, target);
+
+                if (dist > _teleportDistance)
+                {
+                    // 큰 오차는 즉시 스냅 (맵 이동/스폰/재동기화 대비)
+                    view.transform.position = target; 
+                    st.Vel = Vector3.zero;
+                    view.ResetFacingCache();
+                }
+                else
+                {
+                    // 부드럽게 따라가기
+                    view.transform.position = Vector3.SmoothDamp(cur, target, ref st.Vel, _smoothTime); 
+                }
+                view.UpdateFacingByMovement(dt);
+
+                float moved = Vector3.Distance(st.RenderPos, view.transform.position);
+                bool isMoving = moved > _moveThreshold && !st.Dead;
+
+                if(view.State != CombatActorView.ActionState.Attack)
+                {
+                    if (isMoving) view.PlayMove();
+                    else if (!st.Dead) view.PlayIdle();
+                }
+
+                st.RenderPos = view.transform.position;
             }
         }
         public static bool HasEventThisTick(IList<CombatLogEventPb> eventsThisTick, string type, string actorId = null, string targetId = null)

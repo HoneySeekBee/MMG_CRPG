@@ -3,13 +3,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.ResourceManagement.ResourceProviders.Simulation;
 public enum CombatTeam
 {
     Player = 0,
     Enemy = 1
 }
 public abstract class CombatActorView : MonoBehaviour, ICombatSpeedAffectable
-{
+{  
     [Header("Runtime Info")]
     public long ActorId;        // 서버 ActorId
     public CombatTeam Team;
@@ -19,13 +20,80 @@ public abstract class CombatActorView : MonoBehaviour, ICombatSpeedAffectable
 
     public float SpawnX { get; private set; }
     public float SpawnZ { get; private set; }
+
     [Header("Optional")]
     public GameObject HitEffect;
     public GameObject DeadEffect;
+
+    [Header("Look At")]
+    [SerializeField] private Transform visualRoot;      
+    [SerializeField] private float turnSpeed = 18f;     
+    [SerializeField] private float minMoveSqr = 0.0004f;  
+    [SerializeField] private float yawOffset = 0f;
+
+    private Vector3 _lastPos;
+    private bool _facingInit;
+
+    // 최근 상태 
+    public enum ActionState { None, Idle, Move, Attack, Dead, Damage, Victory }
+    public ActionState State = ActionState.None;
+    protected virtual void Awake()
+    {
+        if (visualRoot == null) visualRoot = transform;
+    }
+    public void UpdateFacingByMovement(float dt)
+    {
+        var cur = transform.position;
+
+        if (!_facingInit)
+        {
+            _lastPos = cur;
+            _facingInit = true;
+            return;
+        }
+
+        Vector3 delta = cur - _lastPos;
+        _lastPos = cur;
+
+        delta.y = 0f;
+
+        if (delta.sqrMagnitude < minMoveSqr) return;
+
+        var dir = delta.normalized;
+        var targetRot = Quaternion.LookRotation(dir, Vector3.up) * Quaternion.Euler(0f, yawOffset, 0f);
+
+        visualRoot.rotation = Quaternion.Slerp(visualRoot.rotation, targetRot, turnSpeed * dt);
+        Debug.Log("이동 방향 바라보기");
+    }
+    public void FaceDirection(Vector3 dir, bool smooth)
+    {
+        dir.y = 0f;
+        if (dir.sqrMagnitude < 0.0001f) return;
+
+        var targetRot = Quaternion.LookRotation(dir.normalized, Vector3.up);
+
+        // 모델 축 보정 필요하면 yawOffset 적용
+        targetRot *= Quaternion.Euler(0f, yawOffset, 0f);
+
+        if (visualRoot == null) visualRoot = transform;
+
+        if (!smooth)
+        {
+            visualRoot.rotation = targetRot;
+        }
+        else
+        {
+            // 부드럽게 돌리려면 코루틴/트윈으로 처리
+            visualRoot.rotation = Quaternion.Slerp(visualRoot.rotation, targetRot, 1f);
+        }
+
+        ResetFacingCache(); // 이동방향 기반 캐시 꼬임 방지
+    }
     public void SetSpawnPosition(Vector3 pos)
     {
         SpawnX = pos.x;
         SpawnZ = pos.z;
+        State = ActionState.None;
     }
 
     public virtual void InitFromServer(long actorId, int team, int hp)
@@ -95,4 +163,17 @@ public abstract class CombatActorView : MonoBehaviour, ICombatSpeedAffectable
 
     }
     public abstract void ApplySpeed(float scale);
+    
+    protected bool CanPlayAnim(ActionState newAction)
+    {
+        if (State == newAction)
+            return false;
+
+        State = newAction;
+        return true;
+    }
+    public void ResetFacingCache()
+    {
+        _facingInit = false;
+    }
 }

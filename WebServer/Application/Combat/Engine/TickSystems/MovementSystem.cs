@@ -14,6 +14,7 @@ namespace Application.Combat.Engine.TickSystems
         const float AllySeparationDist = 1.5f;
         const float AllySeparationStrength = 0.5f;
         const float SpawnSnapRange = 0.05f;
+        const float PaddingDist = 1.0f;
 
         private const float CollisionRadius = 1.2f;
         private const float EnemyRadius = 1.6f;
@@ -64,137 +65,98 @@ namespace Application.Combat.Engine.TickSystems
             }
         }
 
-
         private void HandleCombatMovement(CombatRuntimeState s, List<ActorState> actors, ActorState actor, float speedPerTick)
         {
             UpdateTarget(s, actor);
 
-            if (actor.Stunned || actor.Frozen || actor.KnockedDown)
-                return;
-
-            if (actor.Rooted)
-                return;
-
-            if (actor.TargetActorId == null)
-                return;
-
-            if (!s.ActiveActors.TryGetValue(actor.TargetActorId.Value, out var target))
-                return;
+            if (actor.Stunned || actor.Frozen || actor.KnockedDown || actor.Rooted) return;
+            if (actor.TargetActorId == null) return;
+            if (!s.ActiveActors.TryGetValue(actor.TargetActorId.Value, out var target)) return;
 
             float dx = target.X - actor.X;
             float dz = target.Z - actor.Z;
             float dist = MathF.Sqrt(dx * dx + dz * dz);
 
-            float stopRange = actor.RangeBase;
+            float stopRange = actor.RangeBase + PaddingDist;
             float minCollisionDist = CollisionRadius + EnemyRadius;
 
-            // 1) 적과 겹침 → 내 유닛만 뒤로 빼기
+            // facing은 항상 타겟 기준으로 유지
+            actor.FacingX = dx / (dist + 0.0001f);
+            actor.FacingZ = dz / (dist + 0.0001f);
+
+            // 너무 붙었으면 살짝만 떼기
             if (dist < minCollisionDist)
-            {
-                ApplyEnemyRepulsion(actor, dx, dz, dist, minCollisionDist);
-                return;
-            }
-
-            // 2) 사거리 안이면 이동 금지
-            if (dist < stopRange)
-            {
-                // 이동하지 않지만 방향은 유지
-                actor.FacingX = dx / (dist + 0.0001f);
-                actor.FacingZ = dz / (dist + 0.0001f);
-                return;
-            }
+                ApplyEnemyRepulsionSmall(actor, dx, dz, dist, minCollisionDist, speedPerTick);
              
-            // 3) 정상 이동 (아군 방향 보정만 적용)
-            float dirX = dx / dist;
-            float dirZ = dz / dist;
-            actor.FacingX = dirX;
-            actor.FacingZ = dirZ;
-
-            (float sepAX, float sepAZ) = ComputeAllySeparation(actors, actor);
-            (float sepEX, float sepEZ) = ComputeEnemySeparation(s, actor);
-
-            // 아군 분리는 방향에만 영향 (위치 이동 없음)
-            float finalX = dirX + sepAX * AllySeparationStrength;
-            float finalZ = dirZ + sepAZ * AllySeparationStrength;
-
-            float len = MathF.Sqrt(finalX * finalX + finalZ * finalZ);
-            if (len > 0.0001f)
+            if (dist <= stopRange)
             {
-                finalX /= len;
-                finalZ /= len;
-
-                actor.X += finalX * speedPerTick;
-                actor.Z += finalZ * speedPerTick;
+                ResolveAllyOverlapSmall(actors, actor);
+                return;
             }
+
+            float dirX = dx / (dist + 0.0001f);
+            float dirZ = dz / (dist + 0.0001f);
+
+            // overshoot 방지: 사거리 경계까지만
+            float moveDist = dist - stopRange;
+            float step = MathF.Min(speedPerTick, moveDist);
+
+            actor.X += dirX * step;
+            actor.Z += dirZ * step;
+
+            ResolveAllyOverlapSmall(actors, actor);
         }
-
-        private void ApplyEnemyRepulsion(ActorState actor, float dx, float dz, float dist, float minDist)
+        private void ResolveAllyOverlapSmall(List<ActorState> actors, ActorState self)
         {
-            if (dist < 0.001f) return;
-
-            float push = (minDist - dist);
-
-            float dirX = dx / dist;
-            float dirZ = dz / dist;
-
-            actor.X -= dirX * push * 0.8f;
-            actor.Z -= dirZ * push * 0.8f;
-        }
-
-
-        // 아군은 실제 이동시키지 않음 → 방향 보정만 사용
-        private (float, float) ComputeAllySeparation(List<ActorState> actors, ActorState self)
-        {
-            float sepX = 0f;
-            float sepZ = 0f;
+            const float minDist = 0.9f;
+            const float maxPushPerTick = 0.05f;
 
             foreach (var ally in actors)
             {
                 if (ally.ActorId == self.ActorId) continue;
                 if (ally.Team != self.Team) continue;
 
+                if (ally.ActorId < self.ActorId) continue;
                 float dx = self.X - ally.X;
                 float dz = self.Z - ally.Z;
-                float dist = MathF.Sqrt(dx * dx + dz * dz);
+                float dist2 = dx * dx + dz * dz;
+                if (dist2 < 1e-6f) continue;
 
-                if (dist >= AllySeparationDist || dist < 0.001f) continue;
+                float dist = MathF.Sqrt(dist2);
+                if (dist >= minDist) continue;
 
-                float t = (AllySeparationDist - dist) / AllySeparationDist;
+                float overlap = (minDist - dist);
 
-                sepX += (dx / dist) * t;
-                sepZ += (dz / dist) * t;
+                float push = MathF.Min(overlap * 0.5f, maxPushPerTick);
+
+                float nx = dx / dist;
+                float nz = dz / dist;
+                 
+                float half = push * 0.5f;
+                self.X += nx * half;
+                self.Z += nz * half;
+                ally.X -= nx * half;
+                ally.Z -= nz * half;
             }
-
-            return (sepX, sepZ);
         }
-
-
-        private (float, float) ComputeEnemySeparation(CombatRuntimeState s, ActorState self)
+        private void ApplyEnemyRepulsionSmall(ActorState actor, float dx, float dz, float dist, float minDist, float maxStep)
         {
-            float sepX = 0f;
-            float sepZ = 0f;
+            if (dist < 0.001f) return;
 
-            foreach (var enemy in s.ActiveActors.Values)
-            {
-                if (enemy.Team == self.Team) continue;
+            float overlap = (minDist - dist);
+            if (overlap <= 0f) return;
+             
+            float push = overlap * 0.3f;             
+            push = MathF.Min(push, 0.05f);          
+            push = MathF.Min(push, maxStep * 0.2f);  
 
-                float dx = self.X - enemy.X;
-                float dz = self.Z - enemy.Z;
-                float dist = MathF.Sqrt(dx * dx + dz * dz);
+            float dirX = dx / dist;
+            float dirZ = dz / dist;
 
-                float minDist = CollisionRadius + EnemyRadius;
-
-                if (dist >= minDist || dist < 0.001f) continue;
-
-                float t = (minDist - dist) / minDist;
-                sepX += (dx / dist) * t;
-                sepZ += (dz / dist) * t;
-            }
-
-            return (sepX, sepZ);
+            actor.X -= dirX * push;
+            actor.Z -= dirZ * push;
         }
-
-
+          
         private void HandleReturnToSpawn(CombatRuntimeState s, List<ActorState> actors, ActorState actor, float speedPerTick)
         {
             if (actor.Team != 0 || !actor.ReturningToSpawn)

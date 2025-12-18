@@ -76,7 +76,11 @@ public class BattleMapManager : MonoBehaviour
         skillFxDb.Build();
         EnsureFactory();
     }
-
+    private void LateUpdate()
+    {
+        if (_isMapMoving) return;
+        _snapshotApplier?.UpdateRender(Time.unscaledDeltaTime);
+    }
     private void EnsureFactory()
     {
         if (_actorFactory != null) return;
@@ -189,7 +193,7 @@ public class BattleMapManager : MonoBehaviour
         while (!_battleEnded)
         {
             // 맵 이동 중이면 틱 안돌림
-            if (!_combatTickEnabled || _isMapMoving)
+            if (!_combatTickEnabled)
             {
                 yield return null;
                 continue;
@@ -197,8 +201,7 @@ public class BattleMapManager : MonoBehaviour
 
             // CombatDirector가 Tick 처리
             yield return _combatDirector.Tick();
-
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSecondsRealtime(0.1f); 
         }
 
         Debug.Log("[BattleMap] TickLoop_CombatDirector 종료");
@@ -431,6 +434,7 @@ public class BattleMapManager : MonoBehaviour
         while (!AreAllPlayersAtSpawn())
             yield return null;
 
+        foreach (var v in players) v.FaceDirection(Vector3.right, smooth: false);
         foreach (var v in players)
             v.PlayIdle();
 
@@ -571,6 +575,15 @@ public class BattleMapManager : MonoBehaviour
         Debug.Log("[BattleMap] 스킬 요청 성공");
         onResult?.Invoke(true);
     }
+    private void FaceForwardAllPlayers(bool smooth = false)
+    {
+        var players = GetAlivePlayerActors();
+        foreach (var v in players)
+        { 
+            v.FaceDirection(Vector3.right, smooth);
+        }
+    }
+
     public void OnClickSpeedButton()
     {
         StartCoroutine(

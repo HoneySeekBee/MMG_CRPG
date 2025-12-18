@@ -13,17 +13,19 @@ public class MonsterBase : CombatActorView
     public void Set(MonsterPb enemyPb)
     {
         MonsterData = enemyPb;
-        Appearance.Set(MonsterData.Id, Animator.Set); 
+        Appearance.Set(MonsterData.Id, Animator.Set);
     }
     public override void PlayHitFx(bool isCrit)
     {
         base.PlayHitFx(isCrit);
-        Animator.Play_GetHit(isCrit);
+        if (CanPlayAnim(CombatActorView.ActionState.Damage))
+            Animator.Play_GetHit(isCrit);
     }
 
     public override void OnDie()
     {
-        Animator.PlayDie();
+        if (CanPlayAnim(CombatActorView.ActionState.Dead))
+            Animator.PlayDie();
         base.OnDie();
     }
     protected override void UpdateHPBar()
@@ -33,14 +35,17 @@ public class MonsterBase : CombatActorView
 
     public override void PlayMove()
     {
-        Animator.PlayMove(1);
+        if (CanPlayAnim(CombatActorView.ActionState.Move))
+            Animator.PlayMove(1);
     }
     public override void PlayIdle()
     {
-        Animator.PlayIdle(true);
+        if (CanPlayAnim(CombatActorView.ActionState.Idle))
+            Animator.PlayIdle(true);
     }
     public override void PlayAttack(bool isCrit)
     {
+        State = ActionState.Attack;
         Animator.PlayAttack(isCrit);
     }
 

@@ -416,18 +416,31 @@ namespace Application.Combat
             if (!_runtimeStates.TryGetValue(combatId, out var state))
                 throw new KeyNotFoundException($"Combat {combatId} not found");
 
-            List<CombatLogEventDto> evs;
+            List<CombatLogEventDto> evs = new();
             CombatSnapshotDto snapshot;
+
+            const int BaseTickMs = 100;
+            const int MaxCatchUpTicks = 5;
 
             lock (state.SyncRoot)
             {
-                const int BaseTickMs = 100;
+                if (tick <= state.Tick)
+                {
+                    snapshot = _tickEngine.BuildSnapshot(state);
+                    return new CombatTickResponse(combatId, state.Tick, snapshot, evs);
+                }
+
+                int missing = tick - state.Tick;
+                int catchUp = Math.Min(missing, MaxCatchUpTicks);
+
                 int tickDeltaMs = (int)(BaseTickMs * state.TimeScale);
 
-                // 1) 틱 처리 → 이벤트 수집
-                evs = _tickEngine.Process(state, tickDeltaMs);
+                for (int i = 0; i < catchUp; i++)
+                {
+                    var stepEvents = _tickEngine.Process(state, tickDeltaMs);
+                    if (stepEvents.Count > 0) evs.AddRange(stepEvents);
+                }
 
-                // 2) 현재 상태 기준 스냅샷 
                 snapshot = _tickEngine.BuildSnapshot(state);
             }
 
