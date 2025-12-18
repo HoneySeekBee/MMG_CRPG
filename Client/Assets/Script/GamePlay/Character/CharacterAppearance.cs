@@ -2,7 +2,6 @@ using Contracts.CharacterModel;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 

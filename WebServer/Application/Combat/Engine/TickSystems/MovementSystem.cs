@@ -14,7 +14,6 @@ namespace Application.Combat.Engine.TickSystems
         const float AllySeparationDist = 1.5f;
         const float AllySeparationStrength = 0.5f;
         const float SpawnSnapRange = 0.05f;
-        const float PaddingDist = 1.0f;
 
         private const float CollisionRadius = 1.2f;
         private const float EnemyRadius = 1.6f;
@@ -77,7 +76,7 @@ namespace Application.Combat.Engine.TickSystems
             float dz = target.Z - actor.Z;
             float dist = MathF.Sqrt(dx * dx + dz * dz);
 
-            float stopRange = actor.RangeBase + PaddingDist;
+            float stopRange = actor.RangeBase - 0.01f;
             float minCollisionDist = CollisionRadius + EnemyRadius;
 
             // facing은 항상 타겟 기준으로 유지
@@ -89,8 +88,7 @@ namespace Application.Combat.Engine.TickSystems
                 ApplyEnemyRepulsionSmall(actor, dx, dz, dist, minCollisionDist, speedPerTick);
              
             if (dist <= stopRange)
-            {
-                ResolveAllyOverlapSmall(actors, actor);
+            { 
                 return;
             }
 
@@ -103,42 +101,8 @@ namespace Application.Combat.Engine.TickSystems
 
             actor.X += dirX * step;
             actor.Z += dirZ * step;
-
-            ResolveAllyOverlapSmall(actors, actor);
-        }
-        private void ResolveAllyOverlapSmall(List<ActorState> actors, ActorState self)
-        {
-            const float minDist = 0.9f;
-            const float maxPushPerTick = 0.05f;
-
-            foreach (var ally in actors)
-            {
-                if (ally.ActorId == self.ActorId) continue;
-                if (ally.Team != self.Team) continue;
-
-                if (ally.ActorId < self.ActorId) continue;
-                float dx = self.X - ally.X;
-                float dz = self.Z - ally.Z;
-                float dist2 = dx * dx + dz * dz;
-                if (dist2 < 1e-6f) continue;
-
-                float dist = MathF.Sqrt(dist2);
-                if (dist >= minDist) continue;
-
-                float overlap = (minDist - dist);
-
-                float push = MathF.Min(overlap * 0.5f, maxPushPerTick);
-
-                float nx = dx / dist;
-                float nz = dz / dist;
-                 
-                float half = push * 0.5f;
-                self.X += nx * half;
-                self.Z += nz * half;
-                ally.X -= nx * half;
-                ally.Z -= nz * half;
-            }
-        }
+             
+        } 
         private void ApplyEnemyRepulsionSmall(ActorState actor, float dx, float dz, float dist, float minDist, float maxStep)
         {
             if (dist < 0.001f) return;

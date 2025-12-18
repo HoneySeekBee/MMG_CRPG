@@ -10,8 +10,7 @@ namespace Application.Combat.Engine.TickSystems
     public sealed class AttackSystem
     {
         private const float AttackSpeedScale = 2.0f;
-        private readonly Random _rng = new(); // TODO: 나중에 Seed/IRandomProvider로 교체
-        const float PaddingDist = 1.0f;
+        private readonly Random _rng = new(); // TODO: 나중에 Seed/IRandomProvider로 교체 
         public void Run(CombatRuntimeState s, List<CombatLogEventDto> evs, int dtMs)
         {
             foreach (var actor in s.ActiveActors.Values.Where(a => !a.Dead && a.Hp > 0)) // Hp>0 추가
@@ -52,7 +51,7 @@ namespace Application.Combat.Engine.TickSystems
                 }
 
                 float dist = Distance(actor, target);
-                float effectiveRange = actor.RangeBase + PaddingDist;
+                float effectiveRange = actor.RangeBase;
                 Console.WriteLine($"[Atk] {actor.ActorId}(Team={actor.Team}) -> {target.ActorId}(Team={target.Team}) dist={dist}, range={actor.RangeBase}");
 
                 if (dist > effectiveRange)
