@@ -1,0 +1,37 @@
+using Contracts.Protos;
+using MMG_CRPG.UI;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class UserCharacterDeatailUI : MonoBehaviour
+{
+    public static UserCharacterDeatailUI Instance { get; private set; }
+
+    [SerializeField] private UserCharacterStatusUI StatusUI;
+   public UserCharacterEquipUI EquipUI;
+    public UserCharacterSummaryPb status;
+    [SerializeField] private Toggle[] CategoryToggles;
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+    }
+    private void Start()
+    {
+        if(EquipUI.gameObject.activeSelf) 
+            EquipUI.gameObject.SetActive(false);
+    }
+    public void Set(UserCharacterSummaryPb status)
+    {
+        this.status = status;
+        CategoryToggles[0].isOn = true;
+        StatusUI.Set();
+    } 
+}
