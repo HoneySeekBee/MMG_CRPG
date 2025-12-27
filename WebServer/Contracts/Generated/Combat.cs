@@ -59,19 +59,22 @@ namespace Combat {
             "b3JTbmFwc2hvdFBiIjsKFUZpbmlzaENvbWJhdFJlcXVlc3RQYhIRCgljb21i",
             "YXRfaWQYASABKAMSDwoHdXNlcl9pZBgCIAEoBSJNChFTdGFnZVJld2FyZEl0",
             "ZW1QYhIPCgdpdGVtX2lkGAEgASgFEgsKA3F0eRgCIAEoBRIaChJmaXJzdF9j",
-            "bGVhcl9yZXdhcmQYAyABKAgipAEKFkZpbmlzaENvbWJhdFJlc3BvbnNlUGIS",
+            "bGVhcl9yZXdhcmQYAyABKAgizAEKFkZpbmlzaENvbWJhdFJlc3BvbnNlUGIS",
             "EAoIc3RhZ2VfaWQYASABKAUSDQoFc3RhcnMYAiABKAUSEwoLZmlyc3RfY2xl",
             "YXIYAyABKAgSKgoHcmV3YXJkcxgEIAMoCzIZLmNvbWJhdC5TdGFnZVJld2Fy",
             "ZEl0ZW1QYhIMCgRnb2xkGAUgASgDEgsKA2dlbRgGIAEoAxINCgV0b2tlbhgH",
-            "IAEoAyIpChRUb2dnbGVTcGVlZFJlcXVlc3RQYhIRCgljb21iYXRfaWQYASAB",
-            "KAMiUAoVVG9nZ2xlU3BlZWRSZXNwb25zZVBiEhEKCWNvbWJhdF9pZBgBIAEo",
-            "AxIkCgVzcGVlZBgCIAEoDjIVLmNvbWJhdC5Db21iYXRTcGVlZFBiKm4KDUNv",
-            "bWJhdFNwZWVkUGISHAoYQ09NQkFUX1NQRUVEX1VOU1BFQ0lGSUVEEAASEwoP",
-            "Q09NQkFUX1NQRUVEX1gxEAESFQoRQ09NQkFUX1NQRUVEX1gxXzUQAhITCg9D",
-            "T01CQVRfU1BFRURfWDIQA2IGcHJvdG8z"));
+            "IAEoAxImCgZyZXN1bHQYCCABKA4yFi5jb21iYXQuQ29tYmF0UmVzdWx0UGIi",
+            "KQoUVG9nZ2xlU3BlZWRSZXF1ZXN0UGISEQoJY29tYmF0X2lkGAEgASgDIlAK",
+            "FVRvZ2dsZVNwZWVkUmVzcG9uc2VQYhIRCgljb21iYXRfaWQYASABKAMSJAoF",
+            "c3BlZWQYAiABKA4yFS5jb21iYXQuQ29tYmF0U3BlZWRQYipuCg1Db21iYXRT",
+            "cGVlZFBiEhwKGENPTUJBVF9TUEVFRF9VTlNQRUNJRklFRBAAEhMKD0NPTUJB",
+            "VF9TUEVFRF9YMRABEhUKEUNPTUJBVF9TUEVFRF9YMV81EAISEwoPQ09NQkFU",
+            "X1NQRUVEX1gyEAMqXgoOQ29tYmF0UmVzdWx0UGISHQoZQ09NQkFUX1JFU1VM",
+            "VF9VTlNQRUNJRklFRBAAEhUKEUNPTUJBVF9SRVNVTFRfV0lOEAESFgoSQ09N",
+            "QkFUX1JFU1VMVF9MT1NFEAJiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.WrappersReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.StructReflection.Descriptor, },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Combat.CombatSpeedPb), }, null, new pbr::GeneratedClrTypeInfo[] {
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Combat.CombatSpeedPb), typeof(global::Combat.CombatResultPb), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Combat.StartCombatRequestPb), global::Combat.StartCombatRequestPb.Parser, new[]{ "StageId", "UserId", "BattleId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Combat.ActorInitPb), global::Combat.ActorInitPb.Parser, new[]{ "ActorId", "Team", "X", "Z", "Hp", "WaveIndex", "MasterId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Combat.CombatInitialSnapshotPb), global::Combat.CombatInitialSnapshotPb.Parser, new[]{ "Actors" }, null, null, null, null),
@@ -86,7 +89,7 @@ namespace Combat {
             new pbr::GeneratedClrTypeInfo(typeof(global::Combat.CombatSnapshotPb), global::Combat.CombatSnapshotPb.Parser, new[]{ "Actors" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Combat.FinishCombatRequestPb), global::Combat.FinishCombatRequestPb.Parser, new[]{ "CombatId", "UserId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Combat.StageRewardItemPb), global::Combat.StageRewardItemPb.Parser, new[]{ "ItemId", "Qty", "FirstClearReward" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Combat.FinishCombatResponsePb), global::Combat.FinishCombatResponsePb.Parser, new[]{ "StageId", "Stars", "FirstClear", "Rewards", "Gold", "Gem", "Token" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Combat.FinishCombatResponsePb), global::Combat.FinishCombatResponsePb.Parser, new[]{ "StageId", "Stars", "FirstClear", "Rewards", "Gold", "Gem", "Token", "Result" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Combat.ToggleSpeedRequestPb), global::Combat.ToggleSpeedRequestPb.Parser, new[]{ "CombatId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Combat.ToggleSpeedResponsePb), global::Combat.ToggleSpeedResponsePb.Parser, new[]{ "CombatId", "Speed" }, null, null, null, null)
           }));
@@ -100,6 +103,12 @@ namespace Combat {
     [pbr::OriginalName("COMBAT_SPEED_X1")] CombatSpeedX1 = 1,
     [pbr::OriginalName("COMBAT_SPEED_X1_5")] CombatSpeedX15 = 2,
     [pbr::OriginalName("COMBAT_SPEED_X2")] CombatSpeedX2 = 3,
+  }
+
+  public enum CombatResultPb {
+    [pbr::OriginalName("COMBAT_RESULT_UNSPECIFIED")] CombatResultUnspecified = 0,
+    [pbr::OriginalName("COMBAT_RESULT_WIN")] CombatResultWin = 1,
+    [pbr::OriginalName("COMBAT_RESULT_LOSE")] CombatResultLose = 2,
   }
 
   #endregion
@@ -4160,6 +4169,7 @@ namespace Combat {
       gold_ = other.gold_;
       gem_ = other.gem_;
       token_ = other.token_;
+      result_ = other.result_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -4255,6 +4265,18 @@ namespace Combat {
       }
     }
 
+    /// <summary>Field number for the "result" field.</summary>
+    public const int ResultFieldNumber = 8;
+    private global::Combat.CombatResultPb result_ = global::Combat.CombatResultPb.CombatResultUnspecified;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Combat.CombatResultPb Result {
+      get { return result_; }
+      set {
+        result_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -4277,6 +4299,7 @@ namespace Combat {
       if (Gold != other.Gold) return false;
       if (Gem != other.Gem) return false;
       if (Token != other.Token) return false;
+      if (Result != other.Result) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -4291,6 +4314,7 @@ namespace Combat {
       if (Gold != 0L) hash ^= Gold.GetHashCode();
       if (Gem != 0L) hash ^= Gem.GetHashCode();
       if (Token != 0L) hash ^= Token.GetHashCode();
+      if (Result != global::Combat.CombatResultPb.CombatResultUnspecified) hash ^= Result.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -4334,6 +4358,10 @@ namespace Combat {
         output.WriteRawTag(56);
         output.WriteInt64(Token);
       }
+      if (Result != global::Combat.CombatResultPb.CombatResultUnspecified) {
+        output.WriteRawTag(64);
+        output.WriteEnum((int) Result);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -4369,6 +4397,10 @@ namespace Combat {
         output.WriteRawTag(56);
         output.WriteInt64(Token);
       }
+      if (Result != global::Combat.CombatResultPb.CombatResultUnspecified) {
+        output.WriteRawTag(64);
+        output.WriteEnum((int) Result);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -4397,6 +4429,9 @@ namespace Combat {
       }
       if (Token != 0L) {
         size += 1 + pb::CodedOutputStream.ComputeInt64Size(Token);
+      }
+      if (Result != global::Combat.CombatResultPb.CombatResultUnspecified) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Result);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -4428,6 +4463,9 @@ namespace Combat {
       }
       if (other.Token != 0L) {
         Token = other.Token;
+      }
+      if (other.Result != global::Combat.CombatResultPb.CombatResultUnspecified) {
+        Result = other.Result;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -4472,6 +4510,10 @@ namespace Combat {
             Token = input.ReadInt64();
             break;
           }
+          case 64: {
+            Result = (global::Combat.CombatResultPb) input.ReadEnum();
+            break;
+          }
         }
       }
     #endif
@@ -4513,6 +4555,10 @@ namespace Combat {
           }
           case 56: {
             Token = input.ReadInt64();
+            break;
+          }
+          case 64: {
+            Result = (global::Combat.CombatResultPb) input.ReadEnum();
             break;
           }
         }

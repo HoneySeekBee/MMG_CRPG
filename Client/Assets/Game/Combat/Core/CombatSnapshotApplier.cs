@@ -14,7 +14,7 @@ namespace Game.Combat
             public Vector3 RenderPos;
             public Vector3 TargetPos;
             public Vector3 Vel; // Damp용 좌표
-             
+
             public int Hp;
             public bool Dead;
             public bool Inited;
@@ -28,6 +28,7 @@ namespace Game.Combat
         private readonly float _moveThreshold;
         private readonly float _smoothTime;
         private readonly float _teleportDistance;
+        private bool _hardSnapThisFrame;
         public CombatSnapshotApplier(
            Dictionary<long, GameObject> actorObjects,
            Dictionary<long, CombatTeam> actorTeams,
@@ -49,6 +50,10 @@ namespace Game.Combat
 
         public void Apply(CombatSnapshotPb snapshot, IList<CombatLogEventPb> eventsThisTick)
         {
+            _hardSnapThisFrame =
+    HasEventThisTick(eventsThisTick, "spawn")
+ || HasEventThisTick(eventsThisTick, "wave_cleared");
+
             if (snapshot?.Actors == null) return;
 
             var seen = new HashSet<long>();
@@ -77,10 +82,12 @@ namespace Game.Combat
 
                 if (!st.Inited)
                 {
-                    st.RenderPos = view.transform.position;
+                    view.transform.position = newTarget;
+                    st.RenderPos = newTarget;
                     st.TargetPos = newTarget;
-                    st.Hp = view.Hp;
-                    st.Dead = false;
+                    st.Vel = Vector3.zero;
+                    st.Hp = a.Hp;
+                    st.Dead = a.Dead;
                     st.Inited = true;
                 }
 
@@ -90,7 +97,14 @@ namespace Game.Combat
                 view.SetHp(a.Hp);
 
                 if (!st.Dead && a.Dead)
+                {
                     view.OnDie();
+                    SkillButton characterSkillBtn;
+                    if (BattleMapPopup.Instance.SkillButtonDic.TryGetValue(view.ActorId, out characterSkillBtn))
+                    {
+                        characterSkillBtn.CharacterDead();
+                    } 
+                }
 
                 st.Hp = a.Hp;
                 st.Dead = a.Dead;
@@ -130,25 +144,22 @@ namespace Game.Combat
                 var target = st.TargetPos;
 
                 float dist = Vector3.Distance(cur, target);
-
-                if (dist > _teleportDistance)
+                if (_hardSnapThisFrame || dist > _teleportDistance * 3f)
                 {
-                    // 큰 오차는 즉시 스냅 (맵 이동/스폰/재동기화 대비)
-                    view.transform.position = target; 
+                    view.transform.position = target;
                     st.Vel = Vector3.zero;
                     view.ResetFacingCache();
                 }
                 else
                 {
-                    // 부드럽게 따라가기
-                    view.transform.position = Vector3.SmoothDamp(cur, target, ref st.Vel, _smoothTime); 
+                    view.transform.position = Vector3.SmoothDamp(cur, target, ref st.Vel, _smoothTime);
                 }
                 view.UpdateFacingByMovement(dt);
 
                 float moved = Vector3.Distance(st.RenderPos, view.transform.position);
                 bool isMoving = moved > _moveThreshold && !st.Dead;
 
-                if(view.State != CombatActorView.ActionState.Attack)
+                if (view.State != CombatActorView.ActionState.Attack)
                 {
                     if (isMoving) view.PlayMove();
                     else if (!st.Dead) view.PlayIdle();

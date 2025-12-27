@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Application.Combat;
 using Application.Combat.Engine;
 using Application.UserCharacter;
+using Domain.Combat.Engine;
+using Domain.Entities.Combats;
 
 namespace Application.Combat
 {
@@ -82,7 +84,7 @@ namespace Application.Combat
             );
         }
 
-        public async Task<MasterPackDto> BuildPackAsync(int stageId, long userId, IReadOnlyCollection<long> partyCharacterIds, CancellationToken ct)
+        public async Task<MasterPack> BuildPackAsync(int stageId, long userId, IReadOnlyCollection<long> partyCharacterIds, CancellationToken ct)
         {
             // 1) 스테이지 상세 정보 로드 (StageDetailDto)
             var stage = await _stage.GetAsync(stageId, ct)
@@ -182,7 +184,7 @@ namespace Application.Combat
                 actors[mid] = def;
             }
 
-            return new MasterPackDto(stageDef, actors);
+            return new MasterPack(stageDef, actors);
         }
 
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Entities.Combats;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,7 @@ namespace Application.Combat
         CancellationToken ct);
 
         // 클라이언트 초기 스냅샷 용 
-        Task<MasterPackDto> BuildPackAsync(
+        Task<MasterPack> BuildPackAsync(
             int stageId,
             long userid,
             IReadOnlyCollection<long> partyCharacterIds,  

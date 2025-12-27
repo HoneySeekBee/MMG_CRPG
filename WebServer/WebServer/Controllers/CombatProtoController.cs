@@ -1,6 +1,7 @@
 ﻿using Application.Combat;
 using Combat;
 using Domain.Entities;
+using Domain.Enum;
 using Microsoft.AspNetCore.Mvc;
 using WebServer.Mappers;
 using static Application.Combat.CombatService;
@@ -119,7 +120,13 @@ namespace WebServer.Controllers
                 FirstClear = result.FirstClear,
                 Gold = result.Gold,
                 Gem = result.Gem,
-                Token = result.Token
+                Token = result.Token,
+                Result = result.Result switch
+                {
+                    CombatResult.Win => CombatResultPb.CombatResultWin,
+                    CombatResult.Lose => CombatResultPb.CombatResultLose,
+                    _ => CombatResultPb.CombatResultUnspecified
+                }
             };
 
             pb.Rewards.AddRange(result.Items.Select(i => new StageRewardItemPb

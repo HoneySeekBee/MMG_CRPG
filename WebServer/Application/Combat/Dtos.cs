@@ -1,5 +1,7 @@
 ﻿using Application.Contents.Stages;
+using Domain.Combat.Engine;
 using Domain.Entities.Contents;
+using Domain.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -108,6 +110,7 @@ namespace Application.Combat
         IReadOnlyList<GainedItemDto> Items,
         long Gold,
         long Gem,
-        long Token
+        long Token,
+        CombatResult Result
     );
 }

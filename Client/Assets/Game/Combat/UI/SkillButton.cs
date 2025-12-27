@@ -7,6 +7,7 @@ using WebServer.Protos;
 
 public class SkillButton : MonoBehaviour
 {
+    private bool isAllive;
     private SkillMessage SkillData;
     private SkillLevelMessage SkillLevelData;
 
@@ -20,6 +21,7 @@ public class SkillButton : MonoBehaviour
     private float cooldownSeconds = 3f;
     public void Set(SkillMessage data, int level, long actorId)
     {
+        CharacterAllive();
         SkillData = data;
         SkillLevelData = data.Levels[level];
         casterActorId = actorId;
@@ -42,9 +44,21 @@ public class SkillButton : MonoBehaviour
         CoolTimeImage.fillAmount = 0;
         CoolTimeImage.gameObject.SetActive(false);
     }
+    public void CharacterAllive()
+    {
+        isAllive = true;
+        SkillIconImage.color = Color.white;
+    }
+    public void CharacterDead()
+    {
+        isAllive = false;
+        SkillIconImage.color = Color.gray;
+    }
 
     private void ClickEvent()
     {
+        if (isAllive == false)
+            return;
         if (isCooling)
             return;
         BattleMapManager.Instance.RequestSkill(casterActorId, SkillData.SkillId, ok =>

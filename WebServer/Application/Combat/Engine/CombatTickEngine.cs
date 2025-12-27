@@ -1,7 +1,9 @@
-﻿using Application.Combat.Engine.TickSystems;
-using Application.Combat.Engine.TickSystems.Skill;
-using Application.Combat.Runtime;
+﻿using Domain.Combat.Engine.TickSystems;
+using Domain.Combat.Engine.TickSystems.Skill;
+using Domain.Combat.Runtime;
 using Domain.Entities;
+using Domain.Entities.Combats;
+using Domain.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,9 +26,9 @@ namespace Application.Combat.Engine
         private readonly BuffStatSystem _buffStats = new(); 
         private readonly CrowdControlSystem _cc = new();
         private readonly ProjectileSystem _proj = new(); 
-        public List<CombatLogEventDto> Process(CombatRuntimeState state, int dtMs)
+        public List<CombatLogEvent> Process(CombatRuntimeState state, int dtMs)
         {
-            var events = new List<CombatLogEventDto>();
+            var events = new List<CombatLogEvent>();
             if (state.BattleEnded)
                 return events;
              
@@ -52,9 +54,12 @@ namespace Application.Combat.Engine
 
             return events;
         }
-       
+
 
         public CombatSnapshotDto BuildSnapshot(CombatRuntimeState s)
-            => _snapshot.Build(s);
+        {
+            CombatSnapshot domainSnap = _snapshot.Build(s); 
+            return CombatSnapshotMapper.ToDto(domainSnap);
+        }
     }
 }

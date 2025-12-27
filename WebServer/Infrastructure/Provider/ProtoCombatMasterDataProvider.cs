@@ -4,6 +4,7 @@ using Infrastructure.Reader;
 using WebServer.Protos;
 using WebServer.Protos.Monsters;
 using Application.Combat.Engine;
+using Domain.Combat.Engine;
 
 namespace Infrastructure.Provider
 {

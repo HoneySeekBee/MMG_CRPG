@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Extentions;
-using System.Threading.Tasks; 
-using DG.Tweening; 
+using System.Threading.Tasks;
+using DG.Tweening;
 using static PartySetManager;
-using Combat; 
+using Combat;
 using Google.Protobuf.WellKnownTypes;
-using System; 
+using System;
 using Game.Data;
-using Game.Core; 
+using Game.Core;
 using Game.Combat;
 
 public class BattleMapManager : MonoBehaviour
@@ -60,7 +60,8 @@ public class BattleMapManager : MonoBehaviour
     private readonly Dictionary<long, int> _actorMasterIds = new();
 
     [SerializeField] private CombatSpeedApplier combatSpeedApplier; // Unity 내부 동작 스피드 적용
-
+    private bool _gotStageResult = false;
+    private bool _finalWin = false;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -101,6 +102,8 @@ public class BattleMapManager : MonoBehaviour
     {
         Set_MonsterSlot();
         EnsureFactory();
+        _gotStageResult = false;
+        _finalWin = false;
 
         _snapshotApplier?.Clear();
 
@@ -181,7 +184,6 @@ public class BattleMapManager : MonoBehaviour
         _combatDirector.OnBattleEnd += () =>
         {
             _battleEnded = true;
-            _stageCleared = true;
         };
 
         _vfx = new CombatVfxPresenter(skillFxDb, _actorObjects, _actorMasterIds, this.transform);
@@ -201,7 +203,7 @@ public class BattleMapManager : MonoBehaviour
 
             // CombatDirector가 Tick 처리
             yield return _combatDirector.Tick();
-            yield return new WaitForSecondsRealtime(0.1f); 
+            yield return new WaitForSecondsRealtime(0.1f);
         }
 
         Debug.Log("[BattleMap] TickLoop_CombatDirector 종료");
@@ -219,9 +221,31 @@ public class BattleMapManager : MonoBehaviour
             case "wave_cleared":
                 HandleWaveClearEvent(ev);
                 break;
+
+            case "stage_result":
+                HandleStageResultEvent(ev);
+                break;
         }
     }
 
+    private void HandleStageResultEvent(CombatLogEventPb ev)
+    {
+        string result = "win";
+        if (ev.Extra != null && ev.Extra.Fields.TryGetValue("result", out var v))
+        {
+            if (v.KindCase == Value.KindOneofCase.StringValue)
+                result = v.StringValue;
+        }
+
+        _gotStageResult = true;
+        _finalWin = (result == "win");
+        _stageCleared = _finalWin;
+        if (!_finalWin)
+        {
+            _battleEnded = true;
+        }
+        Debug.Log($"[BattleMap] stage_result = {result}");
+    }
     private int GetBreakthrough(int characterId)
     {
         if (GameState.Instance.CurrentUser.UserCharactersDict.TryGetValue(characterId, out var c))
@@ -305,7 +329,7 @@ public class BattleMapManager : MonoBehaviour
     private IEnumerator BattleFlow()
     {
         var popup = BattleMapPopup.Instance;
-
+        yield return new WaitForSeconds(1);
         // [1] 전투 시작 연출
         yield return popup.StartCoroutine(popup.ShowStart());
 
@@ -345,19 +369,30 @@ public class BattleMapManager : MonoBehaviour
                 {
                     // [3] 마지막 웨이브 -> 최종 복귀
                     Debug.Log("[BattleFlow] 마지막 웨이브 종료 -> End 복귀 시작");
-                    yield return StartCoroutine(ReturnPlayersToSpawnEnd());
 
-                    // 복귀 완료 → 전투 종료로 이동
-                    break;
+                    //yield return StartCoroutine(ReturnPlayersToSpawnEnd()); 
+                    // 복귀 완료 → 전투 종료로 이동 
                 }
             }
+            if (_gotStageResult)
+            {
+                if (_finalWin && !_endReturnDone)
+                    yield return StartCoroutine(ReturnPlayersToSpawnEnd());
 
+                _battleEnded = true;
+                break;
+            }
             // 매프레임 감시
             yield return null;
         }
 
         Debug.Log("[BattleFlow] BattleFlow 종료 감지 → FinishCombat 요청");
-
+        if (_gotStageResult && _finalWin)
+        {
+            // 아직 End 복귀 안했으면 수행
+            if (!_endReturnDone)
+                yield return StartCoroutine(ReturnPlayersToSpawnEnd());
+        }
         // [3] 서버에 FinishCombat 요청  
         FinishCombatResponsePb result = null;
         bool done = false;
@@ -382,8 +417,8 @@ public class BattleMapManager : MonoBehaviour
             Debug.LogError("[BattleMap] FinishCombat 결과 없음");
             yield break;
         }
-
-        ApplyStageClearToClientProgress(result);
+        if (_stageCleared)
+            ApplyStageClearToClientProgress(result);
 
         popup.ShowResult(result);
 
@@ -420,7 +455,6 @@ public class BattleMapManager : MonoBehaviour
             v.PlayVictory();
 
         _endReturnDone = true;
-        _stageCleared = false;
         Debug.Log("[BattleMap] ReturnPlayersToSpawnEnd 완료");
     }
     private IEnumerator ReturnPlayersToSpawn()
@@ -579,7 +613,7 @@ public class BattleMapManager : MonoBehaviour
     {
         var players = GetAlivePlayerActors();
         foreach (var v in players)
-        { 
+        {
             v.FaceDirection(Vector3.right, smooth);
         }
     }
@@ -595,7 +629,7 @@ public class BattleMapManager : MonoBehaviour
                     {
                         BattleMapPopup.Instance.SpeedBtn.UpdateSpeedUI(res.Data.Speed);
                         CombatTime.SetSpeed(res.Data.Speed);
-                        combatSpeedApplier.RefreshAndApply(CombatTime.TimeScale); 
+                        combatSpeedApplier.RefreshAndApply(CombatTime.TimeScale);
                     }
                 }
             )

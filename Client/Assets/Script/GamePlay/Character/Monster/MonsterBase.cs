@@ -22,11 +22,17 @@ public class MonsterBase : CombatActorView
             Animator.Play_GetHit(isCrit);
     }
 
-    public override void OnDie()
+    private IEnumerator PlayDie()
     {
+        // 파티원 사망 UI, 부활 가능 등
         if (CanPlayAnim(CombatActorView.ActionState.Dead))
             Animator.PlayDie();
+        yield return new WaitForSeconds(1);
         base.OnDie();
+    }
+    public override void OnDie()
+    {
+        StartCoroutine(PlayDie());
     }
     protected override void UpdateHPBar()
     {

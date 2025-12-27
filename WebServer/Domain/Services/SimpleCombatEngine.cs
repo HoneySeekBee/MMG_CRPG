@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Domain.Entities.Combats;
+using Domain.Entities.Combats;
 using Domain.Enum;
 using Domain.Events;
 using System;

@@ -24,7 +24,8 @@ public class AdventureDetailPopup : UIPopup
             blocker.SetActive(true);
         LobbyRootController.Instance._currentStage = data;
         ClearSlots();
-        chapterStageText.text = $"{data.Chapter}-{data.Order}";
+        ChapterPb chapter = BattleContentsCache.Instance.Chapters[data.Chapter];
+        chapterStageText.text = $"{chapter.ChapterNum}-{data.Order}";
         chapterTitleText.text = $"{data.Name}";
 
         PlayButton.onClick.RemoveAllListeners();

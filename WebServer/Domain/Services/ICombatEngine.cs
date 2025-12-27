@@ -1,4 +1,4 @@
-﻿using Domain.Entities;
+﻿using Domain.Entities.Combats;
 using Domain.Events;
 using System;
 using System.Collections.Generic;

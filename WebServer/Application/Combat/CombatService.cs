@@ -1,5 +1,5 @@
 ﻿using Application.Combat.Engine;
-using Application.Combat.Runtime;
+using Domain.Combat.Runtime;
 using Application.Contents.Stages;
 using Application.Repositories;
 using Application.Skills;
@@ -11,14 +11,10 @@ using Application.Users;
 using Domain.Entities.Contents;
 using Domain.Enum;
 using Domain.Services;
-using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using Domain.Combat.Engine;
+using Domain.Entities.Combats;
+using CombatEntitiy = Domain.Entities.Combats.Combat;
 
 namespace Application.Combat
 {
@@ -104,22 +100,22 @@ namespace Application.Combat
                 if (!statsByCharacterId.TryGetValue(charId, out var uc))
                     throw new InvalidOperationException($"CharacterId {charId} not found in stats.");
 
-                return new Domain.Entities.PartyMember(
+                return new PartyMember(
                     CharacterId: uc.CharacterId,
                     Level: uc.Level
                 );
             }).ToArray();
 
-            var input = new Domain.Entities.CombatInputSnapshot(
+            var input = new CombatInputSnapshot(
                 req.StageId,
                 partyMembers,
-                Array.Empty<Domain.Entities.SkillInput>());
+                Array.Empty<SkillInput>());
 
             // (7) Combat Aggregate 생성/저장
             var seed = BitConverter.ToInt64(Guid.NewGuid().ToByteArray(), 0);
             if (seed == 0) seed = 1;
 
-            var combat = Domain.Entities.Combat.Create(
+            var combat = CombatEntitiy.Create(
                 CombatMode.Pve,
                 req.StageId,
                 seed,
@@ -148,13 +144,14 @@ namespace Application.Combat
 
             var runtimeState = _runtimeStates[combatId];
             runtimeState.Snapshot = new CombatRuntimeSnapshot();
-            runtimeState.MasterPack = pack;
+            runtimeState._MasterPack = pack;
 
             var skills = _skillCache.GetAll();
             runtimeState.SkillMaster.Clear();
+
             foreach (var s in skills)
             {
-                runtimeState.SkillMaster[s.SkillId] = s;
+                runtimeState.SkillMaster[s.SkillId] = CombatSkillMapper.ToCombatSkill(s);
             }
 
             // (8) ActorInitDto 구성
@@ -260,21 +257,21 @@ namespace Application.Combat
 
             // 3) 도메인 입력 스냅샷
             var party = req.Party
-                .Select(p => new Domain.Entities.PartyMember(p.CharacterId, p.Level))
+                .Select(p => new PartyMember(p.CharacterId, p.Level))
                 .ToArray();
 
             var skills = (req.SkillInputs ?? Enumerable.Empty<SkillInputDto>())
-                .Select(s => new Domain.Entities.SkillInput(s.TMs, s.CasterRef, s.SkillId, s.Targets.ToArray()))
+                .Select(s => new SkillInput(s.TMs, s.CasterRef, s.SkillId, s.Targets.ToArray()))
                 .ToArray();
 
-            var input = new Domain.Entities.CombatInputSnapshot(req.StageId, party, skills);
+            var input = new CombatInputSnapshot(req.StageId, party, skills);
 
             // 4) 마스터 데이터 패키지
             var partyIds = party.Select(x => x.CharacterId).ToArray();
             var masterPack = await _master.BuildEnginePackAsync(req.StageId, partyIds, ct);
 
             // 5) Aggregate 생성
-            var combat = Domain.Entities.Combat.Create(
+            var combat = CombatEntitiy.Create(
                 Domain.Enum.CombatMode.Pve, req.StageId, seed, input,
                 balanceVersion: "1", // TODO: 운영툴/설정에서 주입
                 clientVersion: req.ClientVersion);
@@ -319,7 +316,10 @@ namespace Application.Combat
                 throw new InvalidOperationException("COMBAT_NOT_FINISHED");
 
             // (3) 승패/별 계산 
-            bool success = true;
+            if (state.Result is null)
+                throw new InvalidOperationException("COMBAT_RESULT_MISSING");
+
+            bool success = state.Result == CombatResult.Win;
             StageStars stars = CalculateStars(state, success);
 
             // (4) 보상 + 진행도 + 지갑 처리 전부 StageRewardService에 위임
@@ -343,14 +343,15 @@ namespace Application.Combat
                 .ToList();
 
             return new FinishCombatResponse(
-        StageId: rewardResult.StageId,
-        Stars: stars,
-        FirstClear: rewardResult.IsFirstClear,
-        Items: items,
-        Gold: rewardResult.Gold,
-        Gem: rewardResult.Gem,
-        Token: rewardResult.Token
-    );
+                StageId: rewardResult.StageId,
+                Stars: stars,
+                FirstClear: rewardResult.IsFirstClear,
+                Items: items,
+                Gold: rewardResult.Gold,
+                Gem: rewardResult.Gem,
+                Token: rewardResult.Token,
+               Result: state.Result.Value
+               );
         }
         private StageStars CalculateStars(CombatRuntimeState state, bool success)
         {
@@ -378,7 +379,12 @@ namespace Application.Combat
 
             lock (state.SyncRoot)
             {
-                state.PendingCommands.Enqueue(cmd);
+                state.PendingCommands.Enqueue(new CombatCommand(
+                    cmd.ActorId,
+                    cmd.TargetActorId,
+                    cmd.SkillId,
+                    cmd.SkillLevel
+                ));
             }
             var tMs = (int)(DateTimeOffset.UtcNow - state.StartedAt).TotalMilliseconds;
 
@@ -416,18 +422,18 @@ namespace Application.Combat
             if (!_runtimeStates.TryGetValue(combatId, out var state))
                 throw new KeyNotFoundException($"Combat {combatId} not found");
 
-            List<CombatLogEventDto> evs = new();
+            List<Domain.Events.CombatLogEvent> domainEvs = new();
             CombatSnapshotDto snapshot;
 
             const int BaseTickMs = 100;
             const int MaxCatchUpTicks = 5;
-
             lock (state.SyncRoot)
             {
                 if (tick <= state.Tick)
                 {
                     snapshot = _tickEngine.BuildSnapshot(state);
-                    return new CombatTickResponse(combatId, state.Tick, snapshot, evs);
+                    var dtoEvs0 = new List<CombatLogEventDto>();
+                    return new CombatTickResponse(combatId, state.Tick, snapshot, dtoEvs0);
                 }
 
                 int missing = tick - state.Tick;
@@ -437,39 +443,24 @@ namespace Application.Combat
 
                 for (int i = 0; i < catchUp; i++)
                 {
-                    var stepEvents = _tickEngine.Process(state, tickDeltaMs);
-                    if (stepEvents.Count > 0) evs.AddRange(stepEvents);
+                    var step = _tickEngine.Process(state, tickDeltaMs);
+                    if (step.Count > 0) domainEvs.AddRange(step);
                 }
 
                 snapshot = _tickEngine.BuildSnapshot(state);
             }
 
             // 3) 이벤트 로그 영속화
-            if (evs.Count > 0)
+            if (domainEvs.Count > 0)
             {
-                var domainEvents = evs.Select(e =>
-                    new Domain.Events.CombatLogEvent(
-                        TMs: e.TMs,
-                        Type: e.Type,
-                        Actor: e.Actor,
-                        Target: e.Target,
-                        Damage: e.Damage,
-                        Crit: e.Crit,
-                        Extra: e.Extra
-                    ));
-
-                await _repo.AppendLogsAsync(combatId, domainEvents, ct);
+                await _repo.AppendLogsAsync(combatId, domainEvs, ct);
             }
 
+            var dtoEvs = domainEvs.Select(Map).ToList();
             // 4) 스냅샷 + 이벤트를 함께 반환
-            return new CombatTickResponse(combatId, tick, snapshot, evs);
+            return new CombatTickResponse(combatId, tick, snapshot, dtoEvs);
         }
-        public enum CombatSpeed
-        {
-            X1,
-            X15,
-            X2
-        }
+
         public Task<CombatSpeed> ToggleSpeedAsync(long combatId, CancellationToken ct)
         {
             if (!_runtimeStates.TryGetValue(combatId, out var state))

@@ -1,10 +1,11 @@
-﻿using Application.Combat; 
+﻿using Application.Combat;
+using CombatEntity = Domain.Entities.Combats.Combat;
 
 namespace Application.Repositories
 {
     public interface ICombatRepository
     {
-        Task<long> SaveAsync(Domain.Entities.Combat combat,
+        Task<long> SaveAsync(CombatEntity combat,
             IEnumerable<Domain.Events.CombatLogEvent> events,
             CancellationToken ct);
         Task AppendLogsAsync(

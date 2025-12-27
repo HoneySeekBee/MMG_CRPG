@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class ObjectPool : MonoBehaviour
 {
-    [SerializeField] private GameObject prefab; 
+    [SerializeField] private GameObject prefab;
 
     private readonly Queue<GameObject> _pool = new Queue<GameObject>();
-     
+
     private GameObject CreateNew()
     {
         var go = Instantiate(prefab, transform);
@@ -33,7 +33,8 @@ public class ObjectPool : MonoBehaviour
     public void Return(GameObject go)
     {
         go.SetActive(false);
-        go.transform.SetParent(transform);
+        if (this.transform != null)
+            go.transform.SetParent(transform);
         _pool.Enqueue(go);
     }
 }

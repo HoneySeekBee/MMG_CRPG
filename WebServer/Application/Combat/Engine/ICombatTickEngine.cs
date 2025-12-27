@@ -1,4 +1,5 @@
-﻿using Application.Combat.Runtime;
+﻿using Domain.Combat.Runtime;
+using Domain.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Application.Combat.Engine
 {
     public interface ICombatTickEngine
     {
-        List<CombatLogEventDto> Process(CombatRuntimeState state, int dtMs);
+        List<CombatLogEvent> Process(CombatRuntimeState state, int dtMs);
         CombatSnapshotDto BuildSnapshot(CombatRuntimeState s);
 
 
