@@ -91,6 +91,12 @@ Unity 클라이언트와 ASP.NET Core 서버를 직접 설계·구현한
 ---
 https://youtu.be/QODgDKIFDW0
 
+Notion 
+https://www.notion.so/Lumen-Academy-2cedd6b204da81aea245eb503471a500?source=copy_link
+
+Blog (개발 일지)
+https://blog.naver.com/12dlfdl12/223977163312
+
 ## 7. 이 프로젝트를 통해 얻은 것
 - 클라이언트–서버–운영툴 전체 흐름을 고려한 설계 경험
 - 서버 권한 구조를 통한 데이터 무결성 및 치트 방지 구조 이해
