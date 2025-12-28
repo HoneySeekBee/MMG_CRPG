@@ -54,7 +54,7 @@ public class GachaShopPopup : UIPopup
         {
             if (banner != null)
             {
-                banner.transform.SetParent(null, false);
+                banner.transform.SetParent(pool.transform, false);
                 pool.Return(banner.gameObject);
             }
         }

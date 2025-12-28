@@ -144,6 +144,18 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7466875301157923495, guid: 3b31db33aca1f9b46b99168587271302, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7466875301157923495, guid: 3b31db33aca1f9b46b99168587271302, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7466875301157923495, guid: 3b31db33aca1f9b46b99168587271302, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7466875301157923495, guid: 3b31db33aca1f9b46b99168587271302, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.00499323
       objectReference: {fileID: 0}
@@ -316,6 +328,10 @@ PrefabInstance:
     - target: {fileID: 432350906011875738, guid: 6b9e9392ea32bab40baef03bfb83c757, type: 3}
       propertyPath: m_Name
       value: WindbulletCast
+      objectReference: {fileID: 0}
+    - target: {fileID: 432350906011875738, guid: 6b9e9392ea32bab40baef03bfb83c757, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7332462641210323792, guid: 6b9e9392ea32bab40baef03bfb83c757, type: 3}
       propertyPath: m_LocalPosition.x

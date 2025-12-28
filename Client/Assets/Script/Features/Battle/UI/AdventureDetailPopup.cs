@@ -14,7 +14,7 @@ public class AdventureDetailPopup : UIPopup
     [SerializeField] private Button PlayButton;
 
     [SerializeField] private ObjectPool slotPool;
-    [SerializeField] private Transform slotParent; 
+    [SerializeField] private Transform slotParent;
     private readonly List<GameObject> _spawnedSlots = new List<GameObject>();
 
     [SerializeField] private GameObject blocker;
@@ -29,12 +29,15 @@ public class AdventureDetailPopup : UIPopup
         chapterTitleText.text = $"{data.Name}";
 
         PlayButton.onClick.RemoveAllListeners();
-        PlayButton.onClick.AddListener(() => { Play(data); }); 
-         
+        PlayButton.onClick.AddListener(() =>
+        {
+            Play(data);
+        });
+
         foreach (var item in data.FirstRewards)
         {
             GameObject go = slotPool.Get();
-            go.transform.SetParent(slotParent, false);      
+            go.transform.SetParent(slotParent, false);
             go.GetComponent<Image>().color = Color.green;
 
             ItemSlotUI slotUI = go.GetComponent<ItemSlotUI>();
@@ -82,7 +85,7 @@ public class AdventureDetailPopup : UIPopup
     private void Play(StagePb data)
     {
         Debug.Log($"{data.Chapter}-{data.Order} 실행하기");
-        this.gameObject.SetActive(false);
+        Hide();
         LobbyRootController.Instance.Show("PartySet");
     }
 }

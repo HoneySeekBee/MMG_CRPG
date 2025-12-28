@@ -468,7 +468,8 @@ public class BattleMapManager : MonoBehaviour
         while (!AreAllPlayersAtSpawn())
             yield return null;
 
-        foreach (var v in players) v.FaceDirection(Vector3.right, smooth: false);
+        foreach (var v in players) 
+            v.FaceDirection(Vector3.right, smooth: false);
         foreach (var v in players)
             v.PlayIdle();
 

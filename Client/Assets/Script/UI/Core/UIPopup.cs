@@ -39,8 +39,11 @@ namespace Lobby
             OnBeforeShow();
 
             await FadeAsync(1f, fadeDuration);
-            canvasGroup.interactable = true;
-            canvasGroup.blocksRaycasts = blockRaycastWhenShown;
+            if (canvasGroup != null)
+            {
+                canvasGroup.interactable = true;
+                canvasGroup.blocksRaycasts = blockRaycastWhenShown;
+            }
 
             OnAfterShow();
         }
@@ -71,6 +74,10 @@ namespace Lobby
             while (t < 1f)
             {
                 t += Time.unscaledDeltaTime / duration;
+
+                if (canvasGroup == null)
+                    return;
+
                 canvasGroup.alpha = Mathf.Lerp(start, target, t);
                 await Task.Yield();
             }
