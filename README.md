@@ -42,8 +42,7 @@ Unity 클라이언트와 ASP.NET Core 서버를 직접 설계·구현한
 
 ## 3. 전체 아키텍처
 > Client(Unity) ↔ WebServer(API) ↔ Application ↔ Domain ↔ Infrastructure(DB/Cache)
-
-<img width="923" height="559" alt="architecture" src="https://github.com/user-attachments/assets/621023de-83f0-4e7e-9a08-f82e7424998c" />
+<img width="839" height="494" alt="MMG_CRPG_Archtecture" src="https://github.com/user-attachments/assets/9f0ad939-7681-48be-9956-f13552c35ecc" />
 
 ---
 
@@ -89,8 +88,8 @@ Unity 클라이언트와 ASP.NET Core 서버를 직접 설계·구현한
 <img width="347" height="194" alt="admin" src="https://github.com/user-attachments/assets/73f9da26-0fed-4c44-ba5d-d93b404fc592" />
 
 🎥 클라이언트 동작 영상   
-https://youtu.be/QODgDKIFDW0
 ---
+https://youtu.be/QODgDKIFDW0
 
 ## 7. 이 프로젝트를 통해 얻은 것
 - 클라이언트–서버–운영툴 전체 흐름을 고려한 설계 경험
