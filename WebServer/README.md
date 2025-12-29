@@ -61,10 +61,25 @@ MMG_CRPG의 게임 서버입니다.
 ## 아키텍처 구조 (Clean Architecture) 
 <img width="3868" height="1580" alt="서버아키텍처" src="https://github.com/user-attachments/assets/7e294cc5-3241-4e40-829f-45c1cc55090d" />
 
-- WebServer: Controller / 인증 / 요청 검증
-- Application: 유스케이스 흐름 제어
-- Domain: 전투 규칙 및 Tick 엔진
-- Infrastructure: DB / Redis / 외부 연동
+> WebServer, Application, Domain, Infrastructure 계층을 분리하여  
+> 전투 규칙과 비즈니스 로직을 외부 인터페이스(API, DB)로부터 독립적으로 유지하도록 설계했습니다.
+
+- WebServer  
+  - Protobuf / JSON Controller  
+  - 인증, 요청 검증, Contract 매핑
+
+- Application  
+  - 유스케이스 흐름 제어  
+  - 전투 시작 / Tick 처리 / 전투 종료 / 보상 지급
+
+- Domain  
+  - 전투 규칙 및 상태 모델  
+  - Tick 기반 전투 엔진, Snapshot / Event 생성
+
+- Infrastructure  
+  - PostgreSQL (EF Core)  
+  - Redis (Session / Cache)  
+  - 외부 서비스 연동
 
 ### 요구 사항
 - .NET SDK 8.0.x
