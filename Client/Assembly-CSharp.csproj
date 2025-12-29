@@ -101,7 +101,6 @@
     <Compile Include="Assets\Script\Features\Lobby\Managers\GachaAnimationManager.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\ObstacleOvercomeCharacterState.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterStates\MycoBehavior.cs" />
-    <Compile Include="Assets\Scenes\Use\Script\AppBootstrap.cs" />
     <Compile Include="Assets\ExternalAsset\VFX\PixPlays\Components\Scripts\VfxAddons\ParticleSystemStartStopLifetime.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Player\PlayerCharacterInput.cs" />
     <Compile Include="Assets\Script\Features\Combat\Core\CombatTime.cs" />
@@ -277,6 +276,7 @@
     <Compile Include="Assets\Script\Features\Combat\Skills\SlashVfx.cs" />
     <Compile Include="Assets\Script\Core\Addressbles\AddressableManager.cs" />
     <Compile Include="Assets\ExternalAsset\VFX\PixPlays\Components\Scripts\IHittable.cs" />
+    <Compile Include="Assets\Script\App\AppBootstrap.cs" />
     <Compile Include="Assets\Script\Systems\Network\GamePlay\UserPartyNetwork.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,82 +1,54 @@
 # ---- 기본 OS 파일 ----
-# Windows
 Thumbs.db
 ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
-
-# macOS
 .DS_Store
 .AppleDouble
 .LSOverride
 __MACOSX/
 
-# ---- Visual Studio / Rider / .NET ----
+# ---- IDE / Editor ----
+.vs/
+.vscode/
+.idea/
 *.user
 *.suo
 *.userosscache
 *.sln.docstates
+*.swp
 
-# 빌드 결과물
-[Bb]in/
-[Oo]bj/
-[Ll]og/
+# ---- .NET (서버/운영툴 공통) ----
+**/[Bb]in/
+**/[Oo]bj/
 [Tt]est[Rr]esults/
-*.exe
-*.dll
-*.pdb
-*.cache
-*.config
-*.dbmdl
-*.bak
-*.mdf
-*.ldf
-
-# 패키지
 *.nupkg
 *.snupkg
-*.nuspec
 packages/
-project.lock.json
-project.fragment.lock.json
 
-# DotNet
-*.vs/
-.vscode/
-*.idea/
-*.swp
-*.lock.json
+# 개발 환경 설정 (비공개)
+WebServer/**/appsettings.Development.json
 
-# ---- Unity ----
-[Ll]ibrary/
-[Tt]emp/
-[Oo]bj/
-[Bb]uild/
-[Bb]uilds/
-[Ll]ogs/
-UserSettings/
+# ---- Unity (Client 전용) ----
+Client/[Ll]ibrary/
+Client/[Tt]emp/
+Client/[Oo]bj/
+Client/[Bb]uild/
+Client/[Bb]uilds/
+Client/[Ll]ogs/
+Client/UserSettings/
+Client/[Bb]ee/
+Client/MemoryCaptures/
+Client/Recordings/
 
-# Bee 빌드 시스템 캐시 (Unity 2021+)
-[Bb]ee/
+# Unity 자동 생성 솔루션/프로젝트 (Client 전용)
+Client/*.csproj
+Client/*.sln
+Client/*.unityproj
 
-# Memory / Recordings / Profiler
-MemoryCaptures/
-Recordings/
-
-# Auto-generated solution/project files
-*.csproj
-*.unityproj
-*.sln
-*.suo
-*.tmp
-*.user
-*.userprefs
-
-# 기타 Unity 자동 생성 파일
-sysinfo.txt
-*.pidb
-*.booproj
-*.svd
-*.mdb
-
-WebServer/WebServer/appsettings.Development.json
+# Unity 기타 자동 생성 파일
+Client/sysinfo.txt
+Client/*.pidb
+Client/*.booproj
+Client/*.svd
+Client/*.mdb
