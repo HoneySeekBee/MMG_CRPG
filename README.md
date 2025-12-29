@@ -104,7 +104,7 @@ Unity 클라이언트와 ASP.NET Core 서버를 직접 설계·구현한
 ## 9. 참고 자료 
 
 🎥 Youtube
-https://youtu.be/QODgDKIFDW0
+https://youtu.be/e2f5qjR5SHQ
 
 Notion 
 https://www.notion.so/Lumen-Academy-2cedd6b204da81aea245eb503471a500?source=copy_link
