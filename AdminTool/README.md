@@ -137,14 +137,6 @@ AdminTool은 라이브 게임 운영에 필요한 주요 기능을 제공합니�
 - Jwt:Issuer
 - Jwt:Audience
 - Jwt:Key
-
-### 실행
-```
-cd AdminTool
-dotnet restore
-dotnet run
-```
-
 ---
 
 ## 설계상 제공하지 않는 기능
