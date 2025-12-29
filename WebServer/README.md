@@ -4,6 +4,8 @@ MMG_CRPG의 게임 서버입니다.
 서버 권한(Server-authoritative) 구조를 기반으로 전투, 보상, 데이터 무결성을 서버가 책임집니다.  
 전투는 Tick Loop로 시뮬레이션되며 결과는 Snapshot + Events 형태로 클라이언트에 전달됩니다.
 
+
+
 ## 기술 스택
 - ASP.NET Core Web API
 - Clean Architecture (WebServer / Application / Domain / Infrastructure)
@@ -56,7 +58,9 @@ MMG_CRPG의 게임 서버입니다.
 - 캐시 데이터
 - 서버 상태 트래킹 / 분산락
 
-## 아키텍처 구조 (Clean Architecture)
+## 아키텍처 구조 (Clean Architecture) 
+<img width="3868" height="1580" alt="서버아키텍처" src="https://github.com/user-attachments/assets/7e294cc5-3241-4e40-829f-45c1cc55090d" />
+
 - WebServer: Controller / 인증 / 요청 검증
 - Application: 유스케이스 흐름 제어
 - Domain: 전투 규칙 및 Tick 엔진
