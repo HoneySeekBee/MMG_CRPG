@@ -9,15 +9,22 @@ MMG_CRPG의 Unity 클라이언트입니다.
 ## 핵심 설계 포인트
 
 ### 1) 서버-클라이언트 통신 규약
+
 - 프로토콜: HTTPS + Protobuf(Proto3, Binary) + JWT
 - 엔드포인트: `/api/pb/*`
 - 헤더
   - `Content-Type: application/x-protobuf`
   - `Accept: application/x-protobuf`
   - `Authorization: Bearer <AccessToken>`
-- 네트워크 공통화
-  - `ProtoHttpClient`에서 Timeout / Retry / Token 처리 통합
-  - 도메인별 모듈(Combat / Gacha / Party 등)은 호출부만 사용하도록 단순화
+
+<img width="4142" height="1937" alt="클라이언트구조" src="https://github.com/user-attachments/assets/a5bddee3-30b6-487f-8908-af41cd6dbc99" />
+
+- 클라이언트는 Feature 단위(Network Module)에서 요청을 생성합니다.
+- 모든 네트워크 요청은 `ProtoHttpClient`를 통해 전송됩니다.
+- `ProtoHttpClient`는 HTTPS 전송, JWT 인증, Retry, Timeout, Protobuf 파싱을 공통 처리합니다.
+- 서버는 `/api/pb/*` 엔드포인트에서 Protobuf 요청을 처리하고,
+  서버 기준 Snapshot + Event 결과를 반환합니다.
+- 클라이언트는 서버 응답을 기준으로 상태를 동기화하고 연출만 재생합니다.  
 
 ### 2) Tick 기반 전투 동기화 (서버 권한)
 - 전투 흐름: `StartCombat → Tick Loop → FinishCombat`
@@ -25,9 +32,16 @@ MMG_CRPG의 Unity 클라이언트입니다.
 - 클라이언트는 Tick 단위로 Snapshot을 반영하고, Event로 연출을 재생
 
 ### 3) 씬 및 게임 플로우 구조
-- `AppPersistent` 씬은 앱 시작부터 종료까지 유지되며 전역 시스템을 포함합니다.
+
+<img width="3837" height="1894" alt="서버클라이언트통신구조" src="https://github.com/user-attachments/assets/2b80369a-d736-49cd-b336-fbd94389420e" />
+
+- `AppPersistent` 씬은 앱 시작부터 종료까지 유지되며,
+  인증, 네트워크, 캐시, Addressables 등 전역 시스템을 포함합니다.
 - `AppBootstrap`이 `LobbyRoot` 씬을 로드하여 전체 게임 플로우를 초기화합니다.
-- `LobbyRoot`는 앱 실행 동안 유지되며, 전투/콘텐츠 씬을 Additive로 로드 및 해제합니다.
+- `LobbyRoot`는 UI(Canvas/Panel/Popup)와 게임 상태 전환을 관리하며 항상 유지됩니다.
+- 전투, 가챠, 파티 설정과 같은 콘텐츠 씬은 Additive 방식으로 로드되며,
+  사용 종료 시 즉시 언로드됩니다.
+- 이 구조를 통해 씬 전환 비용을 최소화하고 전역 상태를 안정적으로 유지합니다.
 
 ### 4) Addressables 로딩 & 캐시
 - Key 기반 비동기 로딩
