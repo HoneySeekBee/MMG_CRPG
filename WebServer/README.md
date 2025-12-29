@@ -24,6 +24,23 @@ MMG_CRPG의 게임 서버입니다.
 - 서버가 상태의 정답을 소유하여 데이터 위변조 및 치트 방지에 유리
 
 ### 2. Tick 기반 전투 시뮬레이션
+
+#### Tick Loop 기반 전투 처리 흐름
+
+<img width="3766" height="1730" alt="서버_전투처리구조" src="https://github.com/user-attachments/assets/aec6d4cf-09ed-4e25-beb5-b8c2a93bc1e7" />
+
+서버는 CombatRuntimeState를 authoritative 상태로 유지하며  
+Tick Loop를 통해 모든 전투 판정과 상태 변화를 처리합니다.
+
+각 Tick 결과는
+- Snapshot: 현재 전투 상태 동기화용 데이터
+- Events: 연출 및 로그용 이벤트
+
+로 분리되어 클라이언트에 전달됩니다.
+
+Snapshot은 상태 동기화를, Events는 연출과 로그를 담당하여  
+동기화 정확성과 클라이언트 표현 자유도를 분리합니다.
+
 - 기본 Tick 간격: 100ms
 - 누락 Tick 보정(Catch-up): 최대 5 Tick
 - dt 상한: 200ms (폭주 방지)
@@ -42,6 +59,15 @@ MMG_CRPG의 게임 서버입니다.
   - 클라이언트는 Event 기반으로 연출 재생
 
 ### 4. 런타임 전투 상태 관리
+#### 전투 런타임 상태 및 이벤트 로그 관리
+
+<img width="4005" height="1766" alt="서버_상태관리 데이터흐름" src="https://github.com/user-attachments/assets/65194b68-5c7a-41e0-9899-02637b5e120f" />
+
+전투 중 상태는 서버 메모리에서 관리되며,  
+Tick 처리 중 발생한 이벤트는 DB에 Append-only 방식으로 저장됩니다.
+
+이를 통해 전투 리플레이, 로그 분석, 운영 이슈 추적이 가능하도록 설계했습니다.
+
 - 전투 진행 중 상태는 서버 메모리에서 관리
 - ConcurrentDictionary<long, CombatRuntimeState> 사용
 - 상태 접근은 lock(SyncRoot)으로 동기화
@@ -59,6 +85,16 @@ MMG_CRPG의 게임 서버입니다.
 - 서버 상태 트래킹 / 분산락
 
 ## 아키텍처 구조 (Clean Architecture) 
+
+### 전체 서버 아키텍처
+
+<img width="3866" height="1768" alt="서버_서버클라이언트통신구조" src="https://github.com/user-attachments/assets/4c9178e6-fe49-467e-9c9c-d556594767b1" />
+
+ASP.NET Core Web API를 Entry Point로 하여  
+Application 계층에서 유스케이스 흐름을 조합하고,  
+Domain 계층에서 전투 규칙과 상태를 관리하며,  
+Infrastructure 계층에서 DB 및 Redis와 같은 외부 의존성을 처리합니다.
+
 <img width="3868" height="1580" alt="서버아키텍처" src="https://github.com/user-attachments/assets/7e294cc5-3241-4e40-829f-45c1cc55090d" />
 
 > WebServer, Application, Domain, Infrastructure 계층을 분리하여  
