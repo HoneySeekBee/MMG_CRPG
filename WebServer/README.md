@@ -62,16 +62,16 @@ MMG_CRPG의 게임 서버입니다.
 - Domain: 전투 규칙 및 Tick 엔진
 - Infrastructure: DB / Redis / 외부 연동
 
-###요구 사항
+### 요구 사항
 - .NET SDK 8.0.x
 - PostgreSQL
 - Redis
 
-###환경 설정
+### 환경 설정
 - appsettings.json
 - appsettings.Development.json (Git 추적 제외 권장)
 
-###필수 설정 항목 예시
+### 필수 설정 항목 예시
 - ConnectionStrings:Postgres
 - Redis:Host
 - Jwt:Issuer
@@ -80,29 +80,29 @@ MMG_CRPG의 게임 서버입니다.
 - S3:Bucket
 - CloudFront:Domain
 
-###실행
+### 실행
 cd WebServer
 dotnet restore
 dotnet run
 
-###데이터베이스 마이그레이션 (EF Core)
+### 데이터베이스 마이그레이션 (EF Core)
 dotnet ef database update
 
 
-##인증 구조 요약
+## 인증 구조 요약
 - 로그인 시 AccessToken(JWT) + RefreshToken 발급
 - RefreshToken은 Redis에 저장
 - AccessToken 만료 시 RefreshToken으로 재발급
 - 로그아웃 또는 차단 시 Refresh 세션 revoke 지원
 
 
-##인프라 구성 요약
+## 인프라 구성 요약
 - AWS EC2 단일 인스턴스 배포
 - PostgreSQL / Redis 사용
 - 정적 리소스는 S3 저장 후 CloudFront로 서빙
 
 
-##트러블슈팅
+## 트러블슈팅
 - 401 Unauthorized
   - JWT 만료 여부 확인
   - Redis에 저장된 Refresh 세션 상태 확인
