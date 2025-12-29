@@ -95,8 +95,6 @@ Application 계층에서 유스케이스 흐름을 조합하고,
 Domain 계층에서 전투 규칙과 상태를 관리하며,  
 Infrastructure 계층에서 DB 및 Redis와 같은 외부 의존성을 처리합니다.
 
-<img width="3868" height="1580" alt="서버아키텍처" src="https://github.com/user-attachments/assets/7e294cc5-3241-4e40-829f-45c1cc55090d" />
-
 > WebServer, Application, Domain, Infrastructure 계층을 분리하여  
 > 전투 규칙과 비즈니스 로직을 외부 인터페이스(API, DB)로부터 독립적으로 유지하도록 설계했습니다.
 
