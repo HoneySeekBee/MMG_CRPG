@@ -27,7 +27,7 @@ __MACOSX/
 packages/
 
 # 개발 환경 설정 (비공개)
-WebServer/**/appsettings.Development.json
+
 
 # ---- Unity (Client 전용) ----
 Client/[Ll]ibrary/
@@ -52,3 +52,22 @@ Client/*.pidb
 Client/*.booproj
 Client/*.svd
 Client/*.mdb
+
+# ---- Security scan artifacts ----
+gitleaks.exe
+gitleaks-report.json
+gitleaks-report*.json
+gitleaks*.sarif
+*.sarif
+
+# ---- Local env secrets ----
+.env
+.env.*
+*.pem
+*.pfx
+*.key
+secrets.json
+**/appsettings.*.local.json
+**/appsettings.Production.json
+**/appsettings.Development.json
+**/out/
