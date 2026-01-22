@@ -18,6 +18,7 @@ using Infrastructure.Caching;
 
 namespace WebServer.HostedServices
 {
+    // 정적인 데이터들에만 사용 : 우선은 이렇게 두고 이후에 운영툴에서 아이템 수정 시 반영 등의 작업을 하며 조금 수정해보자. 
     public sealed class CacheWarmupHostedService : IHostedService
     {
         private readonly IServiceProvider _sp;

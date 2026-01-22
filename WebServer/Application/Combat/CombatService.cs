@@ -458,7 +458,8 @@ namespace Application.Combat
 
             var dtoEvs = domainEvs.Select(Map).ToList();
             // 4) 스냅샷 + 이벤트를 함께 반환
-            return new CombatTickResponse(combatId, tick, snapshot, dtoEvs);
+            var serverTick = state.Tick;
+            return new CombatTickResponse(combatId, serverTick, snapshot, dtoEvs);
         }
 
         public Task<CombatSpeed> ToggleSpeedAsync(long combatId, CancellationToken ct)

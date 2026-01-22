@@ -34,7 +34,7 @@
 	
 	<ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
-    <ProjectReference Include="..\Contracts\Contracts.csproj" />
+    <ProjectReference Include="..\Contracts\Protocol.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 	
@@ -42,7 +42,6 @@
 	  <Folder Include="DataSeeds\" />
 	</ItemGroup>
 	<ItemGroup>
-		<None Include="..\Contracts\bin\Release\netstandard2.0\Contracts.dll"
-			  CopyToOutputDirectory="Always" />
+		<None Include="..\Contracts\bin\Release\netstandard2.0\Contracts.dll" CopyToOutputDirectory="Always" />
 	</ItemGroup>
 </Project>
