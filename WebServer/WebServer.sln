@@ -14,7 +14,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{E53992CB-234B-4852-9CF8-850287F8B258}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts", "Contracts\Contracts.csproj", "{521068A9-F556-4AC4-8B5C-6E39AD8E55F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protocol", "Contracts\Protocol.csproj", "{521068A9-F556-4AC4-8B5C-6E39AD8E55F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

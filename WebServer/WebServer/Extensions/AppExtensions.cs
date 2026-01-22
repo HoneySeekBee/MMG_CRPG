@@ -47,6 +47,7 @@ using Application.Gacha.GachaPool;
 using Application.Gacha.GachaDraw;
 using Application.Gacha;
 using ProtoBuf.Meta;
+using Application.Users.Caching;
 
 namespace WebServer.Extensions
 {
@@ -224,6 +225,7 @@ namespace WebServer.Extensions
             s.AddScoped<IUserInventoryService, UserInventoryService>();
             s.AddScoped<IUserStageProgressRepository, UserStageProgressRepository>();
             s.AddScoped<IUserStageProgressService, UserStageProgressService>();
+            s.AddScoped<IUserCacheService, RedisUserCacheService>();
 
             // 유저 캐릭터
             s.AddScoped<IUserCharacterRepository, UserCharacterRepository>();

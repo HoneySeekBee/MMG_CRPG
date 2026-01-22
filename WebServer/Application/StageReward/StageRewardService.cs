@@ -3,6 +3,7 @@ using Application.Repositories;
 using Application.UserCurrency;
 using Application.UserInventory;
 using Application.Users;
+using Application.Users.Caching;
 using Domain.Entities.Contents;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
@@ -20,6 +21,9 @@ namespace Application.StageReward
         private readonly IWalletService _wallet;
         private readonly IUserInventoryService _inventory;
         private readonly IDistributedLock _lock;
+        private readonly IUserCacheService _userCache;
+
+
         // ItemId → 통화 코드 매핑 (예시)
         private readonly IReadOnlyDictionary<int, string> _itemToCurrencyCode =
             new Dictionary<int, string>
@@ -34,13 +38,15 @@ namespace Application.StageReward
          IUserStageProgressService progressService,
          IWalletService wallet,
          IUserInventoryService inventory,
-         IDistributedLock redisLock)
+         IDistributedLock redisLock,
+         IUserCacheService userCache)
         {
             _stageQuery = stageQuery;
             _progressService = progressService;
             _wallet = wallet;
             _inventory = inventory;
             _lock = redisLock;
+            _userCache = userCache;
         }
         private async Task<StageRewardResult> GrantRewardsInternalAsync(int userId, int stageId, bool success, StageStars stars, DateTime nowUtc, CancellationToken ct)
         { 
@@ -200,6 +206,7 @@ namespace Application.StageReward
             }
 
             long gold = 0, gem = 0, token = 0;
+            bool walletChanged = false;
 
             foreach (var kv in byCode)
             {
@@ -209,6 +216,7 @@ namespace Application.StageReward
                 if (amt <= 0) continue;
 
                 await _wallet.GrantAsync(userId, code, amt, ct);
+                walletChanged = true;
 
                 switch (code)
                 {
@@ -217,6 +225,9 @@ namespace Application.StageReward
                     case "TOKEN": token = amt; break;
                 }
             }
+
+            if (walletChanged)
+                await _userCache.InvalidateWalletAsync(userId, ct);
 
             return (gold, gem, token);
         }

@@ -1,13 +1,14 @@
 ﻿using Application.Common.Interface;
 using Application.Repositories;
 using Application.UserCurrency;
+using Application.Users.Caching;
 using Domain.Entities;
 using Domain.Entities.User;
 using Domain.Enum;
 using System.Text.Json;
 
 namespace Application.Users
-{
+{ 
     public sealed class UserService : IUserService
     {
         private readonly IUserRepository _users;
@@ -23,14 +24,15 @@ namespace Application.Users
         private readonly IUserCurrencyRepository _userCurrs;
         private readonly IWalletService _wallet;
 
-        private readonly ICacheService _cache;
         private readonly ISessionStorage _sessionStorage;
-        private readonly IEventStreamLogger _events;
+        private readonly IEventStreamLogger _events; 
+        private readonly IUserCacheService _userCache;
+
         public UserService(
             IUserRepository users, IUserQueryRepository userQuery, IProfileRepository profiles,
             ISessionRepository sessions, ISessionQueryRepository sessionQuery, ISecurityEventRepository sec, IPasswordHasher hasher, ITokenService tokens,
             IClock clock, IUserCurrencyRepository userCurrs, IWalletService wallet,
-            ICacheService cache, ISessionStorage storage, IEventStreamLogger events)
+            ISessionStorage storage, IEventStreamLogger events, IUserCacheService userCache)
         {
             _users = users;
             _userQuery = userQuery;
@@ -44,9 +46,9 @@ namespace Application.Users
 
             _userCurrs = userCurrs;
             _wallet = wallet;
-            _cache = cache;
             _sessionStorage = storage;
             _events = events;
+            _userCache = userCache;
         }
 
         // --- 인증/계정 -------------------------------------------------------
@@ -224,85 +226,116 @@ namespace Application.Users
         // --- 내 정보 / 프로필 -------------------------------------------------
         public async Task<UserSummaryDto> GetMySummaryAsync(int userId, CancellationToken ct)
         {
-            string cacheKey = $"user:{userId}:summary";
-
-            // [1] 캐시에서 조회하기 
-            var cached = await _cache.GetAsync(cacheKey);
-            if (cached != null)
-                return JsonSerializer.Deserialize<UserSummaryDto>(cached)!;
-
-            // [2] 없으면 DB에서 조회하기 
             var u = await _users.GetByIdAsync(userId, ct)
-            ?? throw new InvalidOperationException("USER_NOT_FOUND");
-            var p = await _profiles.GetByUserIdAsync(userId, ct)
-                    ?? throw new InvalidOperationException("PROFILE_NOT_FOUND");
+       ?? throw new InvalidOperationException("USER_NOT_FOUND");
 
-            var dto = u.ToSummaryDto(p);
+            var profileCore = await GetOrLoadProfileCoreAsync(userId, profileFromAggregate: null, ct);
+            var wallet = await GetOrLoadWalletAsync(userId, ct);
 
-            // [3] 캐시에 저장하기 
-            await _cache.SetAsync(cacheKey, JsonSerializer.Serialize(dto), TimeSpan.FromMinutes(5));
-
-            return dto;
+            return new UserSummaryDto(
+                Id: u.Id,
+                Account: u.Account,
+                NickName: profileCore.NickName,
+                Level: profileCore.Level,
+                Gold: wallet.Gold,
+                Gem: wallet.Gem,
+                Token: wallet.Token,
+                IconId: profileCore.IconId,
+                Status: u.Status,
+                CreatedAt: u.CreatedAt,
+                LastLoginAt: u.LastLoginAt
+            );
         }
 
         public async Task<UserDetailDto> GetDetailAsync(int userId, CancellationToken ct)
         {
-            string cacheKey = $"user:{userId}:detail";
-
-            var cached = await _cache.GetAsync(cacheKey);
-            if (cached != null)
-                return JsonSerializer.Deserialize<UserDetailDto>(cached)!;
-
             var (u, p) = await _userQuery.GetAggregateAsync(userId, ct);
-            if (u is null || p is null) throw new InvalidOperationException("USER_NOT_FOUND");
+            if (u is null) throw new InvalidOperationException("USER_NOT_FOUND");
+
+            var profileCore = await GetOrLoadProfileCoreAsync(userId, p, ct);
+            var wallet = await GetOrLoadWalletAsync(userId, ct);
 
             var recent = await _sessionQuery.GetRecentByUserIdAsync(userId, 5, ct);
-            var dto = u.ToDetailDto(p, recent);
+            var recentDtos = recent.Select(s => s.ToBriefDto()).ToList();
 
-            await _cache.SetAsync(cacheKey, JsonSerializer.Serialize(dto), TimeSpan.FromMinutes(3));
-
-            return dto;
+            return new UserDetailDto(
+                Id: u.Id,
+                Account: u.Account,
+                Status: u.Status,
+                CreatedAt: u.CreatedAt,
+                LastLoginAt: u.LastLoginAt,
+                NickName: profileCore.NickName,
+                Level: profileCore.Level,
+                Exp: profileCore.Exp,
+                Gold: wallet.Gold,
+                Gem: wallet.Gem,
+                Token: wallet.Token,
+                IconId: profileCore.IconId,
+                RecentSessions: recentDtos
+            );
         }
 
         public async Task<UserProfileDto> GetProfileAsync(int userId, CancellationToken ct)
         {
-            string cacheKey = $"user:{userId}:profile";
+            // 1. Profilecore 캐시 조회
+            var profileCore = await _userCache.GetProfileCoreAsync(userId, ct);
+            if(profileCore is null)
+            {
+                var p = await _profiles.GetByUserIdAsync(userId, ct)
+                    ?? throw new InvalidOperationException("PROFLE_NOT_FOUND");
 
-            var cached = await _cache.GetAsync(cacheKey);
-            if (cached != null)
-                return JsonSerializer.Deserialize<UserProfileDto>(cached)!;
+                profileCore = new UserProfileCoreCacheDto(
+                    ProfileId: p.Id,
+                    NickName: p.NickName,
+                    Level: p.Level,
+                    Exp: p.Exp,
+                    IconId: p.IconId
+                    );
 
-            var p = await _profiles.GetByUserIdAsync(userId, ct)
-           ?? throw new InvalidOperationException("PROFILE_NOT_FOUND");
+                await _userCache.SetProfileCoreAsync(userId, profileCore, ct);
+            }
 
-            var balances = await _wallet.GetBalancesAsync(userId, ct);
-            long gold = balances.FirstOrDefault(x => x.Code == "GOLD").Amount;
-            long gem = balances.FirstOrDefault(x => x.Code == "GEM").Amount;
-            long token = balances.FirstOrDefault(x => x.Code == "TOKEN").Amount;
+            // 2. Wallet 캐시 조회 
+            var wallet = await _userCache.GetWalletAsync(userId, ct);
+            if (wallet is null)
+            {
+                var balances = await _wallet.GetBalancesAsync(userId, ct);
 
+                long gold = balances.FirstOrDefault(x => x.Code == "GOLD").Amount;
+                long gem = balances.FirstOrDefault(x => x.Code == "GEM").Amount;
+                long token = balances.FirstOrDefault(x => x.Code == "TOKEN").Amount;
+
+                wallet = new UserWalletCacheDto(
+                      Gold: (int)Math.Min(int.MaxValue, gold),
+                      Gem: (int)Math.Min(int.MaxValue, gem),
+                      Token: (int)Math.Min(int.MaxValue, token)
+                  );
+
+                await _userCache.SetWalletAsync(userId, wallet, ct); 
+            }
 
             var dto = new UserProfileDto(
-                Id: p.Id,
-                UserId: p.UserId,
-                NickName: p.NickName,
-                Level: p.Level,
-                Exp: p.Exp,
-                Gold: (int)Math.Min(int.MaxValue, gold),
-                Gem: (int)Math.Min(int.MaxValue, gem),
-                Token: (int)Math.Min(int.MaxValue, token),
-                IconId: p.IconId
-            );
-
-            await _cache.SetAsync(cacheKey, JsonSerializer.Serialize(dto), TimeSpan.FromMinutes(3));
-
+                    Id: profileCore.ProfileId,
+                    UserId: userId,
+                    NickName: profileCore.NickName,
+                    Level: profileCore.Level,
+                    Exp: profileCore.Exp,
+                    Gold: wallet.Gold,
+                    Gem: wallet.Gem,
+                    Token: wallet.Token,
+                    IconId: profileCore.IconId
+                );  
             return dto;
         }
 
         public async Task<UserProfileDto> UpdateProfileAsync(int userId, UpdateProfileRequest req, CancellationToken ct)
         {
-            if (string.IsNullOrWhiteSpace(req.NickName)) throw new ArgumentException("INVALID_NICKNAME");
+            if (string.IsNullOrWhiteSpace(req.NickName)) 
+                throw new ArgumentException("INVALID_NICKNAME");
 
-            var p = await _profiles.GetByUserIdAsync(userId, ct) ?? throw new InvalidOperationException("PROFILE_NOT_FOUND");
+            var p = await _profiles.GetByUserIdAsync(userId, ct) 
+                ?? throw new InvalidOperationException("PROFILE_NOT_FOUND");
+            
             p.Rename(req.NickName.Trim());
             p.SetIcon(req.IconId);
 
@@ -315,10 +348,8 @@ namespace Application.Users
                 ["iconId"] = req.IconId.ToString(),
                 ["timestamp"] = _clock.UtcNow.ToString("O")
             });
-            await _cache.RemoveAsync($"user:{userId}:summary");
-            await _cache.RemoveAsync($"user:{userId}:profile");
-            await _cache.RemoveAsync($"user:{userId}:detail");
 
+            await _userCache.InvalidateProfileCoreAsync(userId, ct);
             return p.ToProfileDto();
         }
 
@@ -367,10 +398,7 @@ namespace Application.Users
                 ["userId"] = userId.ToString(),
                 ["newStatus"] = req.Status.ToString(),
                 ["timestamp"] = _clock.UtcNow.ToString("O")
-            });
-
-            await _cache.RemoveAsync($"user:{userId}:summary");
-            await _cache.RemoveAsync($"user:{userId}:detail");
+            }); 
         }
 
         public async Task AdminSetNicknameAsync(int userId, AdminSetNicknameRequest req, CancellationToken ct)
@@ -381,9 +409,7 @@ namespace Application.Users
             p.Rename(req.NickName.Trim());
             await _profiles.SaveChangesAsync(ct);
 
-            await _cache.RemoveAsync($"user:{userId}:summary");
-            await _cache.RemoveAsync($"user:{userId}:profile");
-            await _cache.RemoveAsync($"user:{userId}:detail");
+            await _userCache.InvalidateProfileCoreAsync(userId, ct);
         }
 
         public async Task AdminResetPasswordAsync(int userId, AdminResetPasswordRequest req, CancellationToken ct)
@@ -398,8 +424,6 @@ namespace Application.Users
             await _users.SaveChangesAsync(ct);
 
             // 보안 정책에 따라 모든 세션 만료 권장
-            //await _sessions.InvalidateAllByUserIdAsync(userId, ct);
-            //await _sessions.SaveChangesAsync(ct);
             await _sessionStorage.RevokeAllByUserIdAsync(userId);
         }
 
@@ -430,6 +454,49 @@ namespace Application.Users
                 ["sessionId"] = sid.ToString(),
                 ["timestamp"] = _clock.UtcNow.ToString("O")
             });
+        }
+        private async Task<UserProfileCoreCacheDto> GetOrLoadProfileCoreAsync(
+    int userId,
+    UserProfile? profileFromAggregate,
+    CancellationToken ct)
+        {
+            var cached = await _userCache.GetProfileCoreAsync(userId, ct);
+            if (cached is not null) return cached;
+
+            var p = profileFromAggregate ?? await _profiles.GetByUserIdAsync(userId, ct)
+                ?? throw new InvalidOperationException("PROFILE_NOT_FOUND");
+
+            var dto = new UserProfileCoreCacheDto(
+                ProfileId: p.Id,
+                NickName: p.NickName,
+                Level: p.Level,
+                Exp: p.Exp,
+                IconId: p.IconId
+            );
+
+            await _userCache.SetProfileCoreAsync(userId, dto, ct);
+            return dto;
+        }
+
+        private async Task<UserWalletCacheDto> GetOrLoadWalletAsync(int userId, CancellationToken ct)
+        {
+            var cached = await _userCache.GetWalletAsync(userId, ct);
+            if (cached is not null) return cached;
+
+            var balances = await _wallet.GetBalancesAsync(userId, ct);
+
+            long gold = balances.FirstOrDefault(x => x.Code == "GOLD").Amount;
+            long gem = balances.FirstOrDefault(x => x.Code == "GEM").Amount;
+            long token = balances.FirstOrDefault(x => x.Code == "TOKEN").Amount;
+
+            var dto = new UserWalletCacheDto(
+                Gold: (int)Math.Min(int.MaxValue, gold),
+                Gem: (int)Math.Min(int.MaxValue, gem),
+                Token: (int)Math.Min(int.MaxValue, token)
+            );
+
+            await _userCache.SetWalletAsync(userId, dto, ct);
+            return dto;
         }
     }
 }

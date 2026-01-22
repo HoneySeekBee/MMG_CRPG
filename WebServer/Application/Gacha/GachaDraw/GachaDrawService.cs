@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Domain.Entities.User;
 using Application.UserCurrency;
 using Application.Common;
+using Application.Users.Caching;
 
 
 namespace Application.Gacha.GachaDraw
@@ -31,6 +32,7 @@ namespace Application.Gacha.GachaDraw
         private readonly IWalletService _walletService;
         private readonly ICurrencyRepository _currencyRepo;
         private readonly IGachaCacheService _cache;
+        private readonly IUserCacheService _userCache;
 
         private readonly Random _rng = new();
 
@@ -43,7 +45,8 @@ namespace Application.Gacha.GachaDraw
             IUserInventoryRepository inventoryRepo,
             IWalletService wallet,
             ICurrencyRepository currencyRepo,
-            IGachaCacheService cache)
+            IGachaCacheService cache,
+            IUserCacheService userCache)
         {
             _banners = banners;
             _pools = pools;
@@ -54,6 +57,8 @@ namespace Application.Gacha.GachaDraw
             _walletService = wallet;
             _currencyRepo = currencyRepo;
             _cache = cache;
+            _userCache = userCache;
+
         }
         public async Task<DrawResultDto> DrawAsync(string bannerKey, int count, int userId, CancellationToken ct)
         {
@@ -251,6 +256,8 @@ namespace Application.Gacha.GachaDraw
                 bool ok = await _walletService.SpendAsync(userId, currency.Code, gemCost, ct);
                 if (!ok)
                     throw new GameErrorException("GACHA_NOT_ENOUGH_COST", "Not enough currency");
+
+                await _userCache.InvalidateWalletAsync(userId, ct);
             }
 
             // 2) 티켓 차감
