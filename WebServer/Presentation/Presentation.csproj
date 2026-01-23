@@ -25,16 +25,16 @@
 
 	<ItemGroup>
 		<!-- gRPC service proto only -->
-		<Protobuf Include="..\Contracts\Proto\Service\user_service.proto" GrpcServices="Server" ProtoRoot="..\Contracts\Proto" />
+		<Protobuf Include="..\Protocol\Proto\Service\user_service.proto" GrpcServices="Server" ProtoRoot="..\Protocol\Proto" />
 
-		<Protobuf Include="..\Contracts\Proto\Service\inventory_service.proto" GrpcServices="Server" ProtoRoot="..\Contracts\Proto" />
+		<Protobuf Include="..\Protocol\Proto\Service\inventory_service.proto" GrpcServices="Server" ProtoRoot="..\Protocol\Proto" />
 
-		<Protobuf Include="..\Contracts\Proto\Service\wallet_service.proto" GrpcServices="Server" ProtoRoot="..\Contracts\Proto" />
+		<Protobuf Include="..\Protocol\Proto\Service\wallet_service.proto" GrpcServices="Server" ProtoRoot="..\Protocol\Proto" />
 	</ItemGroup>
 	
 	<ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
-    <ProjectReference Include="..\Contracts\Protocol.csproj" />
+    <ProjectReference Include="..\Protocol\Protocol.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 	
@@ -42,6 +42,6 @@
 	  <Folder Include="DataSeeds\" />
 	</ItemGroup>
 	<ItemGroup>
-		<None Include="..\Contracts\bin\Release\netstandard2.0\Contracts.dll" CopyToOutputDirectory="Always" />
+		<None Include="..\Protocol\bin\Release\netstandard2.0\Contracts.dll" CopyToOutputDirectory="Always" />
 	</ItemGroup>
 </Project>

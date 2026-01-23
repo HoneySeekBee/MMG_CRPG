@@ -112,7 +112,8 @@ public class Program
         {
             using var scope = app.Services.CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<IDbConnection>();
-
+            if (db.State != ConnectionState.Open)
+                db.Open();
             var loader = new SeedLoader(db, seedDir);
             await loader.LoadAllAsync();
         }

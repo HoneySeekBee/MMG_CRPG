@@ -1,10 +1,11 @@
-﻿using Application.Combat;
-using Contracts.Protos;
-using Infrastructure.Reader; 
-using WebServer.Protos;
-using WebServer.Protos.Monsters;
+﻿using Application.Combat;  
+using Infrastructure.Reader;  
 using Application.Combat.Engine;
 using Domain.Combat.Engine;
+using WebServer.Protos.Monsters;
+using WebServer.Protos;
+using Contracts.Protos;
+
 
 namespace Infrastructure.Provider
 {
