@@ -1,17 +1,12 @@
 ﻿using Application.Gacha.GachaBanner;
 using Application.Gacha.GachaPool;
 using Application.Repositories;
-using Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
-using Domain.Entities.User;
 using Application.UserCurrency;
 using Application.Common;
-
+using Application.Users.Caching;
+using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 namespace Application.Gacha.GachaDraw
 {
@@ -22,7 +17,7 @@ namespace Application.Gacha.GachaDraw
     public sealed class GachaDrawService : IGachaDrawService
     {
         private readonly IGachaBannerService _banners;
-        private readonly IGachaPoolService _pools; 
+        private readonly IGachaPoolService _pools;
 
         private readonly IGachaDrawLogRepository _logRepo;
         private readonly IUserCharacterRepository _charRepo;
@@ -31,8 +26,10 @@ namespace Application.Gacha.GachaDraw
         private readonly IWalletService _walletService;
         private readonly ICurrencyRepository _currencyRepo;
         private readonly IGachaCacheService _cache;
-
+        private readonly IUserCacheService _userCache;
         private readonly Random _rng = new();
+
+        private readonly ILogger<GachaDrawService> _logger;
 
         public GachaDrawService(
             IGachaBannerService banners,
@@ -43,7 +40,9 @@ namespace Application.Gacha.GachaDraw
             IUserInventoryRepository inventoryRepo,
             IWalletService wallet,
             ICurrencyRepository currencyRepo,
-            IGachaCacheService cache)
+            IGachaCacheService cache,
+            IUserCacheService userCache,
+             ILogger<GachaDrawService> logger)
         {
             _banners = banners;
             _pools = pools;
@@ -54,9 +53,13 @@ namespace Application.Gacha.GachaDraw
             _walletService = wallet;
             _currencyRepo = currencyRepo;
             _cache = cache;
+            _userCache = userCache;
+            _logger = logger;
         }
         public async Task<DrawResultDto> DrawAsync(string bannerKey, int count, int userId, CancellationToken ct)
         {
+            
+
             // 1) Redis → 없으면 DB
             var banner = await GetBannerAsync(bannerKey, ct);
             var pool = await GetPoolAsync(banner.GachaPoolId, ct);
@@ -68,7 +71,11 @@ namespace Application.Gacha.GachaDraw
 
             if (pool.Entries.Count == 0)
                 throw new InvalidOperationException("Pool entries missing");
-
+            _logger.LogInformation(
+    "[GachaDraw] start userId={UserId} bannerKey={BannerKey} count={Count} trace={TraceId}",
+    userId, bannerKey, count,
+    Activity.Current?.TraceId.ToString() ?? "-"
+);
             // 3) 비용 차감
             var pay = await PayCostAsync(userId, banner, count, ct);
 
@@ -97,19 +104,18 @@ namespace Application.Gacha.GachaDraw
                 guaranteeApplied = true;
             }
             // 5) 결과 아이템 변환
+            var newlyGranted = new HashSet<int>();
             var results = new List<DrawResultItemDto>(count);
-
             for (int i = 0; i < pulledEntries.Count; i++)
             {
                 var e = pulledEntries[i];
-
-                var item = await GrantCharacterOrShardAsync(userId, e, ct);
                 bool isGuaranteed = guaranteeApplied && i == pulledEntries.Count - 1;
+
+                var item = await GrantCharacterOrShardSafeAsync(userId, e, newlyGranted, ct);
 
                 results.Add(item with { IsGuaranteed = isGuaranteed });
             }
 
-            // 6) 로그 저장
             var log = new Domain.Entities.Gacha.GachaDrawLog
             {
                 UserId = userId,
@@ -121,6 +127,9 @@ namespace Application.Gacha.GachaDraw
 
             await _logRepo.AddAsync(log, ct);
             await _logRepo.SaveChangesAsync(ct);
+
+            _logger.LogInformation("[GachaDraw] success userId={UserId} usedTickets={Tickets} usedCurrency={Currency}",
+      userId, pay.UsedTickets, pay.UsedCurrency);
 
             return new DrawResultDto(now, results, pay.UsedTickets, pay.UsedCurrency);
         }
@@ -151,6 +160,46 @@ namespace Application.Gacha.GachaDraw
                    ?? throw new GameErrorException("GACHA_POOL_NOT_FOUND", "Pool not found");
 
             return pool;
+        }
+        private async Task<DrawResultItemDto> GrantCharacterOrShardSafeAsync(
+    int userId,
+    GachaPoolEntryDto entry,
+    HashSet<int> newlyGranted,
+    CancellationToken ct)
+        {
+            var now = DateTimeOffset.UtcNow;
+
+            // 1) 이번 요청 내에서 이미 신규 지급으로 처리한 CharacterId면 무조건 shard
+            if (newlyGranted.Contains(entry.CharacterId))
+                return await GrantShardAsync(userId, entry, ct);
+
+            // 2) DB에 이미 보유중이면 shard
+            var existing = await _charRepo.GetAsync(userId, entry.CharacterId, ct);
+            if (existing != null)
+                return await GrantShardAsync(userId, entry, ct);
+
+            // 3) 신규 지급
+            var newChar = Domain.Entities.User.UserCharacter.Create(userId, entry.CharacterId, now);
+            await _charRepo.AddAsync(newChar, ct);
+            newlyGranted.Add(entry.CharacterId);
+
+            return new DrawResultItemDto(
+                entry.CharacterId, entry.Grade, entry.RateUp,
+                IsNew: true, IsShard: false, ShardAmount: 0, IsGuaranteed: false);
+        }
+        private async Task<DrawResultItemDto> GrantShardAsync(int userId, GachaPoolEntryDto entry, CancellationToken ct)
+        {
+            string shardCode = $"SHARD_{entry.CharacterId}";
+            var shard = await _itemRepo.GetByCodeAsync(shardCode, false, ct)
+                ?? throw new InvalidOperationException($"Shard not found: {shardCode}");
+
+            int amount = entry.Grade switch { 3 => 5, 4 => 10, 5 => 15, 6 => 20, 7 => 30, _ => 5 };
+
+            await _inventoryRepo.AddItemAsync(userId, shard.Id, amount, ct);
+
+            return new DrawResultItemDto(
+                entry.CharacterId, entry.Grade, entry.RateUp,
+                IsNew: false, IsShard: true, ShardAmount: amount, IsGuaranteed: false);
         }
         // Character 지급
         private async Task<DrawResultItemDto> GrantCharacterOrShardAsync(int userId, GachaPoolEntryDto entry, CancellationToken ct)
@@ -251,6 +300,8 @@ namespace Application.Gacha.GachaDraw
                 bool ok = await _walletService.SpendAsync(userId, currency.Code, gemCost, ct);
                 if (!ok)
                     throw new GameErrorException("GACHA_NOT_ENOUGH_COST", "Not enough currency");
+
+                await _userCache.InvalidateWalletAsync(userId, ct);
             }
 
             // 2) 티켓 차감
@@ -259,7 +310,6 @@ namespace Application.Gacha.GachaDraw
                 inv.TryConsume(useTickets);
                 await _inventoryRepo.SaveChangesAsync(ct);
             }
-
             return new PayCostResult(useTickets, gemCost);
         }
         private GachaPoolEntryDto Pick(IReadOnlyList<GachaPoolEntryDto> entries)
