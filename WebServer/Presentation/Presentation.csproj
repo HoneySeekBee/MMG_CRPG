@@ -36,12 +36,10 @@
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Protocol\Protocol.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
-  </ItemGroup>
-	
-	<ItemGroup>
-	  <Folder Include="DataSeeds\" />
+	<ProjectReference Include="..\Protocol\Protocol.csproj" />
 	</ItemGroup>
+
 	<ItemGroup>
-		<None Include="..\Protocol\bin\Release\netstandard2.0\Contracts.dll" CopyToOutputDirectory="Always" />
-	</ItemGroup>
+		<Folder Include="DataSeeds\" />
+	</ItemGroup> 
 </Project>
