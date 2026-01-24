@@ -44,7 +44,7 @@ jobs:
             --comment "Deploy via GitHub Actions" \
             --parameters commands='[
               "set -e",
-              "cd ~/mmg || cd mmg",
+              "cd /home/ec2-user/mmg",
               "echo \"== (1) disk usage ==\"",
               "df -h",
               "echo \"== (2) docker usage ==\"",
