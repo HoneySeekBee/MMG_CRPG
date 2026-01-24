@@ -72,7 +72,13 @@ namespace Application.Users
         UserSummaryDto User,
         AuthTokensDto Tokens
     );
-
+    public sealed record RefreshResultDto(
+    int UserId,
+    string AccessToken,
+    string RefreshToken,
+    DateTimeOffset AccessExpiresAt,
+    DateTimeOffset RefreshExpiresAt
+);
     // 공통 페이지 결과 (캐릭터와 동일 패턴)
     public sealed record PagedResult<T>(IReadOnlyList<T> Items, int TotalCount, int Page, int PageSize);
     public sealed record SecurityEventBriefDto(

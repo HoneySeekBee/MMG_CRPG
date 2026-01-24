@@ -17,7 +17,7 @@ namespace Application.Users
         Task<LoginResultDto> LoginAsync(LoginUserRequest req, CancellationToken ct);
 
         /// <summary>리프레시 토큰으로 액세스/리프레시 재발급</summary>
-        Task<AuthTokensDto> RefreshAsync(RefreshTokenRequest req, CancellationToken ct);
+        Task<RefreshResultDto> RefreshAsync(RefreshTokenRequest req, CancellationToken ct);
 
         /// <summary>리프레시 토큰 기반 로그아웃(세션 무효화)</summary>
         Task LogoutAsync(LogoutRequest req, CancellationToken ct);

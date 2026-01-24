@@ -161,12 +161,14 @@ namespace WebServer.Controllers
 
                 var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                 Console.WriteLine($"[Refresh 요청 ] {playerId}");
+                var dto = await _users.RefreshAsync(appReq, ct);
+
                 return Ok(new AuthResponse
                 {
-                    PlayerId = playerId ?? string.Empty,
-                    AccessToken = access,
-                    RefreshToken = refresh ?? string.Empty,
-                    ServerUnixMs = now
+                    PlayerId = dto.UserId.ToString(),
+                    AccessToken = dto.AccessToken,
+                    RefreshToken = dto.RefreshToken,
+                    ServerUnixMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
                 });
             }
             catch (ArgumentException ex) when (ex.Message == "INVALID_REFRESH")

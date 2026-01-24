@@ -144,7 +144,7 @@ namespace Application.Users
             return new LoginResultDto(userDto, tokenDto);
         }
 
-        public async Task<AuthTokensDto> RefreshAsync(RefreshTokenRequest req, CancellationToken ct)
+        public async Task<RefreshResultDto> RefreshAsync(RefreshTokenRequest req, CancellationToken ct)
         {
             if (string.IsNullOrWhiteSpace(req.RefreshToken)) throw new ArgumentException("INVALID_REFRESH");
 
@@ -176,8 +176,16 @@ namespace Application.Users
                 ["event"] = "token_refreshed",
                 ["userId"] = user.Id.ToString(),
                 ["timestamp"] = _clock.UtcNow.ToString("O")
-            });
-            return new AuthTokensDto(access, newRefresh, accessExp, newRefreshExp);
+            }); 
+            var userId = user.Id;
+
+            return new RefreshResultDto(
+                UserId: userId,
+                AccessToken: access,
+                RefreshToken: newRefresh,
+                AccessExpiresAt: accessExp,
+                RefreshExpiresAt: newRefreshExp
+            );
         }
 
         public async Task LogoutAsync(LogoutRequest req, CancellationToken ct)
