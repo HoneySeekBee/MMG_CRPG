@@ -29,7 +29,6 @@ jobs:
           tags: limmyeongsik/mmg-crpg-server:latest
           no-cache: true
 
-      # 🔥 여기부터가 SSH 대신 SSM 배포
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -44,10 +43,22 @@ jobs:
             --document-name "AWS-RunShellScript" \
             --comment "Deploy via GitHub Actions" \
             --parameters commands='[
-              "cd mmg",
+              "set -e",
+              "cd ~/mmg || cd mmg",
+              "echo \"== (1) disk usage ==\"",
+              "df -h",
+              "echo \"== (2) docker usage ==\"",
+              "docker system df || true",
+              "echo \"== (3) pull latest images ==\"",
               "docker-compose pull",
-              "docker-compose up -d",
-              "docker image prune -f"
+              "echo \"== (4) recreate containers using pulled images ==\"",
+              "docker-compose up -d --force-recreate",
+              "echo \"== (5) running containers ==\"",
+              "docker-compose ps",
+              "echo \"== (6) show image id of server ==\"",
+              "docker images limmyeongsik/mmg-crpg-server --digests | head -n 5 || true",
+              "echo \"== (7) prune old images ==\"",
+              "docker image prune -af"
             ]' \
             --query "Command.CommandId" \
             --output text)
