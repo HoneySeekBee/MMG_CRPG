@@ -29,10 +29,13 @@ namespace Infrastructure.Services
         public async Task StoreSessionAsync(Session session, CancellationToken ct)
         {
             string key = $"session:refresh:{session.RefreshTokenHash}";
+            var dto = RedisSessionMapper.ToDto(session);
 
-            var data = JsonSerializer.Serialize(session);
+            var data = JsonSerializer.Serialize(dto);
 
             var ttl = session.RefreshExpiresAt - DateTimeOffset.UtcNow;
+            if (ttl <= TimeSpan.Zero) ttl = TimeSpan.FromSeconds(1);
+            
             await _redis.StringSetAsync(key, data, ttl);
         }
 
@@ -46,7 +49,8 @@ namespace Infrastructure.Services
 
             try
             {
-                return JsonSerializer.Deserialize<Session>(value!);
+                var dto = JsonSerializer.Deserialize<RedisSessionDto>(value!);
+                return dto == null ? null : RedisSessionMapper.ToDomain(dto);
             }
             catch (Exception ex)
             {

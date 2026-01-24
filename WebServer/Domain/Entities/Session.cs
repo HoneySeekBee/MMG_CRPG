@@ -21,7 +21,8 @@ namespace Domain.Entities
         public DateTimeOffset RefreshExpiresAt { get; private set; }
 
         public bool Revoked { get; private set; }
-        public DateTimeOffset CreatedAt { get; private set; }
+        public DateTimeOffset CreatedAt { get; private set; } 
+        public DateTimeOffset? RevokedAt { get; private set; } 
 
         public static Session Create(
             int userId,
@@ -44,14 +45,44 @@ namespace Domain.Entities
                 ExpiresAt = expiresAt,
                 RefreshExpiresAt = refreshExpiresAt,
                 Revoked = false,
-                CreatedAt = now ?? DateTimeOffset.UtcNow
+                CreatedAt = now ?? DateTimeOffset.UtcNow,
+                RevokedAt = null
             };
         }
+        public static Session Rehydrate(
+    int userId,
+    string accessTokenHash,
+    string refreshTokenHash,
+    DateTimeOffset expiresAt,
+    DateTimeOffset refreshExpiresAt,
+    bool revoked,
+    DateTimeOffset createdAt,
+    DateTimeOffset? revokedAt)
+        { 
+            if (userId <= 0) throw new ArgumentOutOfRangeException(nameof(userId));
+            if (string.IsNullOrWhiteSpace(accessTokenHash)) throw new ArgumentException(nameof(accessTokenHash));
+            if (string.IsNullOrWhiteSpace(refreshTokenHash)) throw new ArgumentException(nameof(refreshTokenHash));
 
+            return new Session
+            {
+                UserId = userId,
+                AccessTokenHash = accessTokenHash,
+                RefreshTokenHash = refreshTokenHash,
+                ExpiresAt = expiresAt,
+                RefreshExpiresAt = refreshExpiresAt,
+                Revoked = revoked,
+                CreatedAt = createdAt,
+                RevokedAt = revokedAt
+            };
+        }
         public bool IsAccessExpired(DateTimeOffset? now = null) => (now ?? DateTimeOffset.UtcNow) >= ExpiresAt;
         public bool IsRefreshExpired(DateTimeOffset? now = null) => (now ?? DateTimeOffset.UtcNow) >= RefreshExpiresAt;
 
-        public void Revoke() => Revoked = true;
+        public void Revoke(DateTimeOffset? now = null)
+        {
+            Revoked = true;
+            RevokedAt = now ?? DateTimeOffset.UtcNow;
+        } 
 
         public void RotateAccess(string newHash, DateTimeOffset newExpiresAt)
         {
