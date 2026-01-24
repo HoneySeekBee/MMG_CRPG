@@ -125,7 +125,7 @@ namespace WebServer.Controllers
                     return Problem(statusCode: 500, title: "LOGIN_TOKENS_MISSING");
 
                 ServerMetrics.IncrementOnlineUsers();
-                Console.WriteLine($"[Login 요청 ] {login.User.Id.ToString()}");
+
                 return Ok(new AuthResponse
                 {
                     PlayerId = login.User.Id.ToString(),
@@ -160,7 +160,7 @@ namespace WebServer.Controllers
                     return Unauthorized();
 
                 var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                Console.WriteLine($"[Refresh 요청 ] {playerId}");
+
                 var dto = await _users.RefreshAsync(appReq, ct);
 
                 return Ok(new AuthResponse

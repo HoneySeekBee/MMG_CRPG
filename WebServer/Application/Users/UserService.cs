@@ -8,7 +8,7 @@ using Domain.Enum;
 using System.Text.Json;
 
 namespace Application.Users
-{ 
+{
     public sealed class UserService : IUserService
     {
         private readonly IUserRepository _users;
@@ -25,7 +25,7 @@ namespace Application.Users
         private readonly IWalletService _wallet;
 
         private readonly ISessionStorage _sessionStorage;
-        private readonly IEventStreamLogger _events; 
+        private readonly IEventStreamLogger _events;
         private readonly IUserCacheService _userCache;
 
         public UserService(
@@ -146,11 +146,11 @@ namespace Application.Users
 
         public async Task<RefreshResultDto> RefreshAsync(RefreshTokenRequest req, CancellationToken ct)
         {
-            if (string.IsNullOrWhiteSpace(req.RefreshToken)) throw new ArgumentException("INVALID_REFRESH");
+            if (string.IsNullOrWhiteSpace(req.RefreshToken))
+                throw new ArgumentException("INVALID_REFRESH");
 
             var hash = _tokens.Hash(req.RefreshToken);
-            //var session = await _sessions.FindByRefreshHashAsync(hash, ct)
-            //              ?? throw new InvalidOperationException("INVALID_REFRESH");
+
             var session = await _sessionStorage.GetByRefreshHashAsync(hash, ct);
             if (session.Revoked || session.IsRefreshExpired(_clock.UtcNow))
                 throw new InvalidOperationException("EXPIRED_REFRESH");
@@ -176,7 +176,7 @@ namespace Application.Users
                 ["event"] = "token_refreshed",
                 ["userId"] = user.Id.ToString(),
                 ["timestamp"] = _clock.UtcNow.ToString("O")
-            }); 
+            });
             var userId = user.Id;
 
             return new RefreshResultDto(
@@ -287,7 +287,7 @@ namespace Application.Users
         {
             // 1. Profilecore 캐시 조회
             var profileCore = await _userCache.GetProfileCoreAsync(userId, ct);
-            if(profileCore is null)
+            if (profileCore is null)
             {
                 var p = await _profiles.GetByUserIdAsync(userId, ct)
                     ?? throw new InvalidOperationException("PROFLE_NOT_FOUND");
@@ -319,7 +319,7 @@ namespace Application.Users
                       Token: (int)Math.Min(int.MaxValue, token)
                   );
 
-                await _userCache.SetWalletAsync(userId, wallet, ct); 
+                await _userCache.SetWalletAsync(userId, wallet, ct);
             }
 
             var dto = new UserProfileDto(
@@ -332,18 +332,18 @@ namespace Application.Users
                     Gem: wallet.Gem,
                     Token: wallet.Token,
                     IconId: profileCore.IconId
-                );  
+                );
             return dto;
         }
 
         public async Task<UserProfileDto> UpdateProfileAsync(int userId, UpdateProfileRequest req, CancellationToken ct)
         {
-            if (string.IsNullOrWhiteSpace(req.NickName)) 
+            if (string.IsNullOrWhiteSpace(req.NickName))
                 throw new ArgumentException("INVALID_NICKNAME");
 
-            var p = await _profiles.GetByUserIdAsync(userId, ct) 
+            var p = await _profiles.GetByUserIdAsync(userId, ct)
                 ?? throw new InvalidOperationException("PROFILE_NOT_FOUND");
-            
+
             p.Rename(req.NickName.Trim());
             p.SetIcon(req.IconId);
 
@@ -406,7 +406,7 @@ namespace Application.Users
                 ["userId"] = userId.ToString(),
                 ["newStatus"] = req.Status.ToString(),
                 ["timestamp"] = _clock.UtcNow.ToString("O")
-            }); 
+            });
         }
 
         public async Task AdminSetNicknameAsync(int userId, AdminSetNicknameRequest req, CancellationToken ct)
