@@ -138,7 +138,7 @@ public class MasterDataCache : MonoBehaviour
             var tex = DownloadHandlerTexture.GetContent(req);
             var sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
             PortraitSprites[item.PortraitId] = sprite;
-            Debug.Log($"초상화 {item.PortraitId} || {sprite.name}");
+            //Debug.Log($"초상화 {item.PortraitId} || {sprite.name}");
         }
         onDone.Invoke(); 
     } 

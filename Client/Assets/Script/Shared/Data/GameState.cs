@@ -34,6 +34,7 @@ namespace Game.Data
         public void InitUser(int userId, string nickname, int level)
         {
             CurrentUser = new UserData(userId, nickname, level);
+            Debug.Log($"UserData가 왜 없지 {CurrentUser}");
         }
         public void LoadFromPrefs()
         {

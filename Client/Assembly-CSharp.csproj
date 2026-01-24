@@ -225,6 +225,7 @@
     <Compile Include="Assets\Script\Systems\Network\ProtoHttpClient.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\Movement\MovementStates\LadderMovementState.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\NuttyKnight.cs" />
+    <Compile Include="Assets\Script\App\AuthBootstrap.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CharacterComponents\CharacterAnimator.cs" />
     <Compile Include="Assets\Script\Features\Battle\Character\Monster\MonsterModelData.cs" />
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\SpriteSwapper.cs" />

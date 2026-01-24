@@ -134,41 +134,84 @@ namespace Client.Systems
             Debug.Log("[AppBootstrap] 자동 로그인 시도");
 
             GameState.Instance.LoadFromPrefs();
-
             var refresh = GameState.Instance.RefreshToken;
 
-            if(string.IsNullOrEmpty(refresh)) // 리프레시 토큰 없음.
+            // 0) 리프레시 토큰 없으면 로그인
+            if (string.IsNullOrEmpty(refresh))
             {
-                Debug.Log("[AppBootstrap] : 리프레시 토큰 없음");
+                Debug.Log("[AppBootstrap] 리프레시 토큰 없음 ");
                 GameState.Instance.SetNeedLogin();
-                yield return SceneController.Instance.GoAsync("LobbyRoot"); 
+                Http.ClearToken();
+
+                yield return SceneController.Instance.GoAsync("LobbyRoot");
+                yield return null;
+
                 LobbyRootController.Instance.Show("Login");
                 yield break;
             }
 
-            bool ok = false;
-             
-            // Refresh 요청
+            // 1) Refresh로 새 토큰 받기
+            bool refreshOk = false;
+            string playerId = null, access = null, newRefresh = null;
+            long serverMs = 0;
+
             yield return AuthService.Refresh(refresh, res =>
             {
                 if (!res.Ok)
                 {
                     Debug.LogWarning($"[AppBootstrap] [Auth Refresh] 실패: {res.Message}");
-                    GameState.Instance.SetNeedLogin();
-                    Http.ClearToken();// 토큰 제거하기 
                     return;
                 }
 
-                ok = true;
-                ResetAuthRedirect();
-                Http.SetToken(res.Data.AccessToken);
-                GameState.Instance.SaveAuth(res.Data.PlayerId, res.Data.AccessToken, res.Data.RefreshToken);
-                Debug.Log("[AppBootstrap] 자동 로그인 성공");
+                refreshOk = true;
+                playerId = res.Data.PlayerId;
+                access = res.Data.AccessToken;
+                newRefresh = res.Data.RefreshToken;
+                serverMs = res.Data.ServerUnixMs;
+                Debug.Log($"[AppBootstrap] [Auth Refresh] : {res.Data.PlayerId} {res.Data.AccessToken}");
             });
 
-            yield return SceneController.Instance.GoAsync("LobbyRoot");
+            if (!refreshOk)
+            {
+                Debug.Log("[AppBootstrap] 리프레시 토큰 손상 ");
+                GameState.Instance.SetNeedLogin();
+                Http.ClearToken();
 
-            LobbyRootController.Instance.Show(ok ? "Main" : "Login");
+                yield return SceneController.Instance.GoAsync("LobbyRoot");
+                yield return null;
+
+                LobbyRootController.Instance.Show("Login");
+                yield break;
+            }
+
+            // 2) 공통 부트스트랩(프로필/부트/스테이지/인벤/캐릭터 등 로딩)
+            var bootstrap = new AuthBootstrapper(Http, Popup);
+            Debug.Log($"player ID 체크 : {playerId}");
+            yield return bootstrap.CoBootstrapAfterToken(playerId, access, newRefresh, serverMs);
+
+            bool bootOk = !string.IsNullOrEmpty(GameState.Instance.AccessToken)
+                          && GameState.Instance.CurrentUser != null;
+
+            // 3) 결과에 따라 화면 전환
+            if (bootOk == false)
+            {
+                Debug.LogWarning($"[AppBootstrap] Bootstrap 실패 -> Login  {GameState.Instance.CurrentUser == null}");
+
+                GameState.Instance.SetNeedLogin();
+                Http.ClearToken();
+
+                yield return SceneController.Instance.GoAsync("LobbyRoot");
+                yield return null;
+                LobbyRootController.Instance.Show("Login");
+                yield break;
+            }
+
+            Debug.Log("[AppBootstrap] 자동 로그인 성공 -> Main");
+            ResetAuthRedirect();
+
+            yield return SceneController.Instance.GoAsync("LobbyRoot");
+            yield return null;
+            LobbyRootController.Instance.Show("Main");
         }
         public void ResetAuthRedirect()
         {

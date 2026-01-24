@@ -11,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI; 
 
@@ -92,7 +93,7 @@ public class LoginPopup : UIPopup
             return;
         }
         _running = StartCoroutine(CoPasswordLogin(account, password)); 
-    }
+    } 
     private IEnumerator CoPasswordLogin(string account, string password)
     {
         _busy = true;
@@ -107,13 +108,10 @@ public class LoginPopup : UIPopup
         yield return Http.Post(ApiRoutes.AuthLogin, req, AuthResponse.Parser, (res) =>
         {
             if (!res.Ok)
-            {
-                Spinner?.Show(false);
+            { 
                 Popup?.Show(res.StatusCode == 401 ? "계정 또는 비밀번호가 올바르지 않습니다." : $"로그인 실패: {res.Message}");
                 return;
-            }
-            Debug.Log($"[AUTH] access len={res.Data.AccessToken?.Length}, player={res.Data.PlayerId}");
-
+            } 
             ok = true;
             playerId = res.Data.PlayerId; 
             access = res.Data.AccessToken; 
@@ -123,8 +121,38 @@ public class LoginPopup : UIPopup
 
         // 보안: 메모리상 비밀번호 지우기 (UI도 클리어)
         if (PasswordInput) PasswordInput.text = "";
+        if (!ok)
+        {
+            SetLoading(false);
+            _busy = false;
+            _running = null;
+            yield break;
+        }
+        var boot = new AuthBootstrapper(Http, Popup);
+        yield return boot.CoBootstrapAfterToken(playerId, access, refresh, serverMs);
+        Debug.Log("유저 정보 받아오기");
 
-        yield return AfterAuth(ok, playerId, access, refresh, serverMs);
+        bool bootOk = !string.IsNullOrEmpty(GameState.Instance.AccessToken)
+                      && GameState.Instance.CurrentUser != null;
+
+        if (!bootOk)
+        {
+            // 부트스트랩 실패 시: 상태 정리
+            GameState.Instance.SetNeedLogin();
+            Http.ClearToken();
+            SetLoading(false);
+            _busy = false;
+            _running = null;
+            yield break;
+        }
+        AppBootstrap.Instance.ResetAuthRedirect();
+        OnLoginCompleted?.Invoke(new LoginResult
+        {
+            Ok = true,
+            Profile = GameState.Instance.CurrentUser?.UserProfilePb, 
+            Boot = null
+        });
+
         SetLoading(false);
         _busy = false;
         _running = null;

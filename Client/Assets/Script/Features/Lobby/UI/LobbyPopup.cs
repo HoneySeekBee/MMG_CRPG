@@ -16,7 +16,7 @@ public class LobbyPopup : UIPopup
 {
     [Header("UI Refs")]
     [SerializeField] private UserProfileIUI ProfileUI;
-    [SerializeField] private CurrencyUI CurrencyUI; 
+    [SerializeField] private CurrencyUI CurrencyUI;
 
     [Header("Optional")]
     public LoadingSpinner Spinner;    // 없으면 무시
@@ -61,7 +61,12 @@ public class LobbyPopup : UIPopup
         {
             ApplyFromGameState();
         }
-
+        else
+        {
+            Debug.LogError($"Lost User Data {user == null}");
+            if (user != null)
+                Debug.LogError($"Lost User Data {user.UserProfilePb == null}");
+        }
         //  버튼 이벤트 연결
         CharactersBtn.onClick.RemoveAllListeners();
         CharactersBtn.onClick.AddListener(ToggleUserCharacterPopup);
@@ -84,7 +89,7 @@ public class LobbyPopup : UIPopup
             {
                 _inventoryPopup = go;
                 go.gameObject.SetActive(false);
-                go.transform.parent = popupRoot; 
+                go.transform.parent = popupRoot;
             }
         }
 
@@ -97,10 +102,10 @@ public class LobbyPopup : UIPopup
             {
                 _userCharacterPopup = go;
                 go.gameObject.SetActive(false);
-                go.transform.parent = popupRoot; 
+                go.transform.parent = popupRoot;
             }
         }
-    } 
+    }
     private void ToggleInventoryPopup()
     {
         if (_inventoryPopup == null)
