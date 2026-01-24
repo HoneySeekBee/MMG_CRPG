@@ -7,6 +7,8 @@ namespace Game.Data
     public class GameState : MonoBehaviour
     {
         public static GameState Instance { get; private set; }
+        public enum AuthState { Checking, Authed, NeedLogin }
+        public AuthState State { get; private set; }
 
         public string PlayerId { get; private set; }
         public string AccessToken { get; private set; }
@@ -74,5 +76,32 @@ namespace Game.Data
             ServerTimeUnixMsOffset = serverUnixMs - localMs;
         }
 
+        public void ClearAuth()
+        {
+            PlayerId = "";
+            AccessToken = "";
+            RefreshToken = "";
+            PlayerPrefs.DeleteKey(Constants.PlayerPrefs_Token);
+            PlayerPrefs.DeleteKey(Constants.PlayerPrefs_RefreshToken);
+            PlayerPrefs.DeleteKey(Constants.PlayerPrefs_PlayerId);
+            PlayerPrefs.Save();
+        }
+
+        public void SetChecking()
+        {
+            State = AuthState.Checking;
+        }
+
+        public void SetAuthed(string playerId, string access, string refresh)
+        {
+            State = AuthState.Authed;
+            SaveAuth(playerId, access, refresh);
+        }
+
+        public void SetNeedLogin()
+        {
+            State = AuthState.NeedLogin;
+            ClearAuth();
+        }
     }
 }

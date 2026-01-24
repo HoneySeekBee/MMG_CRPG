@@ -140,6 +140,7 @@ public class LoginPopup : UIPopup
 
         GameState.Instance.SetServerTimeOffset(serverMs);
         GameState.Instance.SaveAuth(playerId, access, refresh);
+        AppBootstrap.Instance.ResetAuthRedirect();
         Http.SetToken(access);
          
         UserProfilePb profile = null;

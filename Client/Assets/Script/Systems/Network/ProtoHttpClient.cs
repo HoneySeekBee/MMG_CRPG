@@ -10,8 +10,11 @@ namespace Game.Network
     public class ProtoHttpClient
     {
         private readonly ApiConfig _config; 
-        private string _authToken; 
-        
+        private string _authToken;
+
+        public event Action<int> OnUnauthorized;
+        public void ClearToken() => _authToken = null;
+
         public ProtoHttpClient(ApiConfig config) { _config = config; Debug.Log($"[Http] Base={_config.BaseUrl}"); }
         public void SetToken(string token) { _authToken = token; }
         public IEnumerator Get<T>(string path, MessageParser<T> parser, Action<ApiResult<T>> cb) where T : IMessage<T>
@@ -72,6 +75,10 @@ namespace Game.Network
                     }
                     else
                     {
+                        bool isAuthPath = path.StartsWith("/api/pb/auth/"); 
+                        if (!isAuthPath && req.responseCode == 401)
+                            OnUnauthorized?.Invoke(401);
+
                         var msg = req.error ?? req.downloadHandler?.text;
                         last = ApiResult<T>.Fail("HTTP_ERROR", msg, (int)req.responseCode);
                     }
@@ -82,5 +89,7 @@ namespace Game.Network
             }
             cb(last);
         }
+
+
     } 
 } 

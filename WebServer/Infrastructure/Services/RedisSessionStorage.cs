@@ -1,5 +1,8 @@
-﻿using Application.Common.Interface;
+﻿using Amazon.Runtime.Internal.Util;
+using Application.Common.Interface;
+using Application.Gacha.GachaDraw;
 using Domain.Entities;
+using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -14,9 +17,13 @@ namespace Infrastructure.Services
     {
         private readonly IDatabase _redis;
 
-        public RedisSessionStorage(IConnectionMultiplexer connection)
+        private readonly ILogger<GachaDrawService> _logger;
+
+        public RedisSessionStorage(IConnectionMultiplexer connection,
+             ILogger<GachaDrawService> logger)
         {
             _redis = connection.GetDatabase();
+            _logger = logger;
         }
 
         public async Task StoreSessionAsync(Session session, CancellationToken ct)
@@ -37,7 +44,16 @@ namespace Infrastructure.Services
             if (!value.HasValue)
                 return null;
 
-            return JsonSerializer.Deserialize<Session>(value!)!;
+            try
+            {
+                return JsonSerializer.Deserialize<Session>(value!);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "SESSION_DESERIALIZE_FAIL key={Key}", key);
+                await _redis.KeyDeleteAsync(key);
+                return null;
+            }
         }
 
         public async Task RevokeAsync(string refreshHash, CancellationToken ct)
