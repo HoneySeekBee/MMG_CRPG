@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "Client",
+        "WebServer",
+        "AdminTool",
+        "docs",
+        "scripts"
+      ]
+    }
+  }
+}

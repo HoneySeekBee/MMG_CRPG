@@ -1,0 +1,33 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Verify WebServer
+        run: |
+          cd WebServer
+          dotnet restore
+          dotnet build -c Release
+          dotnet test -c Release
+
+      - name: Verify AdminTool
+        run: |
+          cd AdminTool
+          dotnet restore
+          dotnet build -c Release
+          dotnet test -c Release
