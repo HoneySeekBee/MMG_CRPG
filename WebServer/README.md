@@ -163,3 +163,8 @@ dotnet ef database update
   - 서버 Tick 처리 로그(Event) 및 Snapshot 생성 흐름 확인
 - Redis 연결 오류
   - Redis Host/Port 설정 및 네트워크 보안 그룹 확인
+ 
+## 참고 링크 
+
+https://www.ssw.com.au/rules/clean-architecture
+https://blog.hansolbangul.com/post/ddd-post-step1
