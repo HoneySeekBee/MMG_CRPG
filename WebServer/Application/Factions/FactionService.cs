@@ -1,6 +1,7 @@
 ﻿using Application.Repositories;
 using Application.Validation;
 using Domain.Entities;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,13 @@ namespace Application.Factions
     public sealed class FactionService : IFactionService
     {
         private readonly IFactionRepository _repo;
-        public FactionService(IFactionRepository repo) => _repo = repo;
+        private readonly ILogger<FactionService> _logger;
+
+        public FactionService(IFactionRepository repo, ILogger<FactionService> logger)
+        {
+            _repo = repo;
+            _logger = logger;
+        }
 
         public async Task<FactionDto?> GetAsync(int id, CancellationToken ct)
             => (await _repo.GetByIdAsync(id, ct)) is { } e ? FactionDto.From(e) : null;
@@ -54,8 +61,7 @@ namespace Application.Factions
 
         public async Task UpdateAsync(int id, UpdateFactionRequest req, CancellationToken ct)
         {
-            Console.WriteLine($"FactionService - Update (id : {id}) ");
-            Console.WriteLine($"FactionService - Update (label : {req.Label}) (iconId : {req.IconId}) (meta : {req.Meta} ");
+            _logger.LogDebug("Faction update: Id={FactionId}, Label={Label}, IconId={IconId}", id, req.Label, req.IconId);
             var e = await _repo.GetByIdAsync(id, ct) ?? throw new KeyNotFoundException("대상을 찾을 수 없습니다.");
 
             Guard.NotEmpty(req.Label, nameof(req.Label));

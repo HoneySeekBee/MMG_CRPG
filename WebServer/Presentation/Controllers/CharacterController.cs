@@ -1,5 +1,7 @@
 ﻿using Application.Character;
+using Infrastructure.Caching;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace WebServer.Controllers
 {
@@ -9,8 +11,13 @@ namespace WebServer.Controllers
     {
 
         private readonly ICharacterService _svc;
+        private readonly ILogger<CharacterController> _logger;
 
-        public CharacterController(ICharacterService svc) => _svc = svc;
+        public CharacterController(ICharacterService svc, ILogger<CharacterController> logger)
+        {
+            _svc = svc;
+            _logger = logger;
+        }
 
         // GET /api/characters
         [HttpGet]
@@ -55,7 +62,8 @@ namespace WebServer.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> Create([FromBody] CreateCharacterRequest req, CancellationToken ct = default)
         {
-            Console.WriteLine($"[API] [Character] [Create] | iconId :{req.IconId} Portrait : {req.PortraitId} element : {req.ElementId}, role : {req.RoleId}");
+            _logger.LogInformation($"[API] [Character] [Create] | iconId :{req.IconId} Portrait : {req.PortraitId} element : {req.ElementId}, role : {req.RoleId}");
+           
             try
             {
                 var id = await _svc.CreateAsync(req, ct);

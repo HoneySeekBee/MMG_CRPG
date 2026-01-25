@@ -14,10 +14,8 @@ namespace Domain.Combat.Engine.TickSystems
         private readonly Random _rng = new(); // TODO: 나중에 Seed/IRandomProvider로 교체 
         public void Run(CombatRuntimeState s, List<CombatLogEvent> evs, int dtMs)
         {
-            foreach (var actor in s.ActiveActors.Values.Where(a => !a.Dead && a.Hp > 0)) // Hp>0 추가
+            foreach (var actor in s.ActiveActors.Values.Where(a => !a.Dead && a.Hp > 0))
             {
-                Console.WriteLine($"[Atk] Actor={actor.ActorId}, Team={actor.Team}, Hp={actor.Hp}, Cd={actor.AttackCooldownMs}");
-
                 // 쿨타임 감소
                 if (actor.AttackCooldownMs > 0)
                 {
@@ -37,10 +35,7 @@ namespace Domain.Combat.Engine.TickSystems
                     actor.TargetActorId = FindNearestEnemy(s, actor.ActorId);
 
                 if (actor.TargetActorId == null)
-                {
-                    Console.WriteLine($"[Atk] Actor={actor.ActorId} -> target 없음");
                     continue;
-                }
 
                 var target = s.ActiveActors[actor.TargetActorId.Value];
 
@@ -53,7 +48,6 @@ namespace Domain.Combat.Engine.TickSystems
 
                 float dist = Distance(actor, target);
                 float effectiveRange = actor.RangeBase;
-                Console.WriteLine($"[Atk] {actor.ActorId}(Team={actor.Team}) -> {target.ActorId}(Team={target.Team}) dist={dist}, range={actor.RangeBase}");
 
                 if (dist > effectiveRange)
                     continue;
@@ -78,10 +72,6 @@ namespace Domain.Combat.Engine.TickSystems
 
                 actor.AttackCooldownMs = (int)(actor.AttackIntervalMsBase * AttackSpeedScale);
 
-                Console.WriteLine(
-                    $"[Hit] {actor.ActorId}(T={actor.Team}) -> {target.ActorId}(T={target.Team}), " +
-                    $"dmg={finalDmg}, hp: {oldHp} -> {target.Hp}"
-                );
                 evs.Add(new CombatLogEvent(
                   s.NowMs,
                    "normal_attack",

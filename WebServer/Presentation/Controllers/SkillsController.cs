@@ -122,16 +122,13 @@ namespace WebServer.Controllers
         [HttpPut("{id:int}/combat")]
         public async Task<IActionResult> UpdateCombat(int id, [FromBody] UpdateSkillCombatRequest req, CancellationToken ct = default)
         {
-            Console.WriteLine($"[API] Combat req: Type={req.Type}, Elem={req.ElementId}, Active={req.IsActive}, Targeting={req.TargetingType}, Aoe={req.AoeShape}, Side={req.TargetSide}");
+            _logger.LogInformation($"[API] Combat req: Type={req.Type}, Elem={req.ElementId}, Active={req.IsActive}, Targeting={req.TargetingType}, Aoe={req.AoeShape}, Side={req.TargetSide}"); 
             await _svc.UpdateCombatAsync(id, req, ct);
             return NoContent();
         }
         [HttpPatch("{id:int}/meta")]
         public async Task<IActionResult> UpdateMeta(int id, [FromBody] PatchSkillMetaRequest req, CancellationToken ct = default)
-        {
-            Console.WriteLine($"[API] Skill - Create  {req.Tag.Length}");
-            Console.WriteLine($"[API] Skill - Create  {req.Tag[0]}");
-            Console.WriteLine($"[API] Skill - Create  {req.BaseInfo}");
+        { 
             try
             {
                 await _svc.UpdateMetaAsync(id, req, ct);

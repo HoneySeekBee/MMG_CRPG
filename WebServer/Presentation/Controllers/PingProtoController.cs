@@ -23,8 +23,7 @@ namespace WebServer.Controllers
         [HttpPost]
         public async Task<ActionResult<Empty>> Ping([FromBody] Empty req, CancellationToken ct)
         {
-            var userId = User.GetUserId();
-            Console.WriteLine($"[Ping] user={userId}");
+            var userId = User.GetUserId(); 
 
             if (userId <= 0)
                 return Unauthorized();

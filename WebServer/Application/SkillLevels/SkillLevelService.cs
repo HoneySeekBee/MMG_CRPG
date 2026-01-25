@@ -1,6 +1,7 @@
 ﻿using Application.Repositories;
 using Domain.Entities;
 using Domain.Entities.Skill;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,19 +13,24 @@ namespace Application.SkillLevels
     public sealed class SkillLevelService : ISkillLevelService
     {
         private readonly ISkillLevelRepository _repo;
+        private readonly ILogger<SkillLevelService> _logger;
 
-        public SkillLevelService(ISkillLevelRepository repo) => _repo = repo;
+        public SkillLevelService(ISkillLevelRepository repo, ILogger<SkillLevelService> logger)
+        {
+            _repo = repo;
+            _logger = logger;
+        }
 
         public async Task<SkillLevelDto?> GetAsync(int skillId, int level, CancellationToken ct)
         {
-            Console.WriteLine($"[ WebAPI ] - GetSkill | SkillId : {skillId}");
+            _logger.LogDebug("GetSkillLevel: SkillId={SkillId}, Level={Level}", skillId, level);
             var e = await _repo.GetByIdAsync(skillId, level, ct);
             return e is null ? null : SkillLevelDto.From(e);
         }
 
         public async Task<IReadOnlyList<SkillLevelDto>> ListAsync(int skillId, CancellationToken ct)
         {
-            Console.WriteLine($"[ WebAPI ] - GetList | SkillId : {skillId}");
+            _logger.LogDebug("ListSkillLevels: SkillId={SkillId}", skillId);
             var list = await _repo.ListAsync(skillId, ct);
             return list.Select(SkillLevelDto.From).ToList();
         }

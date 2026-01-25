@@ -1,7 +1,9 @@
 ﻿using Application.Repositories;
 using Domain.Entities.Characters;
+using Infrastructure.Caching;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +15,14 @@ namespace Infrastructure.Repositories
     public sealed class CharacterRepository : ICharacterRepository
     {
         private readonly GameDBContext _db;
+        private readonly ILogger<CharacterRepository> _logger;
 
-        public CharacterRepository(GameDBContext db) => _db = db;
+
+        public CharacterRepository(GameDBContext db, ILogger<CharacterRepository> logger)
+        {
+            _db = db;
+            _logger = logger;
+        } 
 
         // ===== Reads =====
 
@@ -126,25 +134,22 @@ namespace Infrastructure.Repositories
         }
         public async Task<int> SaveChangesAsync(CancellationToken ct)
         {
-            Console.WriteLine($"[INFRA] SaveChangesAsync");
+            _logger.LogDebug("[INFRA] SaveChangesAsync start");
             try
             {
                 var rows = await _db.SaveChangesAsync(ct);
-                Console.WriteLine($"[INFRA] SaveChanges OK rows={rows}");
+                _logger.LogInformation("[INFRA] SaveChanges OK rows={Rows}", rows); 
                 return rows;
             }
             catch (DbUpdateException ex)
             {
-                Console.WriteLine("[INFRA] DbUpdateException in SaveChanges:");
-                Console.WriteLine(ex.ToString());
-                if (ex.InnerException != null)
-                    Console.WriteLine("[INFRA] Inner: " + ex.InnerException);
-                throw; // 반드시 다시 던지기
+                _logger.LogError(ex, "[INFRA] DbUpdateException during SaveChanges");
+
+                throw;  
             }
             catch (Exception ex)
             {
-                Console.WriteLine("[INFRA] Exception in SaveChanges:");
-                Console.WriteLine(ex.ToString());
+                _logger.LogError(ex, "[INFRA] Exception during SaveChanges"); 
                 throw;
             }
         }

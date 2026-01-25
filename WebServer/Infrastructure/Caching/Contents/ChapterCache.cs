@@ -55,8 +55,7 @@ namespace Infrastructure.Caching.Contents
                 _all = list;
                 _byId = byId;
             }
-
-            Console.WriteLine($"[ChapterCache] loaded: {_all.Count}");
+             
         }
     }
 }

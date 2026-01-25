@@ -1,6 +1,7 @@
 ﻿using Application.Repositories;
 using Domain.Entities.Characters;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +14,12 @@ namespace Application.Character
     public sealed class CharacterService : ICharacterService
     {
         private readonly ICharacterRepository _repo;
+        private readonly ILogger<CharacterService> _logger;
 
-        public CharacterService(ICharacterRepository repo)
+        public CharacterService(ICharacterRepository repo, ILogger<CharacterService> logger)
         {
             _repo = repo;
+            _logger = logger;
         }
 
         public async Task<PagedResult<CharacterSummaryDto>> GetListAsync(CharacterListQuery query, CancellationToken ct)
@@ -39,18 +42,14 @@ namespace Application.Character
     => v.HasValue ? v.Value.ToUniversalTime() : v;
         public async Task<int> CreateAsync(CreateCharacterRequest req, CancellationToken ct)
         {
-            Console.WriteLine($"[API] Create start " +
-                $"IconId {req.IconId}, Portrait {req.PortraitId}, Rarity {req.RarityId}");
+            _logger.LogInformation("Character create started: IconId={IconId}, PortraitId={PortraitId}, RarityId={RarityId}",
+                req.IconId, req.PortraitId, req.RarityId);
 
             try
             {
-                Console.WriteLine("[API] before ToUtc");
                 var utc = ToUtc(req.ReleaseDate);
+                var meta = NormalizeJsonOrNull(req.MetaJson);
 
-                Console.WriteLine("[API] before NormalizeJsonOrNull");
-                var meta = NormalizeJsonOrNull(req.MetaJson);   // ← 여기서도 예외 가능
-
-                Console.WriteLine("[API] before Character.Create");
                 var entity = Domain.Entities.Characters.Character.Create(
                     name: req.Name.Trim(),
                     rarityId: req.RarityId,
@@ -66,27 +65,20 @@ namespace Application.Character
                     metaJson: meta
                 );
 
-                Console.WriteLine("[API] after Character.Create, before AddAsync");
                 await _repo.AddAsync(entity, ct);
-
-                Console.WriteLine("[API] after AddAsync, before SaveChangesAsync");
                 var rows = await _repo.SaveChangesAsync(ct);
 
-                Console.WriteLine($"[API] after SaveChanges rows={rows}, NewId={entity.Id}");
+                _logger.LogInformation("Character created successfully: Id={CharacterId}, RowsAffected={Rows}", entity.Id, rows);
                 return entity.Id;
             }
             catch (DbUpdateException ex)
             {
-                Console.WriteLine("[API][Create] DbUpdateException:");
-                Console.WriteLine(ex.ToString());
-                if (ex.InnerException != null)
-                    Console.WriteLine("[API][Create] Inner: " + ex.InnerException);
+                _logger.LogError(ex, "Database error while creating character");
                 throw;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("[API][Create] Exception:");
-                Console.WriteLine(ex.ToString());
+                _logger.LogError(ex, "Unexpected error while creating character");
                 throw;
             }
         }

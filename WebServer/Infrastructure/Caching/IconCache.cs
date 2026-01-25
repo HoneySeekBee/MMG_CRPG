@@ -27,8 +27,7 @@ namespace Infrastructure.Caching
             _cache = await db.Icons
                 .Select(x => new IconMetaDto(x.IconId, x.Key, x.Version))
                 .ToListAsync(ct);
-
-            Console.WriteLine($"[IconCache] loaded: {_cache.Count}");
+             
         }
     }
 }

@@ -127,8 +127,7 @@ namespace Infrastructure.Caching
                     i.EquipType
                 ))
                 .ToList();
-
-            Console.WriteLine($"[ItemCache] loaded: {_cache.Count}");
+             
         }
     }
 }

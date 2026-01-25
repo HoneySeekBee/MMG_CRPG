@@ -58,8 +58,7 @@ namespace WebServer.Controllers.User
         {
             try
             {
-                var p = await _users.GetProfileAsync(CurrentUserId(), ct);
-                Console.WriteLine($"Profile 호출  {p.Id} ");
+                var p = await _users.GetProfileAsync(CurrentUserId(), ct); 
                 return Ok(new UserProfilePb
                 {
                     Id = p.Id,

@@ -167,10 +167,7 @@ namespace Infrastructure.Persistence
             #endregion
 
             var et = modelBuilder.Model.FindEntityType(typeof(CharacterModel))!;
-            var prop = et.FindProperty(nameof(CharacterModel.BodyType))!;
-            Console.WriteLine($"BodyType column type = {prop.GetColumnType()}");
-            Console.WriteLine("OnModelCreateing");
-
+            var prop = et.FindProperty(nameof(CharacterModel.BodyType))!; 
 
             Modeling_Skill(modelBuilder);
             Modeling_SkillLevel(modelBuilder);
@@ -192,7 +189,6 @@ namespace Infrastructure.Persistence
 
              
             var p = et.FindProperty(nameof(Domain.Entities.Characters.CharacterModel.BodyType))!;
-            Console.WriteLine($"ClrType={p.ClrType}, ProviderClrType={p.GetProviderClrType()}, ColumnType={p.GetColumnType()}, Converter={(p.GetValueConverter() is null ? "null" : p.GetValueConverter()!.GetType().Name)}");
         }
         
         public void Modeling_Skill(ModelBuilder modelBuilder)
@@ -565,8 +561,7 @@ namespace Infrastructure.Persistence
         }
         private void LogDataSourceHash(string tag)
         {
-            var conn = (NpgsqlConnection)Database.GetDbConnection();
-            Console.WriteLine($"[Ctx {tag}] DS Hash = {conn.DataSource?.GetHashCode()}");
+            var conn = (NpgsqlConnection)Database.GetDbConnection(); 
         }
 
     }

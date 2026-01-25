@@ -50,8 +50,7 @@ namespace Infrastructure.Services
                 return ms.ToArray();
             }
             catch (AmazonS3Exception e)
-            {
-                Console.WriteLine($"[S3PortraitStorage] GetObject FAIL bucket={_bucketName} key={s3Key} status={e.StatusCode} code={e.ErrorCode} msg={e.Message}");
+            { 
                 throw;
             }
         }

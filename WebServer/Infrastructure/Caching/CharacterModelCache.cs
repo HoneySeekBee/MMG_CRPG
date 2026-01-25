@@ -43,8 +43,7 @@ namespace Infrastructure.Caching
             .Options;
 
             await using var db = new GameDBContext(opts);
-            var conn = (NpgsqlConnection)db.Database.GetDbConnection();
-            Console.WriteLine($"[Ctx] DS Hash = {conn.DataSource?.GetHashCode()}");
+            var conn = (NpgsqlConnection)db.Database.GetDbConnection(); 
 
             // Models
             var models = await db.Set<Domain.Entities.Characters.CharacterModel>()
@@ -64,8 +63,7 @@ namespace Infrastructure.Caching
                     HairColorCode = m.HairColorCode,
                     SkinColorCode = m.SkinColorCode,
                 })
-                .ToListAsync(ct);
-            Console.WriteLine($"[Reload] Models fetched: {models.Count}  ");
+                .ToListAsync(ct); 
 
             // Parts
             var parts = await db.Set<Domain.Entities.Characters.CharacterModelPart>()
@@ -76,8 +74,7 @@ namespace Infrastructure.Caching
                     PartKey = p.PartKey,
                     PartType = p.PartType.ToString(),                // enum -> string 
                 })
-                .ToListAsync(ct);
-            Console.WriteLine($"[Reload] Parts fetched:   {parts.Count} v");
+                .ToListAsync(ct); 
 
             // Weapons
             var weapons = await db.Set<Domain.Entities.Characters.CharacterModelWeapon>()
@@ -89,8 +86,7 @@ namespace Infrastructure.Caching
                     DisplayName = w.DisplayName,
                     IsTwoHanded = w.IsTwoHanded
                 })
-                .ToListAsync(ct);
-            Console.WriteLine($"[Reload] Weapons fetched: {weapons.Count}  s");
+                .ToListAsync(ct); 
 
             // Build dictionaries
             var modelsById = models.ToDictionary(x => x.CharacterId);

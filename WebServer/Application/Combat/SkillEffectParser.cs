@@ -16,9 +16,9 @@ namespace Application.Combat
         public static SkillEffect SafeParseEffect(int skillId, JsonNode? values)
         {
             try { return Parse(skillId, values); }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine($"SkillEffect parse fail skillId={skillId} err={ex.Message}");
+                // TODO: ILogger 사용 시 로깅 추가 필요 (static 클래스 한계)
                 return new SkillEffect();
             }
         }
@@ -208,8 +208,8 @@ namespace Application.Combat
             }
 
             if (buff["resetSkillCooldown"]?.GetValue<bool?>() == true)
-            { 
-                Console.WriteLine("resetSkillCooldown buff exists but not modeled.");
+            {
+                // TODO: resetSkillCooldown buff 모델링 필요
             }
 
             return new BuffEffect

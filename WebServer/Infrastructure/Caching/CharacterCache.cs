@@ -1,13 +1,20 @@
 ﻿using Application.Character;
 using Infrastructure.Persistence;
-using Microsoft.EntityFrameworkCore; 
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Caching
 {
     public class CharacterCache : ICharacterCache
     {
         private readonly IDbContextFactory<GameDBContext> _factory;
-        public CharacterCache(IDbContextFactory<GameDBContext> factory) => _factory = factory;
+        private readonly ILogger<CharacterCache> _logger;
+        public CharacterCache(IDbContextFactory<GameDBContext> factory, ILogger<CharacterCache> logger)
+        {
+            _factory = factory;
+            _logger = logger;
+        }
+
         private List<CharacterDetailDto> _cache = new();
         private Dictionary<int, CharacterDetailDto> _byId = new();
 
@@ -98,7 +105,7 @@ namespace Infrastructure.Caching
 
             // 원자적 스왑
             _cache = list;
-            Console.WriteLine($"Characeter Cache {list.Count}");
+            _logger.LogInformation($"Characeter Cache {list.Count}");
             _byId = list.ToDictionary(x => x.Id);
         }
     }

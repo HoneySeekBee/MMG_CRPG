@@ -48,9 +48,7 @@ namespace Infrastructure.Caching.Contents
             {
                 _all = list;
                 _byId = byId;
-            }
-
-            Console.WriteLine($"[StagesCache] loaded: {_all.Count}");
+            } 
         }
         private static StageDetailDto ToDetailDto(Domain.Entities.Contents.Stage s)
         {

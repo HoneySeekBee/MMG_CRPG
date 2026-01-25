@@ -56,8 +56,7 @@ namespace Infrastructure.Caching.Contents
                 _all = list;
                 _byId = byId;
             }
-
-            Console.WriteLine($"[BattlesCache] loaded: {_all.Count}");
+             
         }
     }
 }

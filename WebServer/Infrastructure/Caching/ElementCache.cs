@@ -53,8 +53,7 @@ namespace Infrastructure.Caching
                 _byId = byId;
                 _byKey = byKey;
             }
-
-            Console.WriteLine($"[ElementCache] loaded: {_all.Count}");
+             
         }
     }
 }

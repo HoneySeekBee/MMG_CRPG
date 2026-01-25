@@ -66,8 +66,7 @@ namespace Infrastructure.Caching
                 .GroupBy(r => r.RarityId)
                 .ToDictionary(g => g.Key, g => g.OrderBy(x => x.Level).ToList());
             var newByKey = rows.ToDictionary(r => (r.RarityId, r.Level));
-
-            Console.WriteLine($"[ CharacterExp Cache ] {newAll.Count}");
+             
             // 원자적 스왑
             lock (_gate)
             {

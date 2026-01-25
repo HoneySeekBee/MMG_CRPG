@@ -52,8 +52,7 @@ namespace Infrastructure.Caching
 
                 var newById = new ConcurrentDictionary<int, EquipSlotDto>(
                     list.Select(e => new KeyValuePair<int, EquipSlotDto>(e.Id, e)));
-
-                Console.WriteLine($"[ CACHE ]  EquipSlot : {newAll.Count()} 개 ");
+                 
                 // 원자적 교체
                 _all = newAll;
                 _byId = newById;

@@ -17,8 +17,7 @@ namespace WebServer.Controllers
         {
             var items = (activeOnly ? _cache.GetAll().Where(x => x.Active) : _cache.GetAll())
                 .Select(Map)
-                .ToList();
-            Console.WriteLine($"ItemType 요청 {items.Count}");
+                .ToList(); 
             return Ok(new ListItemTypesResponseMessage
             {
                 Items = { items },

@@ -14,16 +14,12 @@ namespace Domain.Combat.Engine.TickSystems
     {
         public void Run(CombatRuntimeState s, List<CombatLogEvent> evs)
         {
-            Console.WriteLine($"[WaveSystem] tick: curWave={s.CurrentWaveIndex}, WaitingNextWave={s.WaitingNextWave}, NextWaveSpawnMs={s.NextWaveSpawnMs}");
             if (s.BattleEnded)
                 return;
 
             var stage = s._MasterPack?.Stage;
             if (stage == null)
-            {
-                Console.WriteLine("[WaveSystem] s.MasterPack.Stage is null");
                 return;
-            }
             int now = s.NowMs;
 
             // 이미 웨이브 클리어 후, 다음 웨이브 스폰을 기다리는 중이면
@@ -45,7 +41,6 @@ namespace Domain.Combat.Engine.TickSystems
                     }
 
                     s.NextWaveSpawnMs = now + 1000;
-                    Console.WriteLine("[WaveSystem] All players reached spawn. Next wave in 1s.");
                     return;
                 }
 
@@ -84,23 +79,11 @@ namespace Domain.Combat.Engine.TickSystems
                 return;
             }
 
-            //  "전투 중" 로직 
-
-            Console.WriteLine(
-                $"[WaveSystem.Run] totalWaves={stage.Waves.Count}, currentWave={s.CurrentWaveIndex}"
-            );
-
             bool anyEnemyAlive = s.ActiveActors.Values
                 .Any(a => a.Team == 1 && !a.Dead && a.Hp > 0 && a.Waveindex == s.CurrentWaveIndex);
 
-            Console.WriteLine(
-                $"[WaveSystem.Run] anyEnemyAlive={anyEnemyAlive}, currentWave={s.CurrentWaveIndex}"
-            );
-
             if (anyEnemyAlive)
                 return;
-
-            Console.WriteLine($"[WaveSystem] Wave {s.CurrentWaveIndex} cleared. Resetting players to spawn.");
 
             //  현재 웨이브 적 전부 죽음 
             CleanupWaveEnemies(s);
@@ -134,18 +117,11 @@ namespace Domain.Combat.Engine.TickSystems
         {
             var stage = s._MasterPack?.Stage;
             if (stage == null)
-            {
-                Console.WriteLine("[WaveSystem] SpawnNextWave: s.MasterPack.Stage is null");
                 return;
-            }
 
-            // wave.Index == CurrentWaveIndex 인 웨이브를 찾아온다
             var wave = stage.Waves.FirstOrDefault(w => w.Index == s.CurrentWaveIndex);
             if (wave == null)
-            {
-                Console.WriteLine($"[WaveSystem] SpawnNextWave: wave index {s.CurrentWaveIndex} not found");
                 return;
-            }
 
             foreach (var spawn in wave.Enemies)
             {
@@ -212,7 +188,6 @@ namespace Domain.Combat.Engine.TickSystems
 
                 a.ReturningToSpawn = true;
                 a.ArrivedAtSpawn = false;
-                Console.WriteLine($"[WaveSystem] Actor {a.ActorId} set ReturningToSpawn = true (spawn=({a.SpawnX}, {a.SpawnZ}), pos=({a.X}, {a.Z}))");
                 a.TargetActorId = null;
                 a.AttackCooldownMs = 0;
                 a.SkillCooldownMs = 0;

@@ -75,8 +75,7 @@ namespace Infrastructure.Caching
                 dto.Effect = SkillEffectParser.SafeParseEffect(dto.SkillId, maxValues);
             }
 
-            _cache = list;
-            Console.WriteLine($"스킬 캐싱하기 {list.Count}개 ");
+            _cache = list; 
             _byId = list.ToDictionary(x => x.SkillId);
         }
     }

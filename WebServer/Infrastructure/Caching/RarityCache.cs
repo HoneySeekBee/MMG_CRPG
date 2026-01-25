@@ -40,8 +40,7 @@ namespace Infrastructure.Caching
                 _byId = byId;
                 _byKey = byKey;
             }
-
-            Console.WriteLine($"[RarityCache] loaded: {_all.Count}");
+             
         }
     }
 }

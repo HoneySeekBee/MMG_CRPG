@@ -42,8 +42,7 @@ namespace Infrastructure.Caching
                 _byId = byId;
                 _byKey = byKey;
             }
-
-            Console.WriteLine($"[RoleCache] loaded: {_all.Count}");
+             
         }
     }
 }

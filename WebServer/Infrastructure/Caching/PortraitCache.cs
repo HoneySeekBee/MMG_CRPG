@@ -26,8 +26,7 @@ namespace Infrastructure.Caching
             _cache = await db.Portraits
                 .Select(x => new PortraitMetaDto(x.PortraitId, x.Key, x.Version))
                 .ToListAsync(ct);
-
-            Console.WriteLine($"[PortraitCache] loaded: {_cache.Count}");
+             
         }
     }
 }

@@ -3,6 +3,7 @@ using Application.Validation;
 using Domain.Entities;
 using Domain.Entities.Skill;
 using Domain.Enum;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +15,13 @@ namespace Application.Skills
     public sealed class SkillService : ISkillService
     {
         private readonly ISkillRepository _repo;
+        private readonly ILogger<SkillService> _logger;
 
-        public SkillService(ISkillRepository repo) => _repo = repo;
+        public SkillService(ISkillRepository repo, ILogger<SkillService> logger)
+        {
+            _repo = repo;
+            _logger = logger;
+        }
 
         // 단건 (레벨 미포함)
         public async Task<SkillDto?> GetAsync(int id, CancellationToken ct)
@@ -81,7 +87,7 @@ namespace Application.Skills
         // 기본정보 수정 (이름/타입/속성/아이콘)
         public async Task UpdateAsync(int id, UpdateSkillBasicsRequest req, CancellationToken ct)
         {
-            Console.WriteLine($"[API] (SkillService) : basic - name : {req.Name}, iconId : {req.IconId}");
+            _logger.LogDebug("Skill update: Id={SkillId}, Name={Name}, IconId={IconId}", id, req.Name, req.IconId);
             var e = await _repo.GetByIdAsync(id, includeLevels: false, ct)
                     ?? throw new KeyNotFoundException("대상을 찾을 수 없습니다.");
 

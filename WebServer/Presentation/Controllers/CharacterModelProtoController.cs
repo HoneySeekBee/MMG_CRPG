@@ -48,8 +48,7 @@ namespace WebServer.Controllers
 
             var res = new ListCharacterModelsResponsePb();
             res.Models.AddRange(src.Select(m => m.ToProto()));
-
-            Console.WriteLine($"[Request] CharacterModel Proto {src.Count()}");
+             
             return res;
         }
 

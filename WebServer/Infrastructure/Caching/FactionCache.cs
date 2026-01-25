@@ -41,8 +41,7 @@ namespace Infrastructure.Caching
                 _byId = byId;
                 _byKey = byKey;
             }
-
-            Console.WriteLine($"[FactionCache] loaded: {_all.Count}");
+             
         }
     }
 }

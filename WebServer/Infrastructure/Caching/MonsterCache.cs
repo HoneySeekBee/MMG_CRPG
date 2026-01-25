@@ -71,8 +71,7 @@ namespace Infrastructure.Caching
                 .ToList();
 
             _byId = dtos.ToImmutableDictionary(d => d.Id, d => d);
-            _all = dtos;
-            Console.WriteLine($"MonsterCache reloaded: {dtos.Count} monsters.");
+            _all = dtos; 
             _logger.LogInformation("MonsterCache reloaded: {Count} monsters.", dtos.Count);
         }
     }

@@ -32,8 +32,7 @@ namespace Infrastructure.Caching
                     x.Slot != null ? x.Slot.Name : null,
                     x.CreatedAt, x.UpdatedAt, x.Active))
                 .ToListAsync(ct);
-
-            Console.WriteLine($"[ItemTypeCache] loaded: {_cache.Count}"); 
+             
         }
     }
 }
