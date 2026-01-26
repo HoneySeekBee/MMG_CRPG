@@ -27,6 +27,7 @@ namespace Application.Gacha.GachaDraw
         private readonly ICurrencyRepository _currencyRepo;
         private readonly IGachaCacheService _cache;
         private readonly IUserCacheService _userCache;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly Random _rng = new();
 
         private readonly ILogger<GachaDrawService> _logger;
@@ -42,7 +43,8 @@ namespace Application.Gacha.GachaDraw
             ICurrencyRepository currencyRepo,
             IGachaCacheService cache,
             IUserCacheService userCache,
-             ILogger<GachaDrawService> logger)
+            IUnitOfWork unitOfWork,
+            ILogger<GachaDrawService> logger)
         {
             _banners = banners;
             _pools = pools;
@@ -54,13 +56,12 @@ namespace Application.Gacha.GachaDraw
             _currencyRepo = currencyRepo;
             _cache = cache;
             _userCache = userCache;
+            _unitOfWork = unitOfWork;
             _logger = logger;
         }
         public async Task<DrawResultDto> DrawAsync(string bannerKey, int count, int userId, CancellationToken ct)
         {
-            
-
-            // 1) Redis → 없으면 DB
+            // 1) Redis → 없으면 DB (트랜잭션 밖에서 조회)
             var banner = await GetBannerAsync(bannerKey, ct);
             var pool = await GetPoolAsync(banner.GachaPoolId, ct);
 
@@ -71,15 +72,13 @@ namespace Application.Gacha.GachaDraw
 
             if (pool.Entries.Count == 0)
                 throw new InvalidOperationException("Pool entries missing");
-            _logger.LogInformation(
-    "[GachaDraw] start userId={UserId} bannerKey={BannerKey} count={Count} trace={TraceId}",
-    userId, bannerKey, count,
-    Activity.Current?.TraceId.ToString() ?? "-"
-);
-            // 3) 비용 차감
-            var pay = await PayCostAsync(userId, banner, count, ct);
 
-            // 4) 결과 생성
+            _logger.LogInformation(
+                "[GachaDraw] start userId={UserId} bannerKey={BannerKey} count={Count} trace={TraceId}",
+                userId, bannerKey, count,
+                Activity.Current?.TraceId.ToString() ?? "-");
+
+            // 3) 결과 미리 생성 (트랜잭션 밖 - 순수 계산)
             var pulledEntries = new List<GachaPoolEntryDto>(count);
             bool hasGuaranteed = false;
 
@@ -91,8 +90,8 @@ namespace Application.Gacha.GachaDraw
                 if (entry.Grade >= 4)
                     hasGuaranteed = true;
             }
-            bool guaranteeApplied = false;
 
+            bool guaranteeApplied = false;
             var highGrades = pool.Entries.Where(e => e.Grade >= 4).ToList();
 
             if (count >= 10 && !hasGuaranteed && highGrades.Count > 0)
@@ -100,38 +99,55 @@ namespace Application.Gacha.GachaDraw
                 pulledEntries[count - 1] = highGrades
                     .OrderByDescending(e => e.Grade)
                     .First();
-
                 guaranteeApplied = true;
             }
-            // 5) 결과 아이템 변환
-            var newlyGranted = new HashSet<int>();
-            var results = new List<DrawResultItemDto>(count);
-            for (int i = 0; i < pulledEntries.Count; i++)
+
+            // 4) 트랜잭션 내에서 비용 차감 + 보상 지급 + 로그 저장
+            try
             {
-                var e = pulledEntries[i];
-                bool isGuaranteed = guaranteeApplied && i == pulledEntries.Count - 1;
+                return await _unitOfWork.ExecuteInTransactionAsync(async () =>
+                {
+                    // 4-1) 비용 차감
+                    var pay = await PayCostAsync(userId, banner, count, ct);
 
-                var item = await GrantCharacterOrShardSafeAsync(userId, e, newlyGranted, ct);
+                    // 4-2) 결과 아이템 지급
+                    var newlyGranted = new HashSet<int>();
+                    var results = new List<DrawResultItemDto>(count);
 
-                results.Add(item with { IsGuaranteed = isGuaranteed });
+                    for (int i = 0; i < pulledEntries.Count; i++)
+                    {
+                        var e = pulledEntries[i];
+                        bool isGuaranteed = guaranteeApplied && i == pulledEntries.Count - 1;
+
+                        var item = await GrantCharacterOrShardSafeAsync(userId, e, newlyGranted, ct);
+                        results.Add(item with { IsGuaranteed = isGuaranteed });
+                    }
+
+                    // 4-3) 로그 저장
+                    var log = new Domain.Entities.Gacha.GachaDrawLog
+                    {
+                        UserId = userId,
+                        BannerId = banner.Id,
+                        PoolId = pool.Pool.PoolId,
+                        Timestamp = now,
+                        ResultsJson = JsonSerializer.Serialize(results)
+                    };
+                    await _logRepo.AddAsync(log, ct);
+
+                    _logger.LogInformation(
+                        "[GachaDraw] success userId={UserId} usedTickets={Tickets} usedCurrency={Currency}",
+                        userId, pay.UsedTickets, pay.UsedCurrency);
+
+                    return new DrawResultDto(now, results, pay.UsedTickets, pay.UsedCurrency);
+                }, ct);
             }
-
-            var log = new Domain.Entities.Gacha.GachaDrawLog
+            catch (Exception ex)
             {
-                UserId = userId,
-                BannerId = banner.Id,
-                PoolId = pool.Pool.PoolId,
-                Timestamp = now,
-                ResultsJson = JsonSerializer.Serialize(results)
-            };
-
-            await _logRepo.AddAsync(log, ct);
-            await _logRepo.SaveChangesAsync(ct);
-
-            _logger.LogInformation("[GachaDraw] success userId={UserId} usedTickets={Tickets} usedCurrency={Currency}",
-      userId, pay.UsedTickets, pay.UsedCurrency);
-
-            return new DrawResultDto(now, results, pay.UsedTickets, pay.UsedCurrency);
+                _logger.LogError(ex,
+                    "[GachaDraw] FAILED userId={UserId} bannerKey={BannerKey} count={Count} error={Error}",
+                    userId, bannerKey, count, ex.Message);
+                throw;
+            }
         }
         private async Task<GachaBannerDto> GetBannerAsync(string key, CancellationToken ct)
         {
@@ -304,12 +320,12 @@ namespace Application.Gacha.GachaDraw
                 await _userCache.InvalidateWalletAsync(userId, ct);
             }
 
-            // 2) 티켓 차감
+            // 2) 티켓 차감 (SaveChanges는 트랜잭션 끝에서 처리)
             if (useTickets > 0 && inv != null)
             {
                 inv.TryConsume(useTickets);
-                await _inventoryRepo.SaveChangesAsync(ct);
             }
+
             return new PayCostResult(useTickets, gemCost);
         }
         private GachaPoolEntryDto Pick(IReadOnlyList<GachaPoolEntryDto> entries)
