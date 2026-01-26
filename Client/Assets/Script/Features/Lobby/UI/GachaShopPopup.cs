@@ -37,7 +37,7 @@ public class GachaShopPopup : UIPopup
 
     public void Set(Action fadeIn, GachaCatalogPb gachaCatalog)
     {
-        Debug.Log($"¹è³Ê °¹¼ö {gachaCatalog.Banners.Count}");
+        Debug.Log($"ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ {gachaCatalog.Banners.Count}");
         Set_Banner(gachaCatalog);
         Set_Currency();
         StartCoroutine(LoadGachaScnee(fadeIn));
@@ -54,7 +54,6 @@ public class GachaShopPopup : UIPopup
         {
             if (banner != null)
             {
-                banner.transform.SetParent(pool.transform, false);
                 pool.Return(banner.gameObject);
             }
         }
@@ -70,13 +69,13 @@ public class GachaShopPopup : UIPopup
     }
     private void Set_Banner(GachaCatalogPb gachaCatalog)
     {
-        // ±âÁ¸ ¹è³Ê ¹ÝÈ¯
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
         foreach (var banner in activeBanners)
             pool.Return(banner.gameObject);
 
         activeBanners.Clear();
 
-        // Ç®¿¡¼­ °¡Á®¿Í¼­ »ý¼º
+        // Ç®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ ï¿½ï¿½ï¿½ï¿½
         foreach (var bannerData in gachaCatalog.Banners)
         {
             GameObject go = pool.Get();
@@ -90,7 +89,7 @@ public class GachaShopPopup : UIPopup
         if (activeBanners.Count > 0)
         {
             var firstToggle = activeBanners[0].GetComponent<Toggle>();
-            firstToggle.isOn = true; // ÀÚµ¿ ¼±ÅÃ
+            firstToggle.isOn = true; // ï¿½Úµï¿½ ï¿½ï¿½ï¿½ï¿½
         }
     }
     private void Set_Currency()
@@ -102,7 +101,7 @@ public class GachaShopPopup : UIPopup
     public void Set_Btn(GachaBannerPb data, Sprite bannerImage)
     {
         BannerBG.gameObject.SetActive(true);
-        BannerBG.sprite = bannerImage; // ÀÌ°Å´Â ³ªÁß¿¡ ÇØÁÖÀÚ. ( ÇöÀç ÇØ´ç ÀÌ¹ÌÁö Åõ¸íµµ 0À¸·Î ÇØ³õ¾Ò´Ù. ) 
+        BannerBG.sprite = bannerImage; // ï¿½Ì°Å´ï¿½ ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. ( ï¿½ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½ ï¿½Ø³ï¿½ï¿½Ò´ï¿½. ) 
 
         Gacha_One.onClick.RemoveAllListeners();
         Gacha_Ten.onClick.RemoveAllListeners();
@@ -110,12 +109,12 @@ public class GachaShopPopup : UIPopup
         GachaNetwork network = NetworkManager.Instance.GachaNetwork;
         Gacha_One.onClick.AddListener(() =>
         {
-            Debug.Log($"»Ì±â 1È¸ : {data.Title}");
+            Debug.Log($"ï¿½Ì±ï¿½ 1È¸ : {data.Title}");
             StartCoroutine(network.DrawAsync(data.Key, 1, (res) =>
             {
                 if (!res.Ok)
                 {
-                    Debug.LogError($"Draw ½ÇÆÐ: {res.Message}");
+                    Debug.LogError($"Draw ï¿½ï¿½ï¿½ï¿½: {res.Message}");
                     return;
                 }
 
@@ -126,12 +125,12 @@ public class GachaShopPopup : UIPopup
 
         Gacha_Ten.onClick.AddListener(() =>
         {
-            Debug.Log($"»Ì±â 10È¸ : {data.Title}");
+            Debug.Log($"ï¿½Ì±ï¿½ 10È¸ : {data.Title}");
             StartCoroutine(network.DrawAsync(data.Key, 10, (res) =>
             {
                 if (!res.Ok)
                 {
-                    Debug.LogError($"Draw ½ÇÆÐ: {res.Message}");
+                    Debug.LogError($"Draw ï¿½ï¿½ï¿½ï¿½: {res.Message}");
                     return;
                 }
 
@@ -139,7 +138,7 @@ public class GachaShopPopup : UIPopup
                 LobbyRootController.Instance.Show("GachaResult");
             }));
         });
-        Gacha_Ten.onClick.AddListener(() => Console.WriteLine($"»Ì±â 10È¸ : {data.Title}"));
+        Gacha_Ten.onClick.AddListener(() => Console.WriteLine($"ï¿½Ì±ï¿½ 10È¸ : {data.Title}"));
     }
 
 }

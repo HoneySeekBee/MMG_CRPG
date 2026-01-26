@@ -33,8 +33,13 @@ public class ObjectPool : MonoBehaviour
     public void Return(GameObject go)
     {
         go.SetActive(false);
-        if (this.transform != null)
+
+        // 풀이 활성 상태이고, 이미 자식이 아닐 때만 부모 변경
+        if (gameObject.activeInHierarchy && go.transform.parent != transform)
+        {
             go.transform.SetParent(transform);
+        }
+
         _pool.Enqueue(go);
     }
 }
