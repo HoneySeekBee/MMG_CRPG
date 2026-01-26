@@ -110,18 +110,8 @@ namespace Application.Gacha.GachaDraw
                     // 4-1) 비용 차감
                     var pay = await PayCostAsync(userId, banner, count, ct);
 
-                    // 4-2) 결과 아이템 지급
-                    var newlyGranted = new HashSet<int>();
-                    var results = new List<DrawResultItemDto>(count);
-
-                    for (int i = 0; i < pulledEntries.Count; i++)
-                    {
-                        var e = pulledEntries[i];
-                        bool isGuaranteed = guaranteeApplied && i == pulledEntries.Count - 1;
-
-                        var item = await GrantCharacterOrShardSafeAsync(userId, e, newlyGranted, ct);
-                        results.Add(item with { IsGuaranteed = isGuaranteed });
-                    }
+                    // 4-2) 배치 처리로 N+1 해결
+                    var results = await GrantRewardsBatchAsync(userId, pulledEntries, guaranteeApplied, ct);
 
                     // 4-3) 로그 저장
                     var log = new Domain.Entities.Gacha.GachaDrawLog
@@ -177,45 +167,77 @@ namespace Application.Gacha.GachaDraw
 
             return pool;
         }
-        private async Task<DrawResultItemDto> GrantCharacterOrShardSafeAsync(
-    int userId,
-    GachaPoolEntryDto entry,
-    HashSet<int> newlyGranted,
-    CancellationToken ct)
+        /// <summary>
+        /// 배치 처리로 N+1 문제 해결
+        /// - 캐릭터 보유 여부 한 번에 조회
+        /// - 파편 아이템 한 번에 조회
+        /// - 신규 캐릭터 한 번에 추가
+        /// </summary>
+        private async Task<List<DrawResultItemDto>> GrantRewardsBatchAsync(
+            int userId,
+            List<GachaPoolEntryDto> pulledEntries,
+            bool guaranteeApplied,
+            CancellationToken ct)
         {
             var now = DateTimeOffset.UtcNow;
+            var results = new List<DrawResultItemDto>(pulledEntries.Count);
 
-            // 1) 이번 요청 내에서 이미 신규 지급으로 처리한 CharacterId면 무조건 shard
-            if (newlyGranted.Contains(entry.CharacterId))
-                return await GrantShardAsync(userId, entry, ct);
+            // 1) 뽑은 캐릭터 ID 목록 (중복 제거)
+            var pulledCharacterIds = pulledEntries.Select(e => e.CharacterId).Distinct().ToList();
 
-            // 2) DB에 이미 보유중이면 shard
-            var existing = await _charRepo.GetAsync(userId, entry.CharacterId, ct);
-            if (existing != null)
-                return await GrantShardAsync(userId, entry, ct);
+            // 2) 유저가 이미 보유한 캐릭터 ID 한 번에 조회
+            var ownedIds = await _charRepo.GetOwnedCharacterIdsAsync(userId, pulledCharacterIds, ct);
 
-            // 3) 신규 지급
-            var newChar = Domain.Entities.User.UserCharacter.Create(userId, entry.CharacterId, now);
-            await _charRepo.AddAsync(newChar, ct);
-            newlyGranted.Add(entry.CharacterId);
+            // 3) 파편 코드 목록 생성 및 한 번에 조회
+            var shardCodes = pulledCharacterIds.Select(id => $"SHARD_{id}").ToList();
+            var shardItems = await _itemRepo.GetByCodesAsync(shardCodes, ct);
 
-            return new DrawResultItemDto(
-                entry.CharacterId, entry.Grade, entry.RateUp,
-                IsNew: true, IsShard: false, ShardAmount: 0, IsGuaranteed: false);
-        }
-        private async Task<DrawResultItemDto> GrantShardAsync(int userId, GachaPoolEntryDto entry, CancellationToken ct)
-        {
-            string shardCode = $"SHARD_{entry.CharacterId}";
-            var shard = await _itemRepo.GetByCodeAsync(shardCode, false, ct)
-                ?? throw new InvalidOperationException($"Shard not found: {shardCode}");
+            // 4) 이번 요청에서 신규로 지급한 캐릭터 추적
+            var newlyGrantedThisRequest = new HashSet<int>();
+            var newCharactersToAdd = new List<Domain.Entities.User.UserCharacter>();
 
-            int amount = entry.Grade switch { 3 => 5, 4 => 10, 5 => 15, 6 => 20, 7 => 30, _ => 5 };
+            // 5) 결과 처리
+            for (int i = 0; i < pulledEntries.Count; i++)
+            {
+                var entry = pulledEntries[i];
+                bool isGuaranteed = guaranteeApplied && i == pulledEntries.Count - 1;
+                bool isNew = false;
+                bool isShard = false;
+                int shardAmount = 0;
 
-            await _inventoryRepo.AddItemAsync(userId, shard.Id, amount, ct);
+                // 이미 보유 중이거나 이번 요청에서 이미 지급한 경우 → 파편
+                if (ownedIds.Contains(entry.CharacterId) || newlyGrantedThisRequest.Contains(entry.CharacterId))
+                {
+                    isShard = true;
+                    shardAmount = GetShardAmount(entry.Grade);
 
-            return new DrawResultItemDto(
-                entry.CharacterId, entry.Grade, entry.RateUp,
-                IsNew: false, IsShard: true, ShardAmount: amount, IsGuaranteed: false);
+                    var shardCode = $"SHARD_{entry.CharacterId}";
+                    if (!shardItems.TryGetValue(shardCode, out var shard))
+                        throw new InvalidOperationException($"Shard not found: {shardCode}");
+
+                    await _inventoryRepo.AddItemAsync(userId, shard.Id, shardAmount, ct);
+                }
+                else
+                {
+                    // 신규 캐릭터
+                    isNew = true;
+                    var newChar = Domain.Entities.User.UserCharacter.Create(userId, entry.CharacterId, now);
+                    newCharactersToAdd.Add(newChar);
+                    newlyGrantedThisRequest.Add(entry.CharacterId);
+                }
+
+                results.Add(new DrawResultItemDto(
+                    entry.CharacterId, entry.Grade, entry.RateUp,
+                    isNew, isShard, shardAmount, isGuaranteed));
+            }
+
+            // 6) 신규 캐릭터 한 번에 추가
+            if (newCharactersToAdd.Count > 0)
+            {
+                await _charRepo.AddRangeAsync(newCharactersToAdd, ct);
+            }
+
+            return results;
         }
         // Character 지급
         private async Task<DrawResultItemDto> GrantCharacterOrShardAsync(int userId, GachaPoolEntryDto entry, CancellationToken ct)

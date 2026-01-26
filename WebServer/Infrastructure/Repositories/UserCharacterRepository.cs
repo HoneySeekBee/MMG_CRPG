@@ -24,6 +24,23 @@ namespace Infrastructure.Repositories
         public Task AddAsync(UserCharacter entity, CancellationToken ct = default)
             => _db.UserCharacters.AddAsync(entity, ct).AsTask();
 
+        public async Task AddRangeAsync(IEnumerable<UserCharacter> entities, CancellationToken ct = default)
+            => await _db.UserCharacters.AddRangeAsync(entities, ct);
+
+        public async Task<HashSet<int>> GetOwnedCharacterIdsAsync(int userId, IEnumerable<int> characterIds, CancellationToken ct = default)
+        {
+            var ids = characterIds.ToList();
+            if (ids.Count == 0) return new HashSet<int>();
+
+            var owned = await _db.UserCharacters
+                .AsNoTracking()
+                .Where(x => x.UserId == userId && ids.Contains(x.CharacterId))
+                .Select(x => x.CharacterId)
+                .ToListAsync(ct);
+
+            return owned.ToHashSet();
+        }
+
         public async Task<(IReadOnlyList<UserCharacter> Items, int TotalCount)> GetListAsync(int userId, int page, int pageSize, CancellationToken ct = default)
         {
             var q = _db.UserCharacters

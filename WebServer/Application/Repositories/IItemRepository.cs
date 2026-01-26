@@ -17,6 +17,11 @@ namespace Application.Repositories
         Task<Item?> GetByIdAsync(long id, bool includeChildren, CancellationToken ct);
         Task<Item?> GetByCodeAsync(string code, bool includeChildren, CancellationToken ct);
 
+        /// <summary>
+        /// 여러 코드로 아이템 배치 조회 (N+1 방지용)
+        /// </summary>
+        Task<Dictionary<string, Item>> GetByCodesAsync(IEnumerable<string> codes, CancellationToken ct);
+
         Task<(IReadOnlyList<Item> Items, long TotalCount)> SearchAsync(
             ListItemsRequest req,
             CancellationToken ct);

@@ -42,6 +42,19 @@ namespace Infrastructure.Repositories
             return await q.FirstOrDefaultAsync(i => i.Code == code, ct);
         }
 
+        public async Task<Dictionary<string, Item>> GetByCodesAsync(IEnumerable<string> codes, CancellationToken ct)
+        {
+            var codeList = codes.ToList();
+            if (codeList.Count == 0) return new Dictionary<string, Item>();
+
+            var items = await _db.Items
+                .AsNoTracking()
+                .Where(i => codeList.Contains(i.Code))
+                .ToListAsync(ct);
+
+            return items.ToDictionary(i => i.Code);
+        }
+
         public async Task<(IReadOnlyList<Item> Items, long TotalCount)> SearchAsync(
             ListItemsRequest req, CancellationToken ct)
         {
