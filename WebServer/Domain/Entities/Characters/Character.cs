@@ -93,6 +93,13 @@ namespace Domain.Entities.Characters
 
         public void SetMeta(string? json) => MetaJson = json;
 
+        public void SetRarity(int rarityId) => RarityId = rarityId;
+        public void SetFaction(int factionId) => FactionId = factionId;
+        public void SetRole(int roleId) => RoleId = roleId;
+        public void SetElement(int elementId) => ElementId = elementId;
+
+        public void ClearTags() => _tags.Clear();
+
         public void AddTag(string tag)
         {
             tag = (tag ?? string.Empty).Trim();

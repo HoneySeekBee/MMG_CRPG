@@ -91,32 +91,24 @@ namespace Application.Character
                 => v.HasValue ? v.Value.ToUniversalTime() : v;
 
             entity.Rename(req.Name);
-            // 단순 세터 사용
-            if (entity.RarityId != req.RarityId) typeof(Domain.Entities.Characters.Character).GetProperty("RarityId")!.SetValue(entity, req.RarityId);
-            if (entity.FactionId != req.FactionId) typeof(Domain.Entities.Characters.Character).GetProperty("FactionId")!.SetValue(entity, req.FactionId);
-            if (entity.RoleId != req.RoleId) typeof(Domain.Entities.Characters.Character).GetProperty("RoleId")!.SetValue(entity, req.RoleId);
-            if (entity.ElementId != req.ElementId) typeof(Domain.Entities.Characters.Character).GetProperty("ElementId")!.SetValue(entity, req.ElementId);
+            entity.SetRarity(req.RarityId);
+            entity.SetFaction(req.FactionId);
+            entity.SetRole(req.RoleId);
+            entity.SetElement(req.ElementId);
 
             entity.SetIcon(req.IconId);
             entity.SetPortrait(req.PortraitId);
             entity.SetReleaseDate(ToUtc(req.ReleaseDate));
             entity.SetLimited(req.IsLimited);
-            entity.SetMeta(req.MetaJson);
-
             entity.SetMeta(NormalizeJsonOrNull(req.MetaJson));
+
             // 태그 전체 교체
-            var tagField = typeof(Domain.Entities.Characters.Character).GetField("_tags", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            if (tagField != null)
+            entity.ClearTags();
+            if (req.Tags != null)
             {
-                var list = (List<string>)tagField.GetValue(entity)!;
-                list.Clear();
-                if (req.Tags != null)
+                foreach (var t in req.Tags)
                 {
-                    foreach (var t in req.Tags)
-                    {
-                        var tag = (t ?? string.Empty).Trim();
-                        if (tag.Length > 0 && !list.Contains(tag)) list.Add(tag);
-                    }
+                    entity.AddTag(t);
                 }
             }
 
