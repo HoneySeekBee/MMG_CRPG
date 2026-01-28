@@ -71,3 +71,14 @@ secrets.json
 **/appsettings.Production.json
 **/appsettings.Development.json
 **/out/
+
+# --- AI / MCP tooling ---
+.claude/
+.mcp.json
+mcp.json
+mcp.local.json
+
+# --- local git mirror backups ---
+MMG_CRPG_backup.git/
+*.backup.git/
+
