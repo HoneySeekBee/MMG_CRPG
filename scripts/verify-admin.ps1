@@ -1,4 +1,6 @@
-﻿$ErrorActionPreference = "Stop"
+﻿# Utility scripts
+
+$ErrorActionPreference = "Stop"
 
 Write-Host "== Verify AdminTool =="
 
