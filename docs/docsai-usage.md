@@ -1,6 +1,6 @@
 \# AI Usage Rules (Claude Code + MCP)
 
-
+<!-- Project documentation -->
 
 \## 허용되는 작업
 
@@ -33,6 +33,4 @@
 3\) 커밋
 
 4\) PR 생성 후 CI 통과 확인
-
-
 
