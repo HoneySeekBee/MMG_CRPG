@@ -22,11 +22,11 @@ namespace Infrastructure.Services
         private static string WalletKey(int userId) => $"user:{userId}:wallet";
 
         // ---- TTL 정책 ----
-        // ProfileCore: 10~30분 + 지터
+        // ProfileCore: 20~30분 + 지터
         private static readonly TimeSpan ProfileCoreTtlBase = TimeSpan.FromMinutes(20);
         private static readonly TimeSpan ProfileCoreTtlJitter = TimeSpan.FromMinutes(10);
 
-        // Wallet: 10~60초 + 지터
+        // Wallet: 30~60초 + 지터
         private static readonly TimeSpan WalletTtlBase = TimeSpan.FromSeconds(30);
         private static readonly TimeSpan WalletTtlJitter = TimeSpan.FromSeconds(30);
 
