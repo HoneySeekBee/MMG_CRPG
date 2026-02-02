@@ -11,7 +11,6 @@ namespace Domain.Combat.Engine.TickSystems
     public sealed class AttackSystem
     {
         private const float AttackSpeedScale = 2.0f;
-        private readonly Random _rng = new(); // TODO: 나중에 Seed/IRandomProvider로 교체 
         public void Run(CombatRuntimeState s, List<CombatLogEvent> evs, int dtMs)
         {
             foreach (var actor in s.ActiveActors.Values.Where(a => !a.Dead && a.Hp > 0))

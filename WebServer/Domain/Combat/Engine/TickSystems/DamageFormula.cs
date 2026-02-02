@@ -8,7 +8,6 @@ namespace Domain.Combat.Engine.TickSystems
 {
     public static class DamageFormula
     {
-        private static readonly Random _rng = new();
         public static int ComputeBase(int atk, int def)
         {
             float fAtk = atk;
@@ -44,7 +43,7 @@ namespace Domain.Combat.Engine.TickSystems
 
             int dmg = ComputeBase(atk, (int)effectiveDef);
 
-            isCrit = _rng.NextDouble() < critRate;
+            isCrit = Random.Shared.NextDouble() < critRate;
             if (isCrit)
                 dmg = (int)(dmg * (1f + (float)critDamage));
 
