@@ -80,7 +80,14 @@ namespace WebServer.Extensions
                 o.CustomSchemaIds(t => t.FullName?.Replace("+", "."));
             });
 
-            s.AddCors(o => o.AddDefaultPolicy(p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+            var allowedOrigins = cfg.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
+            s.AddCors(o => o.AddDefaultPolicy(p =>
+            {
+                if (allowedOrigins.Length > 0)
+                    p.WithOrigins(allowedOrigins).AllowAnyHeader().AllowAnyMethod();
+                else
+                    p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+            }));
 
             // 캐시 (싱글턴)
             s.AddSingleton<IItemTypeCache, ItemTypeCache>();
