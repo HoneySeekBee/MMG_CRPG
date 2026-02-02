@@ -42,7 +42,8 @@ namespace Infrastructure.Auth
 
                 return CryptographicOperations.FixedTimeEquals(computed, key);
             }
-            catch { return false; }
+            catch (FormatException) { return false; }
+            catch (OverflowException) { return false; }
         }
     }
 }
