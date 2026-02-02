@@ -62,13 +62,13 @@ public class Program
 
         var builder = WebApplication.CreateBuilder(args);
          
-        // 1) ¿É¼Ç + ±â¹İ
+        // 1) ï¿½É¼ï¿½ + ï¿½ï¿½ï¿½
         builder.Services
             .AddPersistence(builder.Configuration)   // DbContext/Factory
-            .AddProtoFormatters()                    // Protobuf Æ÷¸ËÅÍ
+            .AddProtoFormatters()                    // Protobuf ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             .AddJwtAuth(builder.Configuration)       // AuthN/AuthZ
-            .AddApplicationServices(builder.Configuration) // DI ¹­À½
-            .AddHostedWorkers();                     // Ä³½Ã ¿ö¹Ö¾÷ µî
+            .AddApplicationServices(builder.Configuration) // DI ï¿½ï¿½ï¿½ï¿½
+            .AddHostedWorkers();                     // Ä³ï¿½ï¿½ ï¿½ï¿½ï¿½Ö¾ï¿½ ï¿½ï¿½
 
         builder.Services.AddHealthChecks();
         builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
@@ -108,6 +108,13 @@ public class Program
 
         var app = builder.Build();
 
+        // ìë™ Migration ì ìš©
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<GameDBContext>();
+            await db.Database.MigrateAsync();
+        }
+
         if (app.Environment.IsDevelopment())
         {
             using var scope = app.Services.CreateScope();
@@ -118,7 +125,7 @@ public class Program
             await loader.LoadAllAsync();
         }
 
-        // 2) ¹Ìµé¿ş¾î
+        // 2) ï¿½Ìµï¿½ï¿½ï¿½ï¿½
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
@@ -136,7 +143,7 @@ public class Program
 
         //app.UseHttpsRedirection();
 
-        // Á¤Àû ÆÄÀÏ + °­ Ä³½Ã Çì´õ(ÀÌ¹ÌÁö)
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ + ï¿½ï¿½ Ä³ï¿½ï¿½ ï¿½ï¿½ï¿½(ï¿½Ì¹ï¿½ï¿½ï¿½)
         app.UseStaticFiles(new StaticFileOptions
         {
             OnPrepareResponse = ctx =>

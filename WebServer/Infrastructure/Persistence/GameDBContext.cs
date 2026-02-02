@@ -4,11 +4,13 @@ using Domain.Entities.Contents;
 using Domain.Entities.Gacha;
 using Domain.Entities.Monsters;
 using Domain.Entities.Skill;
+using Domain.Entities.Shop;
 using Domain.Entities.User;
 using Infrastructure.Persistence.Configurations.Characters;
 using Infrastructure.Persistence.Configurations.Contents;
 using Infrastructure.Persistence.Configurations.Gacha;
 using Infrastructure.Persistence.Configurations.Items;
+using ShopConfigurations = Infrastructure.Persistence.Configurations.Shop;
 using Infrastructure.Persistence.Configurations.MasterData;
 using Infrastructure.Persistence.Configurations.Monsters;
 using Infrastructure.Persistence.Configurations.Users;
@@ -94,6 +96,13 @@ namespace Infrastructure.Persistence
         public DbSet<CharacterExp> CharacterExps => Set<CharacterExp>();
         public DbSet<UserParty> UserParties => Set<UserParty>();
         public DbSet<UserPartySlot> UserPartySlots => Set<UserPartySlot>();
+
+        #region Shop
+        public DbSet<Domain.Entities.Shop.Shop> Shops => Set<Domain.Entities.Shop.Shop>();
+        public DbSet<ShopProduct> ShopProducts => Set<ShopProduct>();
+        public DbSet<UserPurchaseLog> UserPurchaseLogs => Set<UserPurchaseLog>();
+        #endregion
+
         #region Contents
         public DbSet<Battle> Battles => Set<Battle>();
         public DbSet<Chapter> Chapters => Set<Chapter>();
@@ -157,6 +166,12 @@ namespace Infrastructure.Persistence
             modelBuilder.ApplyConfiguration(new StageWaveEnemiesConfiguration());
             modelBuilder.ApplyConfiguration(new StageBatchConfiguration());
 
+            #endregion
+
+            #region Shop
+            modelBuilder.ApplyConfiguration(new ShopConfigurations.ShopConfiguration());
+            modelBuilder.ApplyConfiguration(new ShopConfigurations.ShopProductConfiguration());
+            modelBuilder.ApplyConfiguration(new ShopConfigurations.UserPurchaseLogConfiguration());
             #endregion
 
             #region Gacha
