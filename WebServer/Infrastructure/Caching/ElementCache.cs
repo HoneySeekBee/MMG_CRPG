@@ -38,7 +38,7 @@ namespace Infrastructure.Caching
                     e.ColorHex,
                     e.SortOrder,
                     e.IsActive,
-                    e.Meta ?? string.Empty,
+                    e.Meta ?? "{}",
                     e.CreatedAt,
                     e.UpdatedAt
                 ))
