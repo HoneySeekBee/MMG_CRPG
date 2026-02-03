@@ -5,8 +5,8 @@
     ViewData["Title"] = "Shops";
     var filter = ViewBag.Filter as ShopListFilterVm ?? new ShopListFilterVm();
     var page = ViewBag.Page;
-    int currentPage = (int)(page?.Page ?? filter.Page);
-    int totalPages = (int)(page?.TotalPages ?? 1);
+    int currentPage = page != null ? (int)page.Page : filter.Page;
+    int totalPages = page != null ? (int)page.TotalPages : 1;
 }
 
 <div class="container py-3">
