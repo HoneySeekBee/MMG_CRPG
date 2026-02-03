@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Presentation.Controllers.Admin
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/elementaffinity")]
     public class AdminElementAffinityController : ControllerBase
     {
         private readonly IElementAffinityService _svc;

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Presentation.Controllers.Admin
 {
     [ApiController]
-    [Route("api/[controller]")] // /api/stattypes
+    [Route("api/stattypes")]
     public sealed class AdminStatTypesController : ControllerBase
     {
         private readonly IStatTypeService _svc;

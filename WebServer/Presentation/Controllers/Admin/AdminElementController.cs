@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Presentation.Controllers.Admin
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/element")]
     public class AdminElementController : ControllerBase
     {
         private readonly IElementService _svc;

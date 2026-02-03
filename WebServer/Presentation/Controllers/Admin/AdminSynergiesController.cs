@@ -5,7 +5,7 @@ using System.Net.Mime;
 namespace Presentation.Controllers.Admin
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/synergies")]
     [Produces(MediaTypeNames.Application.Json)]
     public sealed class AdminSynergiesController : ControllerBase
     {

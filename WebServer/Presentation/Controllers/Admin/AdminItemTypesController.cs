@@ -8,7 +8,7 @@ using Npgsql;
 namespace Presentation.Controllers.Admin
 {
     [ApiController]
-    [Route("api/[controller]")]          // /api/itemtypes
+    [Route("api/itemtypes")]
     public sealed class AdminItemTypesController : ControllerBase
     {
         private readonly IItemTypeService _svc;

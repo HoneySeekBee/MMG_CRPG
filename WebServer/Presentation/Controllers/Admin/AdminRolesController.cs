@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Presentation.Controllers.Admin
 {
     [ApiController]
-    [Route("api/[controller]")] // /api/roles
+    [Route("api/roles")]
     public sealed class AdminRolesController : ControllerBase
     {
         private readonly IRoleService _svc;

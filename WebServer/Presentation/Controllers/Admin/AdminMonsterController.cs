@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Presentation.Controllers.Admin
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/monster")]
     public class AdminMonsterController : ControllerBase
     {
         private readonly IMonsterService _service;

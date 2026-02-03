@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Presentation.Controllers.Admin
 {
     [ApiController]
-    [Route("api/[controller]")] // /api/skills
+    [Route("api/skills")]
     public sealed class AdminSkillsController : ControllerBase
     {
         private readonly ISkillService _svc;

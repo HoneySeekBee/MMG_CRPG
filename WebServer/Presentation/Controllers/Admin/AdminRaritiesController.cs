@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Presentation.Controllers.Admin
 {
     [ApiController]
-    [Route("api/[controller]")] // /api/rarities
+    [Route("api/rarities")]
     public sealed class AdminRaritiesController : ControllerBase
     {
         private readonly IRarityService _svc;

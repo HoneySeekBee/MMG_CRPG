@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Presentation.Controllers.Admin
 {
     [ApiController]
-    [Route("api/[controller]")] // => api/portraits
+    [Route("api/portraits")]
     public sealed class AdminPortraitsController : ControllerBase
     {
         private readonly PortraitService _svc;

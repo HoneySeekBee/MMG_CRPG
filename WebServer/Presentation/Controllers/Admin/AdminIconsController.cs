@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Presentation.Controllers.Admin
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/icons")]
     public class AdminIconsController : ControllerBase
     {
         private readonly IconService _svc;

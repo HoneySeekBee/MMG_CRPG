@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Presentation.Controllers.Admin.Gacha
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/gachabanner")]
     public sealed class AdminGachaBannerController : ControllerBase
     {
         private readonly IGachaBannerService _service;

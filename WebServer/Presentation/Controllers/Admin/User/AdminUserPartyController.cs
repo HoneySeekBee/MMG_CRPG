@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Presentation.Controllers.Admin.User
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/userparty")]
     public class AdminUserPartyController : ControllerBase
     {
         private readonly IUserPartyRepository _repo;

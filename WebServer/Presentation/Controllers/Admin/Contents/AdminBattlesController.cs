@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Presentation.Controllers.Admin.Contents
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/battles")]
     public class AdminBattlesController : ControllerBase
     {
         private readonly IBattlesService _battleService;

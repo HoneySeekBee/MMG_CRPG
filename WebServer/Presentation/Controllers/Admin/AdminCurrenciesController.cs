@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Presentation.Controllers.Admin
 {
     [ApiController]
-    [Route("api/[controller]")] // /api/currencies
+    [Route("api/currencies")]
     public sealed class AdminCurrenciesController : ControllerBase
     {
         private readonly ICurrencyService _svc;

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Presentation.Controllers.Admin
 {
     [ApiController]
-    [Route("api/[controller]")] // /api/factions
+    [Route("api/factions")]
     public sealed class AdminFactionsController : ControllerBase
     {
         private readonly IFactionService _svc;

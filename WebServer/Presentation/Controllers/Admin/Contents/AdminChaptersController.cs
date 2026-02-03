@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Presentation.Controllers.Admin.Contents
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/chapters")]
     public class AdminChaptersController : ControllerBase
     {
         private readonly IChapterService _chapterService;
