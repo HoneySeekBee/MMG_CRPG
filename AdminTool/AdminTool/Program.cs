@@ -38,9 +38,22 @@ namespace AdminTool
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(
                     new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                client.Timeout = TimeSpan.FromSeconds(10);
             })
-.AddHttpMessageHandler<TokenAttachHandler>();
+.AddHttpMessageHandler<TokenAttachHandler>()
+.AddStandardResilienceHandler(options =>
+{
+    options.Retry.ShouldHandle = args =>
+    {
+        if (args.Outcome.Result is HttpResponseMessage resp
+            && resp.RequestMessage?.Method != HttpMethod.Get)
+        {
+            return ValueTask.FromResult(false);
+        }
+        return ValueTask.FromResult(
+            Microsoft.Extensions.Http.Resilience.HttpClientResiliencePredicates
+                .IsTransient(args.Outcome));
+    };
+});
 
             builder.Services.AddSingleton<IAdminAssetCatalog, AdminAssetCatalog>();
             builder.Services.AddSession(o =>
