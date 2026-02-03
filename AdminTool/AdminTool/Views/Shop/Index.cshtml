@@ -1,0 +1,146 @@
+@using AdminTool.Models
+@model List<ShopVm>
+
+@{
+    ViewData["Title"] = "Shops";
+    var filter = ViewBag.Filter as ShopListFilterVm ?? new ShopListFilterVm();
+    var page = ViewBag.Page;
+    int currentPage = (int)(page?.Page ?? filter.Page);
+    int totalPages = (int)(page?.TotalPages ?? 1);
+}
+
+<div class="container py-3">
+    <div class="d-flex align-items-center mb-3">
+        <h2 class="mb-0">Shops</h2>
+        <a class="btn btn-primary ms-auto me-2" href="/admin/shop/new">+ New Shop</a>
+        <a class="btn btn-outline-secondary" href="/admin/shop/logs">Purchase Logs</a>
+    </div>
+
+    @if (TempData["Message"] is string msg)
+    {
+        <div class="alert alert-success">@msg</div>
+    }
+    @if (TempData["Error"] is string err)
+    {
+        <div class="alert alert-danger">@err</div>
+    }
+
+    <!-- Filter -->
+    <form method="get" class="card card-body mb-3">
+        <div class="row g-2">
+            <div class="col-md-2">
+                <label class="form-label">Type</label>
+                <select name="shopType" class="form-select">
+                    <option value="">All</option>
+                    <option value="0" selected="@(filter.ShopType == 0)">General</option>
+                    <option value="1" selected="@(filter.ShopType == 1)">TimeLimited</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Active</label>
+                <select name="isActive" class="form-select">
+                    <option value="">All</option>
+                    <option value="true" selected="@(filter.IsActive == true)">Active</option>
+                    <option value="false" selected="@(filter.IsActive == false)">Inactive</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Search</label>
+                <input type="text" name="search" class="form-control"
+                       value="@filter.Search" placeholder="Name or Code" />
+            </div>
+            <div class="col-12 d-flex gap-2 mt-2">
+                <button type="submit" class="btn btn-primary">Filter</button>
+                <a href="/admin/shop" class="btn btn-outline-secondary">Reset</a>
+            </div>
+        </div>
+    </form>
+
+    <!-- Table -->
+    <div class="table-responsive">
+        <table class="table table-sm table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Code</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Period</th>
+                    <th>Order</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @if (Model.Count == 0)
+            {
+                <tr><td colspan="8" class="text-center text-muted py-4">No shops</td></tr>
+            }
+            else
+            {
+                foreach (var x in Model)
+                {
+                    <tr>
+                        <td>@x.Id</td>
+                        <td><code>@x.Code</code></td>
+                        <td>@x.Name</td>
+                        <td>
+                            @if (x.ShopType == 0)
+                            { <span class="badge bg-info">General</span> }
+                            else
+                            { <span class="badge bg-warning text-dark">TimeLimited</span> }
+                        </td>
+                        <td>
+                            @if (x.ShopType == 1 && x.StartsAt.HasValue && x.EndsAt.HasValue)
+                            {
+                                <small>@x.StartsAt.Value.ToString("yyyy-MM-dd") ~ @x.EndsAt.Value.ToString("yyyy-MM-dd")</small>
+                            }
+                            else
+                            {
+                                <span class="text-muted">-</span>
+                            }
+                        </td>
+                        <td>@x.SortOrder</td>
+                        <td>
+                            @if (x.IsActive)
+                            { <span class="badge bg-success">Active</span> }
+                            else
+                            { <span class="badge bg-secondary">Inactive</span> }
+                        </td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-primary" href="/admin/shop/@x.Id">Edit</a>
+                            <form method="post" action="/admin/shop/@x.Id/delete"
+                                  class="d-inline"
+                                  onsubmit="return confirm('Delete shop @x.Code ?');">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    @if (totalPages > 1)
+    {
+        <nav class="mt-2">
+            <ul class="pagination pagination-sm mb-0">
+                <li class="page-item @(currentPage <= 1 ? "disabled" : "")">
+                    <a class="page-link" href="/admin/shop?page=@(currentPage-1)&shopType=@filter.ShopType&isActive=@filter.IsActive&search=@filter.Search">Prev</a>
+                </li>
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    <li class="page-item @(i == currentPage ? "active" : "")">
+                        <a class="page-link" href="/admin/shop?page=@i&shopType=@filter.ShopType&isActive=@filter.IsActive&search=@filter.Search">@i</a>
+                    </li>
+                }
+                <li class="page-item @(currentPage >= totalPages ? "disabled" : "")">
+                    <a class="page-link" href="/admin/shop?page=@(currentPage+1)&shopType=@filter.ShopType&isActive=@filter.IsActive&search=@filter.Search">Next</a>
+                </li>
+            </ul>
+        </nav>
+    }
+</div>

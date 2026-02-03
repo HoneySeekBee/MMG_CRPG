@@ -1,0 +1,247 @@
+@using AdminTool.Models
+@model ShopEditVm
+
+@{
+    ViewData["Title"] = $"Edit Shop - {Model.Code}";
+}
+
+<div class="container py-3">
+    <div class="d-flex align-items-center mb-3">
+        <h2 class="mb-0">Edit Shop</h2>
+        <a class="btn btn-outline-secondary ms-auto" href="/admin/shop">← Back</a>
+    </div>
+
+    @if (TempData["Message"] is string msg)
+    {
+        <div class="alert alert-success">@msg</div>
+    }
+    @if (TempData["Error"] is string err)
+    {
+        <div class="alert alert-danger">@err</div>
+    }
+
+    <!-- ═══════ Shop Form ═══════ -->
+    <form method="post" action="/admin/shop/@Model.Id" class="card mb-4" novalidate>
+        @Html.AntiForgeryToken()
+        <div class="card-body">
+            <h5 class="mb-3">Shop Info</h5>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Code</label>
+                    <input asp-for="Code" class="form-control" readonly />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Name</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Type</label>
+                    <select asp-for="ShopType" class="form-select" id="shopTypeSelect">
+                        <option value="0">General</option>
+                        <option value="1">TimeLimited</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Active</label>
+                    <select asp-for="IsActive" class="form-select">
+                        <option value="true">Active</option>
+                        <option value="false">Inactive</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4 period-fields" style="display:none;">
+                    <label class="form-label">Starts At</label>
+                    <input asp-for="StartsAt" type="datetime-local" class="form-control" />
+                </div>
+                <div class="col-md-4 period-fields" style="display:none;">
+                    <label class="form-label">Ends At</label>
+                    <input asp-for="EndsAt" type="datetime-local" class="form-control" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Sort Order</label>
+                    <input asp-for="SortOrder" type="number" class="form-control" />
+                </div>
+            </div>
+            <div class="mt-3">
+                <button type="submit" class="btn btn-primary">Save Shop</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- ═══════ Products Table ═══════ -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="mb-3">Products</h5>
+            <div class="table-responsive">
+                <table class="table table-sm table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Item</th>
+                            <th>Currency</th>
+                            <th>Price</th>
+                            <th>Qty</th>
+                            <th>Daily</th>
+                            <th>Weekly</th>
+                            <th>Total</th>
+                            <th>Order</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @if (Model.Products.Count == 0)
+                    {
+                        <tr><td colspan="11" class="text-center text-muted py-3">No products</td></tr>
+                    }
+                    else
+                    {
+                        foreach (var p in Model.Products)
+                        {
+                            <tr>
+                                <td>@p.Id</td>
+                                <td>@p.ItemId</td>
+                                <td>@p.CurrencyId</td>
+                                <td>@p.Price.ToString("N0")</td>
+                                <td>@p.QuantityPerPurchase</td>
+                                <td>@(p.DailyLimit?.ToString() ?? "-")</td>
+                                <td>@(p.WeeklyLimit?.ToString() ?? "-")</td>
+                                <td>@(p.TotalLimit?.ToString() ?? "-")</td>
+                                <td>@p.SortOrder</td>
+                                <td>
+                                    @if (p.IsActive)
+                                    { <span class="badge bg-success">Active</span> }
+                                    else
+                                    { <span class="badge bg-secondary">Inactive</span> }
+                                </td>
+                                <td class="text-end text-nowrap">
+                                    <button type="button" class="btn btn-sm btn-outline-primary btn-edit-product"
+                                            data-id="@p.Id" data-item="@p.ItemId" data-currency="@p.CurrencyId"
+                                            data-price="@p.Price" data-qty="@p.QuantityPerPurchase"
+                                            data-daily="@(p.DailyLimit?.ToString() ?? "")"
+                                            data-weekly="@(p.WeeklyLimit?.ToString() ?? "")"
+                                            data-total="@(p.TotalLimit?.ToString() ?? "")"
+                                            data-order="@p.SortOrder"
+                                            data-active="@p.IsActive.ToString().ToLower()">Edit</button>
+                                    <form method="post" action="/admin/shop/@Model.Id/products/@p.Id/delete"
+                                          class="d-inline"
+                                          onsubmit="return confirm('Delete product #@p.Id ?');">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Del</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════ Add / Edit Product Form ═══════ -->
+    <div class="card">
+        <div class="card-body">
+            <h5 class="mb-3" id="productFormTitle">Add Product</h5>
+            <form id="productForm" method="post" action="/admin/shop/@Model.Id/products/add">
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="editProductId" value="0" />
+                <div class="row g-3">
+                    <div class="col-md-2">
+                        <label class="form-label">Item ID</label>
+                        <input type="number" name="ItemId" id="pItemId" class="form-control" required />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Currency ID</label>
+                        <input type="number" name="CurrencyId" id="pCurrencyId" class="form-control" required />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Price</label>
+                        <input type="number" name="Price" id="pPrice" class="form-control" required />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Qty / Purchase</label>
+                        <input type="number" name="QuantityPerPurchase" id="pQty" class="form-control" value="1" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Daily Limit</label>
+                        <input type="number" name="DailyLimit" id="pDaily" class="form-control" placeholder="∞" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Weekly Limit</label>
+                        <input type="number" name="WeeklyLimit" id="pWeekly" class="form-control" placeholder="∞" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Total Limit</label>
+                        <input type="number" name="TotalLimit" id="pTotal" class="form-control" placeholder="∞" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Sort Order</label>
+                        <input type="number" name="SortOrder" id="pOrder" class="form-control" value="0" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Active</label>
+                        <select name="IsActive" id="pActive" class="form-select">
+                            <option value="true">Active</option>
+                            <option value="false">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="d-flex gap-2 mt-3">
+                    <button type="submit" class="btn btn-primary" id="productSubmitBtn">Add Product</button>
+                    <button type="button" class="btn btn-outline-secondary" id="cancelEditBtn" style="display:none;"
+                            onclick="resetProductForm()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // ShopType → 기간 필드 토글
+        const sel = document.getElementById('shopTypeSelect');
+        function togglePeriod() {
+            document.querySelectorAll('.period-fields')
+                .forEach(el => el.style.display = sel.value === '1' ? '' : 'none');
+        }
+        sel.addEventListener('change', togglePeriod);
+        togglePeriod();
+
+        // 상품 Edit 버튼 클릭 → 폼 채우기
+        const shopId = @Model.Id;
+        document.querySelectorAll('.btn-edit-product').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const pid = btn.dataset.id;
+                document.getElementById('editProductId').value = pid;
+                document.getElementById('pItemId').value = btn.dataset.item;
+                document.getElementById('pCurrencyId').value = btn.dataset.currency;
+                document.getElementById('pPrice').value = btn.dataset.price;
+                document.getElementById('pQty').value = btn.dataset.qty;
+                document.getElementById('pDaily').value = btn.dataset.daily;
+                document.getElementById('pWeekly').value = btn.dataset.weekly;
+                document.getElementById('pTotal').value = btn.dataset.total;
+                document.getElementById('pOrder').value = btn.dataset.order;
+                document.getElementById('pActive').value = btn.dataset.active;
+
+                document.getElementById('productForm').action = `/admin/shop/${shopId}/products/${pid}`;
+                document.getElementById('productFormTitle').textContent = `Edit Product #${pid}`;
+                document.getElementById('productSubmitBtn').textContent = 'Update Product';
+                document.getElementById('cancelEditBtn').style.display = '';
+
+                document.getElementById('productForm').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        function resetProductForm() {
+            document.getElementById('editProductId').value = '0';
+            document.getElementById('productForm').action = `/admin/shop/${shopId}/products/add`;
+            document.getElementById('productFormTitle').textContent = 'Add Product';
+            document.getElementById('productSubmitBtn').textContent = 'Add Product';
+            document.getElementById('cancelEditBtn').style.display = 'none';
+            document.getElementById('productForm').reset();
+        }
+    </script>
+}

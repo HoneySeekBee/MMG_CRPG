@@ -1,0 +1,81 @@
+@using AdminTool.Models
+@model ShopEditVm
+
+@{
+    ViewData["Title"] = "New Shop";
+}
+
+<div class="container py-3">
+    <div class="d-flex align-items-center mb-3">
+        <h2 class="mb-0">New Shop</h2>
+        <a class="btn btn-outline-secondary ms-auto" href="/admin/shop">← Back</a>
+    </div>
+
+    @if (TempData["Error"] is string err)
+    {
+        <div class="alert alert-danger">@err</div>
+    }
+
+    <form method="post" action="/admin/shop/new" class="card" novalidate>
+        @Html.AntiForgeryToken()
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Code</label>
+                    <input asp-for="Code" class="form-control" placeholder="GENERAL_EQUIP" />
+                    <span asp-validation-for="Code" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Name</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Type</label>
+                    <select asp-for="ShopType" class="form-select" id="shopTypeSelect">
+                        <option value="0">General</option>
+                        <option value="1">TimeLimited</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Active</label>
+                    <select asp-for="IsActive" class="form-select">
+                        <option value="true">Active</option>
+                        <option value="false">Inactive</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4 period-fields" style="display:none;">
+                    <label class="form-label">Starts At</label>
+                    <input asp-for="StartsAt" type="datetime-local" class="form-control" />
+                </div>
+                <div class="col-md-4 period-fields" style="display:none;">
+                    <label class="form-label">Ends At</label>
+                    <input asp-for="EndsAt" type="datetime-local" class="form-control" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Sort Order</label>
+                    <input asp-for="SortOrder" type="number" class="form-control" />
+                </div>
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn btn-primary">Create</button>
+                <a class="btn btn-outline-secondary" href="/admin/shop">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const sel = document.getElementById('shopTypeSelect');
+        function togglePeriod() {
+            document.querySelectorAll('.period-fields')
+                .forEach(el => el.style.display = sel.value === '1' ? '' : 'none');
+        }
+        sel.addEventListener('change', togglePeriod);
+        togglePeriod();
+    </script>
+}
