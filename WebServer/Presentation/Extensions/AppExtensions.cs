@@ -239,6 +239,13 @@ namespace WebServer.Extensions
             s.AddScoped<IUserCharacterService, UserCharacterService>();
             s.AddScoped<ICharacterEquipmentService, CharacterEquipmentService>();
 
+            // 상점
+            s.AddScoped<IShopRepository, ShopRepository>();
+            s.AddScoped<IShopQueryRepository, ShopQueryRepository>();
+            s.AddScoped<IShopProductRepository, ShopProductRepository>();
+            s.AddScoped<IUserPurchaseLogRepository, UserPurchaseLogRepository>();
+            s.AddScoped<IUserPurchaseLogQueryRepository, UserPurchaseLogQueryRepository>();
+
             // UoW
             s.AddScoped<IUnitOfWork, EfUnitOfWork>();
 
