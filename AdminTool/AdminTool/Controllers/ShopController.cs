@@ -17,7 +17,16 @@ namespace AdminTool.Controllers
         public async Task<IActionResult> Index([FromQuery] ShopListFilterVm filter, CancellationToken ct)
         {
             var qs = BuildShopQuery(filter);
-            var page = await Api.GetFromJsonAsync<PagedResultJson<ShopVm>>($"/api/shop{qs}", ct);
+            PagedResultJson<ShopVm>? page = null;
+
+            try
+            {
+                page = await Api.GetFromJsonAsync<PagedResultJson<ShopVm>>($"/api/shop{qs}", ct);
+            }
+            catch (HttpRequestException ex)
+            {
+                TempData["Error"] = $"API 호출 실패: {ex.Message}";
+            }
 
             ViewBag.Page = page;
             ViewBag.Filter = filter;
@@ -204,8 +213,17 @@ namespace AdminTool.Controllers
         public async Task<IActionResult> Logs([FromQuery] PurchaseLogFilterVm filter, CancellationToken ct)
         {
             var qs = BuildLogQuery(filter);
-            var page = await Api.GetFromJsonAsync<PagedResultJson<PurchaseLogVm>>(
-                $"/api/shop/purchase-logs{qs}", ct);
+            PagedResultJson<PurchaseLogVm>? page = null;
+
+            try
+            {
+                page = await Api.GetFromJsonAsync<PagedResultJson<PurchaseLogVm>>(
+                    $"/api/shop/purchase-logs{qs}", ct);
+            }
+            catch (HttpRequestException ex)
+            {
+                TempData["Error"] = $"API 호출 실패: {ex.Message}";
+            }
 
             ViewBag.Page = page;
             ViewBag.Filter = filter;
