@@ -4,9 +4,8 @@
 @{
     ViewData["Title"] = "Purchase Logs";
     var filter = ViewBag.Filter as PurchaseLogFilterVm ?? new PurchaseLogFilterVm();
-    var page = ViewBag.Page;
-    int currentPage = page != null ? (int)page.Page : filter.Page;
-    int totalPages = page != null ? (int)page.TotalPages : 1;
+    int currentPage = (int)(ViewBag.CurrentPage ?? filter.Page);
+    int totalPages = (int)(ViewBag.TotalPages ?? 1);
 }
 
 <div class="container py-3">

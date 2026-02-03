@@ -28,7 +28,8 @@ namespace AdminTool.Controllers
                 TempData["Error"] = $"API 호출 실패: {ex.Message}";
             }
 
-            ViewBag.Page = page;
+            ViewBag.CurrentPage = page?.Page ?? filter.Page;
+            ViewBag.TotalPages = page?.TotalPages ?? 1;
             ViewBag.Filter = filter;
             return View(page?.Items ?? new List<ShopVm>());
         }
@@ -225,7 +226,8 @@ namespace AdminTool.Controllers
                 TempData["Error"] = $"API 호출 실패: {ex.Message}";
             }
 
-            ViewBag.Page = page;
+            ViewBag.CurrentPage = page?.Page ?? filter.Page;
+            ViewBag.TotalPages = page?.TotalPages ?? 1;
             ViewBag.Filter = filter;
             return View(page?.Items ?? new List<PurchaseLogVm>());
         }
