@@ -1,4 +1,5 @@
 ﻿using Application.Items;
+using Application.Shop;
 using Application.ItemTypes;
 using Application.Users;
 using Application.UserInventory;
@@ -245,6 +246,8 @@ namespace WebServer.Extensions
             s.AddScoped<IShopProductRepository, ShopProductRepository>();
             s.AddScoped<IUserPurchaseLogRepository, UserPurchaseLogRepository>();
             s.AddScoped<IUserPurchaseLogQueryRepository, UserPurchaseLogQueryRepository>();
+            s.AddScoped<IShopService, ShopService>();
+            s.AddScoped<IPurchaseService, PurchaseService>();
 
             // UoW
             s.AddScoped<IUnitOfWork, EfUnitOfWork>();
