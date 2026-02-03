@@ -149,12 +149,24 @@
                 <input type="hidden" id="editProductId" value="0" />
                 <div class="row g-3">
                     <div class="col-md-2">
-                        <label class="form-label">Item ID</label>
-                        <input type="number" name="ItemId" id="pItemId" class="form-control" required />
+                        <label class="form-label">Item</label>
+                        <select name="ItemId" id="pItemId" class="form-select" required>
+                            <option value="">-- Select --</option>
+                            @foreach (var item in Model.Items)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
                     </div>
                     <div class="col-md-2">
-                        <label class="form-label">Currency ID</label>
-                        <input type="number" name="CurrencyId" id="pCurrencyId" class="form-control" required />
+                        <label class="form-label">Currency</label>
+                        <select name="CurrencyId" id="pCurrencyId" class="form-select" required>
+                            <option value="">-- Select --</option>
+                            @foreach (var cur in Model.Currencies)
+                            {
+                                <option value="@cur.Value">@cur.Text</option>
+                            }
+                        </select>
                     </div>
                     <div class="col-md-2">
                         <label class="form-label">Price</label>

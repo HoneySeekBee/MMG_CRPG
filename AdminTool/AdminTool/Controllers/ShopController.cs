@@ -1,5 +1,6 @@
 using AdminTool.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Net;
 
 namespace AdminTool.Controllers
@@ -93,6 +94,7 @@ namespace AdminTool.Controllers
                 Products = dto.Products ?? new()
             };
 
+            await PopulateLookupsAsync(vm, ct);
             return View(vm);
         }
 
@@ -106,6 +108,7 @@ namespace AdminTool.Controllers
                 // 상품 목록 다시 로드
                 var detail = await Api.GetFromJsonAsync<ShopEditJson>($"/api/shop/{id}", ct);
                 vm.Products = detail?.Products ?? new();
+                await PopulateLookupsAsync(vm, ct);
                 return View(vm);
             }
 
@@ -126,6 +129,7 @@ namespace AdminTool.Controllers
                 TempData["Error"] = $"수정 실패: {(int)resp.StatusCode} {body}";
                 var detail = await Api.GetFromJsonAsync<ShopEditJson>($"/api/shop/{id}", ct);
                 vm.Products = detail?.Products ?? new();
+                await PopulateLookupsAsync(vm, ct);
                 return View(vm);
             }
 
@@ -231,6 +235,58 @@ namespace AdminTool.Controllers
             ViewBag.Filter = filter;
             return View(page?.Items ?? new List<PurchaseLogVm>());
         }
+
+        // ═══════ Lookup ═══════
+
+        private async Task PopulateLookupsAsync(ShopEditVm vm, CancellationToken ct)
+        {
+            var client = Api;
+
+            var itemsTask = GetPagedItemsOrEmpty<ItemSimple>(
+                client, "/api/items?pageSize=500&isActive=true", ct);
+            var currenciesTask = GetListOrEmpty<CurrencySimple>(
+                client, "/api/currencies", ct);
+
+            await Task.WhenAll(itemsTask, currenciesTask);
+
+            vm.Items = itemsTask.Result
+                .OrderBy(i => i.Name)
+                .Select(i => new SelectListItem($"{i.Name} (#{i.Id})", i.Id.ToString()))
+                .ToList();
+
+            vm.Currencies = currenciesTask.Result
+                .OrderBy(c => c.Code)
+                .Select(c => new SelectListItem($"{c.Code} - {c.Name}", c.Id.ToString()))
+                .ToList();
+        }
+
+        private static async Task<List<T>> GetPagedItemsOrEmpty<T>(
+            HttpClient client, string url, CancellationToken ct)
+        {
+            try
+            {
+                var env = await client.GetFromJsonAsync<PagedEnvelope<T>>(url, ct);
+                return env?.Items ?? new List<T>();
+            }
+            catch { return new List<T>(); }
+        }
+
+        private static async Task<List<T>> GetListOrEmpty<T>(
+            HttpClient client, string url, CancellationToken ct)
+        {
+            try
+            {
+                using var resp = await client.GetAsync(url, ct);
+                if (resp.StatusCode == HttpStatusCode.NotFound) return new List<T>();
+                resp.EnsureSuccessStatusCode();
+                return await resp.Content.ReadFromJsonAsync<List<T>>(cancellationToken: ct) ?? new List<T>();
+            }
+            catch { return new List<T>(); }
+        }
+
+        private sealed class PagedEnvelope<T> { public List<T>? Items { get; set; } }
+        private sealed record ItemSimple(int Id, string Code, string Name);
+        private sealed record CurrencySimple(short Id, string Code, string Name);
 
         // ═══════ Helper ═══════
 

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AdminTool.Models
 {
@@ -46,6 +47,10 @@ namespace AdminTool.Models
 
         // Edit 페이지에서 하단 상품 목록 표시용
         public List<ShopProductVm> Products { get; set; } = new();
+
+        // 드롭다운 옵션
+        public List<SelectListItem> Items { get; set; } = new();
+        public List<SelectListItem> Currencies { get; set; } = new();
     }
 
     // ───── 상품 행 ─────
