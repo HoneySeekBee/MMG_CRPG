@@ -158,6 +158,7 @@
     <Compile Include="Assets\Script\UI\LoadingSpinner.cs" />
     <Compile Include="Assets\Script\Features\Lobby\UI\ItemType\BagItemIconUI.cs" />
     <Compile Include="Assets\Script\Features\Lobby\UI\GachaShopPopup.cs" />
+    <Compile Include="Assets\Script\Features\Lobby\UI\ShopPopup.cs" />
     <Compile Include="Assets\Script\Shared\Cache\BattleContentsCache.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\Character_Controller\MovePlayerInput.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Manager\CharacterManager.cs" />
