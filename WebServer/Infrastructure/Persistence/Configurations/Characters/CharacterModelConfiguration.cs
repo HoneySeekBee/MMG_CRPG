@@ -35,8 +35,8 @@ namespace Infrastructure.Persistence.Configurations.Characters
             e.Property(x => x.HairColorCode).HasColumnName("hair_color_code").IsRequired(false);
             e.Property(x => x.SkinColorCode).HasColumnName("skin_color_code").IsRequired(false);
 
-            e.Property(x => x.CreatedAt).HasColumnName("created_at").HasColumnType("timestamptz").HasDefaultValueSql("now()");
-            e.Property(x => x.UpdatedAt).HasColumnName("updated_at").HasColumnType("timestamptz").HasDefaultValueSql("now()");
+            e.Property(x => x.CreatedAt).HasColumnName("created_at").HasColumnType("datetime(6)").HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
+            e.Property(x => x.UpdatedAt).HasColumnName("updated_at").HasColumnType("datetime(6)").HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
 
             // ─── Foreign Keys ─────────────────────────────────────────────────
 

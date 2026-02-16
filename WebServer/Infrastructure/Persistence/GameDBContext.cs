@@ -17,7 +17,7 @@ using Infrastructure.Persistence.Configurations.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql;
+// using Npgsql; // PostgreSQL
 using System.Reflection.Emit;
 using System.Text.Json.Nodes;
 
@@ -110,10 +110,10 @@ namespace Infrastructure.Persistence
         #endregion
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // 스키마를 꼭 넣기! (public)
-            modelBuilder.HasPostgresEnum<Domain.Enum.Characters.BodySize>("public", "BodySize");
-            modelBuilder.HasPostgresEnum<Domain.Enum.Characters.PartType>("public", "PartType");
-            modelBuilder.HasPostgresEnum<Domain.Enum.Characters.CharacterAnimationType>("public", "CharacterAnimationType");
+            // ── PostgreSQL enum (주석 보존) ──
+            // modelBuilder.HasPostgresEnum<Domain.Enum.Characters.BodySize>("public", "BodySize");
+            // modelBuilder.HasPostgresEnum<Domain.Enum.Characters.PartType>("public", "PartType");
+            // modelBuilder.HasPostgresEnum<Domain.Enum.Characters.CharacterAnimationType>("public", "CharacterAnimationType");
 
             modelBuilder.ApplyConfiguration(new CharacterConfiguration());
 
@@ -228,11 +228,11 @@ namespace Infrastructure.Persistence
                 e.Property(x => x.TargetSide).HasConversion<short>().IsRequired();
 
                 e.Property(x => x.BaseInfo)
-           .HasColumnType("jsonb")
+           .HasColumnType("json")
            .IsRequired(false);
 
                 e.Property(x => x.Tag)
-           .HasColumnType("jsonb")
+           .HasColumnType("json")
            .IsRequired();
 
                 // 프로퍼티 기반으로 관계를 정의
@@ -271,11 +271,11 @@ namespace Infrastructure.Persistence
 
                 // Values (jsonb)
                 e.Property(x => x.Values)
-                    .HasColumnType("jsonb");
+                    .HasColumnType("json");
 
                 // Materials (jsonb)
                 e.Property(x => x.Materials)
-                    .HasColumnType("jsonb");
+                    .HasColumnType("json");
             });
         }  
 
@@ -300,7 +300,7 @@ namespace Infrastructure.Persistence
             e.Property(x => x.InputJson)
                 .IsRequired()
                 .HasColumnName("InputJson")
-                .HasColumnType("jsonb");
+                .HasColumnType("json");
 
             e.Property(x => x.Result)
                 .HasColumnName("Result");
@@ -341,7 +341,7 @@ namespace Infrastructure.Persistence
             e.Property(x => x.PayloadJson)
                 .IsRequired()
                 .HasColumnName("PayloadJson")
-                .HasColumnType("jsonb");
+                .HasColumnType("json");
 
             e.HasIndex(x => new { x.CombatId, x.TMs })
                 .HasDatabaseName("idx_combat_log_order");
@@ -561,7 +561,7 @@ namespace Infrastructure.Persistence
             e.Property(x => x.Type).IsRequired();     // enum
             e.Property(x => x.Meta)
       .HasColumnName("Meta")
-      .HasColumnType("jsonb")
+      .HasColumnType("json")
       .IsRequired(false);
             // jsonb 매핑(문자열)
             e.Property(x => x.CreatedAt).IsRequired();
@@ -576,7 +576,7 @@ namespace Infrastructure.Persistence
         }
         private void LogDataSourceHash(string tag)
         {
-            var conn = (NpgsqlConnection)Database.GetDbConnection(); 
+            var conn = Database.GetDbConnection();
         }
 
     }

@@ -21,7 +21,7 @@ namespace Infrastructure.Persistence.Configurations.Characters
             e.Property(x => x.CostGold).IsRequired();
 
             e.Property(x => x.Bonus)
-                .HasColumnType("jsonb")
+                .HasColumnType("json")
                 .IsRequired(false);
 
             e.HasOne(x => x.Character)

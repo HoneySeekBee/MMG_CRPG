@@ -16,7 +16,7 @@ namespace Infrastructure.Persistence.Configurations.Items
             e.ToTable("ItemEffect");
             e.HasKey(x => x.Id);
 
-            e.Property(x => x.Payload).HasColumnType("jsonb");
+            e.Property(x => x.Payload).HasColumnType("json");
             e.Property(x => x.SortOrder).HasDefaultValue((short)0);
         }
 

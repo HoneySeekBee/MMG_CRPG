@@ -18,7 +18,7 @@ namespace Infrastructure.Persistence.Configurations.Shop
             e.Property(x => x.Quantity).IsRequired();
             e.Property(x => x.PricePaid).IsRequired();
             e.Property(x => x.CurrencyCode).IsRequired().HasMaxLength(50);
-            e.Property(x => x.PurchasedAt).HasColumnType("timestamptz").IsRequired();
+            e.Property(x => x.PurchasedAt).HasColumnType("datetime(6)").IsRequired();
 
             e.HasOne<User>().WithMany().HasForeignKey(x => x.UserId);
             e.HasOne<ShopProduct>().WithMany().HasForeignKey(x => x.ShopProductId);

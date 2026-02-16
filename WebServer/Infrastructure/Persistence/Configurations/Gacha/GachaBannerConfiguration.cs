@@ -49,13 +49,13 @@ namespace Infrastructure.Persistence.Configurations.Gacha
             // StartsAt
             builder.Property(x => x.StartsAt)
                 .HasColumnName("StartsAt")
-                .HasColumnType("timestamptz")
+                .HasColumnType("datetime(6)")
                 .IsRequired();
 
             // EndsAt
             builder.Property(x => x.EndsAt)
                 .HasColumnName("EndsAt")
-                .HasColumnType("timestamptz");
+                .HasColumnType("datetime(6)");
 
             // Priority
             builder.Property(x => x.Priority)

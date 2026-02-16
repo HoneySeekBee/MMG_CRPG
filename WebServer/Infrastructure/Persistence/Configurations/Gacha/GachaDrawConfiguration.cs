@@ -34,13 +34,13 @@ namespace Infrastructure.Persistence.Configurations.Gacha
 
             builder.Property(x => x.Timestamp)
                 .HasColumnName("time_stamp")
-                .HasColumnType("timestamptz")
-                .HasDefaultValueSql("now()")
+                .HasColumnType("datetime(6)")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP(6)")
                 .IsRequired();
 
             builder.Property(x => x.ResultsJson)
                 .HasColumnName("results_json")
-                .HasColumnType("jsonb")
+                .HasColumnType("json")
                 .IsRequired();
         }
     }

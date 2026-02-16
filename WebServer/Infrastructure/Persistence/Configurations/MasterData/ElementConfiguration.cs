@@ -19,7 +19,7 @@ namespace Infrastructure.Persistence.Configurations.MasterData
             e.Property(x => x.Label).IsRequired();
             e.Property(x => x.ColorHex).IsRequired();
             e.Property(x => x.SortOrder).HasColumnType("smallint");
-            e.Property(x => x.Meta).HasColumnType("jsonb"); // PostgreSQL
+            e.Property(x => x.Meta).HasColumnType("json"); // PostgreSQL
             e.HasIndex(x => new { x.IsActive, x.SortOrder });
             e.HasIndex(x => x.Key).IsUnique();
         }

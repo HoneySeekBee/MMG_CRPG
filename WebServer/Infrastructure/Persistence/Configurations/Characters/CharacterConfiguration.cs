@@ -46,19 +46,19 @@ namespace Infrastructure.Persistence.Configurations.Characters
 
             e.Property<List<string>>("_tags")
     .HasColumnName("Tags")
-    .HasColumnType("jsonb")
+    .HasColumnType("json")
     .HasConversion(
         v => JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),
         v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions?)null)
              ?? new List<string>()
     )
-    .HasDefaultValueSql("'[]'::jsonb")
+    .HasDefaultValueSql("(JSON_ARRAY())")
     .IsRequired();
 
             // Meta: JSON 문자열을 jsonb 로 저장
             e.Property(x => x.MetaJson)
                 .HasColumnName("Meta")
-                .HasColumnType("jsonb")
+                .HasColumnType("json")
                 .IsRequired(false);
 
             // 인덱스

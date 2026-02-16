@@ -35,20 +35,20 @@ namespace Infrastructure.Persistence.Configurations.Items
 
             // string[] -> text[] (Npgsql이 자동 매핑)
             e.Property(x => x.Tags)
-    .HasColumnType("jsonb")
+    .HasColumnType("json")
     .HasConversion(
         v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
         v => JsonSerializer.Deserialize<string[]>(v, (JsonSerializerOptions)null) ?? Array.Empty<string>()
     )
-    .HasDefaultValueSql("'[]'::jsonb");
+    .HasDefaultValueSql("(JSON_ARRAY())");
 
             // JsonNode -> jsonb
-            e.Property(x => x.Meta).HasColumnType("jsonb");
+            e.Property(x => x.Meta).HasColumnType("json");
 
 
 
-            e.Property(x => x.CreatedAt).HasColumnType("timestamptz");
-            e.Property(x => x.UpdatedAt).HasColumnType("timestamptz");
+            e.Property(x => x.CreatedAt).HasColumnType("datetime(6)");
+            e.Property(x => x.UpdatedAt).HasColumnType("datetime(6)");
 
             e.Property(x => x.EquipType);
 

@@ -23,8 +23,8 @@ namespace Infrastructure.Persistence.Configurations.Shop
             e.Property(x => x.TotalLimit);
             e.Property(x => x.SortOrder).HasDefaultValue(0);
             e.Property(x => x.IsActive).IsRequired();
-            e.Property(x => x.CreatedAt).HasColumnType("timestamptz").IsRequired();
-            e.Property(x => x.UpdatedAt).HasColumnType("timestamptz").IsRequired();
+            e.Property(x => x.CreatedAt).HasColumnType("datetime(6)").IsRequired();
+            e.Property(x => x.UpdatedAt).HasColumnType("datetime(6)").IsRequired();
 
             e.HasOne<Item>().WithMany().HasForeignKey(x => x.ItemId);
             e.HasOne<Currency>().WithMany().HasForeignKey(x => x.CurrencyId);

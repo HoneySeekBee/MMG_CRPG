@@ -28,21 +28,21 @@ namespace Infrastructure.Persistence.Configurations.Gacha
 
             g.Property(x => x.ScheduleStart)
                 .HasColumnName("ScheduleStart")
-                .HasColumnType("timestamptz")
+                .HasColumnType("datetime(6)")
                 .IsRequired();
 
             g.Property(x => x.ScheduleEnd)
                 .HasColumnName("ScheduleEnd")
-                .HasColumnType("timestamptz")
+                .HasColumnType("datetime(6)")
                 .IsRequired(false);
 
             g.Property(x => x.PityJson)
                 .HasColumnName("PityJson")
-                .HasColumnType("jsonb");
+                .HasColumnType("json");
 
             g.Property(x => x.Config)
                 .HasColumnName("Config")
-                .HasColumnType("jsonb");
+                .HasColumnType("json");
 
             g.Property(x => x.TablesVersion)
                 .HasColumnName("TablesVersion");

@@ -19,7 +19,7 @@ namespace Infrastructure.Persistence.Configurations.MasterData
             e.Property(x => x.Key).IsRequired();
             e.Property(x => x.Label).IsRequired();
             e.Property(x => x.ColorHex);
-            e.Property(x => x.Meta).HasColumnType("jsonb");
+            e.Property(x => x.Meta).HasColumnType("json");
             e.Property(x => x.IsActive).HasDefaultValue(true);
 
             e.HasIndex(x => x.Key).IsUnique();
