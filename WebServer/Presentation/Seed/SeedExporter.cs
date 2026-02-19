@@ -49,7 +49,7 @@ namespace WebServer.Seed
 
             foreach (var table in tables)
             {
-                var rows = await _db.QueryAsync($"SELECT * FROM \"{table}\"");
+                var rows = await _db.QueryAsync($"SELECT * FROM `{table}`");
                 var normalized = new List<Dictionary<string, object?>>();
 
                 foreach (var row in rows)

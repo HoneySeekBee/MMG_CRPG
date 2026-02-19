@@ -40,9 +40,9 @@ namespace Infrastructure.Persistence.Configurations.Characters
 
             e.ToTable(t =>
             {
-                t.HasCheckConstraint("ck_cs_unlock_tier", "\"UnlockTier\" >= 0");
-                t.HasCheckConstraint("ck_cs_unlock_level", "\"UnlockLevel\" >= 1");
-                t.HasCheckConstraint("ck_cs_slot", "\"Slot\" BETWEEN 1 AND 4");
+                t.HasCheckConstraint("ck_cs_unlock_tier", "`UnlockTier` >= 0");
+                t.HasCheckConstraint("ck_cs_unlock_level", "`UnlockLevel` >= 1");
+                t.HasCheckConstraint("ck_cs_slot", "`Slot` BETWEEN 1 AND 4");
             });
 
             e.HasIndex(x => x.SkillId);

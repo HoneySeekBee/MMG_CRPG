@@ -17,8 +17,8 @@ using Infrastructure.Persistence.Configurations.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-// using Npgsql; // PostgreSQL
 using System.Reflection.Emit;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 
 namespace Infrastructure.Persistence
@@ -110,7 +110,7 @@ namespace Infrastructure.Persistence
         #endregion
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // ── PostgreSQL enum (주석 보존) ──
+            // ── PostgreSQL enum ──
             // modelBuilder.HasPostgresEnum<Domain.Enum.Characters.BodySize>("public", "BodySize");
             // modelBuilder.HasPostgresEnum<Domain.Enum.Characters.PartType>("public", "PartType");
             // modelBuilder.HasPostgresEnum<Domain.Enum.Characters.CharacterAnimationType>("public", "CharacterAnimationType");
@@ -229,10 +229,14 @@ namespace Infrastructure.Persistence
 
                 e.Property(x => x.BaseInfo)
            .HasColumnType("json")
+           .HasConversion(JsonNodeConverter)
            .IsRequired(false);
 
                 e.Property(x => x.Tag)
            .HasColumnType("json")
+           .HasConversion(
+               v => JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),
+               v => JsonSerializer.Deserialize<string[]>(v, (JsonSerializerOptions?)null) ?? Array.Empty<string>())
            .IsRequired();
 
                 // 프로퍼티 기반으로 관계를 정의
@@ -269,13 +273,17 @@ namespace Infrastructure.Persistence
                 e.Property(x => x.CostGold)
                     .IsRequired();
 
-                // Values (jsonb)
+                // Values (json)
                 e.Property(x => x.Values)
-                    .HasColumnType("json");
+                    .HasColumnType("json")
+                    .HasConversion(JsonNodeConverter);
 
-                // Materials (jsonb)
+                // Materials (json)
                 e.Property(x => x.Materials)
-                    .HasColumnType("json");
+                    .HasColumnType("json")
+                    .HasConversion(
+                        v => v == null ? null : JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),
+                        v => string.IsNullOrEmpty(v) ? null : JsonSerializer.Deserialize<IReadOnlyDictionary<string, int>>(v, (JsonSerializerOptions?)null));
             });
         }  
 
@@ -364,6 +372,15 @@ namespace Infrastructure.Persistence
         // 2) ValueConverter는 래퍼를 호출만 함 (Expression에 금지 요소 없음)
         private static readonly ValueConverter<JsonNode?, string?> JsonNodeConverter =
             new(v => JsonNodeToString(v), v => StringToJsonNode(v));
+
+        private static string? JsonDocToString(JsonDocument? doc)
+            => doc is null ? null : doc.RootElement.GetRawText();
+
+        private static JsonDocument? StringToJsonDoc(string? json)
+            => string.IsNullOrWhiteSpace(json) ? null : JsonDocument.Parse(json);
+
+        private static readonly ValueConverter<JsonDocument?, string?> JsonDocConverter =
+            new(v => JsonDocToString(v), v => StringToJsonDoc(v));
          
         private static void Modeling_StatTypes(ModelBuilder mb)
         {
@@ -442,7 +459,8 @@ namespace Infrastructure.Persistence
 
             e.Property(x => x.IconId).HasColumnName("IconId");
 
-            e.Property(x => x.Effect).HasColumnName("Effect"); // jsonb ← JsonDocument (Npgsql가 자동 매핑)
+            e.Property(x => x.Effect).HasColumnName("Effect").HasColumnType("json")
+                .HasConversion(JsonDocConverter);
             e.Property(x => x.Stacking).HasConversion<short>(); // smallint
 
             e.Property(x => x.IsActive).HasColumnName("IsActive");
@@ -472,7 +490,8 @@ namespace Infrastructure.Persistence
             e.HasKey(x => new { x.SynergyId, x.Threshold }); // 복합 PK
             e.Property(x => x.SynergyId).HasColumnName("SynergyId");
             e.Property(x => x.Threshold).HasColumnName("Threshold");
-            e.Property(x => x.Effect).HasColumnName("Effect"); // jsonb
+            e.Property(x => x.Effect).HasColumnName("Effect").HasColumnType("json")
+                .HasConversion(JsonDocConverter);
             e.Property(x => x.Note).HasColumnName("Note");
         }
 
@@ -486,7 +505,8 @@ namespace Infrastructure.Persistence
             e.Property(x => x.Metric).HasConversion<short>().HasColumnName("Metric");
             e.Property(x => x.RefId).HasColumnName("RefId");
             e.Property(x => x.RequiredCnt).HasColumnName("RequiredCnt");
-            e.Property(x => x.Extra).HasColumnName("Extra"); // jsonb nullable
+            e.Property(x => x.Extra).HasColumnName("Extra").HasColumnType("json")
+                .HasConversion(JsonDocConverter);
 
             // 성능 인덱스(후보 조회)
             e.HasIndex(x => new { x.Metric, x.RefId }).HasDatabaseName("ix_rule_metric_ref");

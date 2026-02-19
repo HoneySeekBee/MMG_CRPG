@@ -1,7 +1,6 @@
-﻿using Application.CharacterModels;
+using Application.CharacterModels;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +11,7 @@ namespace Infrastructure.Caching
 {
     public sealed class CharacterModelCache : ICharacterModelCache
     {
-        private readonly NpgsqlDataSource _dataSource; 
+        private readonly IDbContextFactory<GameDBContext> _factory;
 
         // 원자적 스왑을 위한 필드
         private Dictionary<int, CharacterModelDto> _modelsById = new();
@@ -20,8 +19,8 @@ namespace Infrastructure.Caching
         private Dictionary<int, CharacterModelWeaponDto> _weaponsById = new();
         private Dictionary<string, int> _weaponCodeToId = new(); // 선택: code→id 역참조
 
-        public CharacterModelCache(NpgsqlDataSource dataSource)
-            => _dataSource = dataSource;
+        public CharacterModelCache(IDbContextFactory<GameDBContext> factory)
+            => _factory = factory;
 
 
         public CharacterModelDto? GetModel(int characterId)
@@ -38,12 +37,7 @@ namespace Infrastructure.Caching
 
         public async Task ReloadAsync(CancellationToken ct = default)
         {
-            var opts = new DbContextOptionsBuilder<GameDBContext>()
-            .UseNpgsql(_dataSource)
-            .Options;
-
-            await using var db = new GameDBContext(opts);
-            var conn = (NpgsqlConnection)db.Database.GetDbConnection(); 
+            await using var db = await _factory.CreateDbContextAsync(ct);
 
             // Models
             var models = await db.Set<Domain.Entities.Characters.CharacterModel>()
@@ -63,7 +57,7 @@ namespace Infrastructure.Caching
                     HairColorCode = m.HairColorCode,
                     SkinColorCode = m.SkinColorCode,
                 })
-                .ToListAsync(ct); 
+                .ToListAsync(ct);
 
             // Parts
             var parts = await db.Set<Domain.Entities.Characters.CharacterModelPart>()
@@ -72,9 +66,9 @@ namespace Infrastructure.Caching
                 {
                     PartId = p.PartId,
                     PartKey = p.PartKey,
-                    PartType = p.PartType.ToString(),                // enum -> string 
+                    PartType = p.PartType.ToString(),                // enum -> string
                 })
-                .ToListAsync(ct); 
+                .ToListAsync(ct);
 
             // Weapons
             var weapons = await db.Set<Domain.Entities.Characters.CharacterModelWeapon>()
@@ -86,7 +80,7 @@ namespace Infrastructure.Caching
                     DisplayName = w.DisplayName,
                     IsTwoHanded = w.IsTwoHanded
                 })
-                .ToListAsync(ct); 
+                .ToListAsync(ct);
 
             // Build dictionaries
             var modelsById = models.ToDictionary(x => x.CharacterId);
@@ -99,7 +93,7 @@ namespace Infrastructure.Caching
             _partsById = partsById;
             _weaponsById = weaponsById;
             _weaponCodeToId = weaponCodeToId;
-             
+
         }
         public CharacterVisualRecipe? BuildRecipe(int characterId)
         {

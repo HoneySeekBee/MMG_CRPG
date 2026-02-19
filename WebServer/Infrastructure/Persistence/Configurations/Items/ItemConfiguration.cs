@@ -33,7 +33,7 @@ namespace Infrastructure.Persistence.Configurations.Items
             e.Property(x => x.Tradable).HasDefaultValue(true);
             e.Property(x => x.Weight).HasDefaultValue(0);
 
-            // string[] -> text[] (Npgsql이 자동 매핑)
+            // string[] -> json
             e.Property(x => x.Tags)
     .HasColumnType("json")
     .HasConversion(
@@ -42,8 +42,11 @@ namespace Infrastructure.Persistence.Configurations.Items
     )
     .HasDefaultValueSql("(JSON_ARRAY())");
 
-            // JsonNode -> jsonb
-            e.Property(x => x.Meta).HasColumnType("json");
+            // JsonDocument -> json (MySQL)
+            e.Property(x => x.Meta).HasColumnType("json")
+                .HasConversion(
+                    v => DocToString(v),
+                    v => StringToDoc(v));
 
 
 
@@ -77,5 +80,9 @@ namespace Infrastructure.Persistence.Configurations.Items
                             .UsePropertyAccessMode(PropertyAccessMode.Field);
         }
 
+        private static string? DocToString(JsonDocument? doc)
+            => doc is null ? null : doc.RootElement.GetRawText();
+        private static JsonDocument? StringToDoc(string? s)
+            => string.IsNullOrWhiteSpace(s) ? null : JsonDocument.Parse(s);
     }
 }

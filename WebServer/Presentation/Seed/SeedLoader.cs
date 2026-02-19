@@ -1,9 +1,7 @@
-﻿using System.Data;
+using System.Data;
 using System.Text.Json;
 using Dapper;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Npgsql;
-using NpgsqlTypes;
+using MySqlConnector;
 
 namespace WebServer.Seed
 {
@@ -17,19 +15,14 @@ namespace WebServer.Seed
             _db = db;
             _seedDir = seedDir;
         }
-        private static readonly Dictionary<string, string> EnumColumnTypes = new()
-        {
-            { "body_type", "BodySize" },
-            { "animation_type", "CharacterAnimationType" },
-            { "part_type", "PartType" }
-        }; 
+
         private static readonly HashSet<string> JsonbColumns = new()
-{
-    "Meta",
-    "Tags",
-    "Effect", 
-    "Bonus"
-};
+        {
+            "Meta",
+            "Tags",
+            "Effect",
+            "Bonus"
+        };
 
         private object? Normalize(JsonElement elem)
         {
@@ -37,7 +30,6 @@ namespace WebServer.Seed
             {
                 case JsonValueKind.String:
                     var s = elem.GetString()!;
-                    // 문자열이 JSON 객체/배열처럼 보이면 JsonDocument 로 변환
                     if ((s.StartsWith("{") && s.EndsWith("}")) ||
                         (s.StartsWith("[") && s.EndsWith("]")))
                     {
@@ -74,31 +66,10 @@ namespace WebServer.Seed
                 .Where(kv => kv.Value != null && kv.Value != DBNull.Value)
                 .ToDictionary(kv => kv.Key, kv => kv.Value);
         }
-        private string BuildSql(string table, Dictionary<string, object?> row)
-        {
-            var colParts = new List<string>();
-            var valParts = new List<string>();
 
-            foreach (var kv in row)
-            {
-                string col = kv.Key;
-                colParts.Add($"\"{col}\"");
-
-                if (EnumColumnTypes.TryGetValue(col, out var enumType))
-                    valParts.Add($"@{col}::\"{enumType}\"");
-                else
-                    valParts.Add($"@{col}");
-            }
-
-            return $@"
-                INSERT INTO ""{table}"" ({string.Join(",", colParts)})
-                VALUES ({string.Join(",", valParts)})
-                ON CONFLICT DO NOTHING;
-            ";
-        }
         private async Task ExecuteWithParamsAsync(string sql, Dictionary<string, object?> row)
         {
-            using var cmd = new NpgsqlCommand(sql, (NpgsqlConnection)_db);
+            using var cmd = new MySqlCommand(sql, (MySqlConnection)_db);
 
             foreach (var kv in row)
             {
@@ -108,37 +79,24 @@ namespace WebServer.Seed
                 {
                     if (val is JsonDocument doc)
                     {
-                        cmd.Parameters.Add(new NpgsqlParameter(col, NpgsqlDbType.Jsonb)
-                        {
-                            Value = doc.RootElement.GetRawText()
-                        });
+                        cmd.Parameters.AddWithValue($"@{col}", doc.RootElement.GetRawText());
                     }
                     else if (val is string s)
                     {
-                        // 문자열이지만 JSON literal "{}" 또는 "[]" 같은 형태인 경우 jsonb로 직접 캐스팅
-                        cmd.Parameters.Add(new NpgsqlParameter(col, NpgsqlDbType.Jsonb)
-                        {
-                            Value = s
-                        });
+                        cmd.Parameters.AddWithValue($"@{col}", s);
                     }
                     else if (val == null)
                     {
-                        cmd.Parameters.Add(new NpgsqlParameter(col, NpgsqlDbType.Jsonb)
-                        {
-                            Value = DBNull.Value
-                        });
+                        cmd.Parameters.AddWithValue($"@{col}", DBNull.Value);
                     }
                     else
                     {
-                        cmd.Parameters.Add(new NpgsqlParameter(col, NpgsqlDbType.Jsonb)
-                        {
-                            Value = JsonSerializer.Serialize(val)
-                        });
+                        cmd.Parameters.AddWithValue($"@{col}", JsonSerializer.Serialize(val));
                     }
                 }
                 else
                 {
-                    cmd.Parameters.AddWithValue(col, val ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue($"@{col}", val ?? DBNull.Value);
                 }
             }
 
@@ -186,7 +144,7 @@ namespace WebServer.Seed
                 "CharacterPromotion",
                 "CharacterPromotionMaterials",
                 "CharacterStatProgression",
-                "CharacterSkills",  
+                "CharacterSkills",
 
                 "Item",
                 "ItemStat",
@@ -258,12 +216,13 @@ namespace WebServer.Seed
         }
         private async Task<List<string>> GetPrimaryKeysAsync(string table)
         {
-            string sql = $@"
-        SELECT a.attname
-        FROM   pg_index i
-        JOIN   pg_class c ON c.oid = i.indrelid
-        JOIN   pg_attribute a ON a.attrelid = c.oid AND a.attnum = ANY(i.indkey)
-        WHERE  c.relname = @table AND i.indisprimary;
+            string sql = @"
+        SELECT COLUMN_NAME
+        FROM   information_schema.KEY_COLUMN_USAGE
+        WHERE  TABLE_SCHEMA = DATABASE()
+          AND  TABLE_NAME   = @table
+          AND  CONSTRAINT_NAME = 'PRIMARY'
+        ORDER BY ORDINAL_POSITION;
     ";
 
             var keys = await _db.QueryAsync<string>(sql, new { table });
@@ -274,29 +233,20 @@ namespace WebServer.Seed
         {
             var columns = row.Keys.ToList();
 
-            string insertCols = string.Join(",", columns.Select(c => $"\"{c}\""));
-            string insertVals = string.Join(",", columns.Select(c =>
-                EnumColumnTypes.ContainsKey(c) ? $"@{c}::\"{EnumColumnTypes[c]}\"" : $"@{c}"
-            ));
-
-            string conflict = string.Join(",", pks.Select(c => $"\"{c}\""));
+            string insertCols = string.Join(",", columns.Select(c => $"`{c}`"));
+            string insertVals = string.Join(",", columns.Select(c => $"@{c}"));
 
             var updateCols = columns
                 .Where(c => !pks.Contains(c))
-                .Select(c =>
-                    EnumColumnTypes.ContainsKey(c)
-                        ? $"\"{c}\" = EXCLUDED.\"{c}\"::\"{EnumColumnTypes[c]}\""    
-                        : $"\"{c}\" = EXCLUDED.\"{c}\""
-                );
+                .Select(c => $"`{c}` = VALUES(`{c}`)");
 
             string updateSql = updateCols.Any()
-                ? "DO UPDATE SET " + string.Join(",", updateCols)
-                : "DO NOTHING";
+                ? "ON DUPLICATE KEY UPDATE " + string.Join(",", updateCols)
+                : "ON DUPLICATE KEY UPDATE " + $"`{pks.First()}` = `{pks.First()}`";
 
             return $@"
-        INSERT INTO ""{table}"" ({insertCols})
+        INSERT INTO `{table}` ({insertCols})
         VALUES ({insertVals})
-        ON CONFLICT ({conflict})
         {updateSql};
     ";
         }

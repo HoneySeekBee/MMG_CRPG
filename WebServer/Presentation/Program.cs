@@ -14,7 +14,7 @@ using ProtoBuf.Meta;
 using WebServer.Filters;
 using System.Data;
 using WebServer.Seed;
-using Npgsql;
+using MySqlConnector;
 
 public class Program
 {
@@ -41,7 +41,7 @@ public class Program
                 Console.WriteLine("ERROR: Connection string LocalDevDb/GameDb not found.");
                 return;
             }
-            using var conn = new NpgsqlConnection(cs);
+            using var conn = new MySqlConnection(cs);
             await conn.OpenAsync();
 
             await new SeedExporter(conn, seedDir).ExportAllAsync();
@@ -53,7 +53,7 @@ public class Program
         if (seedMode)
         {
             var cs = tempBuilder.GetConnectionString("GameDb");
-            using var conn = new NpgsqlConnection(cs);
+            using var conn = new MySqlConnection(cs);
             await conn.OpenAsync();
             await new SeedLoader(conn, seedDir).LoadAllAsync();
             Console.WriteLine("Seed load done.");

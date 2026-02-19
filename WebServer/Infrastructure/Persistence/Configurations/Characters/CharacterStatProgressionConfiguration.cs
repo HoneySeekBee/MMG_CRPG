@@ -36,10 +36,10 @@ namespace Infrastructure.Persistence.Configurations.Characters
 
             e.ToTable(t =>
             {
-                t.HasCheckConstraint("ck_csp_level", "\"Level\" >= 1");
-                t.HasCheckConstraint("ck_csp_stats", "\"HP\" >= 0 AND \"ATK\" >= 0 AND \"DEF\" >= 0 AND \"SPD\" >= 0");
-                t.HasCheckConstraint("ck_csp_cr", "\"CriRate\" >= 0 AND \"CriRate\" <= 100");
-                t.HasCheckConstraint("ck_csp_cd", "\"CriDamage\" >= 0 AND \"CriDamage\" <= 1000");
+                t.HasCheckConstraint("ck_csp_level", "`Level` >= 1");
+                t.HasCheckConstraint("ck_csp_stats", "`HP` >= 0 AND `ATK` >= 0 AND `DEF` >= 0 AND `SPD` >= 0");
+                t.HasCheckConstraint("ck_csp_cr", "`CriRate` >= 0 AND `CriRate` <= 100");
+                t.HasCheckConstraint("ck_csp_cd", "`CriDamage` >= 0 AND `CriDamage` <= 1000");
             });
 
             e.HasIndex(x => x.CharacterId);

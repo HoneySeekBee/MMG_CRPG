@@ -1,9 +1,9 @@
-﻿using Application.Items;
+using Application.Items;
 using Application.ItemTypes;
 using Contracts.Protos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
+using MySqlConnector;
 
 namespace Presentation.Controllers.Admin
 {
@@ -17,7 +17,7 @@ namespace Presentation.Controllers.Admin
         public AdminItemTypesController(IItemTypeService svc, ILogger<AdminItemTypesController> log)
         { _svc = svc; _log = log; }
 
-        #region 조회 
+        #region 조회
         // GET /api/itemtypes?search=&hasSlot=&sort=&desc=&page=&pageSize=
         [HttpGet]
         public async Task<IActionResult> List([FromQuery] ListItemTypesRequest req, CancellationToken ct)
@@ -45,8 +45,8 @@ namespace Presentation.Controllers.Admin
             catch (DbUpdateException ex)
             {
                 var msg = ex.InnerException?.Message ?? ex.Message;
-                if (ex.InnerException is PostgresException pg)
-                    msg = $"PG {pg.SqlState} {pg.ConstraintName}: {pg.MessageText}";
+                if (ex.InnerException is MySqlException mysql)
+                    msg = $"MySQL {mysql.ErrorCode}: {mysql.Message}";
                 return BadRequest(msg);
             }
             catch (Exception ex)

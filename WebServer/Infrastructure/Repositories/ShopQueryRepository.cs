@@ -32,8 +32,8 @@ namespace Infrastructure.Repositories
             {
                 var term = search.Trim();
                 q = q.Where(x =>
-                    EF.Functions.ILike(x.Name, $"%{term}%") ||
-                    EF.Functions.ILike(x.Code, $"%{term}%"));
+                    EF.Functions.Like(x.Name, $"%{term}%") ||
+                    EF.Functions.Like(x.Code, $"%{term}%"));
             }
 
             var total = await q.CountAsync(ct);

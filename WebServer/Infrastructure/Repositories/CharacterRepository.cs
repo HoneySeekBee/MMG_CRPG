@@ -36,7 +36,7 @@ namespace Infrastructure.Repositories
             if (!string.IsNullOrWhiteSpace(search))
             {
                 var s = search.Trim();
-                // Npgsql 사용 시 ILIKE로 대체 가능: EF.Functions.ILike(x.Name, $"%{s}%")
+                // MySQL: LIKE는 기본적으로 case-insensitive
                 query = query.Where(x => EF.Functions.Like(x.Name, $"%{s}%"));
             }
 

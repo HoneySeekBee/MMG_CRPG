@@ -40,7 +40,7 @@ namespace Infrastructure.Persistence.Configurations.Gacha
 
             e.HasCheckConstraint(
     "ck_gpe_weight_pos",
-    "\"Weight\" > 0"
+    "`Weight` > 0"
 ); 
         }
     }

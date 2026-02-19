@@ -1,11 +1,7 @@
-﻿using Domain.Entities.Characters;
+using Domain.Entities.Characters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace Infrastructure.Persistence.Configurations.Characters
 {
@@ -22,6 +18,9 @@ namespace Infrastructure.Persistence.Configurations.Characters
 
             e.Property(x => x.Bonus)
                 .HasColumnType("json")
+                .HasConversion(
+                    v => v == null ? null : JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),
+                    v => string.IsNullOrEmpty(v) ? null : JsonSerializer.Deserialize<StatModifier>(v, (JsonSerializerOptions?)null))
                 .IsRequired(false);
 
             e.HasOne(x => x.Character)
@@ -32,13 +31,13 @@ namespace Infrastructure.Persistence.Configurations.Characters
 
             e.ToTable(t =>
             {
-                t.HasCheckConstraint("ck_cp_tier", "\"Tier\" >= 0");
-                t.HasCheckConstraint("ck_cp_maxlevel", "\"MaxLevel\" >= 1");
-                t.HasCheckConstraint("ck_cp_gold", "\"CostGold\" >= 0");
+                t.HasCheckConstraint("ck_cp_tier", "`Tier` >= 0");
+                t.HasCheckConstraint("ck_cp_maxlevel", "`MaxLevel` >= 1");
+                t.HasCheckConstraint("ck_cp_gold", "`CostGold` >= 0");
             });
 
             e.HasIndex(x => x.CharacterId);
         }
 
-    } 
+    }
 }
