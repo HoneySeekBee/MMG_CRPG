@@ -41,11 +41,11 @@ namespace Infrastructure.Persistence.Configurations.Contents
 
             b.Property(x => x.CreatedAt)
                 .HasColumnName("created_at")
-                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
 
             b.Property(x => x.UpdatedAt)
                 .HasColumnName("updated_at")
-                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
 
             // 관계 설정 (Stage 1 : N StageBatches)
             b.HasOne<Stage>()

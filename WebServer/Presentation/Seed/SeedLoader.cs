@@ -33,8 +33,8 @@ namespace WebServer.Seed
                     if ((s.StartsWith("{") && s.EndsWith("}")) ||
                         (s.StartsWith("[") && s.EndsWith("]")))
                     {
-                        try { return JsonDocument.Parse(s); }
-                        catch { Console.WriteLine("[Normalize] 실패"); }
+                        // MySQL은 JSON을 문자열로 전달
+                        return s;
                     }
                     if (DateTime.TryParse(s, out var dt))
                         return dt;
@@ -54,7 +54,7 @@ namespace WebServer.Seed
 
                 case JsonValueKind.Object:
                 case JsonValueKind.Array:
-                    return JsonDocument.Parse(elem.GetRawText());
+                    return elem.GetRawText();
 
                 default:
                     return elem.ToString();
@@ -111,6 +111,10 @@ namespace WebServer.Seed
                 return;
             }
 
+            // MySQL: FK 제약 임시 해제 (순서 무관하게 시드 로딩)
+            using var fkOff = new MySqlCommand("SET FOREIGN_KEY_CHECKS = 0;", (MySqlConnection)_db);
+            await fkOff.ExecuteNonQueryAsync();
+
             var files = Directory.GetFiles(_seedDir, "*.json");
             var loadOrder = new List<string>
             {
@@ -134,22 +138,21 @@ namespace WebServer.Seed
                 "Synergy",
                 "SynergyBonus",
                 "SynergyRule",
-                "SynergyTarget",
-
-                "Characters",
-                "CharacterExp",
-                "CharacterModel",
-                "CharacterModelParts",
-                "CharacterModelWeapon",
-                "CharacterPromotion",
-                "CharacterPromotionMaterials",
-                "CharacterStatProgression",
-                "CharacterSkills",
 
                 "Item",
                 "ItemStat",
                 "ItemEffect",
                 "ItemPrice",
+
+                "Characters",
+                "CharacterExp",
+                "CharacterModelParts",
+                "CharacterModelWeapon",
+                "CharacterModel",
+                "CharacterPromotion",
+                "CharacterPromotionMaterials",
+                "CharacterStatProgression",
+                "CharacterSkills",
 
 
                 "Monsters",
@@ -193,6 +196,11 @@ namespace WebServer.Seed
                     JsonSerializer.Deserialize<List<Dictionary<string, JsonElement>>>(json)!;
 
                 var pks = await GetPrimaryKeysAsync(table);
+                if (!pks.Any())
+                {
+                    Console.WriteLine($"[SeedLoader] Skipping {table} (table not found)");
+                    continue;
+                }
 
                 foreach (var row in rows)
                 {
@@ -211,6 +219,10 @@ namespace WebServer.Seed
 
                 Console.WriteLine($"[SeedLoader] Loaded JSON → {table}");
             }
+
+            // FK 제약 복원
+            using var fkOn = new MySqlCommand("SET FOREIGN_KEY_CHECKS = 1;", (MySqlConnection)_db);
+            await fkOn.ExecuteNonQueryAsync();
 
             Console.WriteLine("\n=== Seed Load Completed ===\n");
         }

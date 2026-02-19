@@ -40,12 +40,12 @@ namespace Infrastructure.Persistence.Configurations.Contents
 
             builder.Property(b => b.CreatedAt)
                 .HasColumnName("created_at")
-                .HasDefaultValueSql("now()")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP(6)")
                 .IsRequired();
 
             builder.Property(b => b.UpdatedAt)
                 .HasColumnName("updated_at")
-                .HasDefaultValueSql("now()")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP(6)")
                 .IsRequired();
         }
     }

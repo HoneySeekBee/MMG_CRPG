@@ -21,7 +21,8 @@ namespace Infrastructure.Persistence.Configurations.Characters
 
             e.Property(x => x.PartType)
                 .HasColumnName("part_type")
-                .HasColumnType("PartType");
+                .HasConversion<string>()
+                .HasMaxLength(50);
 
             e.HasIndex(x => x.PartKey).IsUnique().HasDatabaseName("ux_part_key");
             e.HasIndex(x => new { x.PartType }).HasDatabaseName("ix_parts_type_size");

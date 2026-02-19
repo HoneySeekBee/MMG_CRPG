@@ -27,8 +27,8 @@ namespace Infrastructure.Migrations
                     scene_key = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     check_multi = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: false),
-                    created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValueSql: "now()"),
-                    updated_at = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValueSql: "now()")
+                    created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP(6)"),
+                    updated_at = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP(6)")
                 },
                 constraints: table =>
                 {
@@ -49,8 +49,8 @@ namespace Infrastructure.Migrations
                     description = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     is_active = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: true),
-                    created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValueSql: "now()"),
-                    updated_at = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValueSql: "now()")
+                    created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP(6)"),
+                    updated_at = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP(6)")
                 },
                 constraints: table =>
                 {
@@ -80,7 +80,7 @@ namespace Infrastructure.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     part_key = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    part_type = table.Column<string>(type: "PartType(255)", nullable: false)
+                    part_type = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -691,9 +691,9 @@ namespace Infrastructure.Migrations
                 {
                     character_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    body_type = table.Column<string>(type: "BodySize(255)", nullable: false)
+                    body_type = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    animation_type = table.Column<string>(type: "CharacterAnimationType(255)", nullable: false)
+                    animation_type = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     weapon_l_id = table.Column<int>(type: "int", nullable: true),
                     weapon_r_id = table.Column<int>(type: "int", nullable: true),
@@ -1112,8 +1112,8 @@ namespace Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     env_key = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    updated_at = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP")
+                    created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP(6)"),
+                    updated_at = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP(6)")
                 },
                 constraints: table =>
                 {

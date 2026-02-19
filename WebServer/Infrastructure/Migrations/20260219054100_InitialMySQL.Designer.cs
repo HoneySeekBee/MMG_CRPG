@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(GameDBContext))]
-    [Migration("20260219052358_InitialMySQL")]
+    [Migration("20260219054100_InitialMySQL")]
     partial class InitialMySQL
     {
         /// <inheritdoc />
@@ -129,12 +129,14 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("AnimationType")
                         .IsRequired()
-                        .HasColumnType("CharacterAnimationType")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
                         .HasColumnName("animation_type");
 
                     b.Property<string>("BodyType")
                         .IsRequired()
-                        .HasColumnType("BodySize")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
                         .HasColumnName("body_type");
 
                     b.Property<DateTime>("CreatedAt")
@@ -228,7 +230,8 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("PartType")
                         .IsRequired()
-                        .HasColumnType("PartType")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
                         .HasColumnName("part_type");
 
                     b.HasKey("PartId");
@@ -444,7 +447,7 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
                         .HasColumnName("created_at")
-                        .HasDefaultValueSql("now()");
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -459,7 +462,7 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
                         .HasColumnName("updated_at")
-                        .HasDefaultValueSql("now()");
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
 
                     b.HasKey("Id");
 
@@ -487,7 +490,7 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
                         .HasColumnName("created_at")
-                        .HasDefaultValueSql("now()");
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -509,7 +512,7 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
                         .HasColumnName("updated_at")
-                        .HasDefaultValueSql("now()");
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
 
                     b.HasKey("ChapterId");
 
@@ -577,7 +580,7 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
                         .HasColumnName("created_at")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
 
                     b.Property<string>("EnvKey")
                         .IsRequired()
@@ -599,7 +602,7 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
                         .HasColumnName("updated_at")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
 
                     b.HasKey("Id");
 

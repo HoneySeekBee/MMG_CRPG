@@ -9,7 +9,7 @@ public static class PersistenceExtensions
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration cfg)
     {
         var cs = cfg.GetConnectionString("GameDb")!;
-        var serverVersion = ServerVersion.AutoDetect(cs);
+        var serverVersion = new MySqlServerVersion(new Version(8, 0, 45));
 
         // MySQL 설정
         services.AddDbContextFactory<GameDBContext>((sp, opt) =>

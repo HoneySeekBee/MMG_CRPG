@@ -19,11 +19,13 @@ namespace Infrastructure.Persistence.Configurations.Characters
             e.Property(x => x.CharacterId).HasColumnName("character_id");
             e.Property(x => x.BodyType)
            .HasColumnName("body_type")
-           .HasColumnType("BodySize");
+           .HasConversion<string>()
+           .HasMaxLength(50);
 
             e.Property(x => x.AnimationType)
                 .HasColumnName("animation_type")
-                .HasColumnType("CharacterAnimationType");
+                .HasConversion<string>()
+                .HasMaxLength(50);
             e.Property(x => x.WeaponLId).HasColumnName("weapon_l_id").IsRequired(false);
             e.Property(x => x.WeaponRId).HasColumnName("weapon_r_id").IsRequired(false);
 
