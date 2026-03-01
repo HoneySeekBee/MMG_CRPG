@@ -16,8 +16,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(GameDBContext))]
-    [Migration("20260202102143_AddShopSystem")]
-    partial class AddShopSystem
+    [Migration("20260301085020_InitialBaseline")]
+    partial class InitialBaseline
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
