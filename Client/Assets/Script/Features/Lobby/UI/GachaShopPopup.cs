@@ -118,6 +118,9 @@ public class GachaShopPopup : UIPopup
                     return;
                 }
 
+                if (res.Data.AfterProfile != null)
+                    GameState.Instance.ApplyProfile(res.Data.AfterProfile);
+
                 LobbyRootController.Instance.GachaResult(res.Data);
                 LobbyRootController.Instance.Show("GachaResult");
             }));

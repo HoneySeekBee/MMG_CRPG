@@ -1,4 +1,5 @@
 ﻿using Application.Gacha.GachaDraw;
+using Application.Users;
 using Contracts.Protos;
 using Google.Protobuf;
 using Microsoft.AspNetCore.Authorization;
@@ -15,10 +16,12 @@ namespace Presentation.Controllers.Game.Gacha
     public sealed class GameGachaDrawController : ControllerBase
     {
         private readonly IGachaDrawService _drawService;
+        private readonly IUserService _users;
 
-        public GameGachaDrawController(IGachaDrawService drawService)
+        public GameGachaDrawController(IGachaDrawService drawService, IUserService users)
         {
             _drawService = drawService;
+            _users = users;
         }
         [HttpPost("draw")]
         public async Task<IActionResult> Draw(CancellationToken ct)
@@ -39,13 +42,26 @@ namespace Presentation.Controllers.Game.Gacha
                 ct);
 
             // 4) 결과 → Protobuf Response
+            var profile = await _users.GetProfileAsync(userId, ct);
             var pb = new GachaDrawResultPb
             {
                 TimestampUtc = result.Timestamp.ToUnixTimeSeconds(),
                 UsedTickets = result.UsedTickets,
                 UsedCurrency = result.UsedCurrency,
                 TotalCharacters = result.TotalCharacters,
-                TotalShards = result.TotalShards
+                TotalShards = result.TotalShards,
+                AfterProfile = new UserProfilePb
+                {
+                    Id = profile.Id,
+                    UserId = profile.UserId,
+                    Nickname = profile.NickName,
+                    Level = profile.Level,
+                    Exp = profile.Exp,
+                    Gold = profile.Gold,
+                    Gem = profile.Gem,
+                    Token = profile.Token,
+                    IconId = profile.IconId ?? 0,
+                }
             };
 
             foreach (var item in result.Items)

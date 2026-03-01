@@ -1,4 +1,6 @@
+using Contracts.Protos;
 using Game.Core;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,7 +15,7 @@ namespace Game.Data
         public string PlayerId { get; private set; }
         public string AccessToken { get; private set; }
         public string RefreshToken { get; private set; }
-        public long ServerTimeUnixMsOffset { get; private set; } // ¼­¹ö-Å¬¶ó ½Ã°£ ¿ÀÇÁ¼Â
+        public long ServerTimeUnixMsOffset { get; private set; } // ï¿½ï¿½ï¿½ï¿½-Å¬ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
         public string Nickname { get; private set; }
         public int SoftCurrency { get; private set; }
@@ -34,12 +36,12 @@ namespace Game.Data
         public void InitUser(int userId, string nickname, int level)
         {
             CurrentUser = new UserData(userId, nickname, level);
-            Debug.Log($"UserData°¡ ¿Ö ¾øÁö {CurrentUser}");
+            Debug.Log($"UserDataï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ {CurrentUser}");
         }
         public void LoadFromPrefs()
         {
             AccessToken = PlayerPrefs.GetString(Constants.PlayerPrefs_Token, "");
-            RefreshToken = PlayerPrefs.GetString(Constants.PlayerPrefs_RefreshToken, ""); // »õ Å°
+            RefreshToken = PlayerPrefs.GetString(Constants.PlayerPrefs_RefreshToken, ""); // ï¿½ï¿½ Å°
             PlayerId = PlayerPrefs.GetString(Constants.PlayerPrefs_PlayerId, "");
 
         }
@@ -62,8 +64,17 @@ namespace Game.Data
         }
 
 
+        public event Action<UserProfilePb> OnCurrencyChanged;
+
         public void SetNickname(string nickname) => Nickname = nickname;
         public void SetCurrencies(int soft, int hard) { SoftCurrency = soft; HardCurrency = hard; }
+
+        public void ApplyProfile(UserProfilePb profile)
+        {
+            if (CurrentUser != null)
+                CurrentUser.SetUserProfile(profile);
+            OnCurrencyChanged?.Invoke(profile);
+        }
         public long NowServerUnixMs()
         {
             var localMs = System.DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();

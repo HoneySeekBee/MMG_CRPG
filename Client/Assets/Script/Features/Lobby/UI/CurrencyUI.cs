@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Contracts.Protos;
+using Game.Data;
 
 namespace Game.Lobby
 {
@@ -12,6 +11,19 @@ namespace Game.Lobby
         public TMP_Text GoldTextt;
         public TMP_Text GemText;
 
+        private void OnEnable()
+        {
+            GameState.Instance.OnCurrencyChanged += Set;
+            var profile = GameState.Instance.CurrentUser?.UserProfilePb;
+            if (profile != null) Set(profile);
+        }
+
+        private void OnDisable()
+        {
+            if (GameState.Instance != null)
+                GameState.Instance.OnCurrencyChanged -= Set;
+        }
+
         public void Set(UserProfilePb p)
         {
             TokenText.text = p.Token.ToString();
@@ -19,5 +31,4 @@ namespace Game.Lobby
             GemText.text = p.Gem.ToString();
         }
     }
-
 }

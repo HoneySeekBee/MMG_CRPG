@@ -1,7 +1,8 @@
 syntax = "proto3";
 package Contracts.Protos;
+import "user.proto";
 
-// ´ÜÀÏ ¹è³Ê
+// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 message GachaBannerPb {
   int32  id           = 1;
   string key          = 2;
@@ -10,9 +11,9 @@ message GachaBannerPb {
   int32  portraitId   = 5;
   int32  gachaPoolId  = 6;
   int64  startsAtUtc  = 7; // Unix seconds
-  int64  endsAtUtc    = 8; // 0ÀÌ¸é ¹«±âÇÑ
+  int64  endsAtUtc    = 8; // 0ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   int32  priority     = 9;
-  int32  status       = 10; // ¼­¹ö enum -> int
+  int32  status       = 10; // ï¿½ï¿½ï¿½ï¿½ enum -> int
   bool   isActive     = 11;  
   
   int32  costCurrencyId = 12;
@@ -20,12 +21,12 @@ message GachaBannerPb {
    int32  ticketItemId    = 14;
 }
 
-// ¹è³Ê ¸ñ·Ï
+// ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 message GachaBannerListPb {
   repeated GachaBannerPb banners = 1;
 }
 
-// Ç® ¿£Æ®¸®(È®·üÇ¥ ÇÑ ÁÙ)
+// Ç® ï¿½ï¿½Æ®ï¿½ï¿½(È®ï¿½ï¿½Ç¥ ï¿½ï¿½ ï¿½ï¿½)
 message GachaEntryPb {
   int32 characterId = 1;
   int32 grade       = 2;
@@ -33,21 +34,21 @@ message GachaEntryPb {
   int32 weight      = 4;
 }
 
-// Ç® »ó¼¼
+// Ç® ï¿½ï¿½
 message GachaPoolDetailPb {
   int32  poolId            = 1;
   string name              = 2;
   string tablesVersion     = 3;
-  string pityJson          = 4; // ¼­¹öÀÇ JSON ¿ø¹® ±×´ë·Î
-  string configJson        = 5; // ¼­¹öÀÇ JSON ¿ø¹® ±×´ë·Î
+  string pityJson          = 4; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ JSON ï¿½ï¿½ï¿½ï¿½ ï¿½×´ï¿½ï¿½
+  string configJson        = 5; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ JSON ï¿½ï¿½ï¿½ï¿½ ï¿½×´ï¿½ï¿½
   int64  scheduleStartUtc  = 6; // Unix seconds
-  int64  scheduleEndUtc    = 7; // 0ÀÌ¸é ¹«±âÇÑ
+  int64  scheduleEndUtc    = 7; // 0ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   repeated GachaEntryPb entries = 8;
 }
 
-// Ä«Å»·Î±×: È°¼º ¹è³Ê + ÂüÁ¶ Ç®µé
+// Ä«Å»ï¿½Î±ï¿½: È°ï¿½ï¿½ ï¿½ï¿½ï¿½ + ï¿½ï¿½ï¿½ï¿½ Ç®ï¿½ï¿½
 message GachaCatalogPb {
-  int64 version = 1; // Ä³½Ì/¹öÀü°ü¸®(¼±ÅÃ)
+  int64 version = 1; // Ä³ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½)
   repeated GachaBannerPb banners = 2;
   repeated GachaPoolDetailPb pools = 3;
 }
@@ -71,7 +72,9 @@ message GachaDrawResultPb {
 
     int32 usedTickets = 3;
     int64 usedCurrency = 4;
-     
+
     int32 totalCharacters = 5;
     int32 totalShards = 6;
+
+    UserProfilePb afterProfile = 7;
 }
