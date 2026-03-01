@@ -75,6 +75,9 @@ namespace Application.Users
             await _profiles.SaveChangesAsync(ct);
 
             await _userCurrs.InitializeForUserAsync(user.Id, ct);
+            await _wallet.GrantAsync(user.Id, "GOLD", 1000, ct);
+            await _wallet.GrantAsync(user.Id, "GEM", 1000, ct);
+            await _wallet.GrantAsync(user.Id, "TOKEN", 1000, ct);
 
             await _events.LogAsync("stream:user-events", new()
             {
