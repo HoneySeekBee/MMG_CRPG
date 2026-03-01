@@ -78,7 +78,7 @@ namespace Infrastructure.Persistence.Migrations
                     part_id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     part_key = table.Column<string>(type: "text", nullable: false),
-                    part_type = table.Column<string>(type: "PartType", nullable: false)
+                    part_type = table.Column<string>(type: "\"PartType\"", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -596,8 +596,8 @@ namespace Infrastructure.Persistence.Migrations
                 {
                     character_id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    body_type = table.Column<string>(type: "BodySize", nullable: false),
-                    animation_type = table.Column<string>(type: "CharacterAnimationType", nullable: false),
+                    body_type = table.Column<string>(type: "\"BodySize\"", nullable: false),
+                    animation_type = table.Column<string>(type: "\"CharacterAnimationType\"", nullable: false),
                     weapon_l_id = table.Column<int>(type: "integer", nullable: true),
                     weapon_r_id = table.Column<int>(type: "integer", nullable: true),
                     part_head_id = table.Column<int>(type: "integer", nullable: true),
