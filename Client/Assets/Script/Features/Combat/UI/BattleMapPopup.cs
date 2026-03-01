@@ -8,6 +8,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Game.Logging;
 using UnityEngine;
 using UnityEngine.UI;
 using WebServer.Protos;
@@ -121,7 +122,7 @@ public class BattleMapPopup : UIPopup
         else { resultText.text = "결과 불명"; }
 
         // 별 표시, 클리어 텍스트 등도 여기서
-        Debug.Log($"Stage {data.StageId} Clear, Stars={data.Stars}, FirstClear={data.FirstClear}");
+        GameLogger.Info($"Stage {data.StageId} Clear, Stars={data.Stars}, FirstClear={data.FirstClear}");
 
     }
     public void GoToStage()

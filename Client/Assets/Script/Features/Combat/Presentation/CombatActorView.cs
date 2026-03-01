@@ -62,7 +62,6 @@ public abstract class CombatActorView : MonoBehaviour, ICombatSpeedAffectable
         var targetRot = Quaternion.LookRotation(dir, Vector3.up) * Quaternion.Euler(0f, yawOffset, 0f);
 
         visualRoot.rotation = Quaternion.Slerp(visualRoot.rotation, targetRot, turnSpeed * dt);
-        Debug.Log("이동 방향 바라보기");
     }
     public void FaceDirection(Vector3 dir, bool smooth)
     {

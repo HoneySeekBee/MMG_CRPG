@@ -7,6 +7,7 @@ using Game.UICommon;
 using Google.Protobuf.WellKnownTypes;
 using System;
 using System.Collections;
+using Game.Logging;
 using UnityEngine;
 public class CombatNetwork
 {
@@ -38,13 +39,13 @@ public class CombatNetwork
         string url = ApiRoutes.CombatStart;
         // 예: public const string CombatStart = "/api/pb/combat/start";
 
-        Debug.Log($"[CombatNetwork] StartCombat: {url}, stage={stageId}, formation={battleId}");
+        GameLogger.Info($"[CombatNetwork] StartCombat: {url}, stage={stageId}, formation={battleId}");
 
         yield return Http.Post(url, req, StartCombatResponsePb.Parser, (ApiResult<StartCombatResponsePb> res) =>
         {
             if (!res.Ok)
             {
-                Debug.LogError($"[CombatNetwork] StartCombat 실패: {res.Message}");
+                GameLogger.Error($"[CombatNetwork] StartCombat 실패: {res.Message}");
                 _popup?.Show($"전투 시작 실패: {res.Message}");
             }
 
@@ -74,14 +75,14 @@ public class CombatNetwork
         string url = ApiRoutes.CombatCommand(combatId);
         // 예: public static string CombatCommand(long combatId) => $"/api/pb/combat/{combatId}/command";
 
-        Debug.Log($"[CombatNetwork] SendCommand: {url}, actor={actorId}, skill={skillId}, target={targetActorId}");
+        GameLogger.Info($"[CombatNetwork] SendCommand: {url}, actor={actorId}, skill={skillId}, target={targetActorId}");
 
         AppBootstrap.Instance.StartCoroutine(
             Http.Post(url, cmd, Empty.Parser, resp =>
             {
                 if (!resp.Ok)
                 {
-                    Debug.LogError($"[CombatNetwork] Command 실패: {resp.Message}");
+                    GameLogger.Error($"[CombatNetwork] Command 실패: {resp.Message}");
                     _popup?.Show($"스킬 사용 실패: {resp.Message}");
                     onDone?.Invoke(false);
                     return;
@@ -103,13 +104,13 @@ public class CombatNetwork
         // 예: public static string CombatLog(long combatId, string cursor, int size)
         //     => $"/api/pb/combat/{combatId}/log?cursor={cursor}&size={size}";
 
-        Debug.Log($"[CombatNetwork] GetLog: {url}");
+        GameLogger.Info($"[CombatNetwork] GetLog: {url}");
 
         yield return Http.Get(url, CombatLogPagePb.Parser, (ApiResult<CombatLogPagePb> res) =>
         {
             if (!res.Ok)
             {
-                Debug.LogError($"[CombatNetwork] GetLog 실패: {res.Message}");
+                GameLogger.Error($"[CombatNetwork] GetLog 실패: {res.Message}");
                 // 로그 폴링 실패는 팝업은 선택 사항
             }
 
@@ -126,13 +127,13 @@ public class CombatNetwork
         // 예: public static string CombatSummary(long combatId)
         //     => $"/api/pb/combat/{combatId}/summary";
 
-        Debug.Log($"[CombatNetwork] GetSummary: {url}");
+        GameLogger.Info($"[CombatNetwork] GetSummary: {url}");
 
         yield return Http.Get(url, CombatLogSummaryPb.Parser, (ApiResult<CombatLogSummaryPb> res) =>
         {
             if (!res.Ok)
             {
-                Debug.LogError($"[CombatNetwork] GetSummary 실패: {res.Message}");
+                GameLogger.Error($"[CombatNetwork] GetSummary 실패: {res.Message}");
                 _popup?.Show($"전투 결과 불러오기 실패: {res.Message}");
             }
 
@@ -150,12 +151,11 @@ public class CombatNetwork
             Tick = tick
         };
 
-        Debug.Log($"[CombatNetwork] Tick: {url}, tick={tick}");
 
         yield return Http.Post(url, req, CombatTickResponsePb.Parser, res =>
         {
             if (!res.Ok)
-                Debug.LogError($"[CombatNetwork] Tick 실패: {res.Message}");
+                GameLogger.Error($"[CombatNetwork] Tick 실패: {res.Message}");
 
             onDone?.Invoke(res);
         });
@@ -170,13 +170,13 @@ public class CombatNetwork
         // 예: /api/pb/combat/{combatId}/finish
         string url = ApiRoutes.CombatFinish(combatId);
 
-        Debug.Log($"[CombatNetwork] FinishCombat: {url}, combatId={combatId}");
+        GameLogger.Info($"[CombatNetwork] FinishCombat: {url}, combatId={combatId}");
 
         yield return Http.Post(url, req, FinishCombatResponsePb.Parser, (ApiResult<FinishCombatResponsePb> res) =>
         {
             if (!res.Ok)
             {
-                Debug.LogError($"[CombatNetwork] FinishCombat 실패: {res.Message}");
+                GameLogger.Error($"[CombatNetwork] FinishCombat 실패: {res.Message}");
                 _popup?.Show($"전투 종료 처리 실패: {res.Message}");
             }
 
@@ -198,13 +198,13 @@ public class CombatNetwork
         string url = ApiRoutes.CombatCommand(combatId);
         // => /api/pb/combat/{combatId}/command
 
-        Debug.Log($"[CombatNetwork] UseSkillAsync → {url} actor={actorId}, skill={skillId}");
+        GameLogger.Info($"[CombatNetwork] UseSkillAsync → {url} actor={actorId}, skill={skillId}");
 
         yield return Http.Post(url, cmd, Empty.Parser, (ApiResult<Empty> res) =>
         {
             if (!res.Ok)
             {
-                Debug.LogError($"[CombatNetwork] UseSkill 실패: {res.Message}");
+                GameLogger.Error($"[CombatNetwork] UseSkill 실패: {res.Message}");
             }
 
             onDone?.Invoke(res);

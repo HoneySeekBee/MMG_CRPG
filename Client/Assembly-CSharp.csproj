@@ -127,7 +127,6 @@
     <Compile Include="Assets\Script\UI\Effects\FadeInOut.cs" />
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\SpinWheel.cs" />
     <Compile Include="Assets\Script\Features\Lobby\UI\UserProfileIUI.cs" />
-    <Compile Include="Assets\Script\Systems\Logging\Logger.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\FaceManagement\FacePicker.cs" />
     <Compile Include="Assets\ExternalAsset\GUIPackCartoon\Demo\Scripts\Popup.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CroakusTheGreat.cs" />
@@ -149,6 +148,7 @@
     <Compile Include="Assets\Script\Features\Lobby\UI\CurrencyUI.cs" />
     <Compile Include="Assets\Script\Features\Lobby\UI\User\UserCharacterStatusUI.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Adventure_Land\Scripts\Demonstration\Character\CandyKing.cs" />
+    <Compile Include="Assets\Script\Systems\Logging\GameLogger.cs" />
     <Compile Include="Assets\Script\Features\Lobby\UI\User\EquipmentQuery.cs" />
     <Compile Include="Assets\ExternalAsset\VFX\PixPlays\Components\Scripts\VfxSystem\VfxReference.cs" />
     <Compile Include="Assets\ExternalAsset\ithappy\Cute_Characters\Scripts\FaceManagement\FaceType.cs" />

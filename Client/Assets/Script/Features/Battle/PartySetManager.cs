@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Game.Logging;
 using UnityEngine;
 
 public class PartySetManager : MonoBehaviour
@@ -52,7 +53,7 @@ public class PartySetManager : MonoBehaviour
             if (slot.SlotId == 0) continue;
             if (slot.UserCharacterId != null && slot.UserCharacterId != 0)
             {
-                Debug.Log($"{slot}번 슬롯 : {slot.UserCharacterId}");
+                GameLogger.Info($"{slot}번 슬롯 : {slot.UserCharacterId}");
                 partySlotsDict[slot.SlotId].BatchCharacter(slot.UserCharacterId ?? 0, GetCharacterObject(), isBattle);
             }
             partySlotsDict[slot.SlotId].SetData(slot);
@@ -74,7 +75,7 @@ public class PartySetManager : MonoBehaviour
         int assignedCount = AssignedCount();
         if (assignedCount >= MAX_CHARACTER_COUNT )
         {
-            Debug.Log("배치 할 수 있는 캐릭터가 가득찼어요.");
+            GameLogger.Info("배치 할 수 있는 캐릭터가 가득찼어요.");
             return false;
         }
 
@@ -143,7 +144,7 @@ public class PartySetManager : MonoBehaviour
             int? userCharacterId = ps.batchSlot?.SlotData != null
                 ? (int?)ps.batchSlot.SlotData.UserCharacterId
                 : null;
-            Debug.Log($"[파티 저장] - [{ps.slotNum}] {userCharacterId}");
+            GameLogger.Info($"[파티 저장] - [{ps.slotNum}] {userCharacterId}");
             // 캐릭터 아이디 0? => null 
             if (userCharacterId == 0)
                 userCharacterId = null;

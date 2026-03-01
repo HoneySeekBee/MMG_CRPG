@@ -2,6 +2,7 @@ using Contracts.CharacterModel;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using Game.Logging;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -89,7 +90,7 @@ public class CharacterAppearance : MonoBehaviour
         var mesh = isWeapon == false? CharacterCache.Instance.GetCharacterMesh(modelKey) : CharacterCache.Instance.GetWeaponMesh(modelKey);
         if (mesh == null)
         {
-            Debug.LogWarning($"mesh not found: {modelKey} {isWeapon}");
+            GameLogger.Warn($"mesh not found: {modelKey} {isWeapon}");
             return;
         }
 
@@ -99,13 +100,13 @@ public class CharacterAppearance : MonoBehaviour
     {
         if (meshRender == null)
         {
-            Debug.LogWarning("meshRender가 없습니다!");
+            GameLogger.Warn("meshRender가 없습니다!");
             return;
         }
          
         if (meshRender == null)
         {
-            Debug.LogWarning("MeshRenderer를 찾을 수 없습니다!");
+            GameLogger.Warn("MeshRenderer를 찾을 수 없습니다!");
             return;
         }
         string colorCode = "#" + hexColor;
@@ -115,11 +116,11 @@ public class CharacterAppearance : MonoBehaviour
             var mat = meshRender.material;
             mat.color = color;
 
-            Debug.Log($"머리 색상 변경 완료: {hexColor} → {color}");
+            GameLogger.Info($"머리 색상 변경 완료: {hexColor} → {color}");
         }
         else
         {
-            Debug.LogWarning($"잘못된 색상 코드: {hexColor}");
+            GameLogger.Warn($"잘못된 색상 코드: {hexColor}");
         }
     }
 }

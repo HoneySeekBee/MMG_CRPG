@@ -2,6 +2,7 @@ using Contracts.UserParty;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Game.Logging;
 using UnityEngine;
 
 public class BatchSlot : MonoBehaviour
@@ -27,11 +28,11 @@ public class BatchSlot : MonoBehaviour
     {
         if (SlotData == null)
         {
-            Debug.Log($"[{name}] 슬롯 데이터가 없음");
+            GameLogger.Info($"[{name}] 슬롯 데이터가 없음");
             return;
         }
 
-        Debug.Log(
+        GameLogger.Info(
             $"[{name}] 슬롯 클릭! slotId={SlotData.SlotId}, userCharId={SlotData.UserCharacterId ?? 0}"
         );
         Unassign();
@@ -44,7 +45,7 @@ public class BatchSlot : MonoBehaviour
     {
         if (characterId == 0)
             return;
-        Debug.Log($"{SlotNum}번에 캐릭터 {characterId}가 배치되었습니다. {isBattle}");
+        GameLogger.Info($"{SlotNum}번에 캐릭터 {characterId}가 배치되었습니다. {isBattle}");
         if (SlotData == null)
         {
             SlotData = new UserPartySlotPb();

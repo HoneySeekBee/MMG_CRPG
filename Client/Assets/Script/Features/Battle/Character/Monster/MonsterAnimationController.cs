@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using Game.Logging;
 using UnityEngine;
 
 public class MonsterAnimationController : MonoBehaviour
@@ -8,7 +7,7 @@ public class MonsterAnimationController : MonoBehaviour
     public void Set()
     { 
         animator = this.GetComponentInChildren<MonsterModelData>().animator;
-        Debug.Log($"[Monster] animator : {animator == null}");
+        GameLogger.Info($"[Monster] animator : {animator == null}");
     }
     public void Set_CombatSpeed(float scale)
     {

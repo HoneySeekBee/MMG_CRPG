@@ -12,6 +12,7 @@ using System;
 using Game.Data;
 using Game.Core;
 using Game.Combat;
+using Game.Logging;
 
 public class BattleMapManager : MonoBehaviour
 {
@@ -41,25 +42,25 @@ public class BattleMapManager : MonoBehaviour
 
     private StagePb stageData;
 
-    // ¸ÊÀÌµ¿ 
+    // ï¿½ï¿½ï¿½Ìµï¿½ 
     private bool _waitingReturnBeforeMapMove = false;
     private bool _isMapMoving = false;
     private int _waveIndexForMove = -1;
-    private bool _combatTickEnabled = false; // Æ½À» µ¹·Áµµ µÇ´ÂÁö Ã¼Å© 
+    private bool _combatTickEnabled = false; // Æ½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½ï¿½ï¿½ Ã¼Å© 
     private bool _endReturnDone = false;
     private bool _stageCleared = false;
 
     private int _clientTick = 0;
     private bool _battleEnded = false;
 
-    [Header("¸ó½ºÅÍ °ü·Ã")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")]
     [SerializeField] private PartySlot[] monsterSlots;
     private string _logCursor = "";
 
     [SerializeField] private SkillFxDataList skillFxDb;
     private readonly Dictionary<long, int> _actorMasterIds = new();
 
-    [SerializeField] private CombatSpeedApplier combatSpeedApplier; // Unity ³»ºÎ µ¿ÀÛ ½ºÇÇµå Àû¿ë
+    [SerializeField] private CombatSpeedApplier combatSpeedApplier; // Unity ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Çµï¿½ ï¿½ï¿½ï¿½ï¿½
     private bool _gotStageResult = false;
     private bool _finalWin = false;
     private void Awake()
@@ -107,7 +108,7 @@ public class BattleMapManager : MonoBehaviour
 
         _snapshotApplier?.Clear();
 
-        // [1] ¼­¹ö¿¡ ÀüÅõ ½ÃÀÛ ¿äÃ»
+        // [1] ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã»
         int stageId = LobbyRootController.Instance._currentStage.Id;
         long battleId = LobbyRootController.Instance._currentBattleId;
 
@@ -117,13 +118,13 @@ public class BattleMapManager : MonoBehaviour
         _endReturnDone = false;
         _stageCleared = false;
 
-        Debug.Log($"ÀüÅõ µ¥ÀÌÅÍ ¿äÃ» {stageId} || {battleId}");
+        GameLogger.Info($"ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã» {stageId} || {battleId}");
 
         yield return _combatNetwork.StartCombatAsync(stageId, battleId, res =>
         {
             if (!res.Ok)
             {
-                Debug.LogError($"[BattleMap] StartCombat ½ÇÆÐ: {res.Message}");
+                GameLogger.Error($"[BattleMap] StartCombat ï¿½ï¿½ï¿½ï¿½: {res.Message}");
                 return;
             }
 
@@ -133,14 +134,14 @@ public class BattleMapManager : MonoBehaviour
 
         if (_combatStart == null)
         {
-            Debug.LogError("[BattleMap] ÀüÅõ ½ÃÀÛ ½ÇÆÐ·Î Set_BattleMap Áß´Ü");
+            GameLogger.Error("[BattleMap] ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ð·ï¿½ Set_BattleMap ï¿½ß´ï¿½");
             yield break;
         }
 
-        // [2] ¸Ê »ý¼º
+        // [2] ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         yield return Set_Map().AsCoroutine();
 
-        // [3] ¼­¹ö ½º³À¼¦ ±â¹Ý À¯´Ö »ý¼º
+        // [3] ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         _actorFactory.BuildFromSnapshot(
        _combatStart.Snapshot,
        actorObjects: _actorObjects,
@@ -155,14 +156,14 @@ public class BattleMapManager : MonoBehaviour
        }
    );
 
-        // [4] UI ¿¬°è
+        // [4] UI ï¿½ï¿½ï¿½ï¿½
         PartyMemeber();
 
-        SetupCombatDirector(); // CombatDirect ÃÊ±âÈ­
+        SetupCombatDirector(); // CombatDirect ï¿½Ê±ï¿½È­
 
-        // [5] ÀüÅõ ·ÎÁ÷/Æ½ ·çÇÁ ½ÃÀÛ (¼­¹ö¿Í µ¿±âÈ­) 
-        StartCoroutine(TickLoop_CombatDirector()); // CombatDirector ±â¹Ý Æ½ ½ÃÀÛ 
-        StartCoroutine(BattleFlow());  // ¿¬Ãâ/Ä«¸Þ¶ó/UI Èå¸§
+        // [5] ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½/Æ½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È­) 
+        StartCoroutine(TickLoop_CombatDirector()); // CombatDirector ï¿½ï¿½ï¿½ Æ½ ï¿½ï¿½ï¿½ï¿½ 
+        StartCoroutine(BattleFlow());  // ï¿½ï¿½ï¿½ï¿½/Ä«ï¿½Þ¶ï¿½/UI ï¿½å¸§
 
         action?.Invoke();
     }
@@ -177,10 +178,10 @@ public class BattleMapManager : MonoBehaviour
             _snapshotApplier.Apply(snapshot, eventsThisTick);
         };
 
-        // CombatLog Event Ã³¸®
+        // CombatLog Event Ã³ï¿½ï¿½
         _combatDirector.OnCombatEvent += HandleCombatEvent;
 
-        // ÀüÅõ Á¾·á ÄÝ¹é
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ý¹ï¿½
         _combatDirector.OnBattleEnd += () =>
         {
             _battleEnded = true;
@@ -189,28 +190,24 @@ public class BattleMapManager : MonoBehaviour
         _vfx = new CombatVfxPresenter(skillFxDb, _actorObjects, _actorMasterIds, this.transform);
     }
     private IEnumerator TickLoop_CombatDirector()
-    {
-        Debug.Log("[BattleMap] TickLoop_CombatDirector ½ÃÀÛ");
-
+    {  
         while (!_battleEnded)
         {
-            // ¸Ê ÀÌµ¿ ÁßÀÌ¸é Æ½ ¾Èµ¹¸²
+            // ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ Æ½ ï¿½Èµï¿½ï¿½ï¿½
             if (!_combatTickEnabled)
             {
                 yield return null;
                 continue;
             }
 
-            // CombatDirector°¡ Tick Ã³¸®
+            // CombatDirectorï¿½ï¿½ Tick Ã³ï¿½ï¿½
             yield return _combatDirector.Tick();
             yield return new WaitForSecondsRealtime(0.1f);
-        }
-
-        Debug.Log("[BattleMap] TickLoop_CombatDirector Á¾·á");
+        } 
     }
     private void HandleCombatEvent(CombatLogEventPb ev)
     {
-        Debug.Log($"[HandleCombatEvent] {ev.Type.ToString()}");
+        GameLogger.Info($"[HandleCombatEvent] {ev.Type.ToString()}");
         _vfx?.HandleEvent(ev);
         switch (ev.Type)
         {
@@ -244,7 +241,7 @@ public class BattleMapManager : MonoBehaviour
         {
             _battleEnded = true;
         }
-        Debug.Log($"[BattleMap] stage_result = {result}");
+        GameLogger.Info($"[BattleMap] stage_result = {result}");
     }
     private int GetBreakthrough(int characterId)
     {
@@ -267,7 +264,7 @@ public class BattleMapManager : MonoBehaviour
 
         if (wave < 0)
         {
-            Debug.LogWarning("[BattleMap] wave_cleared wave ÆÄ½Ì ½ÇÆÐ");
+            GameLogger.Warn("[BattleMap] wave_cleared wave ï¿½Ä½ï¿½ ï¿½ï¿½ï¿½ï¿½");
             return;
         }
         foreach (var p in GetAlivePlayerActors())
@@ -276,7 +273,7 @@ public class BattleMapManager : MonoBehaviour
         _waitingReturnBeforeMapMove = true;
         _waveIndexForMove = wave;
 
-        Debug.Log($"[BattleMap] wave_cleared ¼ö½Å wave={wave}");
+        GameLogger.Info($"[BattleMap] wave_cleared ï¿½ï¿½ï¿½ï¿½ wave={wave}");
     }
     private void Set_MonsterSlot()
     {
@@ -304,7 +301,7 @@ public class BattleMapManager : MonoBehaviour
     }
     private IEnumerator Move_Map()
     {
-        // [1] 1ÃÊµ¿¾È ¸Ê ÀÌµ¿ 
+        // [1] 1ï¿½Êµï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ìµï¿½ 
         Vector3 goalPos = this.transform.position;
         goalPos.x -= 20;
         List<CombatActorView> allPlayer = GetAlivePlayerActors();
@@ -323,17 +320,17 @@ public class BattleMapManager : MonoBehaviour
 
     private void PartyMemeber()
     {
-        Debug.Log("ÀüÅõ ÁØºñ");
+        GameLogger.Info("ï¿½ï¿½ï¿½ï¿½ ï¿½Øºï¿½");
     }
     #region Battle Flow
     private IEnumerator BattleFlow()
     {
         var popup = BattleMapPopup.Instance;
         yield return new WaitForSeconds(1);
-        // [1] ÀüÅõ ½ÃÀÛ ¿¬Ãâ
+        // [1] ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         yield return popup.StartCoroutine(popup.ShowStart());
 
-        Debug.Log("À¯Àú Ä³¸¯ÅÍµé µîÀå ¾Ö´Ï¸ÞÀÌ¼Ç");
+        GameLogger.Info("ï¿½ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½Íµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½");
         if (stageData.Batches.Count > 1)
         {
             _isMapMoving = true;
@@ -344,34 +341,34 @@ public class BattleMapManager : MonoBehaviour
 
         while (!_battleEnded)
         {
-            // ¼­¹ö¿¡¼­ wave_cleared ÀÌº¥Æ®°¡ ¿Ô´ÂÁö Ã¼Å©
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ wave_cleared ï¿½Ìºï¿½Æ®ï¿½ï¿½ ï¿½Ô´ï¿½ï¿½ï¿½ Ã¼Å©
             if (_waitingReturnBeforeMapMove)
             {
                 _waitingReturnBeforeMapMove = false;
 
-                Debug.Log($"[BattleFlow] ¿þÀÌºê {_waveIndexForMove} Å¬¸®¾î °¨Áö ¡æ ÇÃ·¹ÀÌ¾î º¹±Í ½ÃÀÛ");
+                GameLogger.Info($"[BattleFlow] ï¿½ï¿½ï¿½Ìºï¿½ {_waveIndexForMove} Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
 
-                // [1] ÇöÀç ¿þÀÌºê Á¾·á  ÇÃ·¹ÀÌ¾î ½ºÆùÁöÁ¡À¸·Î º¹±Í
+                // [1] ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìºï¿½ ï¿½ï¿½ï¿½ï¿½  ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 yield return StartCoroutine(ReturnPlayersToSpawn());
 
-                // ¸¶Áö¸· ¿þÀÌºêÀÎÁö È®ÀÎ
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìºï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
                 bool isLastWave = IsLastWave(_waveIndexForMove);
                 if (!isLastWave)
                 {
                     AudioManager.Instance.PlaySFX("SFX_Enter");
-                    // [2] ´ÙÀ½ ¿þÀÌºê¸¦ À§ÇÑ ¸Ê ÀÌµ¿
-                    Debug.Log("[BattleFlow] ´ÙÀ½ ¿þÀÌºê·Î ¸Ê ÀÌµ¿");
+                    // [2] ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìºê¸¦ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ìµï¿½
+                    GameLogger.Info("[BattleFlow] ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìºï¿½ï¿½ ï¿½ï¿½ ï¿½Ìµï¿½");
                     _isMapMoving = true;
                     yield return Move_Map();
                     _isMapMoving = false;
                 }
                 else
                 {
-                    // [3] ¸¶Áö¸· ¿þÀÌºê -> ÃÖÁ¾ º¹±Í
-                    Debug.Log("[BattleFlow] ¸¶Áö¸· ¿þÀÌºê Á¾·á -> End º¹±Í ½ÃÀÛ");
+                    // [3] ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìºï¿½ -> ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+                    GameLogger.Info("[BattleFlow] ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìºï¿½ ï¿½ï¿½ï¿½ï¿½ -> End ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
 
                     //yield return StartCoroutine(ReturnPlayersToSpawnEnd()); 
-                    // º¹±Í ¿Ï·á ¡æ ÀüÅõ Á¾·á·Î ÀÌµ¿ 
+                    // ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ 
                 }
             }
             if (_gotStageResult)
@@ -382,18 +379,18 @@ public class BattleMapManager : MonoBehaviour
                 _battleEnded = true;
                 break;
             }
-            // ¸ÅÇÁ·¹ÀÓ °¨½Ã
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             yield return null;
         }
 
-        Debug.Log("[BattleFlow] BattleFlow Á¾·á °¨Áö ¡æ FinishCombat ¿äÃ»");
+        GameLogger.Info("[BattleFlow] BattleFlow ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ FinishCombat ï¿½ï¿½Ã»");
         if (_gotStageResult && _finalWin)
         {
-            // ¾ÆÁ÷ End º¹±Í ¾ÈÇßÀ¸¸é ¼öÇà
+            // ï¿½ï¿½ï¿½ï¿½ End ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             if (!_endReturnDone)
                 yield return StartCoroutine(ReturnPlayersToSpawnEnd());
         }
-        // [3] ¼­¹ö¿¡ FinishCombat ¿äÃ»  
+        // [3] ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ FinishCombat ï¿½ï¿½Ã»  
         FinishCombatResponsePb result = null;
         bool done = false;
 
@@ -403,7 +400,7 @@ public class BattleMapManager : MonoBehaviour
             {
                 if (!res.Ok)
                 {
-                    Debug.LogError("[BattleMap] FinishCombat ½ÇÆÐ: " + res.Message);
+                    GameLogger.Error("[BattleMap] FinishCombat ï¿½ï¿½ï¿½ï¿½: " + res.Message);
                     done = true;
                     return;
                 }
@@ -414,7 +411,7 @@ public class BattleMapManager : MonoBehaviour
 
         if (!done || result == null)
         {
-            Debug.LogError("[BattleMap] FinishCombat °á°ú ¾øÀ½");
+            GameLogger.Error("[BattleMap] FinishCombat ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
             yield break;
         }
         if (_stageCleared)
@@ -422,7 +419,7 @@ public class BattleMapManager : MonoBehaviour
 
         popup.ShowResult(result);
 
-        Debug.Log("[BattleMap] BattleFlow ÀüÃ¼ Á¾·á");
+        GameLogger.Info("[BattleMap] BattleFlow ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½");
     }
     private void ApplyStageClearToClientProgress(FinishCombatResponsePb res)
     {
@@ -455,7 +452,7 @@ public class BattleMapManager : MonoBehaviour
             v.PlayVictory();
 
         _endReturnDone = true;
-        Debug.Log("[BattleMap] ReturnPlayersToSpawnEnd ¿Ï·á");
+        GameLogger.Info("[BattleMap] ReturnPlayersToSpawnEnd ï¿½Ï·ï¿½");
     }
     private IEnumerator ReturnPlayersToSpawn()
     {
@@ -473,7 +470,7 @@ public class BattleMapManager : MonoBehaviour
         foreach (var v in players)
             v.PlayIdle();
 
-        Debug.Log("[BattleMap] ReturnPlayersToSpawn ¿Ï·á");
+        GameLogger.Info("[BattleMap] ReturnPlayersToSpawn ï¿½Ï·ï¿½");
     }
     private bool IsLastWave(int waveIndex)
     {
@@ -482,7 +479,7 @@ public class BattleMapManager : MonoBehaviour
 
     private void HandleSpawnEvent(CombatLogEventPb ev)
     {
-        Debug.Log($"[SpawnEvent] raw actor={ev.Actor}, target={ev.Target}");
+        GameLogger.Info($"[SpawnEvent] raw actor={ev.Actor}, target={ev.Target}");
 
         if (long.TryParse(ev.Actor, out var actorId))
         {
@@ -491,12 +488,12 @@ public class BattleMapManager : MonoBehaviour
                 if (!go.activeSelf)
                 {
                     go.SetActive(true);
-                    Debug.Log($"[BattleMap] HandleSpawnEvent: Actor {actorId} È°¼ºÈ­");
+                    GameLogger.Info($"[BattleMap] HandleSpawnEvent: Actor {actorId} È°ï¿½ï¿½È­");
                 }
             }
             else
             {
-                Debug.LogWarning($"[BattleMap] HandleSpawnEvent: ActorId {actorId}¿¡ ÇØ´çÇÏ´Â GameObject ¾øÀ½");
+                GameLogger.Warn($"[BattleMap] HandleSpawnEvent: ActorId {actorId}ï¿½ï¿½ ï¿½Ø´ï¿½ï¿½Ï´ï¿½ GameObject ï¿½ï¿½ï¿½ï¿½");
             }
         }
     }
@@ -505,14 +502,14 @@ public class BattleMapManager : MonoBehaviour
     #endregion 
     private bool AreAllPlayersAtSpawn()
     {
-        const float tolerance = 0.2f; // ¿ÀÂ÷ Çã¿ë ¹üÀ§
+        const float tolerance = 0.2f; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
         foreach (var kv in _actorObjects)
         {
             long actorId = kv.Key;
             GameObject go = kv.Value;
 
-            // ÇÃ·¹ÀÌ¾î ÆÀ¸¸
+            // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½
             if (!_actorTeams.TryGetValue(actorId, out var team) || team != CombatTeam.Player)
                 continue;
 
@@ -520,7 +517,7 @@ public class BattleMapManager : MonoBehaviour
             if (view == null)
                 continue;
 
-            // Á×Àº ¾Ö´Â Á¦¿Ü
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½
             if (view.Hp <= 0)
                 continue;
 
@@ -530,12 +527,12 @@ public class BattleMapManager : MonoBehaviour
             float dist = Vector3.Distance(view.transform.position, spawnPos);
             if (dist > tolerance)
             {
-                // ÇÏ³ª¶óµµ ¾ÆÁ÷ ¸Ö¸é false
+                // ï¿½Ï³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¸ï¿½ false
                 return false;
             }
         }
 
-        // »ì¾ÆÀÖ´Â ÇÃ·¹ÀÌ¾îµéÀÌ ÀüºÎ ½ºÆù ±ÙÃ³¿¡ ÀÖÀ½
+        // ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         return true;
     }
     private static int GetIntFromExtra(CombatLogEventPb ev, string key, int defaultValue)
@@ -580,12 +577,12 @@ public class BattleMapManager : MonoBehaviour
     {
         if (_battleEnded)
         {
-            Debug.LogWarning("[BattleMap] ÀüÅõ Á¾·á ÈÄ ½ºÅ³ »ç¿ë ºÒ°¡");
+            GameLogger.Warn("[BattleMap] RequestSkill - Battle Ended");
             onResult?.Invoke(false);
             return;
         }
 
-        Debug.Log($"[ ½ºÅ³ ½ÇÇà ] {actorId} : {skillId}");
+        GameLogger.Info($"[RequestSkill] {actorId} : {skillId}");
         StartCoroutine(RequestSkillRoutine(actorId, skillId, onResult));
     }
     private IEnumerator RequestSkillRoutine(long actorId, int skillId, Action<bool> onResult)
@@ -602,12 +599,11 @@ public class BattleMapManager : MonoBehaviour
         );
         if (!response.Ok)
         {
-            Debug.LogError("[BattleMap] ½ºÅ³ ¿äÃ» ½ÇÆÐ: " + response.Message);
+            GameLogger.Error("[BattleMap] RequestSkillRoutine: " + response.Message);
             onResult?.Invoke(false);
             yield break;
         }
-
-        Debug.Log("[BattleMap] ½ºÅ³ ¿äÃ» ¼º°ø");
+         
         onResult?.Invoke(true);
     }
     private void FaceForwardAllPlayers(bool smooth = false)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Game.Logging;
 using UnityEngine;
 using UnityEngine.UI;
 using WebServer.Protos;
@@ -32,7 +33,7 @@ public class SkillButton : MonoBehaviour
         }
         else
         {
-            Debug.Log($"[SkillSet] Character {actorId}의 스킬 아이콘 {data.IconId} 없음");
+            GameLogger.Info($"[SkillSet] Character {actorId}의 스킬 아이콘 {data.IconId} 없음");
         }
 
         btn = GetComponent<Button>();

@@ -1,6 +1,7 @@
 using Lobby;
 using System.Collections;
 using System.Collections.Generic;
+using Game.Logging;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -84,7 +85,7 @@ public class AdventureDetailPopup : UIPopup
     }
     private void Play(StagePb data)
     {
-        Debug.Log($"{data.Chapter}-{data.Order} 실행하기");
+        GameLogger.Info($"{data.Chapter}-{data.Order} 실행하기");
         Hide();
         LobbyRootController.Instance.Show("PartySet");
     }

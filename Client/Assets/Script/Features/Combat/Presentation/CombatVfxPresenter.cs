@@ -23,7 +23,6 @@ namespace Game.Combat
         }
         public void HandleEvent(CombatLogEventPb ev)
         {
-            Debug.Log($"[HandleEvnet] {ev.Type}");
             switch (ev.Type)
             {
                 case "skill_cast":

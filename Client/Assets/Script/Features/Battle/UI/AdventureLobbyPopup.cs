@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Game.Logging;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -79,7 +80,7 @@ public class AdventureLobbyPopup : UIPopup
         }
         _currentChapter = nextChapter;
         _currentChapterList = chapters; 
-        Debug.Log($"[AdventureLobbyPopup] 다음에 플레이할 스테이지  " +
+        GameLogger.Info($"[AdventureLobbyPopup] 다음에 플레이할 스테이지  " +
                   $"Battle={_currentBattleId}, Chapter={nextChapter.ChapterNum}({nextChapter.Name}), " +
                   $"Stage={nextStage.Order}({nextStage.Name})");
         PopulateChapterDropdown(chapters, _currentChapter);
@@ -191,7 +192,7 @@ public class AdventureLobbyPopup : UIPopup
                 stageNum: s.Order,
                 onStageClicked: () =>
                 {
-                    Debug.Log($"[AdventureLobbyPopup] 스테이지 클릭: {s.Id} ({_currentChapter.ChapterNum}-{s.Order})");
+                    GameLogger.Info($"[AdventureLobbyPopup] 스테이지 클릭: {s.Id} ({_currentChapter.ChapterNum}-{s.Order})");
                     // 여기서 실제 입장 로직 호출
                     if(isActive)
                         OpenLoginPopup(s);
@@ -251,11 +252,11 @@ public class AdventureLobbyPopup : UIPopup
         {
             // 혹시 베이스만 살아있거나 초기화 순서 꼬였을 때 대비
             popupPool = FindObjectOfType<UIPopupPool>();
-            if (popupPool == null) { Debug.LogError("UIPopupPool not found"); return; }
+            if (popupPool == null) { GameLogger.Error("UIPopupPool not found"); return; }
         }
 
         var popup = await popupPool.ShowPopupAsync<AdventureDetailPopup>(key, this.transform);
-        if (popup == null) { Debug.LogError("LoginPopup open failed"); return; }
+        if (popup == null) { GameLogger.Error("LoginPopup open failed"); return; }
         popup.Set(data);
     }
 }
