@@ -59,6 +59,7 @@ public class BattleMapManager : MonoBehaviour
 
     [SerializeField] private SkillFxDataList skillFxDb;
     private readonly Dictionary<long, int> _actorMasterIds = new();
+    private readonly Dictionary<long, CombatActorView> _viewCache = new();
 
     [SerializeField] private CombatSpeedApplier combatSpeedApplier; // Unity ���� ���� ���ǵ� ����
     private bool _gotStageResult = false;
@@ -156,7 +157,14 @@ public class BattleMapManager : MonoBehaviour
        }
    );
 
-        // [4] UI ����
+        // [4] view 캐시 구성
+        _viewCache.Clear();
+        foreach (var kv in _actorObjects)
+        {
+            var view = kv.Value.GetComponent<CombatActorView>();
+            if (view != null) _viewCache[kv.Key] = view;
+        }
+
         PartyMemeber();
 
         SetupCombatDirector(); // CombatDirect �ʱ�ȭ
@@ -513,11 +521,9 @@ public class BattleMapManager : MonoBehaviour
             if (!_actorTeams.TryGetValue(actorId, out var team) || team != CombatTeam.Player)
                 continue;
 
-            var view = go.GetComponent<CombatActorView>();
-            if (view == null)
+            if (!_viewCache.TryGetValue(actorId, out var view))
                 continue;
 
-            // ���� �ִ� ����
             if (view.Hp <= 0)
                 continue;
 
@@ -561,8 +567,7 @@ public class BattleMapManager : MonoBehaviour
             if (team != CombatTeam.Player)
                 continue;
 
-            var view = go.GetComponent<CombatActorView>();
-            if (view == null)
+            if (!_viewCache.TryGetValue(actorId, out var view))
                 continue;
 
             if (view.Hp <= 0)

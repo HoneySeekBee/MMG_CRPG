@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-// ¼­¹ö snapshot ¹Þ¾Æ¼­ À¯´Ö¿¡ Àú‚‹¤· 
+// ï¿½ï¿½ï¿½ï¿½ snapshot ï¿½Þ¾Æ¼ï¿½ ï¿½ï¿½ï¿½Ö¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
 namespace Game.Combat
 {
     public class CombatSnapshotApplier
@@ -13,7 +13,7 @@ namespace Game.Combat
         {
             public Vector3 RenderPos;
             public Vector3 TargetPos;
-            public Vector3 Vel; // Damp¿ë ÁÂÇ¥
+            public Vector3 Vel; 
 
             public int Hp;
             public bool Dead;
@@ -23,8 +23,8 @@ namespace Game.Combat
         private readonly Dictionary<long, GameObject> _actorObjects;
         private readonly Dictionary<long, CombatTeam> _actorTeams;
         private readonly Dictionary<long, ActorLastState> _states = new();
+        private readonly Dictionary<long, CombatActorView> _viewCache = new();
 
-        // Æ©´×°ª
         private readonly float _moveThreshold;
         private readonly float _smoothTime;
         private readonly float _teleportDistance;
@@ -46,6 +46,7 @@ namespace Game.Combat
         public void Clear()
         {
             _states.Clear();
+            _viewCache.Clear();
         }
 
         public void Apply(CombatSnapshotPb snapshot, IList<CombatLogEventPb> eventsThisTick)
@@ -65,9 +66,12 @@ namespace Game.Combat
                 if (!_actorObjects.TryGetValue(a.ActorId, out var go) || go == null)
                     continue;
 
-                var view = go.GetComponent<CombatActorView>();
-                if (view == null)
-                    continue;
+                if (!_viewCache.TryGetValue(a.ActorId, out var view))
+                {
+                    view = go.GetComponent<CombatActorView>();
+                    if (view == null) continue;
+                    _viewCache[a.ActorId] = view;
+                }
 
                 if (!a.Dead && !go.activeSelf)
                     go.SetActive(true);
@@ -93,7 +97,7 @@ namespace Game.Combat
 
                 st.TargetPos = newTarget;
 
-                // HP/Dead´Â Áï½Ã ¹Ý¿µÇØµµ ¹«¹æ
+                // HP/Dead
                 view.SetHp(a.Hp);
 
                 if (!st.Dead && a.Dead)
@@ -110,7 +114,6 @@ namespace Game.Combat
                 st.Dead = a.Dead;
             }
 
-            // º¸ÀÌÁö ¾Ê´Â Àû ºñÈ°¼ºÈ­ ·ÎÁ÷Àº À¯Áö
             foreach (var kv in _actorObjects)
             {
                 var actorId = kv.Key;
@@ -137,8 +140,7 @@ namespace Game.Combat
                 if (!_actorObjects.TryGetValue(actorId, out var go) || go == null || !go.activeSelf)
                     continue;
 
-                var view = go.GetComponent<CombatActorView>();
-                if (view == null) continue;
+                if (!_viewCache.TryGetValue(actorId, out var view)) continue;
 
                 var cur = view.transform.position;
                 var target = st.TargetPos;
