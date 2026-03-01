@@ -235,6 +235,11 @@ namespace WebServer.Seed
                     JsonSerializer.Deserialize<List<Dictionary<string, JsonElement>>>(json)!;
 
                 var pks = await GetPrimaryKeysAsync(table);
+                if (!pks.Any())
+                {
+                    Console.WriteLine($"[SeedLoader] Skipped (no table) → {table}");
+                    continue;
+                }
 
                 foreach (var row in rows)
                 {
