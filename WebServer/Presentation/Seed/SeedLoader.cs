@@ -180,9 +180,9 @@ namespace WebServer.Seed
 
                 "Characters",
                 "CharacterExp",
-                "CharacterModel",
                 "CharacterModelParts",
                 "CharacterModelWeapon",
+                "CharacterModel",
                 "CharacterPromotion",
                 "CharacterPromotionMaterials",
                 "CharacterStatProgression",
