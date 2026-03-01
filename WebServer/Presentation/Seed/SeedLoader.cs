@@ -178,6 +178,11 @@ namespace WebServer.Seed
                 "SynergyRule",
                 "SynergyTarget",
 
+                "Item",
+                "ItemStat",
+                "ItemEffect",
+                "ItemPrice",
+
                 "Characters",
                 "CharacterExp",
                 "CharacterModelParts",
@@ -186,12 +191,7 @@ namespace WebServer.Seed
                 "CharacterPromotion",
                 "CharacterPromotionMaterials",
                 "CharacterStatProgression",
-                "CharacterSkills",  
-
-                "Item",
-                "ItemStat",
-                "ItemEffect",
-                "ItemPrice",
+                "CharacterSkills",
 
 
                 "Monsters",
