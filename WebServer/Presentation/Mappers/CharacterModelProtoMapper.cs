@@ -8,23 +8,23 @@ namespace WebServer.Mappers
 {
     public static class CharacterModelProtoMapper
     { 
-        public static BodySizePb ToBodyPb(this string s) => s switch
+        public static BodySizePb ToBodyPb(this string s) => s.ToLower() switch
         {
-            "Small" => BodySizePb.Small,
-            "Normal" => BodySizePb.Normal,
-            "Big" => BodySizePb.Big,
+            "small" => BodySizePb.Small,
+            "normal" => BodySizePb.Normal,
+            "big" => BodySizePb.Big,
             _ => BodySizePb.BodySizeUnspecified
-        }; 
-        
-        public static AnimationTypePb ToAnimPb(this string s) => s switch
+        };
+
+        public static AnimationTypePb ToAnimPb(this string s) => s.ToLower().Replace("_", "") switch
         {
-            "Bow" => AnimationTypePb.Bow,
-            "OneHandSword" => AnimationTypePb.OneHandSword,
-            "Wand" => AnimationTypePb.Wand,
-            "Fist" => AnimationTypePb.Fist,
-            "TwoHandSword" => AnimationTypePb.TwoHandSword,
-            "SwordShield" => AnimationTypePb.SwordShield,
-            "Spear" => AnimationTypePb.Spear,
+            "bow" => AnimationTypePb.Bow,
+            "onehandsword" => AnimationTypePb.OneHandSword,
+            "wand" => AnimationTypePb.Wand,
+            "fist" => AnimationTypePb.Fist,
+            "twohandsword" => AnimationTypePb.TwoHandSword,
+            "swordshield" => AnimationTypePb.SwordShield,
+            "spear" => AnimationTypePb.Spear,
             _ => AnimationTypePb.AnimTypeUnspecified
         };
 
@@ -67,7 +67,7 @@ namespace WebServer.Mappers
         {
             PartId = p.PartId,
             PartKey = p.PartKey,
-            PartType = (PartTypePb)System.Enum.Parse(typeof(PartTypePb), p.PartType)
+            PartType = (PartTypePb)System.Enum.Parse(typeof(PartTypePb), p.PartType, ignoreCase: true)
         };
 
         public static CharacterModelWeaponPb ToProto(this Application.CharacterModels.CharacterModelWeaponDto w) => new()
