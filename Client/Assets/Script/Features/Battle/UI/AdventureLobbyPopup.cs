@@ -1,11 +1,13 @@
 using Contracts.Protos;
 using Game.Data;
+using Game.Logging;
 using Lobby;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TMPro;
-using Game.Logging;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,7 +23,7 @@ public class AdventureLobbyPopup : UIPopup
     private List<ChapterPb> _currentChapterList = new();
     private ChapterPb _currentChapter;
 
-    // ¿ÀºêÁ§Æ® Ç®¸µÀ¸·Î ¹Ù²Ù±â
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® Ç®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù²Ù±ï¿½
     private readonly List<StageButtonPopup> _pool = new();
     private readonly List<StageButtonPopup> _activeButtons = new();
 
@@ -55,7 +57,7 @@ public class AdventureLobbyPopup : UIPopup
 
         foreach (var chapter in chapters)
         {
-            // ÀÌ Ã©ÅÍ¿¡ ¼ÓÇÑ ½ºÅ×ÀÌÁöµé
+            // ï¿½ï¿½ Ã©ï¿½Í¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             var stages = cache
                 .GetStagesByChapter(chapter.ChapterId)
                 .Where(s => s.IsActive)          
@@ -80,7 +82,7 @@ public class AdventureLobbyPopup : UIPopup
         }
         _currentChapter = nextChapter;
         _currentChapterList = chapters; 
-        GameLogger.Info($"[AdventureLobbyPopup] ´ÙÀ½¿¡ ÇÃ·¹ÀÌÇÒ ½ºÅ×ÀÌÁö  " +
+        GameLogger.Info($"[AdventureLobbyPopup] ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  " +
                   $"Battle={_currentBattleId}, Chapter={nextChapter.ChapterNum}({nextChapter.Name}), " +
                   $"Stage={nextStage.Order}({nextStage.Name})");
         PopulateChapterDropdown(chapters, _currentChapter);
@@ -95,7 +97,7 @@ public class AdventureLobbyPopup : UIPopup
 
         var options = new List<TMP_Dropdown.OptionData>();
 
-        // ÇöÀç Ã©ÅÍ ÀÌÇÏÀÎ ¾Öµé º¸¿©ÁÖ±â 
+        // ï¿½ï¿½ï¿½ï¿½ Ã©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Öµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ 
         int maxChapterNum = currentChapter != null ? currentChapter.ChapterNum : 1;
 
         foreach (var ch in allChapters)
@@ -103,13 +105,13 @@ public class AdventureLobbyPopup : UIPopup
             if (ch.ChapterNum > maxChapterNum)
                 break; 
 
-            string label = $"Ã©ÅÍ {ch.ChapterNum} - {ch.Name}";
+            string label = $"Ã©ï¿½ï¿½ {ch.ChapterNum} - {ch.Name}";
             options.Add(new TMP_Dropdown.OptionData(label));
         }
 
         ChapterTitles.AddOptions(options);
 
-        // ÇöÀç Ã©ÅÍ·Î ¼±ÅÃ ¸ÂÃçÁÖ±â
+        // ï¿½ï¿½ï¿½ï¿½ Ã©ï¿½Í·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½
         if (currentChapter != null)
         {
             int index = currentChapter.ChapterNum - 1; // 0-based
@@ -140,14 +142,14 @@ public class AdventureLobbyPopup : UIPopup
         var user = GameState.Instance.CurrentUser;
         var prog = user.StageProgress;   
 
-        // ÀÌ Ã©ÅÍÀÇ ½ºÅ×ÀÌÁöµé
+        // ï¿½ï¿½ Ã©ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         var stages = cache.GetStagesByChapter(chapterId)
                           .Where(s => s.IsActive)
                           .OrderBy(s => s.Order)
                           .ToList();
 
-        // 1) Å¬¸®¾îÇÑ °Ç ÀüºÎ ¿­¸²
-        // 2) ¾ÆÁ÷ ¾È ±ü °Í Áß Ã¹ ¹øÂ°¸¸ ¿­¸²
+        // 1) Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        // 2) ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ Ã¹ ï¿½ï¿½Â°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         var cleared = new HashSet<int>();
         foreach (var p in prog.GetAll)
         {
@@ -155,7 +157,7 @@ public class AdventureLobbyPopup : UIPopup
                 cleared.Add(p.StageId);
         }
 
-        // ¾ÆÁ÷ ¾È ±ü °Í Áß Ã¹ ¹øÂ° stageId Ã£±â
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ Ã¹ ï¿½ï¿½Â° stageId Ã£ï¿½ï¿½
         int? firstLockedStageId = null;
         foreach (var s in stages)
         {
@@ -168,7 +170,7 @@ public class AdventureLobbyPopup : UIPopup
 
         foreach (var s in stages)
         {
-            // È¦/Â¦¿¡ µû¶ó ºÎ¸ð °áÁ¤
+            // È¦/Â¦ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Î¸ï¿½ ï¿½ï¿½ï¿½ï¿½
             Transform parent = (s.Order % 2 == 1) ? Row1 : Row2;
 
             var btn = GetButtonFromPool(parent);
@@ -183,7 +185,7 @@ public class AdventureLobbyPopup : UIPopup
             }
             else
             {
-                // ¾ÆÁ÷ ¾È ±ü °Í Áß Ã¹ ¹øÂ°¸¸ ¿­¾îÁÖ±â
+                // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ Ã¹ ï¿½ï¿½Â°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½
                 isActive = (firstLockedStageId.HasValue && firstLockedStageId.Value == s.Id);
             }
 
@@ -192,10 +194,10 @@ public class AdventureLobbyPopup : UIPopup
                 stageNum: s.Order,
                 onStageClicked: () =>
                 {
-                    GameLogger.Info($"[AdventureLobbyPopup] ½ºÅ×ÀÌÁö Å¬¸¯: {s.Id} ({_currentChapter.ChapterNum}-{s.Order})");
-                    // ¿©±â¼­ ½ÇÁ¦ ÀÔÀå ·ÎÁ÷ È£Ãâ
+                    GameLogger.Info($"[AdventureLobbyPopup] ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½: {s.Id} ({_currentChapter.ChapterNum}-{s.Order})");
+                    // ï¿½ï¿½ï¿½â¼­ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½
                     if(isActive)
-                        OpenLoginPopup(s);
+                        _ = OpenStageDetailPopup(s);
                 },
                 isActive: isActive,
                 score: stars
@@ -241,22 +243,23 @@ public class AdventureLobbyPopup : UIPopup
             Destroy(t.GetChild(i).gameObject);
         }
     }
-    private async void OpenLoginPopup(StagePb data)
+    private async Task OpenStageDetailPopup(StagePb data)
     {
-        // Addressables Å° ÀÌ¸§Àº ÇÁ·ÎÁ§Æ®¿¡ ¸Â°Ô
-        const string key = "StageDetailUI";
-
-        // Ç®¿¡¼­ ¿­±â
-        var popupPool = UIPrefabPool.Instance as UIPopupPool;
-        if (popupPool == null)
+        try
         {
-            // È¤½Ã º£ÀÌ½º¸¸ »ì¾ÆÀÖ°Å³ª ÃÊ±âÈ­ ¼ø¼­ ²¿¿´À» ¶§ ´ëºñ
-            popupPool = FindObjectOfType<UIPopupPool>();
-            if (popupPool == null) { GameLogger.Error("UIPopupPool not found"); return; }
-        }
+            const string key = "StageDetailUI";
 
-        var popup = await popupPool.ShowPopupAsync<AdventureDetailPopup>(key, this.transform);
-        if (popup == null) { GameLogger.Error("LoginPopup open failed"); return; }
-        popup.Set(data);
+            var popupPool = UIPrefabPool.Instance as UIPopupPool
+                            ?? FindObjectOfType<UIPopupPool>();
+            if (popupPool == null) { GameLogger.Error("UIPopupPool not found"); return; }
+
+            var popup = await popupPool.ShowPopupAsync<AdventureDetailPopup>(key, this.transform);
+            if (popup == null) { GameLogger.Error("AdventureDetailPopup open failed"); return; }
+            popup.Set(data);
+        }
+        catch (Exception e)
+        {
+            GameLogger.Error($"[AdventureLobbyPopup] OpenStageDetailPopup failed: {e.Message}");
+        }
     }
 }

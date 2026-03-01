@@ -1,6 +1,6 @@
 using Contracts.Protos;
 using System.Collections;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using WebServer.Protos.Monsters;
 
@@ -10,10 +10,11 @@ public class MonsterBase : CombatActorView
     [SerializeField] private MonsterAppearance Appearance;
     [SerializeField] private MonsterAnimationController Animator;
     [SerializeField] protected HpCanvasController HpUI;
-    public void Set(MonsterPb enemyPb)
+    public async Task Set(MonsterPb enemyPb)
     {
         MonsterData = enemyPb;
-        Appearance.Set(MonsterData.Id, Animator.Set);
+        await Appearance.Set(MonsterData.Id);
+        Animator.Set();
     }
     public override void PlayHitFx(bool isCrit)
     {
@@ -24,7 +25,7 @@ public class MonsterBase : CombatActorView
 
     private IEnumerator PlayDie()
     {
-        // ÆÄÆ¼¿ø »ç¸Á UI, ºÎÈ° °¡´É µî
+        // ï¿½ï¿½Æ¼ï¿½ï¿½ ï¿½ï¿½ï¿½ UI, ï¿½ï¿½È° ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
         if (CanPlayAnim(CombatActorView.ActionState.Dead))
             Animator.PlayDie();
         yield return new WaitForSeconds(1);

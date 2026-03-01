@@ -1,7 +1,7 @@
 using Combat;
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using WebServer.Protos.Monsters;
 namespace Game.Combat
@@ -19,7 +19,7 @@ namespace Game.Combat
             _getCharacterLevel = getCharacterLevel;
         }
 
-        public void BuildFromSnapshot(CombatInitialSnapshotPb snapshot, Dictionary<long, GameObject> actorObjects, Dictionary<long, CombatTeam> actorTeams,
+        public async Task BuildFromSnapshot(CombatInitialSnapshotPb snapshot, Dictionary<long, GameObject> actorObjects, Dictionary<long, CombatTeam> actorTeams,
             Dictionary<long, int> actorWaveIndex, Dictionary<long, Vector3> playerSpawnPos, Dictionary<long, int> actorMasterIds, List<long> enemyActorIds, Action<int, long, int> onCreateSkillButton = null)
         {
             if (snapshot == null) return;
@@ -39,16 +39,14 @@ namespace Game.Combat
 
             foreach (var actor in snapshot.Actors)
             {
-                var go = CreateActorGameObject(actor.MasterId, actor.Team);
+                var go = await CreateActorGameObject(actor.MasterId, actor.Team);
                 if (go == null) continue;
 
                 go.transform.SetParent(_parent, worldPositionStays: true);
 
                 var view = go.GetComponent<CombatActorView>();
                 if (view != null)
-                {
                     view.InitFromServer(actor.ActorId, actor.Team, actor.Hp);
-                }
 
                 Vector3 worldPos = new Vector3(actor.X, 0f, actor.Z);
                 go.transform.position = worldPos;
@@ -60,18 +58,16 @@ namespace Game.Combat
 
                 if (actor.Team == (int)CombatTeam.Enemy)
                 {
-                    // 적은 spawn 이벤트로 켜줄 거라면 기본 비활성
                     go.SetActive(false);
                     enemyActorIds.Add(actor.ActorId);
                 }
-                else // Player
+                else
                 {
                     playerSpawnPos[actor.ActorId] = worldPos;
 
                     if (view != null)
                         view.SetSpawnPosition(worldPos);
 
-                    // 스킬 버튼 만들기 (원하면 콜백으로 뺌)
                     int characterId = (int)actor.MasterId;
                     int level = _getCharacterLevel?.Invoke(characterId) ?? 1;
                     onCreateSkillButton?.Invoke(characterId, actor.ActorId, level);
@@ -79,34 +75,23 @@ namespace Game.Combat
             }
         }
 
-        private GameObject CreateActorGameObject(long masterId, int team)
+        private async Task<GameObject> CreateActorGameObject(long masterId, int team)
         {
             if (masterId == 0) return null;
 
-            // Player
             if (team == (int)CombatTeam.Player)
             {
                 GameObject character = PartySetManager.Instance.GetCharacterObject();
-
                 var chaBase = character.GetComponent<CharacterBase>();
                 if (chaBase != null)
-                {
-                    int characterId = (int)masterId;
-                    chaBase.Set(CharacterCache.Instance.CharacterModelById[characterId], true);
-                }
-
+                    await chaBase.Set(CharacterCache.Instance.CharacterModelById[(int)masterId], true);
                 return character;
             }
 
-            // Enemy
             GameObject monster = UnityEngine.Object.Instantiate(_monsterBasePrefab, _parent);
             var monsterBase = monster.GetComponent<MonsterBase>();
             if (monsterBase != null)
-            {
-                int monsterId = (int)masterId;
-                MonsterPb monsterPb = MonsterCache.Instance.MonstersById[monsterId];
-                monsterBase.Set(monsterPb);
-            }
+                await monsterBase.Set(MonsterCache.Instance.MonstersById[(int)masterId]);
 
             monster.SetActive(false);
             return monster;

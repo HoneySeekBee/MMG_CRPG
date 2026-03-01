@@ -65,7 +65,7 @@ public class GachaShopPopup : UIPopup
         yield return SceneController.Instance.LoadAdditiveAsync(SceneController.PartySetupSceneName);
         if (fadeIn != null)
             fadeIn.Invoke();
-        AudioManager.Instance.PlayBGM("bgm_gacha");
+        _ = AudioManager.Instance.PlayBGM("bgm_gacha");
     }
     private void Set_Banner(GachaCatalogPb gachaCatalog)
     {

@@ -143,19 +143,19 @@ public class BattleMapManager : MonoBehaviour
         yield return Set_Map().AsCoroutine();
 
         // [3] ���� ������ ��� ���� ����
-        _actorFactory.BuildFromSnapshot(
-       _combatStart.Snapshot,
-       actorObjects: _actorObjects,
-       actorTeams: _actorTeams,
-       actorWaveIndex: _actorWaveIndex,
-       playerSpawnPos: _playerSpawnPos,
-       actorMasterIds: _actorMasterIds,
-       enemyActorIds: _enemyActorIds,
-       onCreateSkillButton: (characterId, actorId, level) =>
-       {
-           BattleMapPopup.Instance.CreateSkillButton(characterId, actorId, level);
-       }
-   );
+        yield return _actorFactory.BuildFromSnapshot(
+            _combatStart.Snapshot,
+            actorObjects: _actorObjects,
+            actorTeams: _actorTeams,
+            actorWaveIndex: _actorWaveIndex,
+            playerSpawnPos: _playerSpawnPos,
+            actorMasterIds: _actorMasterIds,
+            enemyActorIds: _enemyActorIds,
+            onCreateSkillButton: (characterId, actorId, level) =>
+            {
+                BattleMapPopup.Instance.CreateSkillButton(characterId, actorId, level);
+            }
+        ).AsCoroutine();
 
         // [4] view 캐시 구성
         _viewCache.Clear();
@@ -363,7 +363,7 @@ public class BattleMapManager : MonoBehaviour
                 bool isLastWave = IsLastWave(_waveIndexForMove);
                 if (!isLastWave)
                 {
-                    AudioManager.Instance.PlaySFX("SFX_Enter");
+                    _ = AudioManager.Instance.PlaySFX("SFX_Enter");
                     // [2] ���� ���̺긦 ���� �� �̵�
                     GameLogger.Info("[BattleFlow] ���� ���̺�� �� �̵�");
                     _isMapMoving = true;

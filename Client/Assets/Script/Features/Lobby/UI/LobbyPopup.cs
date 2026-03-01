@@ -5,6 +5,7 @@ using Game.Lobby;
 using Game.Network;
 using Game.UICommon;
 using Lobby;
+using Game.Logging;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,9 +20,9 @@ public class LobbyPopup : UIPopup
     [SerializeField] private CurrencyUI CurrencyUI;
 
     [Header("Optional")]
-    public LoadingSpinner Spinner;    // ¾øÀ¸¸é ¹«½Ã
-    public Popup Popup;               // ¾øÀ¸¸é ¹«½Ã
-    public ProtoHttpClient Http;      // ºñ¿öµµ ÀÚµ¿ Å½»ö
+    public LoadingSpinner Spinner;    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    public Popup Popup;               // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    public ProtoHttpClient Http;      // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½ Å½ï¿½ï¿½
 
     [Header("EachBtn")]
     [SerializeField] private Button CharactersBtn;
@@ -33,7 +34,7 @@ public class LobbyPopup : UIPopup
     private InventoryUI _inventoryPopup;
     private UserCharactersListUI _userCharacterPopup;
 
-    [SerializeField] private Transform hiddenRoot;       // ¹Ì¸® ¸¸µé¾îµÑ ¼û±è¿ë
+    [SerializeField] private Transform hiddenRoot;       // ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 
     private UIPopupPool _popupPool;
 
@@ -46,41 +47,46 @@ public class LobbyPopup : UIPopup
     }
     private async void OnEnable()
     {
-        Initialize();
-        _popupPool = UIPrefabPool.Instance as UIPopupPool
-                     ?? FindObjectOfType<UIPopupPool>();
-
-        if (_popupPool == null)
+        try
         {
-            Debug.LogError("UIPopupPool not found");
-            return;
-        }
+            Initialize();
+            _popupPool = UIPrefabPool.Instance as UIPopupPool
+                         ?? FindObjectOfType<UIPopupPool>();
 
-        var user = GameState.Instance.CurrentUser;
-        if (user != null && user.UserProfilePb != null)
-        {
-            ApplyFromGameState();
-        }
-        else
-        {
-            Debug.LogError($"Lost User Data {user == null}");
-            if (user != null)
-                Debug.LogError($"Lost User Data {user.UserProfilePb == null}");
-        }
-        //  ¹öÆ° ÀÌº¥Æ® ¿¬°á
-        CharactersBtn.onClick.RemoveAllListeners();
-        CharactersBtn.onClick.AddListener(ToggleUserCharacterPopup);
+            if (_popupPool == null)
+            {
+                GameLogger.Error("[LobbyPopup] UIPopupPool not found");
+                return;
+            }
 
-        InventoryBtn.onClick.RemoveAllListeners();
-        InventoryBtn.onClick.AddListener(ToggleInventoryPopup);
-        AddEvent_GachaShop();
-        //  ÃÊ±â ·Îµå (ºñÈ°¼ºÈ­ »óÅÂ·Î)
-        await PreloadPopups();
+            var user = GameState.Instance.CurrentUser;
+            if (user != null && user.UserProfilePb != null)
+            {
+                ApplyFromGameState();
+            }
+            else
+            {
+                GameLogger.Error($"[LobbyPopup] Lost user data: user={user == null}");
+            }
+
+            CharactersBtn.onClick.RemoveAllListeners();
+            CharactersBtn.onClick.AddListener(ToggleUserCharacterPopup);
+
+            InventoryBtn.onClick.RemoveAllListeners();
+            InventoryBtn.onClick.AddListener(ToggleInventoryPopup);
+            AddEvent_GachaShop();
+
+            await PreloadPopups();
+        }
+        catch (Exception e)
+        {
+            GameLogger.Error($"[LobbyPopup] OnEnable failed: {e.Message}");
+        }
     }
     private async Task PreloadPopups()
     {
         Transform popupRoot = this.transform;
-        // ÀÎº¥Åä¸®
+        // ï¿½Îºï¿½ï¿½ä¸®
         if (_inventoryPopup == null)
         {
             const string invKey = "InventoryPopupUI";
@@ -93,7 +99,7 @@ public class LobbyPopup : UIPopup
             }
         }
 
-        // Ä³¸¯ÅÍ ¸®½ºÆ®
+        // Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
         if (_userCharacterPopup == null)
         {
             const string charKey = "UserCharacterPopupUI";
@@ -140,7 +146,7 @@ public class LobbyPopup : UIPopup
     public override void Initialize()
     {
         base.Initialize();
-        // ½ºÇÇ³Ê ±âº» ²¨µÎ±â
+        // ï¿½ï¿½ï¿½Ç³ï¿½ ï¿½âº» ï¿½ï¿½ï¿½Î±ï¿½
         if (Spinner) Spinner.gameObject.SetActive(false);
     }
     private IEnumerator CoRefreshLobby()
@@ -150,13 +156,13 @@ public class LobbyPopup : UIPopup
 
         SetLoading(true);
 
-        // ¿¹: ÇÁ·ÎÇÊ ´Ù½Ã °¡Á®¿À±â
+        // ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         UserProfilePb profile = null;
         yield return Http.Get(ApiRoutes.MeProfile, UserProfilePb.Parser, res =>
         {
             if (!res.Ok || res.Data == null)
             {
-                Popup?.Show("ÇÁ·ÎÇÊ °»½Å ½ÇÆÐ");
+                Popup?.Show("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
                 return;
             }
 
@@ -164,7 +170,7 @@ public class LobbyPopup : UIPopup
             GameState.Instance.CurrentUser?.SetUserProfile(profile);
         });
 
-        // ¼º°øÇßÀ¸¸é UI¿¡ ¹Ý¿µ
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ UIï¿½ï¿½ ï¿½Ý¿ï¿½
         if (profile != null)
             ApplyFromGameState();
 
@@ -181,10 +187,10 @@ public class LobbyPopup : UIPopup
     }
     public void Set_BattleLobbyBtn(Action onBattleLobbyClicked)
     {
-        // È¤½Ã Áßº¹ ¸®½º³Ê ¹æÁö
+        // È¤ï¿½ï¿½ ï¿½ßºï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         AdventureBtn.onClick.RemoveAllListeners();
 
-        // ÀÎÀÚ·Î ¹ÞÀº ActionÀ» ¸®½º³Ê·Î ¿¬°á
+        // ï¿½ï¿½ï¿½Ú·ï¿½ ï¿½ï¿½ï¿½ï¿½ Actionï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ê·ï¿½ ï¿½ï¿½ï¿½ï¿½
         AdventureBtn.onClick.AddListener(() =>
         {
             onBattleLobbyClicked?.Invoke();

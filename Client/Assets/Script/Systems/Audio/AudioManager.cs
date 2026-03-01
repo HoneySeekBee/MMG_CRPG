@@ -1,5 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
+using Game.Logging;
+using System;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
@@ -19,18 +20,32 @@ public class AudioManager : MonoBehaviour
     {
         bgmPlayer.Play(clip);
     }
-    public async void PlayBGM(string key)
+    public async Task PlayBGM(string key)
     {
-        var clip = await AddressableManager.Instance.LoadAsync<AudioClip>(key);
-        bgmPlayer.Play(clip);
+        try
+        {
+            var clip = await AddressableManager.Instance.LoadAsync<AudioClip>(key);
+            bgmPlayer.Play(clip);
+        }
+        catch (Exception e)
+        {
+            GameLogger.Error($"[AudioManager] PlayBGM failed: {e.Message}");
+        }
     }
     public void PlaySFX(AudioClip clip)
     {
         sfxPlayer.Play(clip);
     }
-    public async void PlaySFX(string key)
+    public async Task PlaySFX(string key)
     {
-        var clip = await AddressableManager.Instance.LoadAsync<AudioClip>(key);
-        sfxPlayer.Play(clip);
+        try
+        {
+            var clip = await AddressableManager.Instance.LoadAsync<AudioClip>(key);
+            sfxPlayer.Play(clip);
+        }
+        catch (Exception e)
+        {
+            GameLogger.Error($"[AudioManager] PlaySFX failed: {e.Message}");
+        }
     }
 }

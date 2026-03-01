@@ -64,7 +64,7 @@ namespace Client.Systems
             Spinner?.Show(true);
 
             yield return CheckServerStatus();   // 점검/업데이트 확인
-            AudioManager.Instance.PlayBGM("bgm_lobby_academy");
+            _ = AudioManager.Instance.PlayBGM("bgm_lobby_academy");
             yield return LoadCaches();          // 마스터/스프라이트 등 (더미)
 
             yield return TryAutoLogin();        // Refresh 성공→Lobby, 실패→Login
