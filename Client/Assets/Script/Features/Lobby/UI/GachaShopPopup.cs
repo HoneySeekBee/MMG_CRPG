@@ -2,6 +2,7 @@ using Contracts.Protos;
 using Game.Data;
 using Game.Lobby;
 using Game.Managers;
+using Google.Protobuf.WellKnownTypes;
 using Lobby;
 using System;
 using System.Collections;
@@ -121,6 +122,8 @@ public class GachaShopPopup : UIPopup
                 if (res.Data.AfterProfile != null)
                     GameState.Instance.ApplyProfile(res.Data.AfterProfile);
 
+                SyncNewCharacters(res.Data);
+
                 LobbyRootController.Instance.GachaResult(res.Data);
                 LobbyRootController.Instance.Show("GachaResult");
             }));
@@ -137,11 +140,37 @@ public class GachaShopPopup : UIPopup
                     return;
                 }
 
+                if (res.Data.AfterProfile != null)
+                    GameState.Instance.ApplyProfile(res.Data.AfterProfile);
+
+                SyncNewCharacters(res.Data);
+
                 LobbyRootController.Instance.GachaResult(res.Data);
                 LobbyRootController.Instance.Show("GachaResult");
             }));
         });
         Gacha_Ten.onClick.AddListener(() => Console.WriteLine($"�̱� 10ȸ : {data.Title}"));
+    }
+
+    private void SyncNewCharacters(GachaDrawResultPb data)
+    {
+        var user = GameState.Instance.CurrentUser;
+        if (user == null) return;
+
+        var now = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow);
+        foreach (var item in data.Items)
+        {
+            if (!item.IsNew) continue;
+            user.AddOrUpdateCharacter(new UserCharacterSummaryPb
+            {
+                UserId = user.UserId,
+                CharacterId = item.CharacterId,
+                Level = 1,
+                Exp = 0,
+                BreakThrough = 0,
+                UpdatedAt = now
+            });
+        }
     }
 
 }

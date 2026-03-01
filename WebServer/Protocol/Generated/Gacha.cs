@@ -24,35 +24,37 @@ namespace Contracts.Protos {
     static GachaReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "CgtnYWNoYS5wcm90bxIQQ29udHJhY3RzLlByb3RvcyKKAgoNR2FjaGFCYW5u",
-            "ZXJQYhIKCgJpZBgBIAEoBRILCgNrZXkYAiABKAkSDQoFdGl0bGUYAyABKAkS",
-            "EAoIc3VidGl0bGUYBCABKAkSEgoKcG9ydHJhaXRJZBgFIAEoBRITCgtnYWNo",
-            "YVBvb2xJZBgGIAEoBRITCgtzdGFydHNBdFV0YxgHIAEoAxIRCgllbmRzQXRV",
-            "dGMYCCABKAMSEAoIcHJpb3JpdHkYCSABKAUSDgoGc3RhdHVzGAogASgFEhAK",
-            "CGlzQWN0aXZlGAsgASgIEhYKDmNvc3RDdXJyZW5jeUlkGAwgASgFEgwKBGNv",
-            "c3QYDSABKAUSFAoMdGlja2V0SXRlbUlkGA4gASgFIkUKEUdhY2hhQmFubmVy",
-            "TGlzdFBiEjAKB2Jhbm5lcnMYASADKAsyHy5Db250cmFjdHMuUHJvdG9zLkdh",
-            "Y2hhQmFubmVyUGIiUgoMR2FjaGFFbnRyeVBiEhMKC2NoYXJhY3RlcklkGAEg",
-            "ASgFEg0KBWdyYWRlGAIgASgFEg4KBnJhdGVVcBgDIAEoCBIOCgZ3ZWlnaHQY",
-            "BCABKAUi0QEKEUdhY2hhUG9vbERldGFpbFBiEg4KBnBvb2xJZBgBIAEoBRIM",
-            "CgRuYW1lGAIgASgJEhUKDXRhYmxlc1ZlcnNpb24YAyABKAkSEAoIcGl0eUpz",
-            "b24YBCABKAkSEgoKY29uZmlnSnNvbhgFIAEoCRIYChBzY2hlZHVsZVN0YXJ0",
-            "VXRjGAYgASgDEhYKDnNjaGVkdWxlRW5kVXRjGAcgASgDEi8KB2VudHJpZXMY",
-            "CCADKAsyHi5Db250cmFjdHMuUHJvdG9zLkdhY2hhRW50cnlQYiKHAQoOR2Fj",
-            "aGFDYXRhbG9nUGISDwoHdmVyc2lvbhgBIAEoAxIwCgdiYW5uZXJzGAIgAygL",
-            "Mh8uQ29udHJhY3RzLlByb3Rvcy5HYWNoYUJhbm5lclBiEjIKBXBvb2xzGAMg",
-            "AygLMiMuQ29udHJhY3RzLlByb3Rvcy5HYWNoYVBvb2xEZXRhaWxQYiI2ChJH",
-            "YWNoYURyYXdSZXF1ZXN0UGISEQoJYmFubmVyS2V5GAEgASgJEg0KBWNvdW50",
-            "GAIgASgFIpABCg9HYWNoYURyYXdJdGVtUGISEwoLY2hhcmFjdGVySWQYASAB",
-            "KAUSDQoFZ3JhZGUYAiABKAUSDgoGcmF0ZVVwGAMgASgIEg0KBWlzTmV3GAQg",
-            "ASgIEg8KB2lzU2hhcmQYBSABKAgSEwoLc2hhcmRBbW91bnQYBiABKAUSFAoM",
-            "aXNHdWFyYW50ZWVkGAcgASgIIrQBChFHYWNoYURyYXdSZXN1bHRQYhIUCgx0",
-            "aW1lc3RhbXBVdGMYASABKAMSMAoFaXRlbXMYAiADKAsyIS5Db250cmFjdHMu",
-            "UHJvdG9zLkdhY2hhRHJhd0l0ZW1QYhITCgt1c2VkVGlja2V0cxgDIAEoBRIU",
-            "Cgx1c2VkQ3VycmVuY3kYBCABKAMSFwoPdG90YWxDaGFyYWN0ZXJzGAUgASgF",
-            "EhMKC3RvdGFsU2hhcmRzGAYgASgFYgZwcm90bzM="));
+            "CgtnYWNoYS5wcm90bxIQQ29udHJhY3RzLlByb3RvcxoKdXNlci5wcm90byKK",
+            "AgoNR2FjaGFCYW5uZXJQYhIKCgJpZBgBIAEoBRILCgNrZXkYAiABKAkSDQoF",
+            "dGl0bGUYAyABKAkSEAoIc3VidGl0bGUYBCABKAkSEgoKcG9ydHJhaXRJZBgF",
+            "IAEoBRITCgtnYWNoYVBvb2xJZBgGIAEoBRITCgtzdGFydHNBdFV0YxgHIAEo",
+            "AxIRCgllbmRzQXRVdGMYCCABKAMSEAoIcHJpb3JpdHkYCSABKAUSDgoGc3Rh",
+            "dHVzGAogASgFEhAKCGlzQWN0aXZlGAsgASgIEhYKDmNvc3RDdXJyZW5jeUlk",
+            "GAwgASgFEgwKBGNvc3QYDSABKAUSFAoMdGlja2V0SXRlbUlkGA4gASgFIkUK",
+            "EUdhY2hhQmFubmVyTGlzdFBiEjAKB2Jhbm5lcnMYASADKAsyHy5Db250cmFj",
+            "dHMuUHJvdG9zLkdhY2hhQmFubmVyUGIiUgoMR2FjaGFFbnRyeVBiEhMKC2No",
+            "YXJhY3RlcklkGAEgASgFEg0KBWdyYWRlGAIgASgFEg4KBnJhdGVVcBgDIAEo",
+            "CBIOCgZ3ZWlnaHQYBCABKAUi0QEKEUdhY2hhUG9vbERldGFpbFBiEg4KBnBv",
+            "b2xJZBgBIAEoBRIMCgRuYW1lGAIgASgJEhUKDXRhYmxlc1ZlcnNpb24YAyAB",
+            "KAkSEAoIcGl0eUpzb24YBCABKAkSEgoKY29uZmlnSnNvbhgFIAEoCRIYChBz",
+            "Y2hlZHVsZVN0YXJ0VXRjGAYgASgDEhYKDnNjaGVkdWxlRW5kVXRjGAcgASgD",
+            "Ei8KB2VudHJpZXMYCCADKAsyHi5Db250cmFjdHMuUHJvdG9zLkdhY2hhRW50",
+            "cnlQYiKHAQoOR2FjaGFDYXRhbG9nUGISDwoHdmVyc2lvbhgBIAEoAxIwCgdi",
+            "YW5uZXJzGAIgAygLMh8uQ29udHJhY3RzLlByb3Rvcy5HYWNoYUJhbm5lclBi",
+            "EjIKBXBvb2xzGAMgAygLMiMuQ29udHJhY3RzLlByb3Rvcy5HYWNoYVBvb2xE",
+            "ZXRhaWxQYiI2ChJHYWNoYURyYXdSZXF1ZXN0UGISEQoJYmFubmVyS2V5GAEg",
+            "ASgJEg0KBWNvdW50GAIgASgFIpABCg9HYWNoYURyYXdJdGVtUGISEwoLY2hh",
+            "cmFjdGVySWQYASABKAUSDQoFZ3JhZGUYAiABKAUSDgoGcmF0ZVVwGAMgASgI",
+            "Eg0KBWlzTmV3GAQgASgIEg8KB2lzU2hhcmQYBSABKAgSEwoLc2hhcmRBbW91",
+            "bnQYBiABKAUSFAoMaXNHdWFyYW50ZWVkGAcgASgIIusBChFHYWNoYURyYXdS",
+            "ZXN1bHRQYhIUCgx0aW1lc3RhbXBVdGMYASABKAMSMAoFaXRlbXMYAiADKAsy",
+            "IS5Db250cmFjdHMuUHJvdG9zLkdhY2hhRHJhd0l0ZW1QYhITCgt1c2VkVGlj",
+            "a2V0cxgDIAEoBRIUCgx1c2VkQ3VycmVuY3kYBCABKAMSFwoPdG90YWxDaGFy",
+            "YWN0ZXJzGAUgASgFEhMKC3RvdGFsU2hhcmRzGAYgASgFEjUKDGFmdGVyUHJv",
+            "ZmlsZRgHIAEoCzIfLkNvbnRyYWN0cy5Qcm90b3MuVXNlclByb2ZpbGVQYmIG",
+            "cHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { },
+          new pbr::FileDescriptor[] { global::Contracts.Protos.UserReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Contracts.Protos.GachaBannerPb), global::Contracts.Protos.GachaBannerPb.Parser, new[]{ "Id", "Key", "Title", "Subtitle", "PortraitId", "GachaPoolId", "StartsAtUtc", "EndsAtUtc", "Priority", "Status", "IsActive", "CostCurrencyId", "Cost", "TicketItemId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Contracts.Protos.GachaBannerListPb), global::Contracts.Protos.GachaBannerListPb.Parser, new[]{ "Banners" }, null, null, null, null),
@@ -61,7 +63,7 @@ namespace Contracts.Protos {
             new pbr::GeneratedClrTypeInfo(typeof(global::Contracts.Protos.GachaCatalogPb), global::Contracts.Protos.GachaCatalogPb.Parser, new[]{ "Version", "Banners", "Pools" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Contracts.Protos.GachaDrawRequestPb), global::Contracts.Protos.GachaDrawRequestPb.Parser, new[]{ "BannerKey", "Count" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Contracts.Protos.GachaDrawItemPb), global::Contracts.Protos.GachaDrawItemPb.Parser, new[]{ "CharacterId", "Grade", "RateUp", "IsNew", "IsShard", "ShardAmount", "IsGuaranteed" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Contracts.Protos.GachaDrawResultPb), global::Contracts.Protos.GachaDrawResultPb.Parser, new[]{ "TimestampUtc", "Items", "UsedTickets", "UsedCurrency", "TotalCharacters", "TotalShards" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Contracts.Protos.GachaDrawResultPb), global::Contracts.Protos.GachaDrawResultPb.Parser, new[]{ "TimestampUtc", "Items", "UsedTickets", "UsedCurrency", "TotalCharacters", "TotalShards", "AfterProfile" }, null, null, null, null)
           }));
     }
     #endregion
@@ -69,7 +71,7 @@ namespace Contracts.Protos {
   }
   #region Messages
   /// <summary>
-  /// ´ÜÀÏ ¹è³Ê
+  /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
   /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class GachaBannerPb : pb::IMessage<GachaBannerPb>
@@ -220,7 +222,7 @@ namespace Contracts.Protos {
     public const int EndsAtUtcFieldNumber = 8;
     private long endsAtUtc_;
     /// <summary>
-    /// 0ÀÌ¸é ¹«±âÇÑ
+    /// 0ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -247,7 +249,7 @@ namespace Contracts.Protos {
     public const int StatusFieldNumber = 10;
     private int status_;
     /// <summary>
-    /// ¼­¹ö enum -> int
+    /// ï¿½ï¿½ï¿½ï¿½ enum -> int
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -752,7 +754,7 @@ namespace Contracts.Protos {
   }
 
   /// <summary>
-  /// ¹è³Ê ¸ñ·Ï
+  /// ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
   /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class GachaBannerListPb : pb::IMessage<GachaBannerListPb>
@@ -934,7 +936,7 @@ namespace Contracts.Protos {
   }
 
   /// <summary>
-  /// Ç® ¿£Æ®¸®(È®·üÇ¥ ÇÑ ÁÙ)
+  /// Ç® ï¿½ï¿½Æ®ï¿½ï¿½(È®ï¿½ï¿½Ç¥ ï¿½ï¿½ ï¿½ï¿½)
   /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class GachaEntryPb : pb::IMessage<GachaEntryPb>
@@ -1238,7 +1240,7 @@ namespace Contracts.Protos {
   }
 
   /// <summary>
-  /// Ç® »ó¼¼
+  /// Ç® ï¿½ï¿½
   /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class GachaPoolDetailPb : pb::IMessage<GachaPoolDetailPb>
@@ -1332,7 +1334,7 @@ namespace Contracts.Protos {
     public const int PityJsonFieldNumber = 4;
     private string pityJson_ = "";
     /// <summary>
-    /// ¼­¹öÀÇ JSON ¿ø¹® ±×´ë·Î
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ JSON ï¿½ï¿½ï¿½ï¿½ ï¿½×´ï¿½ï¿½
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -1347,7 +1349,7 @@ namespace Contracts.Protos {
     public const int ConfigJsonFieldNumber = 5;
     private string configJson_ = "";
     /// <summary>
-    /// ¼­¹öÀÇ JSON ¿ø¹® ±×´ë·Î
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ JSON ï¿½ï¿½ï¿½ï¿½ ï¿½×´ï¿½ï¿½
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -1377,7 +1379,7 @@ namespace Contracts.Protos {
     public const int ScheduleEndUtcFieldNumber = 7;
     private long scheduleEndUtc_;
     /// <summary>
-    /// 0ÀÌ¸é ¹«±âÇÑ
+    /// 0ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -1691,7 +1693,7 @@ namespace Contracts.Protos {
   }
 
   /// <summary>
-  /// Ä«Å»·Î±×: È°¼º ¹è³Ê + ÂüÁ¶ Ç®µé
+  /// Ä«Å»ï¿½Î±ï¿½: È°ï¿½ï¿½ ï¿½ï¿½ï¿½ + ï¿½ï¿½ï¿½ï¿½ Ç®ï¿½ï¿½
   /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class GachaCatalogPb : pb::IMessage<GachaCatalogPb>
@@ -1744,7 +1746,7 @@ namespace Contracts.Protos {
     public const int VersionFieldNumber = 1;
     private long version_;
     /// <summary>
-    /// Ä³½Ì/¹öÀü°ü¸®(¼±ÅÃ)
+    /// Ä³ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½)
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -2618,6 +2620,7 @@ namespace Contracts.Protos {
       usedCurrency_ = other.usedCurrency_;
       totalCharacters_ = other.totalCharacters_;
       totalShards_ = other.totalShards_;
+      afterProfile_ = other.afterProfile_ != null ? other.afterProfile_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -2698,6 +2701,18 @@ namespace Contracts.Protos {
       }
     }
 
+    /// <summary>Field number for the "afterProfile" field.</summary>
+    public const int AfterProfileFieldNumber = 7;
+    private global::Contracts.Protos.UserProfilePb afterProfile_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Contracts.Protos.UserProfilePb AfterProfile {
+      get { return afterProfile_; }
+      set {
+        afterProfile_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -2719,6 +2734,7 @@ namespace Contracts.Protos {
       if (UsedCurrency != other.UsedCurrency) return false;
       if (TotalCharacters != other.TotalCharacters) return false;
       if (TotalShards != other.TotalShards) return false;
+      if (!object.Equals(AfterProfile, other.AfterProfile)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -2732,6 +2748,7 @@ namespace Contracts.Protos {
       if (UsedCurrency != 0L) hash ^= UsedCurrency.GetHashCode();
       if (TotalCharacters != 0) hash ^= TotalCharacters.GetHashCode();
       if (TotalShards != 0) hash ^= TotalShards.GetHashCode();
+      if (afterProfile_ != null) hash ^= AfterProfile.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -2771,6 +2788,10 @@ namespace Contracts.Protos {
         output.WriteRawTag(48);
         output.WriteInt32(TotalShards);
       }
+      if (afterProfile_ != null) {
+        output.WriteRawTag(58);
+        output.WriteMessage(AfterProfile);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -2802,6 +2823,10 @@ namespace Contracts.Protos {
         output.WriteRawTag(48);
         output.WriteInt32(TotalShards);
       }
+      if (afterProfile_ != null) {
+        output.WriteRawTag(58);
+        output.WriteMessage(AfterProfile);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -2827,6 +2852,9 @@ namespace Contracts.Protos {
       }
       if (TotalShards != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(TotalShards);
+      }
+      if (afterProfile_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(AfterProfile);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -2855,6 +2883,12 @@ namespace Contracts.Protos {
       }
       if (other.TotalShards != 0) {
         TotalShards = other.TotalShards;
+      }
+      if (other.afterProfile_ != null) {
+        if (afterProfile_ == null) {
+          AfterProfile = new global::Contracts.Protos.UserProfilePb();
+        }
+        AfterProfile.MergeFrom(other.AfterProfile);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -2895,6 +2929,13 @@ namespace Contracts.Protos {
             TotalShards = input.ReadInt32();
             break;
           }
+          case 58: {
+            if (afterProfile_ == null) {
+              AfterProfile = new global::Contracts.Protos.UserProfilePb();
+            }
+            input.ReadMessage(AfterProfile);
+            break;
+          }
         }
       }
     #endif
@@ -2932,6 +2973,13 @@ namespace Contracts.Protos {
           }
           case 48: {
             TotalShards = input.ReadInt32();
+            break;
+          }
+          case 58: {
+            if (afterProfile_ == null) {
+              AfterProfile = new global::Contracts.Protos.UserProfilePb();
+            }
+            input.ReadMessage(AfterProfile);
             break;
           }
         }
