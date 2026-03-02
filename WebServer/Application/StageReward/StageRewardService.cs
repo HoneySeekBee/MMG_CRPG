@@ -121,6 +121,15 @@ namespace Application.StageReward
                     FirstClearReward: d.FirstClearOnly));
             }
 
+            // GEM 보상: 챕터 기반 지급
+            int baseGem = Math.Clamp(5 + (stage.Chapter - 1) * 3, 5, 20);
+            rewards.Add(new GainedRewardDto(ItemId: 1002, Qty: baseGem, FirstClearReward: false));
+            if (isFirstClear)
+            {
+                int bonus = (int)Math.Ceiling(baseGem * 0.5);
+                rewards.Add(new GainedRewardDto(ItemId: 1002, Qty: bonus, FirstClearReward: true));
+            }
+
             // 5) 통화형 아이템을 Wallet에 지급 + 합계 계산
             var (gold, gem, token) = await GrantCurrenciesAsync(userId, rewards, ct);
 
