@@ -2,11 +2,13 @@ using Cache;
 using Contracts.Protos;
 using Game.Auth;
 using Game.Data;
+using Game.Logging;
 using Game.Managers;
 using Game.Network;
 using System;
-using System.Collections; 
+using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Client.Systems
 {
@@ -15,9 +17,10 @@ namespace Client.Systems
         public static AppBootstrap Instance { get; private set; }
         [Header("References")]
         public ApiConfig ApiConfig;
-        public Game.UICommon.LoadingSpinner Spinner; // ÀÖÀ¸¸é ¿¬°á
-        public Game.UICommon.Popup Popup;            // ÀÖÀ¸¸é ¿¬°á
+        public Game.UICommon.LoadingSpinner Spinner; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        public Game.UICommon.Popup Popup;            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
+        [SerializeField] private AudioListener audioListner;
         public ProtoHttpClient Http { get; private set; }
         public ProtoAuthService AuthService { get; private set; }
         private bool _authRedirecting;
@@ -26,15 +29,16 @@ namespace Client.Systems
             if (Instance != null && Instance != this) { Destroy(gameObject); return; }
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            SceneManager.sceneLoaded += OnSceneLoaded;
             Debug.Log("=== [AppBootstrap] Awake ===");
 
-            // Àü¿ª ¸Å´ÏÀú º¸Àå
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½Å´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             if (SceneController.Instance == null)
                 new GameObject("SceneController").AddComponent<SceneController>();
             if (GameState.Instance == null)
                 new GameObject("GameState").AddComponent<GameState>();
 
-            // ³×Æ®¿öÅ© ÁØºñ
+            // ï¿½ï¿½Æ®ï¿½ï¿½Å© ï¿½Øºï¿½
             Http = new ProtoHttpClient(ApiConfig);
             Http.OnUnauthorized += code =>
             {
@@ -49,7 +53,21 @@ namespace Client.Systems
             };
             AuthService = new ProtoAuthService(Http);
 
-            Debug.Log("[AppBootstrap] (TODO) Addressables ÃÊ±âÈ­ ¿¹Á¤");
+            Debug.Log("[AppBootstrap] (TODO) Addressables ï¿½Ê±ï¿½È­ ï¿½ï¿½ï¿½ï¿½");
+        }
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            var count = FindObjectsByType<AudioListener>(FindObjectsSortMode.None).Length;
+            SetAudioListener(count <= 1);
+        }
+        private void OnDestroy()
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+        private void SetAudioListener(bool _enable)
+        {
+            if (audioListner != null)
+                audioListner.enabled = _enable;
         }
         private IEnumerator GoLoginFlow()
         {
@@ -59,15 +77,15 @@ namespace Client.Systems
                 LobbyRootController.Instance.Show("Login");
         }
         IEnumerator Start()
-        {  
+        {
             Debug.Log("=== [AppBootstrap] Start: Boot Begin ===");
             Spinner?.Show(true);
 
-            yield return CheckServerStatus();   // Á¡°Ë/¾÷µ¥ÀÌÆ® È®ÀÎ
+            yield return CheckServerStatus();   // ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® È®ï¿½ï¿½
             _ = AudioManager.Instance.PlayBGM("bgm_lobby_academy");
-            yield return LoadCaches();          // ¸¶½ºÅÍ/½ºÇÁ¶óÀÌÆ® µî (´õ¹Ì)
+            yield return LoadCaches();          // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½)
 
-            yield return TryAutoLogin();        // Refresh ¼º°ø¡æLobby, ½ÇÆÐ¡æLogin
+            yield return TryAutoLogin();        // Refresh ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Lobby, ï¿½ï¿½ï¿½Ð¡ï¿½Login
 
             Spinner?.Show(false);
             Debug.Log("=== [AppBootstrap] Boot Complete ===");
@@ -75,7 +93,7 @@ namespace Client.Systems
 
         IEnumerator CheckServerStatus()
         {
-            Debug.Log("[AppBootstrap] ¼­¹ö »óÅÂ È®ÀÎ...");
+            Debug.Log("[AppBootstrap] ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½...");
             bool done = false;
 
             yield return Http.Get(ApiRoutes.Status, StatusPb.Parser, res =>
@@ -83,8 +101,8 @@ namespace Client.Systems
                 done = true;
                 if (!res.Ok)
                 {
-                    Debug.LogError($"[Status] ½ÇÆÐ: {res.Message}");
-                    Popup?.Show($"³×Æ®¿öÅ© ¿À·ù: {res.Message}");
+                    Debug.LogError($"[Status] ï¿½ï¿½ï¿½ï¿½: {res.Message}");
+                    Popup?.Show($"ï¿½ï¿½Æ®ï¿½ï¿½Å© ï¿½ï¿½ï¿½ï¿½: {res.Message}");
                     return;
                 }
 
@@ -94,9 +112,9 @@ namespace Client.Systems
                     new GameObject("GameState").AddComponent<GameState>();
 
                 GameState.Instance.SetServerTimeOffset(s.ServerUnixMs);
-                if (s.Maintenance) { Popup?.Show(string.IsNullOrEmpty(s.Message) ? "Á¡°Ë ÁßÀÔ´Ï´Ù." : s.Message); }
-                if (s.ForceUpdate) { Popup?.Show("»õ ¹öÀüÀÌ ÇÊ¿äÇÕ´Ï´Ù. ½ºÅä¾î·Î ÀÌµ¿ÇØÁÖ¼¼¿ä."); }
-                Debug.Log("[AppBootstrap] ¼­¹ö Á¤»ó");
+                if (s.Maintenance) { Popup?.Show(string.IsNullOrEmpty(s.Message) ? "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ô´Ï´ï¿½." : s.Message); }
+                if (s.ForceUpdate) { Popup?.Show("ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½Õ´Ï´ï¿½. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½ï¿½Ö¼ï¿½ï¿½ï¿½."); }
+                Debug.Log("[AppBootstrap] ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
             });
 
             while (!done) yield return null;
@@ -104,13 +122,13 @@ namespace Client.Systems
 
         IEnumerator LoadCaches()
         {
-            Debug.Log("[AppBootstrap] Ä³½Ã ·Îµå ½ÃÀÛ");
+            Debug.Log("[AppBootstrap] Ä³ï¿½ï¿½ ï¿½Îµï¿½ ï¿½ï¿½ï¿½ï¿½");
             bool done1 = false,
                 done2 = false,
                 done3 = false,
                 done4 = false,
                 done5 = false,
-                done6 = false, 
+                done6 = false,
                 done8 = false;
 
             StartCoroutine(Wrap(MasterDataCache.Instance.CoLoadMasterData(Http, Popup), () => done1 = true));
@@ -120,10 +138,9 @@ namespace Client.Systems
             StartCoroutine(Wrap(UIImageCache.Instance.PreloadAllUISprites(), () => done5 = true));
             StartCoroutine(Wrap(BattleContentsCache.Instance.CoLoadContents(Http, Popup), () => done6 = true));
             StartCoroutine(Wrap(MonsterCache.Instance.CoLoadMonsterCache(Http, Popup), () => done8 = true));
-            yield return new WaitUntil(() => done1 && done2 && done3 && done4 && done5 && done6 && done8); 
-            Debug.Log("[AppBootstrap] Ä³½Ã ·Îµå ¿Ï·á");
-        }
-        // °¢ ÄÚ·çÆ¾ ³¡³µÀ» ¶§ ÄÝ¹é È£ÃâÇÏµµ·Ï ·¡ÇÎ
+            yield return new WaitUntil(() => done1 && done2 && done3 && done4 && done5 && done6 && done8);
+            Debug.Log("[AppBootstrap] Ä³ï¿½ï¿½ ï¿½Îµï¿½ ï¿½Ï·ï¿½");
+        } 
         IEnumerator Wrap(IEnumerator routine, Action onDone)
         {
             yield return routine;
@@ -131,15 +148,13 @@ namespace Client.Systems
         }
         IEnumerator TryAutoLogin()
         {
-            Debug.Log("[AppBootstrap] ÀÚµ¿ ·Î±×ÀÎ ½Ãµµ");
+            GameLogger.Info("[AppBootstrap] Try Auto Login");
 
             GameState.Instance.LoadFromPrefs();
-            var refresh = GameState.Instance.RefreshToken;
+            var refresh = GameState.Instance.RefreshToken; 
 
-            // 0) ¸®ÇÁ·¹½Ã ÅäÅ« ¾øÀ¸¸é ·Î±×ÀÎ
             if (string.IsNullOrEmpty(refresh))
-            {
-                Debug.Log("[AppBootstrap] ¸®ÇÁ·¹½Ã ÅäÅ« ¾øÀ½ ");
+            { 
                 GameState.Instance.SetNeedLogin();
                 Http.ClearToken();
 
@@ -150,7 +165,7 @@ namespace Client.Systems
                 yield break;
             }
 
-            // 1) Refresh·Î »õ ÅäÅ« ¹Þ±â
+            // 1) Refresh 
             bool refreshOk = false;
             string playerId = null, access = null, newRefresh = null;
             long serverMs = 0;
@@ -159,7 +174,7 @@ namespace Client.Systems
             {
                 if (!res.Ok)
                 {
-                    Debug.LogWarning($"[AppBootstrap] [Auth Refresh] ½ÇÆÐ: {res.Message}");
+                    GameLogger.Warn($"[AppBootstrap] [Auth Refresh] ï¿½ï¿½ï¿½ï¿½: {res.Message}");
                     return;
                 }
 
@@ -168,12 +183,11 @@ namespace Client.Systems
                 access = res.Data.AccessToken;
                 newRefresh = res.Data.RefreshToken;
                 serverMs = res.Data.ServerUnixMs;
-                Debug.Log($"[AppBootstrap] [Auth Refresh] : {res.Data.PlayerId} {res.Data.AccessToken}");
+                GameLogger.Info($"[AppBootstrap] [Auth Refresh] : {res.Data.PlayerId} {res.Data.AccessToken}");
             });
 
             if (!refreshOk)
-            {
-                Debug.Log("[AppBootstrap] ¸®ÇÁ·¹½Ã ÅäÅ« ¼Õ»ó ");
+            { 
                 GameState.Instance.SetNeedLogin();
                 Http.ClearToken();
 
@@ -183,19 +197,17 @@ namespace Client.Systems
                 LobbyRootController.Instance.Show("Login");
                 yield break;
             }
-
-            // 2) °øÅë ºÎÆ®½ºÆ®·¦(ÇÁ·ÎÇÊ/ºÎÆ®/½ºÅ×ÀÌÁö/ÀÎº¥/Ä³¸¯ÅÍ µî ·Îµù)
+             
             var bootstrap = new AuthBootstrapper(Http, Popup);
-            Debug.Log($"player ID Ã¼Å© : {playerId}");
+            GameLogger.Info($"player ID : {playerId}");
             yield return bootstrap.CoBootstrapAfterToken(playerId, access, newRefresh, serverMs);
 
             bool bootOk = !string.IsNullOrEmpty(GameState.Instance.AccessToken)
                           && GameState.Instance.CurrentUser != null;
-
-            // 3) °á°ú¿¡ µû¶ó È­¸é ÀüÈ¯
+             
             if (bootOk == false)
             {
-                Debug.LogWarning($"[AppBootstrap] Bootstrap ½ÇÆÐ -> Login  {GameState.Instance.CurrentUser == null}");
+                GameLogger.Warn($"[AppBootstrap] Bootstrap-> Login  {GameState.Instance.CurrentUser == null}");
 
                 GameState.Instance.SetNeedLogin();
                 Http.ClearToken();
@@ -206,7 +218,7 @@ namespace Client.Systems
                 yield break;
             }
 
-            Debug.Log("[AppBootstrap] ÀÚµ¿ ·Î±×ÀÎ ¼º°ø -> Main");
+            GameLogger.Info("[AppBootstrap] -> Main");
             ResetAuthRedirect();
 
             yield return SceneController.Instance.GoAsync("LobbyRoot");
@@ -217,5 +229,5 @@ namespace Client.Systems
         {
             _authRedirecting = false;
         }
-    } 
+    }
 }
