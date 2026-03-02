@@ -48,7 +48,7 @@ public class MasterDataCache : MonoBehaviour
        {
            if (!res.Ok)
            {
-               popup?.Show($"¸¶½ºÅÍµ¥ÀÌÅÍ ºÒ·¯¿À±â ½ÇÆÐ: {res.Message}");
+               popup?.Show($"ï¿½ï¿½ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: {res.Message}");
                return;
            }
 
@@ -80,7 +80,7 @@ public class MasterDataCache : MonoBehaviour
         {
             if (!res.Ok)
             {
-                popup?.Show($"¾ÆÀÌÄÜ ºÒ·¯¿À±â ½ÇÆÐ: {res.Message}");
+                popup?.Show($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: {res.Message}");
                 return;
             }
 
@@ -89,33 +89,37 @@ public class MasterDataCache : MonoBehaviour
     }
     private IEnumerator CoDownloadIcons(IEnumerable<IconMessage> list, System.Action onDone)
     {
-        foreach (var item in list)
-        {
-            using var req = UnityWebRequestTexture.GetTexture(item.Url);
-            yield return req.SendWebRequest();
+        var items = list.ToList();
+        var requests = items.Select(i => UnityWebRequestTexture.GetTexture(i.Url)).ToList();
 
+        foreach (var req in requests) req.SendWebRequest();
+        yield return new WaitUntil(() => requests.All(r => r.isDone));
+
+        for (int i = 0; i < items.Count; i++)
+        {
+            var req = requests[i];
             if (req.result != UnityWebRequest.Result.Success)
             {
-                Debug.Log($"¾ÆÀÌÄÜ ´Ù¿î·Îµå ½ÇÆÐ: {item.Url} - {req.error}");
+                Debug.LogWarning($"ì•„ì´ì½˜ ë‹¤ìš´ë¡œë“œ ì‹¤íŒ¨: {items[i].Url} - {req.error}");
+                req.Dispose();
                 continue;
             }
-
             var tex = DownloadHandlerTexture.GetContent(req);
-            var sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
-            IconSprites[item.IconId] = sprite;
+            IconSprites[items[i].IconId] = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+            req.Dispose();
         }
         onDone.Invoke();
     }
 
     public IEnumerator CoLoadPortraits(ProtoHttpClient http, Popup popup, System.Action onDone)
     {
-        Debug.Log("ÃÊ»óÈ­ ·Îµå ½ÃÀÛ");
+        Debug.Log("ï¿½Ê»ï¿½È­ ï¿½Îµï¿½ ï¿½ï¿½ï¿½ï¿½");
         yield return http.Get(ApiRoutes.Portraits, ListPortraitsResponse.Parser, (ApiResult<ListPortraitsResponse> res) =>
         {
             if (!res.Ok)
             {
-                Debug.Log($"ÃÊ»óÈ­ ·Îµå ½ÇÆÐ {res.Message}");
-                popup?.Show($"ÃÊ»óÈ­ ºÒ·¯¿À±â ½ÇÆÐ: {res.Message}");
+                Debug.Log($"ï¿½Ê»ï¿½È­ ï¿½Îµï¿½ ï¿½ï¿½ï¿½ï¿½ {res.Message}");
+                popup?.Show($"ï¿½Ê»ï¿½È­ ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: {res.Message}");
                 return;
             }
 
@@ -123,24 +127,27 @@ public class MasterDataCache : MonoBehaviour
         });
     }
     private IEnumerator CoDownloadPortraits(IEnumerable<PortraitMessage> list, System.Action onDone)
-    { 
-        foreach (var item in list)
-        {
-            using var req = UnityWebRequestTexture.GetTexture(item.Url);
-            yield return req.SendWebRequest();
+    {
+        var items = list.ToList();
+        var requests = items.Select(i => UnityWebRequestTexture.GetTexture(i.Url)).ToList();
 
+        foreach (var req in requests) req.SendWebRequest();
+        yield return new WaitUntil(() => requests.All(r => r.isDone));
+
+        for (int i = 0; i < items.Count; i++)
+        {
+            var req = requests[i];
             if (req.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError($"ÃÊ»óÈ­ ´Ù¿î·Îµå ½ÇÆÐ: {item.Url} - {req.error}");
+                Debug.LogError($"ì´ˆìƒí™” ë‹¤ìš´ë¡œë“œ ì‹¤íŒ¨: {items[i].Url} - {req.error}");
+                req.Dispose();
                 continue;
             }
-
             var tex = DownloadHandlerTexture.GetContent(req);
-            var sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
-            PortraitSprites[item.PortraitId] = sprite;
-            //Debug.Log($"ÃÊ»óÈ­ {item.PortraitId} || {sprite.name}");
+            PortraitSprites[items[i].PortraitId] = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+            req.Dispose();
         }
-        onDone.Invoke(); 
+        onDone.Invoke();
     } 
     #endregion
 }

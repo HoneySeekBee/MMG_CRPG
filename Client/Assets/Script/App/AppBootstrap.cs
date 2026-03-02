@@ -81,11 +81,12 @@ namespace Client.Systems
             Debug.Log("=== [AppBootstrap] Start: Boot Begin ===");
             Spinner?.Show(true);
 
-            yield return CheckServerStatus();   // ����/������Ʈ Ȯ��
+            yield return CheckServerStatus();
             _ = AudioManager.Instance.PlayBGM("bgm_lobby_academy");
-            yield return LoadCaches();          // ������/��������Ʈ �� (����)
+            yield return LoadEssentialCaches();       // Phase 1: 로비 필수 캐시
+            StartCoroutine(LoadBattleCaches());       // Phase 2: 배틀 캐시 백그라운드
 
-            yield return TryAutoLogin();        // Refresh ������Lobby, ���С�Login
+            yield return TryAutoLogin();
 
             Spinner?.Show(false);
             Debug.Log("=== [AppBootstrap] Boot Complete ===");
@@ -120,30 +121,34 @@ namespace Client.Systems
             while (!done) yield return null;
         }
 
-        IEnumerator LoadCaches()
+        IEnumerator LoadEssentialCaches()
         {
-            Debug.Log("[AppBootstrap] ĳ�� �ε� ����");
-            bool done1 = false,
-                done2 = false,
-                done3 = false,
-                done4 = false,
-                done5 = false,
-                done6 = false,
-                done8 = false;
+            bool done1 = false, done2 = false, done3 = false, done4 = false;
+            StartCoroutine(WrapTimed(MasterDataCache.Instance.CoLoadMasterData(Http, Popup), "MasterData", () => done1 = true));
+            StartCoroutine(WrapTimed(ItemCache.Instance.CoLoadItemData(Http, Popup), "Item", () => done2 = true));
+            StartCoroutine(WrapTimed(CharacterCache.Instance.CoLoadCharacterCache(Http, Popup), "Character", () => done3 = true));
+            StartCoroutine(WrapTimed(UIImageCache.Instance.PreloadAllUISprites(), "UIImage", () => done4 = true));
+            yield return new WaitUntil(() => done1 && done2 && done3 && done4);
+        }
+        IEnumerator LoadBattleCaches()
+        {
+            bool done1 = false, done2 = false, done3 = false;
+            StartCoroutine(WrapTimed(SkillCache.Instance.CoLoadSkillData(Http, Popup), "Skill", () => done1 = true));
+            StartCoroutine(WrapTimed(BattleContentsCache.Instance.CoLoadContents(Http, Popup), "BattleContents", () => done2 = true));
+            StartCoroutine(WrapTimed(MonsterCache.Instance.CoLoadMonsterCache(Http, Popup), "Monster", () => done3 = true));
+            yield return new WaitUntil(() => done1 && done2 && done3);
+        }
 
-            StartCoroutine(Wrap(MasterDataCache.Instance.CoLoadMasterData(Http, Popup), () => done1 = true));
-            StartCoroutine(Wrap(ItemCache.Instance.CoLoadItemData(Http, Popup), () => done2 = true));
-            StartCoroutine(Wrap(CharacterCache.Instance.CoLoadCharacterCache(Http, Popup), () => done3 = true));
-            StartCoroutine(Wrap(SkillCache.Instance.CoLoadSkillData(Http, Popup), () => done4 = true));
-            StartCoroutine(Wrap(UIImageCache.Instance.PreloadAllUISprites(), () => done5 = true));
-            StartCoroutine(Wrap(BattleContentsCache.Instance.CoLoadContents(Http, Popup), () => done6 = true));
-            StartCoroutine(Wrap(MonsterCache.Instance.CoLoadMonsterCache(Http, Popup), () => done8 = true));
-            yield return new WaitUntil(() => done1 && done2 && done3 && done4 && done5 && done6 && done8);
-            Debug.Log("[AppBootstrap] ĳ�� �ε� �Ϸ�");
-        } 
         IEnumerator Wrap(IEnumerator routine, Action onDone)
         {
             yield return routine;
+            onDone?.Invoke();
+        }
+        IEnumerator WrapTimed(IEnumerator routine, string label, Action onDone)
+        {
+            float start = Time.realtimeSinceStartup;
+            yield return routine;
+            Debug.Log($"[Boot] {label}: {Time.realtimeSinceStartup - start:F2}s");
             onDone?.Invoke();
         }
         IEnumerator TryAutoLogin()

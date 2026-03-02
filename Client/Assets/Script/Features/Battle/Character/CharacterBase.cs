@@ -25,8 +25,7 @@ public class CharacterBase : CombatActorView
         StartCoroutine(PlayDie());
     }
     private IEnumerator PlayDie()
-    {
-        // ��Ƽ�� ��� UI, ��Ȱ ���� ��
+    { 
         if (CanPlayAnim(CombatActorView.ActionState.Dead))
             Animator.PlayDie();
         yield return new WaitForSeconds(1);
