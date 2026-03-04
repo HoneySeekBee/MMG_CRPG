@@ -7,14 +7,14 @@ public class SkillData : ScriptableObject
 {
     public int CharacterId;
 
-    [Header("스킬 FX (0돌 / 1돌 / 2돌)")]
+    [Header("Skill FX (Breakthrough 0 / 1 / 2)")]
     public SkillFxSet[] fxByBreakthrough = new SkillFxSet[3];
 
-    [Header("평타 FX (기본/크리티컬)")]
+    [Header("Attack FX (Normal / Critical)")]
     public SkillFxSet normalAttackFx;
     public SkillFxSet criticalAttackFx;
 
-    [Header("무기 궤적 FX")]
+    [Header("Weapon Trail FX")]
     public SkillFxSet weaponTrailFx;
 
     public SkillFxSet GetFxSet(int breakthroughLevel)
@@ -29,6 +29,8 @@ public class SkillFxSet
     public int skillId;
     public string skillName;
     public BaseVfx skillFx;
+    [Tooltip("VFX scale multiplier (1 = default, 0.5 = half, 2 = double)")]
+    public float fxScale = 1f;
     public AudioClip castSound;
     public AudioClip hitSound;
 }

@@ -78,6 +78,7 @@ namespace Game.Combat
                 }
 
                 var fx = Object.Instantiate(fxSet.skillFx, parent);
+                fx.transform.localScale = Vector3.one * fxSet.fxScale;
 
                 float duration = 2f;
                 float radius = 1f;
@@ -162,6 +163,7 @@ namespace Game.Combat
                     : source + attackerGo.transform.forward * 2f;
 
                 var fx = Object.Instantiate(fxSet.skillFx, parent);
+                fx.transform.localScale = Vector3.one * fxSet.fxScale;
 
                 float duration = 1.0f;
                 float radius = 0.5f;
@@ -209,6 +211,7 @@ namespace Game.Combat
                 Vector3 pos = targetGo.transform.position;
 
                 var fx = Object.Instantiate(fxSet.skillFx, parent);
+                fx.transform.localScale = Vector3.one * fxSet.fxScale;
 
                 var data = new VfxData(
                     source: pos,
