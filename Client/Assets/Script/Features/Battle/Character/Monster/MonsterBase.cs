@@ -54,6 +54,7 @@ public class MonsterBase : CombatActorView
     {
         State = ActionState.Attack;
         Animator.PlayAttack(isCrit);
+        StartCoroutine(CoResetAttackState());
     }
 
     public override void ApplySpeed(float scale)

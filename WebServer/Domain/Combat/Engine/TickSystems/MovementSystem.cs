@@ -197,6 +197,7 @@ namespace Domain.Combat.Engine.TickSystems
             foreach (var other in s.ActiveActors.Values)
             {
                 if (other.Team == self.Team) continue;
+                if (other.Dead || other.Hp <= 0) continue;
 
                 float dx = other.X - self.X;
                 float dz = other.Z - self.Z;

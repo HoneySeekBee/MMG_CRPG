@@ -12,7 +12,7 @@ namespace Domain.Combat.Engine.TickSystems
     {
         public void Run(CombatRuntimeState s, List<CombatLogEvent> evs)
         {
-            foreach (var actor in s.ActiveActors.Values.Where(a => !a.Dead))
+            foreach (var actor in s.ActiveActors.Values.Where(a => !a.Dead && a.Hp > 0))
             {
                 if (actor.TargetActorId == null)
                     actor.TargetActorId = FindNearestEnemy(s, actor.ActorId);
@@ -29,7 +29,7 @@ namespace Domain.Combat.Engine.TickSystems
             foreach (var other in s.ActiveActors.Values)
             {
                 if (other.Team == self.Team) continue;
-                if (other.Dead) continue;
+                if (other.Dead || other.Hp <= 0) continue;
 
                 float dx = other.X - self.X;
                 float dz = other.Z - self.Z;

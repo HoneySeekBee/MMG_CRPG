@@ -75,6 +75,7 @@ public class CharacterBase : CombatActorView
     {
         State = ActionState.Attack;
         Animator.PlayAttack(isCrit);
+        StartCoroutine(CoResetAttackState());
     }
     public override void PlayVictory()
     {

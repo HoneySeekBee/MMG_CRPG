@@ -69,7 +69,7 @@ namespace Domain.Combat.Engine.TickSystems
                 if (target.Hp < 0)
                     target.Hp = 0;
 
-                actor.AttackCooldownMs = (int)(actor.AttackIntervalMsBase * AttackSpeedScale);
+                actor.AttackCooldownMs = (int)(actor.AttackIntervalMsBase / AttackSpeedScale);
 
                 evs.Add(new CombatLogEvent(
                   s.NowMs,

@@ -57,12 +57,12 @@ namespace Game.Combat
             var fxSet = sd.GetFxSet(breakthrough);
             if (fxSet == null) return;
 
-            // �ִϸ��̼�(�ִ� ���)
+            // 애니메이션 (시전 시작)
             casterGo.GetComponent<CombatActorView>()?.PlayAttack(false);
 
-            // ����
+            // 사운드
             if (fxSet.castSound != null)
-                AudioManager.Instance.PlaySFX(fxSet.castSound); 
+                AudioManager.Instance.PlaySFX(fxSet.castSound);
 
             // FX
             if (fxSet.skillFx != null)
@@ -107,8 +107,8 @@ namespace Game.Combat
             if (fxSet.hitSound != null)
                 AudioSource.PlayClipAtPoint(fxSet.hitSound, targetGo.transform.position);
 
-            // (���ϸ� ���⼭ hitFx�� ��� ����)
-            // ��, �� SkillFxSet�� hitFx�� ���� ������, skillFx�� ��Ȱ������ �����ؾ� ��.
+            // (선택적으로 여기서 hitFx를 따로 처리)
+            // 단, 이 SkillFxSet에 hitFx가 없는 경우 skillFx를 비활성화하여 처리해야 함.
         }
 
         private int GetBreakthrough(int characterId)
@@ -124,7 +124,7 @@ namespace Game.Combat
             if (!_actorObjects.TryGetValue(attackerActorId, out var attackerGo)) return;
             if (!_actorMasterIds.TryGetValue(attackerActorId, out var characterId)) return;
 
-            // Ÿ�� (��� �Ǳ� �ϴµ� hitSound�� Ÿ�� ������ �� �ڿ�������)
+            // 타겟 (hitSound는 타겟 기준으로 나중에 처리)
             GameObject targetGo = null;
             if (!string.IsNullOrEmpty(ev.Target) &&
                 long.TryParse(ev.Target, out var targetActorId))
@@ -132,29 +132,31 @@ namespace Game.Combat
                 _actorObjects.TryGetValue(targetActorId, out targetGo);
             }
 
+            bool isCrit = ev.Crit ?? false;
+
+            // 공격/피격 애니메이션은 SkillFxDb 유무와 관계없이 항상 재생
+            attackerGo.GetComponent<CombatActorView>()?.PlayAttack(isCrit);
+            targetGo?.GetComponent<CombatActorView>()?.PlayHitFx(isCrit);
+
+            // FX/사운드는 SkillFxDb가 있을 때만
             var sd = _skillFxDb.GetByCharacterId(characterId);
             if (sd == null) return;
 
-            bool isCrit = ev.Crit?? false; // proto���� bool�̸� �ٷ� ��� ����
-
-            //  ���� �ִϸ��̼�
-            attackerGo.GetComponent<CombatActorView>()?.PlayAttack(isCrit);
-
-            //  ��Ÿ FX Set ����
+            // 노말/크리티컬 FX Set 선택
             var fxSet = isCrit ? sd.criticalAttackFx : sd.normalAttackFx;
             if (fxSet == null) return;
 
-            // ���� (castSound�� ������������ ����, hitSound�� ���ǰݡ����� ���� ����)
+            // 사운드 (castSound는 공격 시작음, hitSound는 피격음)
             if (fxSet.castSound != null)
                 AudioManager.Instance.PlaySFX(fxSet.castSound);
 
             if (fxSet.hitSound != null)
             {
-                var pos = targetGo != null ? targetGo.transform.position : attackerGo.transform.position; 
-                AudioManager.Instance.PlaySFX(fxSet.hitSound); 
+                var pos = targetGo != null ? targetGo.transform.position : attackerGo.transform.position;
+                AudioManager.Instance.PlaySFX(fxSet.hitSound);
             }
 
-            //  FX (������ ���)
+            // FX (투사체 등)
             if (fxSet.skillFx != null)
             {
                 Vector3 source = attackerGo.transform.position;
@@ -175,15 +177,15 @@ namespace Game.Combat
         }
         private void OnSkillHit(CombatLogEventPb ev)
         {
-            // 1. ĳ����
+            // 1. 캐스터
             if (!long.TryParse(ev.Actor, out var casterActorId)) return;
             if (!_actorMasterIds.TryGetValue(casterActorId, out var casterCharacterId)) return;
 
-            // 2. Ÿ��
+            // 2. 타겟
             if (!long.TryParse(ev.Target, out var targetActorId)) return;
             if (!_actorObjects.TryGetValue(targetActorId, out var targetGo)) return;
 
-            // 3. ��ų ID (�ʼ�!)
+            // 3. 스킬 ID (필수!)
             if (ev.Extra == null ||
                 !ev.Extra.Fields.TryGetValue("skillId", out var skillIdValue))
                 return;
@@ -193,19 +195,19 @@ namespace Game.Combat
                     ? (int)skillIdValue.NumberValue
                     : int.Parse(skillIdValue.StringValue);
 
-            // 4. SkillData ��������
+            // 4. SkillData 가져오기
             var sd = _skillFxDb.GetByCharacterId(casterCharacterId);
             if (sd == null) return;
-             
+
             int breakthrough = GetBreakthrough(casterCharacterId);
             var fxSet = sd.GetFxSet(breakthrough);
             if (fxSet == null) return;
 
-            // 5. ��Ʈ ����
+            // 5. 히트 사운드
             if (fxSet.hitSound != null)
-                AudioManager.Instance.PlaySFX(fxSet.hitSound); 
+                AudioManager.Instance.PlaySFX(fxSet.hitSound);
 
-            // 6. ��Ʈ FX (����)
+            // 6. 히트 FX (선택)
             if (fxSet.skillFx != null)
             {
                 Vector3 pos = targetGo.transform.position;

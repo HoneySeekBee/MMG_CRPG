@@ -32,6 +32,7 @@ public abstract class CombatActorView : MonoBehaviour, ICombatSpeedAffectable
 
     private Vector3 _lastPos;
     private bool _facingInit;
+    private float _lastAttackTime = -1f;
 
     public enum ActionState { None, Idle, Move, Attack, Dead, Damage, Victory }
     public ActionState State = ActionState.None;
@@ -156,6 +157,15 @@ public abstract class CombatActorView : MonoBehaviour, ICombatSpeedAffectable
     }
     public abstract void ApplySpeed(float scale);
     
+    protected IEnumerator CoResetAttackState()
+    {
+        float t = Time.time;
+        _lastAttackTime = t;
+        yield return new WaitForSeconds(0.7f);
+        if (_lastAttackTime == t && State == ActionState.Attack)
+            State = ActionState.None;
+    }
+
     protected bool CanPlayAnim(ActionState newAction)
     {
         if (State == newAction)
