@@ -1,4 +1,5 @@
 using Combat;
+using Game.Logging;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -42,7 +43,7 @@ namespace Game.Combat
             {
                 if (!res.Ok)
                 {
-                    Debug.LogError("[CombatDirector] Tick failed: " + res.Message);
+                    GameLogger.Error("[CombatDirector] Tick failed: " + res.Message);
                     return;
                 }
 
