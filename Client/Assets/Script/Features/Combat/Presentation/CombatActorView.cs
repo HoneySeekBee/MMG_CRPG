@@ -11,7 +11,7 @@ public enum CombatTeam
 public abstract class CombatActorView : MonoBehaviour, ICombatSpeedAffectable
 {  
     [Header("Runtime Info")]
-    public long ActorId;        // º≠πˆ ActorId
+    public long ActorId;      
     public CombatTeam Team;
 
     public int MaxHp;
@@ -33,7 +33,6 @@ public abstract class CombatActorView : MonoBehaviour, ICombatSpeedAffectable
     private Vector3 _lastPos;
     private bool _facingInit;
 
-    // √÷±Ÿ ªÛ≈¬ 
     public enum ActionState { None, Idle, Move, Attack, Dead, Damage, Victory }
     public ActionState State = ActionState.None;
     protected virtual void Awake()
@@ -70,7 +69,6 @@ public abstract class CombatActorView : MonoBehaviour, ICombatSpeedAffectable
 
         var targetRot = Quaternion.LookRotation(dir.normalized, Vector3.up);
 
-        // ∏µ® √‡ ∫∏¡§ « ø‰«œ∏È yawOffset ¿˚øÎ
         targetRot *= Quaternion.Euler(0f, yawOffset, 0f);
 
         if (visualRoot == null) visualRoot = transform;
@@ -81,11 +79,10 @@ public abstract class CombatActorView : MonoBehaviour, ICombatSpeedAffectable
         }
         else
         {
-            // ∫ŒµÂ∑¥∞‘ µπ∏Æ∑¡∏È ƒ⁄∑Á∆æ/∆Æ¿©¿∏∑Œ √≥∏Æ
             visualRoot.rotation = Quaternion.Slerp(visualRoot.rotation, targetRot, 1f);
         }
 
-        ResetFacingCache(); // ¿ÃµøπÊ«‚ ±‚π› ƒ≥Ω√ ≤ø¿” πÊ¡ˆ
+        ResetFacingCache(); 
     }
     public void SetSpawnPosition(Vector3 pos)
     {
@@ -113,8 +110,7 @@ public abstract class CombatActorView : MonoBehaviour, ICombatSpeedAffectable
             OnDie();
         }
     }
-
-    // HP ºº∆√øÎ (º≠πˆø°º≠ full sync «“ ¿œ ¿÷¿ª ∂ß)
+     
     public virtual void SetHp(int hp)
     {
         Hp = Mathf.Clamp(hp, 0, MaxHp);
@@ -123,23 +119,21 @@ public abstract class CombatActorView : MonoBehaviour, ICombatSpeedAffectable
 
     protected virtual void UpdateHPBar()
     {
-        // TODO: HPπŸ UI æ˜µ•¿Ã∆Æ (√º∑¬πŸ ¿÷¿∏∏È ø©±‚º≠)
+        // TODO: HP UI Ïó∞Í≤∞
     }
 
     public virtual void PlayHitFx(bool isCrit)
     {
         if (HitEffect != null)
             Instantiate(HitEffect, transform.position, Quaternion.identity);
-
-        // TODO: ««∞› æ÷¥œ∏ﬁ¿Ãº«, ≈©∏Æ¿œ ∂ß ªÏ¬¶ ¥Ÿ∏£∞‘, ƒ´∏ﬁ∂Û »ÁµÈ±‚ µÓ
+         
     }
 
     public virtual void OnDie()
     {
         if (DeadEffect != null)
             Instantiate(DeadEffect, transform.position, Quaternion.identity);
-
-        // ±‚∫ª ±∏«ˆ: ±◊≥… ≤®πˆ∏Æ±‚
+         
         gameObject.SetActive(false);
     }
 
@@ -169,6 +163,15 @@ public abstract class CombatActorView : MonoBehaviour, ICombatSpeedAffectable
 
         State = newAction;
         return true;
+    }
+    /// <summary>
+    /// Ïõ®Ïù¥Î∏å Î≥µÍ∑Ä Ï†ÑÏö© - yawOffsetÎßå Ï†ÅÏö©Ìïú Í∏∞Î≥∏ Î∞©Ìñ•ÏúºÎ°ú Î¶¨ÏÖã (FaceDirectionÏùò Ïù¥Ï§ë Ï†ÅÏö© Î∞©ÏßÄ)
+    /// </summary>
+    public void FaceDefaultDirection()
+    {
+        if (visualRoot == null) visualRoot = transform;
+        visualRoot.rotation = Quaternion.LookRotation(Vector3.right, Vector3.up) * Quaternion.Euler(0f, yawOffset, 0f);
+        ResetFacingCache();
     }
     public void ResetFacingCache()
     {

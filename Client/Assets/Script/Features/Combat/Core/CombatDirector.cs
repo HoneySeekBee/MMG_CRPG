@@ -52,10 +52,10 @@ namespace Game.Combat
 
             if (tickRes == null) yield break;
 
-            // Snapshot + Events ����
+            // Snapshot → 상태 렌더링 (HP/위치)
             OnTickApplied?.Invoke(tickRes.Snapshot, tickRes.Events);
 
-            // ���� �̺�Ʈ ó�� (skill_hit ��)
+            // Events → VFX/게임 로직
             foreach (var ev in tickRes.Events)
             {
                 OnCombatEvent?.Invoke(ev);

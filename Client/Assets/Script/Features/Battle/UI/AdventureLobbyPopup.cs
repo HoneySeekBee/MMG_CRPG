@@ -82,7 +82,7 @@ public class AdventureLobbyPopup : UIPopup
         }
         _currentChapter = nextChapter;
         _currentChapterList = chapters; 
-        GameLogger.Info($"[AdventureLobbyPopup] ������ �÷����� ��������  " +
+        GameLogger.Info($"[AdventureLobbyPopup]  " +
                   $"Battle={_currentBattleId}, Chapter={nextChapter.ChapterNum}({nextChapter.Name}), " +
                   $"Stage={nextStage.Order}({nextStage.Name})");
         PopulateChapterDropdown(chapters, _currentChapter);
@@ -96,8 +96,7 @@ public class AdventureLobbyPopup : UIPopup
         ChapterTitles.ClearOptions(); 
 
         var options = new List<TMP_Dropdown.OptionData>();
-
-        // ���� é�� ������ �ֵ� �����ֱ� 
+         
         int maxChapterNum = currentChapter != null ? currentChapter.ChapterNum : 1;
 
         foreach (var ch in allChapters)
@@ -194,8 +193,7 @@ public class AdventureLobbyPopup : UIPopup
                 stageNum: s.Order,
                 onStageClicked: () =>
                 {
-                    GameLogger.Info($"[AdventureLobbyPopup] �������� Ŭ��: {s.Id} ({_currentChapter.ChapterNum}-{s.Order})");
-                    // ���⼭ ���� ���� ���� ȣ��
+                    GameLogger.Info($"[AdventureLobbyPopup]: {s.Id} ({_currentChapter.ChapterNum}-{s.Order})"); 
                     if(isActive)
                         _ = OpenStageDetailPopup(s);
                 },

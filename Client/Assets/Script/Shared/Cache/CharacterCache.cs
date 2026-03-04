@@ -397,7 +397,7 @@ public class CharacterCache : MonoBehaviour
     }
     public IEnumerator CoPreloadMeshes()
     {
-        // 1) 캐릭터 파츠(mesh)들
+        // 1) Character parts(mash)
         yield return PreloadLabelToDict("model", CharacterMeshByKey); 
         // 2) 무기(mesh)들
         yield return PreloadLabelToDict("weapon", WeaponMeshByKey);
@@ -410,12 +410,12 @@ public class CharacterCache : MonoBehaviour
 
         if (locHandle.Status != AsyncOperationStatus.Succeeded)
         {
-            Debug.LogError($"[MeshCache] 라벨 '{label}' 로케이션 로드 실패");
+            Debug.LogError($"[MeshCache] label '{label}' location failed load");
             yield break;
         }
 
         var locations = locHandle.Result;
-        Debug.Log($"[MeshCache] {label} 에서 {locations.Count}개 위치 발견");
+        Debug.Log($"[MeshCache] {label} - Count ({locations.Count}) Find location");
 
         foreach (var loc in locations)
         {
@@ -430,18 +430,18 @@ public class CharacterCache : MonoBehaviour
             if (meshHandle.Status == AsyncOperationStatus.Succeeded)
             {
                 dict[key] = meshHandle;
-                Debug.Log($"[MeshCache] ({label}) 캐시: {key}");
+                Debug.Log($"[MeshCache] ({label}) Cache : {key}");
             }
             else
             {
-                Debug.LogWarning($"[MeshCache] ({label}) {key} 로드 실패");
+                Debug.LogWarning($"[MeshCache] ({label}) {key} Load Failed ");
             }
         }
 
-        // 필요시: Addressables.Release(locHandle);
+        // ToDO : Addressables.Release(locHandle);
     }
 
-    // ─── 조회 메서드 ───
+    // ─── Inquiry Method ───
     public Mesh GetCharacterMesh(string key)
     {
         if (CharacterMeshByKey.TryGetValue(key, out var handle) &&
