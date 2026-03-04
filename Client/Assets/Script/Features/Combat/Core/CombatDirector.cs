@@ -15,11 +15,11 @@ namespace Game.Combat
 
         public bool BattleEnded { get; private set; } = false;
 
-        public Action<CombatSnapshotPb, IList<CombatLogEventPb>> OnTickApplied;
+        public event Action<CombatSnapshotPb, IList<CombatLogEventPb>> OnTickApplied;
 
-        public Action<CombatLogEventPb> OnCombatEvent;
+        public event Action<CombatLogEventPb> OnCombatEvent;
 
-        public Action OnBattleEnd;
+        public event Action OnBattleEnd;
         public CombatDirector(CombatNetwork network)
         {
             _network = network;
@@ -51,10 +51,10 @@ namespace Game.Combat
 
             if (tickRes == null) yield break;
 
-            // Snapshot + Events Àü´Þ
+            // Snapshot + Events ï¿½ï¿½ï¿½ï¿½
             OnTickApplied?.Invoke(tickRes.Snapshot, tickRes.Events);
 
-            // °³º° ÀÌº¥Æ® Ã³¸® (skill_hit µî)
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ® Ã³ï¿½ï¿½ (skill_hit ï¿½ï¿½)
             foreach (var ev in tickRes.Events)
             {
                 OnCombatEvent?.Invoke(ev);
