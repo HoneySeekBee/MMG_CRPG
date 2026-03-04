@@ -38,11 +38,13 @@ namespace Domain.Entities.Characters
             int def,
             int spd,
             decimal? critRate = null,
-            decimal? critDamage = null)
+            decimal? critDamage = null,
+            float range = 1f)
         {
             if (level < 1) throw new ArgumentOutOfRangeException(nameof(level));
             if (hp < 0 || atk < 0 || def < 0 || spd < 0)
                 throw new ArgumentOutOfRangeException("stats must be >= 0");
+            if (range < 0) throw new ArgumentOutOfRangeException(nameof(range));
 
             var cr = critRate ?? 5m;
             var cd = critDamage ?? 150m;
@@ -59,7 +61,8 @@ namespace Domain.Entities.Characters
                 DEF = def,
                 SPD = spd,
                 CriRate = cr,
-                CriDamage = cd
+                CriDamage = cd,
+                Range = range
             };
         }
 

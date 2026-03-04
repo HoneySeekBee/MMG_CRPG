@@ -116,6 +116,7 @@ namespace AdminTool.Models
 
         [Range(0, 100)] public decimal CritRate { get; set; } = 5m;    // %
         [Range(0, 1000)] public decimal CritDamage { get; set; } = 150m; // +%
+        [Range(0, float.MaxValue)] public float Range { get; set; } = 1f;
     }
     public sealed class CharacterProgressionsVm
     {
@@ -208,7 +209,7 @@ namespace AdminTool.Models
 
         public static IReadOnlyList<UpsertProgressionRequest> ToProgressionRequests(this CharacterProgressionsVm vm) =>
             vm.Rows.OrderBy(r => r.Level)
-                   .Select(r => new UpsertProgressionRequest(r.Level, r.HP, r.ATK, r.DEF, r.SPD, r.CritRate, r.CritDamage))
+                   .Select(r => new UpsertProgressionRequest(r.Level, r.HP, r.ATK, r.DEF, r.SPD, r.CritRate, r.CritDamage, r.Range))
                    .ToList();
 
         public static IReadOnlyList<UpsertPromotionRequest> ToPromotionRequests(this CharacterPromotionsVm vm) =>
@@ -259,7 +260,8 @@ namespace AdminTool.Models
                             DEF = p.DEF,
                             SPD = p.SPD,
                             CritRate = p.CriRate,
-                            CritDamage = p.CriDamage
+                            CritDamage = p.CriDamage,
+                            Range = p.Range
                         }).ToList()
             };
 

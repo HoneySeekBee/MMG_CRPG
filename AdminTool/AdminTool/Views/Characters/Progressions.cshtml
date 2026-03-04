@@ -42,6 +42,7 @@
                             <th style="width:100px;">SPD</th>
                             <th style="width:120px;">CritRate</th>
                             <th style="width:140px;">CritDamage</th>
+                            <th style="width:100px;">Range</th>
                             <th style="width:80px;"></th>
                         </tr>
                     </thead>
@@ -90,6 +91,12 @@
                                            name="Rows[@i].CritDamage"
                                            value="@Model.Rows[i].CritDamage"
                                            type="number" min="0" max="1000" step="0.1" />
+                                </td>
+                                <td>
+                                    <input class="form-control form-control-sm"
+                                           name="Rows[@i].Range"
+                                           value="@Model.Rows[i].Range"
+                                           type="number" min="0" step="0.1" />
                                 </td>
                                 <td class="text-end">
                                     <button type="button" class="btn btn-sm btn-outline-danger btn-remove">삭제</button>
@@ -147,6 +154,7 @@
         <td><input class="form-control form-control-sm" name="Rows[${i}].SPD" type="number" min="0" step="1" value="0" required></td>
         <td><input class="form-control form-control-sm" name="Rows[${i}].CritRate" type="number" min="0" max="100" step="0.1" value="0"></td>
         <td><input class="form-control form-control-sm" name="Rows[${i}].CritDamage" type="number" min="0" max="1000" step="0.1" value="0"></td>
+        <td><input class="form-control form-control-sm" name="Rows[${i}].Range" type="number" min="0" step="0.1" value="1"></td>
         <td class="text-end"><button type="button" class="btn btn-sm btn-outline-danger btn-remove">삭제</button></td>`;
                         body.appendChild(tr);
                     }

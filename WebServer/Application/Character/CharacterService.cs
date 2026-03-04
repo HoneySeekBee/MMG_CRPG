@@ -134,7 +134,7 @@ namespace Application.Character
                 throw new ArgumentException("Duplicate levels");
 
             var domain = progressions.Select(p =>
-                CharacterStatProgression.Create(characterId, p.Level, p.HP, p.ATK, p.DEF, p.SPD, p.CritRate, p.CritDamage)).ToList();
+                CharacterStatProgression.Create(characterId, p.Level, p.HP, p.ATK, p.DEF, p.SPD, p.CritRate, p.CritDamage, p.Range)).ToList();
 
             await _repo.ReplaceProgressionsAsync(characterId, domain, ct);
             await _repo.SaveChangesAsync(ct);

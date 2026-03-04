@@ -122,7 +122,8 @@ namespace Application.Monsters
                         DEF = s.DEF,
                         SPD = s.SPD,
                         CritRate = s.CritRate,
-                        CritDamage = s.CritDamage
+                        CritDamage = s.CritDamage,
+                        Range = s.Range
                     })
                     .ToList()
             };

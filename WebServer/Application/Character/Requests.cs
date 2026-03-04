@@ -50,7 +50,7 @@ namespace Application.Character
 
     // 레벨 스탯 업서트
     public sealed record UpsertProgressionRequest(
-        short Level, int HP, int ATK, int DEF, int SPD, decimal CritRate = 5, decimal CritDamage = 150);
+        short Level, int HP, int ATK, int DEF, int SPD, decimal CritRate = 5, decimal CritDamage = 150, float Range = 1f);
 
     // 승급 업서트
     public sealed record UpsertPromotionRequest(

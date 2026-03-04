@@ -63,6 +63,9 @@ namespace AdminTool.Models
 
         [Display(Name = "치명타피해(%)")]
         public decimal CritDamage { get; set; } = 150.00m;
+
+        [Display(Name = "사거리")]
+        public float Range { get; set; } = 1f;
     }
     public class MonsterIndexVm
     {
