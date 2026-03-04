@@ -25,21 +25,20 @@ namespace Game.Combat
         {
             switch (ev.Type)
             {
-                case "skill_cast":
+                case CombatEventTypes.SkillCast:
                     OnSkillCast(ev);
                     break;
 
-                case "normal_attack":
+                case CombatEventTypes.NormalAttack:
                     OnNormalAttack(ev);
                     break;
 
-                case "hit":
-                    OnHit(ev); // (±âÁ¸) µ¥¹ÌÁö È÷Æ® »ç¿îµå¿ë, ÇÊ¿äÇÏ¸é À¯Áö
+                case CombatEventTypes.Hit:
+                    OnHit(ev);
                     break;
 
-                // ½ºÅ³ Å¸°Ýµµ µû·Î ¿À¸é ¿©±â Ãß°¡
-                case "skill_hit":
-                case "skill_hit_aoe":
+                case CombatEventTypes.SkillHit:
+                case CombatEventTypes.SkillHitAoe:
                     OnSkillHit(ev);
                     break;
             }
@@ -58,10 +57,10 @@ namespace Game.Combat
             var fxSet = sd.GetFxSet(breakthrough);
             if (fxSet == null) return;
 
-            // ¾Ö´Ï¸ÞÀÌ¼Ç(ÀÖ´Â °æ¿ì)
+            // ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½(ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½)
             casterGo.GetComponent<CombatActorView>()?.PlayAttack(false);
 
-            // »ç¿îµå
+            // ï¿½ï¿½ï¿½ï¿½
             if (fxSet.castSound != null)
                 AudioManager.Instance.PlaySFX(fxSet.castSound); 
 
@@ -107,8 +106,8 @@ namespace Game.Combat
             if (fxSet.hitSound != null)
                 AudioSource.PlayClipAtPoint(fxSet.hitSound, targetGo.transform.position);
 
-            // (¿øÇÏ¸é ¿©±â¼­ hitFxµµ Àç»ý °¡´É)
-            // ´Ü, ³Ê SkillFxSet¿¡ hitFx¸¦ µû·Î ³ÖÀ»Áö, skillFx¸¦ ÀçÈ°¿ëÇÒÁö °áÁ¤ÇØ¾ß ÇÔ.
+            // (ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½â¼­ hitFxï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
+            // ï¿½ï¿½, ï¿½ï¿½ SkillFxSetï¿½ï¿½ hitFxï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, skillFxï¿½ï¿½ ï¿½ï¿½È°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¾ï¿½ ï¿½ï¿½.
         }
 
         private int GetBreakthrough(int characterId)
@@ -124,7 +123,7 @@ namespace Game.Combat
             if (!_actorObjects.TryGetValue(attackerActorId, out var attackerGo)) return;
             if (!_actorMasterIds.TryGetValue(attackerActorId, out var characterId)) return;
 
-            // Å¸°Ù (¾ø¾îµµ µÇ±ä ÇÏ´Âµ¥ hitSound´Â Å¸°Ù ±âÁØÀÌ ´õ ÀÚ¿¬½º·¯¿ò)
+            // Å¸ï¿½ï¿½ (ï¿½ï¿½ï¿½îµµ ï¿½Ç±ï¿½ ï¿½Ï´Âµï¿½ hitSoundï¿½ï¿½ Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ú¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
             GameObject targetGo = null;
             if (!string.IsNullOrEmpty(ev.Target) &&
                 long.TryParse(ev.Target, out var targetActorId))
@@ -135,16 +134,16 @@ namespace Game.Combat
             var sd = _skillFxDb.GetByCharacterId(characterId);
             if (sd == null) return;
 
-            bool isCrit = ev.Crit?? false; // proto¿¡¼­ boolÀÌ¸é ¹Ù·Î »ç¿ë °¡´É
+            bool isCrit = ev.Crit?? false; // protoï¿½ï¿½ï¿½ï¿½ boolï¿½Ì¸ï¿½ ï¿½Ù·ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-            //  °ø°Ý ¾Ö´Ï¸ÞÀÌ¼Ç
+            //  ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½
             attackerGo.GetComponent<CombatActorView>()?.PlayAttack(isCrit);
 
-            //  ÆòÅ¸ FX Set ¼±ÅÃ
+            //  ï¿½ï¿½Å¸ FX Set ï¿½ï¿½ï¿½ï¿½
             var fxSet = isCrit ? sd.criticalAttackFx : sd.normalAttackFx;
             if (fxSet == null) return;
 
-            // »ç¿îµå (castSound¸¦ ¡°½ºÀ®¡±À¸·Î ¾µÁö, hitSound¸¦ ¡°ÇÇ°Ý¡±À¸·Î ¾µÁö ¼±ÅÃ)
+            // ï¿½ï¿½ï¿½ï¿½ (castSoundï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, hitSoundï¿½ï¿½ ï¿½ï¿½ï¿½Ç°Ý¡ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
             if (fxSet.castSound != null)
                 AudioManager.Instance.PlaySFX(fxSet.castSound);
 
@@ -154,7 +153,7 @@ namespace Game.Combat
                 AudioManager.Instance.PlaySFX(fxSet.hitSound); 
             }
 
-            //  FX (ÀÖÀ¸¸é Àç»ý)
+            //  FX (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½)
             if (fxSet.skillFx != null)
             {
                 Vector3 source = attackerGo.transform.position;
@@ -174,15 +173,15 @@ namespace Game.Combat
         }
         private void OnSkillHit(CombatLogEventPb ev)
         {
-            // 1. Ä³½ºÅÍ
+            // 1. Ä³ï¿½ï¿½ï¿½ï¿½
             if (!long.TryParse(ev.Actor, out var casterActorId)) return;
             if (!_actorMasterIds.TryGetValue(casterActorId, out var casterCharacterId)) return;
 
-            // 2. Å¸°Ù
+            // 2. Å¸ï¿½ï¿½
             if (!long.TryParse(ev.Target, out var targetActorId)) return;
             if (!_actorObjects.TryGetValue(targetActorId, out var targetGo)) return;
 
-            // 3. ½ºÅ³ ID (ÇÊ¼ö!)
+            // 3. ï¿½ï¿½Å³ ID (ï¿½Ê¼ï¿½!)
             if (ev.Extra == null ||
                 !ev.Extra.Fields.TryGetValue("skillId", out var skillIdValue))
                 return;
@@ -192,7 +191,7 @@ namespace Game.Combat
                     ? (int)skillIdValue.NumberValue
                     : int.Parse(skillIdValue.StringValue);
 
-            // 4. SkillData °¡Á®¿À±â
+            // 4. SkillData ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             var sd = _skillFxDb.GetByCharacterId(casterCharacterId);
             if (sd == null) return;
              
@@ -200,11 +199,11 @@ namespace Game.Combat
             var fxSet = sd.GetFxSet(breakthrough);
             if (fxSet == null) return;
 
-            // 5. È÷Æ® »ç¿îµå
+            // 5. ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
             if (fxSet.hitSound != null)
                 AudioManager.Instance.PlaySFX(fxSet.hitSound); 
 
-            // 6. È÷Æ® FX (¼±ÅÃ)
+            // 6. ï¿½ï¿½Æ® FX (ï¿½ï¿½ï¿½ï¿½)
             if (fxSet.skillFx != null)
             {
                 Vector3 pos = targetGo.transform.position;

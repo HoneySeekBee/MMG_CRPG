@@ -52,8 +52,8 @@ namespace Game.Combat
         public void Apply(CombatSnapshotPb snapshot, IList<CombatLogEventPb> eventsThisTick)
         {
             _hardSnapThisFrame =
-    HasEventThisTick(eventsThisTick, "spawn")
- || HasEventThisTick(eventsThisTick, "wave_cleared");
+    HasEventThisTick(eventsThisTick, CombatEventTypes.Spawn)
+ || HasEventThisTick(eventsThisTick, CombatEventTypes.WaveCleared);
 
             if (snapshot?.Actors == null) return;
 

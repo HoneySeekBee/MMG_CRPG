@@ -219,15 +219,15 @@ public class BattleMapManager : MonoBehaviour
         _vfx?.HandleEvent(ev);
         switch (ev.Type)
         {
-            case "spawn":
+            case CombatEventTypes.Spawn:
                 HandleSpawnEvent(ev);
                 break;
 
-            case "wave_cleared":
+            case CombatEventTypes.WaveCleared:
                 HandleWaveClearEvent(ev);
                 break;
 
-            case "stage_result":
+            case CombatEventTypes.StageResult:
                 HandleStageResultEvent(ev);
                 break;
         }

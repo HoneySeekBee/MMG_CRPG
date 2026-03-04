@@ -59,7 +59,7 @@ namespace Game.Combat
             {
                 OnCombatEvent?.Invoke(ev);
 
-                if (ev.Type == "stage_cleared")
+                if (ev.Type == CombatEventTypes.StageCleared)
                 {
                     BattleEnded = true;
                     OnBattleEnd?.Invoke();
