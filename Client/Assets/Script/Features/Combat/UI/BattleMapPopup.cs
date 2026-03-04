@@ -45,7 +45,7 @@ public class BattleMapPopup : UIPopup
         }
         Instance = this;
     }
-    // ÀÌÁ¦ ¿©±â¼­ ½ºÅ×ÀÌÁö¿¡ ´ëÇÑ Á¤º¸¸¦ ¹Þ¾Æ¾ßÇÑ´Ù. 
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½â¼­ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¾ï¿½ï¿½Ñ´ï¿½. 
     public void Set(Action fadeIn)
     {
         SkillButtonDic.Clear();
@@ -61,7 +61,7 @@ public class BattleMapPopup : UIPopup
     }
     private void Init_SKillBtn()
     {
-        // 1) ±âÁ¸ ¹öÆ° ¸ðµÎ ºñÈ°¼ºÈ­ (Ç®¸µ ¹æ½Ä)
+        // 1) ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ° ï¿½ï¿½ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­ (Ç®ï¿½ï¿½ ï¿½ï¿½ï¿½)
         foreach (var btn in SkillButtons)
             btn.gameObject.SetActive(false);
     }
@@ -77,7 +77,7 @@ public class BattleMapPopup : UIPopup
         SkillButtonDic[actorId] = btn; 
         btn.gameObject.SetActive(true);
 
-        // Ä³¸¯ÅÍ°¡ °¡Áø ½ºÅ³ Ã£±â (¿©±â¼­´Â 1¹ø ½ºÅ³¸¸ »ç¿ëÇÑ´Ù°í ÇßÀ¸´Ï ¾Æ·¡¿Í °°ÀÌ)
+        // Ä³ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å³ Ã£ï¿½ï¿½ (ï¿½ï¿½ï¿½â¼­ï¿½ï¿½ 1ï¿½ï¿½ ï¿½ï¿½Å³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ñ´Ù°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
         var skillId = CharacterCache.Instance.DetailById[characterMasterId].Skills[0].SkillId;
         var skillData = SkillCache.Instance.SkillDict[skillId];
 
@@ -99,9 +99,12 @@ public class BattleMapPopup : UIPopup
         _spawnedSlots.Clear();
         if (data.Result == CombatResultPb.CombatResultWin)
         {
-            resultText.text = "½Â¸®";
+            resultText.text = "ï¿½Â¸ï¿½";
             foreach (var r in data.Rewards)
             {
+                if (!ItemCache.Instance.ItemDict.TryGetValue(r.ItemId, out var itemData)) continue;
+                if (!MasterDataCache.Instance.IconSprites.TryGetValue(itemData.IconId, out var sprite)) continue;
+
                 GameObject go = slotPool.Get();
                 go.transform.SetParent(slotParent, false);
 
@@ -109,19 +112,18 @@ public class BattleMapPopup : UIPopup
                 img.color = r.FirstClearReward ? Color.green : Color.white;
 
                 ItemSlotUI slotUI = go.GetComponent<ItemSlotUI>();
-                var iconId = ItemCache.Instance.ItemDict[r.ItemId].IconId;
-                slotUI.Set(MasterDataCache.Instance.IconSprites[iconId]);
+                slotUI.Set(sprite);
 
                 _spawnedSlots.Add(go);
             }
         }
         else if (data.Result == CombatResultPb.CombatResultLose)
         {
-            resultText.text = "ÆÐ¹è";
+            resultText.text = "ï¿½Ð¹ï¿½";
         }
-        else { resultText.text = "°á°ú ºÒ¸í"; }
+        else { resultText.text = "ï¿½ï¿½ï¿½ ï¿½Ò¸ï¿½"; }
 
-        // º° Ç¥½Ã, Å¬¸®¾î ÅØ½ºÆ® µîµµ ¿©±â¼­
+        // ï¿½ï¿½ Ç¥ï¿½ï¿½, Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½Æ® ï¿½îµµ ï¿½ï¿½ï¿½â¼­
         GameLogger.Info($"Stage {data.StageId} Clear, Stars={data.Stars}, FirstClear={data.FirstClear}");
 
     }
@@ -132,7 +134,7 @@ public class BattleMapPopup : UIPopup
     }
     private IEnumerator CoGoToStage()
     {
-        // [1] ÇöÀç ¾À ºñÈ°¼ºÈ­
+        // [1] ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­
         yield return SceneController.Instance.UnloadAdditiveAsync(SceneController.MapSceneName);
         // [2] Show()
         LobbyRootController.Instance.Show("Adventure");

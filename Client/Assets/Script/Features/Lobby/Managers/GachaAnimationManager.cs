@@ -1,4 +1,5 @@
 using Cinemachine;
+using Game.Logging;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -48,7 +49,7 @@ public class GachaAnimationManager : MonoBehaviour
         yield return new WaitForSeconds(time / PlaybackSpeed);
     }
 
-    // =========== 가챠 실행 ===========
+    // =========== Play Gatcha ===========
     public void PlayGacha(Action action = null)
     {
         StartCoroutine(_Play(action));
@@ -123,19 +124,19 @@ public class GachaAnimationManager : MonoBehaviour
     {
         PrepareFlagsDeployIdle();
 
-        // 이동 0 → 1
+        // Move 0 → 1
         StartCoroutine(MoveToWaypoint(1, 1f));
         yield return Wait(0.5f);
 
-        // Gate 열기, Animator 속도 적용
+        // Gate Open, Set Animator Speed
         GateAnimator.speed = PlaybackSpeed;
         GateAnimator.Play("Open");
         yield return Wait(0.5f);
 
-        // 이동 1 → 2
+        // Move 1 → 2
         StartCoroutine(MoveToWaypoint(2, 3.5f));
 
-        // 깃발 deploy
+        // flag deploy
         for (int i = 0; i < flags.Length; i++)
         {
             if (flags[i].left != null)
@@ -154,7 +155,7 @@ public class GachaAnimationManager : MonoBehaviour
         }
         if(action != null)
             action.Invoke();
-        Debug.Log("가챠 연출 끝!");
+        GameLogger.Info("Finish Gatcha animation");
     }
 
     private IEnumerator MoveToWaypoint(int index, float duration)

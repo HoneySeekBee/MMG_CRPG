@@ -408,6 +408,17 @@ public class BattleMapManager : MonoBehaviour
         if (_stageCleared)
             ApplyStageClearToClientProgress(result);
 
+        // Update client wallet with earned rewards
+        var currentProfile = GameState.Instance.CurrentUser?.UserProfilePb;
+        if (currentProfile != null && (result.Gem > 0 || result.Gold > 0 || result.Token > 0))
+        {
+            var updatedProfile = currentProfile.Clone();
+            updatedProfile.Gem += (int)result.Gem;
+            updatedProfile.Gold += (int)result.Gold;
+            updatedProfile.Token += (int)result.Token;
+            GameState.Instance.ApplyProfile(updatedProfile);
+        }
+
         popup.ShowResult(result);
          
     }
