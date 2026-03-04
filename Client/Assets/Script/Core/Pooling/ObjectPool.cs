@@ -34,7 +34,7 @@ public class ObjectPool : MonoBehaviour
     {
         go.SetActive(false);
 
-        // 풀이 활성 상태이고, 이미 자식이 아닐 때만 부모 변경
+        // Only reparent if pool is active and object is not already a child
         if (gameObject.activeInHierarchy && go.transform.parent != transform)
         {
             go.transform.SetParent(transform);

@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
-using UnityEngine; 
+using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using static System.Net.WebRequestMethods;
@@ -18,7 +18,7 @@ public class MasterDataCache : MonoBehaviour
 {
     public static MasterDataCache Instance { get; private set; }
 
-    [Header("MasterData - Rarity, Eelement, Role, Faction")] 
+    [Header("MasterData - Rarity, Eelement, Role, Faction")]
 
     public Dictionary<int, RarityMessage> RarityDictionary = new();
     public Dictionary<int, ElementMessage> ElementDictionary = new();
@@ -27,7 +27,7 @@ public class MasterDataCache : MonoBehaviour
 
     [Header("Icons / Portraits")]
     public Dictionary<int, Sprite> IconSprites = new();
-    public Dictionary<int, Sprite> PortraitSprites = new(); 
+    public Dictionary<int, Sprite> PortraitSprites = new();
 
     private void Awake()
     {
@@ -42,13 +42,13 @@ public class MasterDataCache : MonoBehaviour
     }
 
     public IEnumerator CoLoadMasterData(  ProtoHttpClient http, Popup popup)
-    { 
+    {
         yield return http.Get(ApiRoutes.MasterData, MasterDataBundle.Parser,
        (ApiResult<MasterDataBundle> res) =>
        {
            if (!res.Ok)
            {
-               popup?.Show($"�����͵����� �ҷ����� ����: {res.Message}");
+               popup?.Show($"Failed to load master data: {res.Message}");
                return;
            }
 
@@ -71,7 +71,7 @@ public class MasterDataCache : MonoBehaviour
         StartCoroutine(CoLoadPortraits (http, popup, () => isLoadPortraits = true));
 
         while (isLoadIcon == false || isLoadPortraits == false)
-            yield return null; 
+            yield return null;
     }
     #region Icon / Portrait
     public IEnumerator CoLoadIcons(ProtoHttpClient http, Popup popup, System.Action onDone)
@@ -80,7 +80,7 @@ public class MasterDataCache : MonoBehaviour
         {
             if (!res.Ok)
             {
-                popup?.Show($"������ �ҷ����� ����: {res.Message}");
+                popup?.Show($"Failed to load icons: {res.Message}");
                 return;
             }
 
@@ -100,7 +100,7 @@ public class MasterDataCache : MonoBehaviour
             var req = requests[i];
             if (req.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogWarning($"아이콘 다운로드 실패: {items[i].Url} - {req.error}");
+                Debug.LogWarning($"Icon download failed: {items[i].Url} - {req.error}");
                 req.Dispose();
                 continue;
             }
@@ -113,13 +113,13 @@ public class MasterDataCache : MonoBehaviour
 
     public IEnumerator CoLoadPortraits(ProtoHttpClient http, Popup popup, System.Action onDone)
     {
-        Debug.Log("�ʻ�ȭ �ε� ����");
+        Debug.Log("Loading portraits...");
         yield return http.Get(ApiRoutes.Portraits, ListPortraitsResponse.Parser, (ApiResult<ListPortraitsResponse> res) =>
         {
             if (!res.Ok)
             {
-                Debug.Log($"�ʻ�ȭ �ε� ���� {res.Message}");
-                popup?.Show($"�ʻ�ȭ �ҷ����� ����: {res.Message}");
+                Debug.Log($"Portrait load failed: {res.Message}");
+                popup?.Show($"Failed to load portraits: {res.Message}");
                 return;
             }
 
@@ -139,7 +139,7 @@ public class MasterDataCache : MonoBehaviour
             var req = requests[i];
             if (req.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError($"초상화 다운로드 실패: {items[i].Url} - {req.error}");
+                Debug.LogError($"Portrait download failed: {items[i].Url} - {req.error}");
                 req.Dispose();
                 continue;
             }
@@ -148,6 +148,6 @@ public class MasterDataCache : MonoBehaviour
             req.Dispose();
         }
         onDone.Invoke();
-    } 
+    }
     #endregion
 }

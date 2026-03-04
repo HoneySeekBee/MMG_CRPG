@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-// ���� snapshot �޾Ƽ� ���ֿ� ������ 
+// Receives snapshots and applies them to actors for rendering
 namespace Game.Combat
 {
     public class CombatSnapshotApplier
@@ -13,7 +13,7 @@ namespace Game.Combat
         {
             public Vector3 RenderPos;
             public Vector3 TargetPos;
-            public Vector3 Vel; 
+            public Vector3 Vel;
 
             public int Hp;
             public bool Dead;
@@ -107,7 +107,7 @@ namespace Game.Combat
                     if (BattleMapPopup.Instance.SkillButtonDic.TryGetValue(view.ActorId, out characterSkillBtn))
                     {
                         characterSkillBtn.CharacterDead();
-                    } 
+                    }
                 }
 
                 st.Hp = a.Hp;

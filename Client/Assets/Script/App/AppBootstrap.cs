@@ -17,8 +17,8 @@ namespace Client.Systems
         public static AppBootstrap Instance { get; private set; }
         [Header("References")]
         public ApiConfig ApiConfig;
-        public Game.UICommon.LoadingSpinner Spinner; // ������ ����
-        public Game.UICommon.Popup Popup;            // ������ ����
+        public Game.UICommon.LoadingSpinner Spinner; // Loading spinner reference
+        public Game.UICommon.Popup Popup;            // Popup reference
 
         [SerializeField] private AudioListener audioListner;
         public ProtoHttpClient Http { get; private set; }
@@ -32,13 +32,13 @@ namespace Client.Systems
             SceneManager.sceneLoaded += OnSceneLoaded;
             Debug.Log("=== [AppBootstrap] Awake ===");
 
-            // ���� �Ŵ��� ����
+            // Initialize scene manager
             if (SceneController.Instance == null)
                 new GameObject("SceneController").AddComponent<SceneController>();
             if (GameState.Instance == null)
                 new GameObject("GameState").AddComponent<GameState>();
 
-            // ��Ʈ��ũ �غ�
+            // Network setup
             Http = new ProtoHttpClient(ApiConfig);
             Http.OnUnauthorized += code =>
             {
@@ -53,7 +53,7 @@ namespace Client.Systems
             };
             AuthService = new ProtoAuthService(Http);
 
-            Debug.Log("[AppBootstrap] (TODO) Addressables �ʱ�ȭ ����");
+            Debug.Log("[AppBootstrap] (TODO) Addressables initialization skipped");
         }
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
@@ -83,8 +83,8 @@ namespace Client.Systems
 
             yield return CheckServerStatus();
             _ = AudioManager.Instance.PlayBGM("bgm_lobby_academy");
-            yield return LoadEssentialCaches();       // Phase 1: 로비 필수 캐시
-            StartCoroutine(LoadBattleCaches());       // Phase 2: 배틀 캐시 백그라운드
+            yield return LoadEssentialCaches();       // Phase 1: Essential lobby caches
+            StartCoroutine(LoadBattleCaches());       // Phase 2: Battle caches (background)
 
             yield return TryAutoLogin();
 
@@ -94,7 +94,7 @@ namespace Client.Systems
 
         IEnumerator CheckServerStatus()
         {
-            Debug.Log("[AppBootstrap] ���� ���� Ȯ��...");
+            Debug.Log("[AppBootstrap] Checking server status...");
             bool done = false;
 
             yield return Http.Get(ApiRoutes.Status, StatusPb.Parser, res =>
@@ -102,8 +102,8 @@ namespace Client.Systems
                 done = true;
                 if (!res.Ok)
                 {
-                    Debug.LogError($"[Status] ����: {res.Message}");
-                    Popup?.Show($"��Ʈ��ũ ����: {res.Message}");
+                    Debug.LogError($"[Status] Failed: {res.Message}");
+                    Popup?.Show($"Network error: {res.Message}");
                     return;
                 }
 
@@ -113,9 +113,9 @@ namespace Client.Systems
                     new GameObject("GameState").AddComponent<GameState>();
 
                 GameState.Instance.SetServerTimeOffset(s.ServerUnixMs);
-                if (s.Maintenance) { Popup?.Show(string.IsNullOrEmpty(s.Message) ? "���� ���Դϴ�." : s.Message); }
-                if (s.ForceUpdate) { Popup?.Show("�� ������ �ʿ��մϴ�. ������ �̵����ּ���."); }
-                Debug.Log("[AppBootstrap] ���� ����");
+                if (s.Maintenance) { Popup?.Show(string.IsNullOrEmpty(s.Message) ? "Server is under maintenance." : s.Message); }
+                if (s.ForceUpdate) { Popup?.Show("An update is required. Please visit the store."); }
+                Debug.Log("[AppBootstrap] Server status OK");
             });
 
             while (!done) yield return null;
@@ -156,10 +156,10 @@ namespace Client.Systems
             GameLogger.Info("[AppBootstrap] Try Auto Login");
 
             GameState.Instance.LoadFromPrefs();
-            var refresh = GameState.Instance.RefreshToken; 
+            var refresh = GameState.Instance.RefreshToken;
 
             if (string.IsNullOrEmpty(refresh))
-            { 
+            {
                 GameState.Instance.SetNeedLogin();
                 Http.ClearToken();
 
@@ -170,7 +170,7 @@ namespace Client.Systems
                 yield break;
             }
 
-            // 1) Refresh 
+            // 1) Refresh
             bool refreshOk = false;
             string playerId = null, access = null, newRefresh = null;
             long serverMs = 0;
@@ -179,7 +179,7 @@ namespace Client.Systems
             {
                 if (!res.Ok)
                 {
-                    GameLogger.Warn($"[AppBootstrap] [Auth Refresh] ����: {res.Message}");
+                    GameLogger.Warn($"[AppBootstrap] [Auth Refresh] Failed: {res.Message}");
                     return;
                 }
 
@@ -192,7 +192,7 @@ namespace Client.Systems
             });
 
             if (!refreshOk)
-            { 
+            {
                 GameState.Instance.SetNeedLogin();
                 Http.ClearToken();
 
@@ -202,14 +202,14 @@ namespace Client.Systems
                 LobbyRootController.Instance.Show("Login");
                 yield break;
             }
-             
+
             var bootstrap = new AuthBootstrapper(Http, Popup);
             GameLogger.Info($"player ID : {playerId}");
             yield return bootstrap.CoBootstrapAfterToken(playerId, access, newRefresh, serverMs);
 
             bool bootOk = !string.IsNullOrEmpty(GameState.Instance.AccessToken)
                           && GameState.Instance.CurrentUser != null;
-             
+
             if (bootOk == false)
             {
                 GameLogger.Warn($"[AppBootstrap] Bootstrap-> Login  {GameState.Instance.CurrentUser == null}");

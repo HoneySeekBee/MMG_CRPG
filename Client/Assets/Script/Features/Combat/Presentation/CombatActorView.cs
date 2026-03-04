@@ -119,7 +119,7 @@ public abstract class CombatActorView : MonoBehaviour, ICombatSpeedAffectable
 
     protected virtual void UpdateHPBar()
     {
-        // TODO: HP UI 연결
+        // TODO: Update HP UI (implemented in subclass)
     }
 
     public virtual void PlayHitFx(bool isCrit)
@@ -165,7 +165,7 @@ public abstract class CombatActorView : MonoBehaviour, ICombatSpeedAffectable
         return true;
     }
     /// <summary>
-    /// 웨이브 복귀 전용 - yawOffset만 적용한 기본 방향으로 리셋 (FaceDirection의 이중 적용 방지)
+    /// Wave return only - resets to default direction with yawOffset applied (prevents double-application from FaceDirection)
     /// </summary>
     public void FaceDefaultDirection()
     {

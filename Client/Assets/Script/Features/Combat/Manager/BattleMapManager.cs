@@ -133,7 +133,7 @@ public class BattleMapManager : MonoBehaviour
 
         if (_combatStart == null)
         {
-            GameLogger.Error("[BattleMap] ���� ���� ���з� Set_BattleMap �ߴ�");
+            GameLogger.Error("[BattleMap] Set_BattleMap aborted: StartCombat failed");
             yield break;
         }
          
@@ -153,7 +153,7 @@ public class BattleMapManager : MonoBehaviour
             }
         ).AsCoroutine();
 
-        // [4] view 캐시 구성
+        // [4] Build view cache
         _viewCache.Clear();
         foreach (var kv in _actorObjects)
         {
@@ -301,7 +301,7 @@ public class BattleMapManager : MonoBehaviour
     }
     private IEnumerator Move_Map()
     {
-        // [1] 1�ʵ��� �� �̵� 
+        // [1] Move map in ~1 second
         Vector3 goalPos = this.transform.position;
         goalPos.x -= 20;
         List<CombatActorView> allPlayer = GetAlivePlayerActors();
@@ -345,7 +345,7 @@ public class BattleMapManager : MonoBehaviour
             {
                 _waitingReturnBeforeMapMove = false;
 
-                GameLogger.Info($"[BattleFlow]   {_waveIndexForMove} ");
+                GameLogger.Info($"[BattleFlow] Wave {_waveIndexForMove} cleared - returning players to spawn");
                  
                 yield return StartCoroutine(ReturnPlayersToSpawn());
                  
@@ -375,13 +375,13 @@ public class BattleMapManager : MonoBehaviour
             yield return null;
         }
 
-        GameLogger.Info("[BattleFlow] BattleFlow ");
+        GameLogger.Info("[BattleFlow] BattleFlow loop ended, requesting FinishCombat");
         if (_gotStageResult && _finalWin)
         { 
             if (!_endReturnDone)
                 yield return StartCoroutine(ReturnPlayersToSpawnEnd());
         }
-        // [3]  FinishCombat 
+        // [3] Request FinishCombat
         FinishCombatResponsePb result = null;
         bool done = false;
 
@@ -442,7 +442,7 @@ public class BattleMapManager : MonoBehaviour
             v.PlayVictory();
 
         _endReturnDone = true;
-        GameLogger.Info("[BattleMap] ReturnPlayersToSpawnEnd  ");
+        GameLogger.Info("[BattleMap] ReturnPlayersToSpawnEnd complete");
     }
     private IEnumerator ReturnPlayersToSpawn()
     {
@@ -460,7 +460,7 @@ public class BattleMapManager : MonoBehaviour
         foreach (var v in players)
             v.PlayIdle();
 
-        GameLogger.Info("[BattleMap] ReturnPlayersToSpawn ");
+        GameLogger.Info("[BattleMap] ReturnPlayersToSpawn complete");
     }
     private bool IsLastWave(int waveIndex)
     {
@@ -478,7 +478,7 @@ public class BattleMapManager : MonoBehaviour
                 if (!go.activeSelf)
                 {
                     go.SetActive(true);
-                    GameLogger.Info($"[BattleMap] HandleSpawnEvent: Actor {actorId} ");
+                    GameLogger.Info($"[BattleMap] HandleSpawnEvent: Actor {actorId} activated");
                 }
             }
             else

@@ -12,19 +12,19 @@ public class MonsterCache : MonoBehaviour
     public static MonsterCache Instance { get; private set; }
 
     [Header("Monster")]
-    public long MonsterVersion = 0;    
-    
-    // 본체: id -> MonsterPb
+    public long MonsterVersion = 0;
+
+    // All monsters: id -> MonsterPb
     public Dictionary<int, MonsterPb> MonstersById = new();
 
-    // 인덱스
-    public Dictionary<int, List<int>> IdsByElement = new();                
-    public Dictionary<string, List<int>> IdsByModelKey = new(StringComparer.OrdinalIgnoreCase);  
+    // Indexes
+    public Dictionary<int, List<int>> IdsByElement = new();
+    public Dictionary<string, List<int>> IdsByModelKey = new(StringComparer.OrdinalIgnoreCase);
 
-    // 스탯: monsterId -> (level -> stat)
+    // Stats: monsterId -> (level -> stat)
     public Dictionary<int, Dictionary<int, MonsterStatPb>> StatByMonsterAndLevel = new();
 
-    // 원본 응답(필요시 디버그/검증용)
+    // Raw response (used for re-parse/re-download if needed)
     private MonsterListResponsePb _resp;
 
     private void Awake()
@@ -51,14 +51,14 @@ public class MonsterCache : MonoBehaviour
         bool ok = false;
 
         yield return http.Get(
-            ApiRoutes.Monsters,                       // 서버 라우트 상수 (예: "/proto/monsters")
+            ApiRoutes.Monsters,                       // API endpoint path (e.g., "/proto/monsters")
             MonsterListResponsePb.Parser,
             (ApiResult<MonsterListResponsePb> res) =>
             {
                 ok = res.Ok && res.Data != null;
                 if (!ok)
                 {
-                    popup?.Show("몬스터 불러오기 실패");
+                    popup?.Show("Failed to load monsters");
                     Debug.LogError($"[FAILED] Load Monster Cache: {res.Message}");
                 }
                 else
@@ -68,7 +68,7 @@ public class MonsterCache : MonoBehaviour
                 done = true;
             });
 
-        // 타임아웃 옵션
+        // Timeout option
         if (!done && timeoutSeconds > 0f)
         {
             float start = Time.time;
@@ -80,7 +80,7 @@ public class MonsterCache : MonoBehaviour
 
         MonsterVersion = _resp.Version;
 
-        // 용량 미리
+        // Bulk pre-allocation
         int n = _resp.Monsters.Count;
         MonstersById = new Dictionary<int, MonsterPb>(n);
         StatByMonsterAndLevel = new Dictionary<int, Dictionary<int, MonsterStatPb>>(n);
@@ -89,15 +89,15 @@ public class MonsterCache : MonoBehaviour
         {
             MonstersById[m.Id] = m;
 
-            // 인덱스: element
+            // Index: element
             int? elementId = m.ElementId != null ? m.ElementId.Value : (int?)null;
             if (elementId.HasValue) AddToMultiMap(IdsByElement, elementId.Value, m.Id);
 
-            // 인덱스: modelKey
+            // Index: modelKey
             if (!string.IsNullOrWhiteSpace(m.ModelKey))
                 AddToMultiMap(IdsByModelKey, m.ModelKey, m.Id);
 
-            // 스탯 인덱스: level -> MonsterStatPb
+            // Stat index: level -> MonsterStatPb
             if (m.Stats != null && m.Stats.Count > 0)
             {
                 var byLevel = new Dictionary<int, MonsterStatPb>(m.Stats.Count);
@@ -110,7 +110,7 @@ public class MonsterCache : MonoBehaviour
         SortIndexLists(IdsByElement);
         SortIndexLists(IdsByModelKey);
 
-        Debug.Log($"[MonsterCache] 몬스터 {_resp.Monsters.Count}개 로드 (ver={MonsterVersion})");
+        Debug.Log($"[MonsterCache] Loaded {_resp.Monsters.Count} monsters (ver={MonsterVersion})");
     }
 
 
