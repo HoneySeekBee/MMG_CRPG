@@ -33,15 +33,14 @@ public class SkillButton : MonoBehaviour
         }
         else
         {
-            GameLogger.Info($"[SkillSet] Character {actorId}의 스킬 아이콘 {data.IconId} 없음");
+            GameLogger.Warn($"[SkillButton] Icon not found for actor={actorId}, iconId={data.IconId}");
         }
 
         btn = GetComponent<Button>();
         btn.onClick.RemoveAllListeners();
         btn.onClick.AddListener(ClickEvent);
 
-
-        // 쿨타임 오버레이 초기화
+        // Reset cooldown UI
         CoolTimeImage.fillAmount = 0;
         CoolTimeImage.gameObject.SetActive(false);
     }

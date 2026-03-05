@@ -45,7 +45,7 @@ public class BattleMapPopup : UIPopup
         }
         Instance = this;
     }
-    // ���� ���⼭ ���������� ���� ������ �޾ƾ��Ѵ�. 
+    // Initial data must be provided from the caller.
     public void Set(Action fadeIn)
     {
         SkillButtonDic.Clear();
@@ -61,7 +61,7 @@ public class BattleMapPopup : UIPopup
     }
     private void Init_SKillBtn()
     {
-        // 1) ���� ��ư ��� ��Ȱ��ȭ (Ǯ�� ���)
+        // Disable all skill buttons (for pooling)
         foreach (var btn in SkillButtons)
             btn.gameObject.SetActive(false);
     }
@@ -74,10 +74,10 @@ public class BattleMapPopup : UIPopup
             btn = Instantiate(SkillPrefab, SkillIconTr);
             SkillButtons.Add(btn);
         }
-        SkillButtonDic[actorId] = btn; 
+        SkillButtonDic[actorId] = btn;
         btn.gameObject.SetActive(true);
 
-        // ĳ���Ͱ� ���� ��ų ã�� (���⼭�� 1�� ��ų�� ����Ѵٰ� ������ �Ʒ��� ����)
+        // Find the character's first skill (assuming 1 skill per character for now)
         var skillId = CharacterCache.Instance.DetailById[characterMasterId].Skills[0].SkillId;
         var skillData = SkillCache.Instance.SkillDict[skillId];
 
@@ -99,7 +99,7 @@ public class BattleMapPopup : UIPopup
         _spawnedSlots.Clear();
         if (data.Result == CombatResultPb.CombatResultWin)
         {
-            resultText.text = "�¸�";
+            resultText.text = "Victory";
             foreach (var r in data.Rewards)
             {
                 if (!ItemCache.Instance.ItemDict.TryGetValue(r.ItemId, out var itemData)) continue;
@@ -119,11 +119,11 @@ public class BattleMapPopup : UIPopup
         }
         else if (data.Result == CombatResultPb.CombatResultLose)
         {
-            resultText.text = "�й�";
+            resultText.text = "Defeat";
         }
-        else { resultText.text = "��� �Ҹ�"; }
+        else { resultText.text = "Unknown"; }
 
-        // �� ǥ��, Ŭ���� �ؽ�Ʈ � ���⼭
+        // TODO: display stars and stage clear text here
         GameLogger.Info($"Stage {data.StageId} Clear, Stars={data.Stars}, FirstClear={data.FirstClear}");
 
     }
@@ -134,9 +134,9 @@ public class BattleMapPopup : UIPopup
     }
     private IEnumerator CoGoToStage()
     {
-        // [1] ���� �� ��Ȱ��ȭ
+        // [1] Unload battle scene
         yield return SceneController.Instance.UnloadAdditiveAsync(SceneController.MapSceneName);
-        // [2] Show()
+        // [2] Return to lobby
         LobbyRootController.Instance.Show("Adventure");
     }
 

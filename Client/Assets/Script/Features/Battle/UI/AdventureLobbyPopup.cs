@@ -23,7 +23,7 @@ public class AdventureLobbyPopup : UIPopup
     private List<ChapterPb> _currentChapterList = new();
     private ChapterPb _currentChapter;
 
-    // ������Ʈ Ǯ������ �ٲٱ�
+    // Changed to object pool
     private readonly List<StageButtonPopup> _pool = new();
     private readonly List<StageButtonPopup> _activeButtons = new();
 
@@ -57,7 +57,7 @@ public class AdventureLobbyPopup : UIPopup
 
         foreach (var chapter in chapters)
         {
-            // �� é�Ϳ� ���� ����������
+            // Get active stages for this chapter
             var stages = cache
                 .GetStagesByChapter(chapter.ChapterId)
                 .Where(s => s.IsActive)          
@@ -104,13 +104,13 @@ public class AdventureLobbyPopup : UIPopup
             if (ch.ChapterNum > maxChapterNum)
                 break; 
 
-            string label = $"é�� {ch.ChapterNum} - {ch.Name}";
+            string label = $"Chapter {ch.ChapterNum} - {ch.Name}";
             options.Add(new TMP_Dropdown.OptionData(label));
         }
 
         ChapterTitles.AddOptions(options);
 
-        // ���� é�ͷ� ���� �����ֱ�
+        // Set dropdown to current chapter index
         if (currentChapter != null)
         {
             int index = currentChapter.ChapterNum - 1; // 0-based
@@ -141,14 +141,14 @@ public class AdventureLobbyPopup : UIPopup
         var user = GameState.Instance.CurrentUser;
         var prog = user.StageProgress;   
 
-        // �� é���� ����������
+        // Get active stages for the chapter
         var stages = cache.GetStagesByChapter(chapterId)
                           .Where(s => s.IsActive)
                           .OrderBy(s => s.Order)
                           .ToList();
 
-        // 1) Ŭ������ �� ���� ����
-        // 2) ���� �� �� �� �� ù ��°�� ����
+        // 1) Collect cleared stage IDs
+        // 2) Only the first uncleared stage is interactable
         var cleared = new HashSet<int>();
         foreach (var p in prog.GetAll)
         {
@@ -156,7 +156,7 @@ public class AdventureLobbyPopup : UIPopup
                 cleared.Add(p.StageId);
         }
 
-        // ���� �� �� �� �� ù ��° stageId ã��
+        // Find the first uncleared stageId
         int? firstLockedStageId = null;
         foreach (var s in stages)
         {
@@ -169,7 +169,7 @@ public class AdventureLobbyPopup : UIPopup
 
         foreach (var s in stages)
         {
-            // Ȧ/¦�� ���� �θ� ����
+            // Odd order → Row1, Even order → Row2
             Transform parent = (s.Order % 2 == 1) ? Row1 : Row2;
 
             var btn = GetButtonFromPool(parent);
@@ -184,7 +184,7 @@ public class AdventureLobbyPopup : UIPopup
             }
             else
             {
-                // ���� �� �� �� �� ù ��°�� �����ֱ�
+                // Activate only the first uncleared stage
                 isActive = (firstLockedStageId.HasValue && firstLockedStageId.Value == s.Id);
             }
 

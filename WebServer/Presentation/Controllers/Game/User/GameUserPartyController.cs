@@ -106,19 +106,17 @@ namespace Presentation.Controllers.Game.User
         {
             var party = await _repo.GetByIdAsync(req.PartyId, ct);
             if (party == null) return NotFound();
+
             foreach (var p in party.Slots)
-            {
                 party.Unassign(p.SlotId);
-            }
             foreach (var p in req.Pairs)
             {
                 var v = p.UserCharacterId;
                 if (v != null && v.Value != 0)
-                {
                     party.Assign(p.SlotId, v.Value);
-                }
             }
             await _repo.SaveAsync(party, ct);
+
             return Ok(new Empty());
         }
     }
