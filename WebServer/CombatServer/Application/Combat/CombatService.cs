@@ -36,6 +36,136 @@ namespace Application.Combat
             _userCharacterReader = userCharacterReader;
         }
 
+        public async Task<CombatInitialSnapshotDto> InitCombatAsync(InitCombatPayload payload, CancellationToken ct)
+        {
+            // (1) Rebuild CombatMasterDataPack from payload
+            var waveDefs = payload.Stage.Waves.Select(w =>
+                new CombatWaveDef(w.Index, w.Enemies.Select(e =>
+                    new CombatEnemySpawn(e.Slot, e.MonsterId, e.Level)
+                ).ToList())
+            ).ToList();
+
+            var stageDef = new CombatStageDef(payload.Stage.StageId, waveDefs);
+
+            var actorDefs = payload.ActorDefs.ToDictionary(
+                kvp => kvp.Key,
+                kvp => new CombatActorDef(
+                    kvp.Value.MasterId, kvp.Value.IsPlayer, kvp.Value.ModelKey,
+                    kvp.Value.MaxHp, kvp.Value.Atk, kvp.Value.Def, kvp.Value.Spd,
+                    kvp.Value.Range, kvp.Value.AttackIntervalMs,
+                    kvp.Value.CritRate, kvp.Value.CritDamage));
+
+            var pack = new MasterPack(stageDef, actorDefs);
+
+            // (2) Initialize runtime state
+            _runtimeStates[payload.CombatId] = new CombatRuntimeState
+            {
+                CombatId = payload.CombatId,
+                StageId = payload.StageId,
+                UserId = (int)payload.UserId,
+                Seed = payload.Seed,
+                StartedAt = DateTimeOffset.UtcNow,
+                CurrentWaveIndex = 1,
+                TotalWaves = pack.Stage.Waves.Count
+            };
+
+            var state = _runtimeStates[payload.CombatId];
+            state.Snapshot = new CombatRuntimeSnapshot();
+            state._MasterPack = pack;
+
+            var skills = _skillCache.GetAll();
+            state.SkillMaster.Clear();
+            foreach (var s in skills)
+                state.SkillMaster[s.SkillId] = CombatSkillMapper.ToCombatSkill(s);
+
+            // (3) Build actor list
+            var actors = new List<ActorInitDto>();
+
+            foreach (var player in payload.Players)
+            {
+                var (x, z) = PositionUtils.GetPlayerPositionBySlot(player.SlotId);
+                var actorId = 1 + player.SlotId;
+                actors.Add(new ActorInitDto(actorId, 0, x, z, player.Hp, 1, player.CharacterId));
+            }
+
+            foreach (var wave in pack.Stage.Waves)
+            {
+                foreach (var spawn in wave.Enemies)
+                {
+                    var (x, z) = PositionUtils.GetEnemyPositionBySlot(spawn.Slot);
+                    var actorId = 1000 * wave.Index + spawn.Slot;
+                    long cid = spawn.MonsterId;
+                    var cdef = pack.Actors[cid];
+                    actors.Add(new ActorInitDto(actorId, 1, x, z, cdef.MaxHp, wave.Index, cid));
+                }
+            }
+
+            // (4) Load actors into snapshot
+            foreach (var a in actors)
+            {
+                var def = pack.Actors[a.MasterId];
+                state.Snapshot.Actors[a.ActorId] = new ActorState
+                {
+                    ActorId = a.ActorId, Team = a.Team,
+                    X = a.X, Z = a.Z, SpawnX = a.X, SpawnZ = a.Z,
+                    Hp = a.Hp,
+                    AtkBase = def.Atk, DefBase = def.Def, SpdBase = def.Spd,
+                    RangeBase = def.Range, AttackIntervalMsBase = def.AttackIntervalMs,
+                    CritRateBase = def.CritRate, CritDamageBase = def.CritDamage,
+                    AttackCooldownMs = 0, SkillCooldownMs = 0,
+                    TargetActorId = null, Waveindex = a.WaveIndex
+                };
+            }
+
+            // (5) Activate first wave
+            state.ActiveActors.Clear();
+            foreach (var a in state.Snapshot.Actors.Values)
+            {
+                if (a.Waveindex == state.CurrentWaveIndex && a.Hp > 0)
+                    state.ActiveActors[a.ActorId] = a;
+            }
+
+            // (6) Persist combat record
+            var combatInput = new CombatInputSnapshot(
+                payload.StageId,
+                payload.Players.Select(p => new PartyMember(p.CharacterId, 1)).ToArray(),
+                Array.Empty<SkillInput>());
+
+            var combat = CombatEntity.Create(
+                CombatMode.Pve, payload.StageId, payload.Seed,
+                combatInput, balanceVersion: "1", clientVersion: null);
+
+            await _repo.SaveAsync(combat, Enumerable.Empty<Domain.Events.CombatLogEvent>(), ct);
+
+            return new CombatInitialSnapshotDto(actors);
+        }
+
+        public Task<CombatResultPayload> GetResultAsync(long combatId, CancellationToken ct)
+        {
+            if (!_runtimeStates.TryGetValue(combatId, out var state))
+                throw new KeyNotFoundException($"Combat {combatId} not found");
+
+            if (!state.BattleEnded)
+                throw new InvalidOperationException("COMBAT_NOT_FINISHED");
+
+            var players = state.Snapshot.Actors.Values.Where(a => a.Team == 0).ToList();
+            int deadCount = players.Count(a => a.Dead || a.Hp <= 0);
+
+            var result = new CombatResultPayload(
+                CombatId: combatId,
+                StageId: state.StageId,
+                UserId: state.UserId,
+                BattleEnded: state.BattleEnded,
+                Result: state.Result,
+                DeadPlayerCount: deadCount,
+                TotalPlayerCount: players.Count);
+
+            // Remove from memory after result is retrieved
+            _runtimeStates.TryRemove(combatId, out _);
+
+            return Task.FromResult(result);
+        }
+
         public async Task<StartCombatResponse> StartAsync(StartCombatRequest req, CancellationToken ct)
         {
             if (req.StageId <= 0)

@@ -35,13 +35,15 @@ namespace Application.Combat
         private readonly IStagesService _stages;
         private readonly IClock _clock;
         private readonly ISkillCache _skillCache;
+        private readonly CombatServerClient _combatServerClient;
 
         private const int MaxPageSize = 500;
         private static readonly ConcurrentDictionary<long, CombatRuntimeState> _runtimeStates = new();
 
         public CombatService(IMasterDataProvider master, ICombatRepository repo, ICombatEngine engine, IUserPartyReader partyReader,
        IUserCharacterReader userCharacterReader, ICombatTickEngine tickEngine, IUserStageProgressService stageProgress,
-       IStageRewardService stageReward, IWalletService wallet, IStagesService stages, IClock clock, ISkillCache skillCache)
+       IStageRewardService stageReward, IWalletService wallet, IStagesService stages, IClock clock, ISkillCache skillCache,
+       CombatServerClient combatServerClient)
         {
             _master = master;
             _repo = repo;
@@ -56,6 +58,7 @@ namespace Application.Combat
             _stages = stages;
             _clock = clock;
             _skillCache = skillCache;
+            _combatServerClient = combatServerClient;
         }
         public async Task<StartCombatResponse> StartAsync(StartCombatRequest req, CancellationToken ct)
         {
@@ -130,118 +133,28 @@ namespace Application.Combat
                 ct
             );
 
-            // 7-1) RuntimeState 먼저 생성
-            _runtimeStates[combatId] = new CombatRuntimeState
-            {
-                CombatId = combatId,
-                StageId = req.StageId,
-                UserId = req.UserId,
-                Seed = seed,
-                StartedAt = DateTimeOffset.UtcNow,
-                CurrentWaveIndex = 1,
-                TotalWaves = pack.Stage.Waves.Count
-            };
-
-            var runtimeState = _runtimeStates[combatId];
-            runtimeState.Snapshot = new CombatRuntimeSnapshot();
-            runtimeState._MasterPack = pack;
-
-            var skills = _skillCache.GetAll();
-            runtimeState.SkillMaster.Clear();
-
-            foreach (var s in skills)
-            {
-                runtimeState.SkillMaster[s.SkillId] = CombatSkillMapper.ToCombatSkill(s);
-            }
-
-            // (8) ActorInitDto 구성
-            var actors = new List<ActorInitDto>();
-
-            // Player actors
-            foreach (var slot in filledSlots)
+            // (8) Build payload and send to CombatServer
+            var players = filledSlots.Select((slot, idx) =>
             {
                 long charId = slot.UserCharacterId!.Value;
                 var uc = statsByCharacterId[charId];
+                return (SlotId: slot.SlotId, CharacterId: (long)uc.CharacterId, Hp: uc.Hp);
+            });
 
-                var (x, z) = PositionUtils.GetPlayerPositionBySlot(slot.SlotId);
-                var actorId = 1 + slot.SlotId;
+            var payload = CombatServerPayloadMapper.Build(combatId, req.StageId, req.UserId, seed, players, pack);
+            var csSnapshot = await _combatServerClient.InitCombatAsync(payload, ct);
 
-                actors.Add(new ActorInitDto(
-                    ActorId: actorId,
-                    Team: 0,
-                    X: x,
-                    Z: z,
-                    Hp: uc.Hp,
-                    WaveIndex: 1,
-                    MasterId: uc.CharacterId
-                ));
-            }
+            // (9) Map CombatServer response to domain DTO
+            var actors = csSnapshot.Actors.Select(a => new ActorInitDto(
+                ActorId: a.ActorId,
+                Team: a.Team,
+                X: a.X,
+                Z: a.Z,
+                Hp: a.Hp,
+                WaveIndex: a.WaveIndex,
+                MasterId: a.MasterId
+            )).ToList();
 
-            // Enemy actors
-            foreach (var wave in pack.Stage.Waves)
-            {
-                foreach (var spawn in wave.Enemies)
-                {
-                    var (x, z) = PositionUtils.GetEnemyPositionBySlot(spawn.Slot);
-                    var actorId = 1000 * wave.Index + spawn.Slot;
-
-                    long cid = spawn.MonsterId;
-                    var cdef = pack.Actors[cid];
-
-                    actors.Add(new ActorInitDto(
-                        ActorId: actorId,
-                        Team: 1,
-                        X: x,
-                        Z: z,
-                        Hp: cdef.MaxHp,
-                        WaveIndex: wave.Index,
-                        MasterId: cid
-                    ));
-                }
-            }
-
-            // (9) actors 전체를 Snapshot에 로드
-            foreach (var a in actors)
-            {
-                var def = pack.Actors[a.MasterId];
-                runtimeState.Snapshot.Actors[a.ActorId] = new ActorState
-                {
-                    ActorId = a.ActorId,
-                    Team = a.Team,
-                    X = a.X,
-                    Z = a.Z,
-
-                    SpawnX = a.X,
-                    SpawnZ = a.Z,
-
-                    Hp = a.Hp,
-                    AtkBase = def.Atk,
-                    DefBase = def.Def,
-                    SpdBase = def.Spd,
-                    RangeBase = def.Range,
-                    AttackIntervalMsBase = def.AttackIntervalMs,
-                    CritRateBase = def.CritRate,
-                    CritDamageBase = def.CritDamage,
-                    AttackCooldownMs = 0,
-                    SkillCooldownMs = 0,
-                    TargetActorId = null,
-                    Waveindex = a.WaveIndex
-                };
-            }
-
-            // (9-1) ActiveActors 초기화 - 전투 시작 시점에 필드에 있는 애들 등록
-            // CombatRuntimeState 안에 ActiveActors가 Dictionary<long, ActorState> 라고 가정
-            runtimeState.ActiveActors.Clear();
-
-            // 플레이어는 항상 필드에 존재하므로 전부 ActiveActors 에 넣어줌
-            foreach (var a in runtimeState.Snapshot.Actors.Values)
-            {
-                if (a.Waveindex == runtimeState.CurrentWaveIndex && a.Hp > 0)
-                {
-                    runtimeState.ActiveActors[a.ActorId] = a;
-                }
-            }
-            // (10) 클라이언트 초기 스냅샷 반환
             var snapshot = new CombatInitialSnapshotDto(actors);
             return new StartCombatResponse(combatId, snapshot);
         }
@@ -304,37 +217,30 @@ namespace Application.Combat
         }
         public async Task<FinishCombatResponse> FinishAsync(FinishCombatRequest req, CancellationToken ct)
         {
-            if (!_runtimeStates.TryGetValue(req.CombatId, out var state))
-                throw new KeyNotFoundException($"Combat {req.CombatId} not found");
+            // (1) Get combat result from CombatServer (also removes from CombatServer memory)
+            var combatResult = await _combatServerClient.GetResultAsync(req.CombatId, ct);
 
-            // (1) 다른 유저가 Finish 못하게
-            if (state.UserId != req.UserId)
+            // (2) Validate ownership
+            if (combatResult.UserId != req.UserId)
                 throw new InvalidOperationException("COMBAT_USER_MISMATCH");
 
-            // (2) 아직 서버 상태에서 전투가 안 끝났으면 막기
-            if (!state.BattleEnded)
-                throw new InvalidOperationException("COMBAT_NOT_FINISHED");
-
-            // (3) 승패/별 계산 
-            if (state.Result is null)
+            if (combatResult.Result is null)
                 throw new InvalidOperationException("COMBAT_RESULT_MISSING");
 
-            bool success = state.Result == CombatResult.Win;
-            StageStars stars = CalculateStars(state, success);
+            // (3) Calculate stars from survivor data
+            bool success = combatResult.Result == CombatResult.Win;
+            StageStars stars = CalculateStars(success, combatResult.DeadPlayerCount);
 
-            // (4) 보상 + 진행도 + 지갑 처리 전부 StageRewardService에 위임
+            // (4) Grant rewards
             var rewardResult = await _stageReward.GrantRewardsAsync(
-      userId: req.UserId,
-      stageId: state.StageId,
-      success: success,
-      stars: stars,
-      nowUtc: _clock.UtcNow.UtcDateTime,
-      ct: ct);
+                userId: req.UserId,
+                stageId: combatResult.StageId,
+                success: success,
+                stars: stars,
+                nowUtc: _clock.UtcNow.UtcDateTime,
+                ct: ct);
 
-            // (5) runtime state 정리 (메모리 누수 방지)
-            _runtimeStates.TryRemove(req.CombatId, out _);
-
-            // (6) 클라로 보낼 DTO로 매핑 
+            // (5) Map to response DTO
             var items = rewardResult.Rewards
                 .Select(r => new GainedItemDto(
                     ItemId: r.ItemId,
@@ -350,24 +256,14 @@ namespace Application.Combat
                 Gold: rewardResult.Gold,
                 Gem: rewardResult.Gem,
                 Token: rewardResult.Token,
-               Result: state.Result.Value
-               );
+                Result: combatResult.Result.Value);
         }
-        private StageStars CalculateStars(CombatRuntimeState state, bool success)
+
+        private static StageStars CalculateStars(bool success, int deadPlayerCount)
         {
-            if (!success)
-                return StageStars.Zero;
-
-            var players = state.Snapshot.Actors.Values
-                .Where(a => a.Team == 0)
-                .ToList();
-
-            int deadCount = players.Count(a => a.Dead || a.Hp <= 0);
-
-            if (deadCount <= 0)
-                return StageStars.Three;
-            if (deadCount < 3)
-                return StageStars.Two;
+            if (!success) return StageStars.Zero;
+            if (deadPlayerCount <= 0) return StageStars.Three;
+            if (deadPlayerCount < 3) return StageStars.Two;
             return StageStars.One;
         }
         public async Task EnqueueCommandAsync(long combatId, CombatCommandDto cmd, CancellationToken ct)

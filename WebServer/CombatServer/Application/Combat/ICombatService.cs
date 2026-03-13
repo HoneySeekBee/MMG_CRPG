@@ -10,7 +10,13 @@ namespace Application.Combat
 {
     public interface ICombatService
     {
-        Task<StartCombatResponse> StartAsync(StartCombatRequest req, CancellationToken ct);
+        // Called by WebServer via HTTP on combat start
+        Task<CombatInitialSnapshotDto> InitCombatAsync(InitCombatPayload payload, CancellationToken ct);
+
+        // Called by WebServer via HTTP on combat finish
+        Task<CombatResultPayload> GetResultAsync(long combatId, CancellationToken ct);
+
+        // Called by client directly
         Task EnqueueCommandAsync(long combatId, CombatCommandDto cmd, CancellationToken ct);
         Task<CombatLogPageDto> GetLogAsync(long combatId, string? cursor, int size, CancellationToken ct);
         Task<CombatLogSummaryDto> GetSummaryAsync(long combatId, CancellationToken ct);

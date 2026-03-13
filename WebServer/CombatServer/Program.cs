@@ -3,6 +3,7 @@ using Application.Combat.Engine;
 using Application.Repositories;
 using Application.Skills;
 using Application.UserCharacter;
+using CombatServer.Formatters;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,11 @@ builder.Services.AddScoped<ICombatService, CombatService>();
 builder.Services.AddScoped<IMasterDataProvider, MasterDataProvider>();
 
 // ── Controllers / Swagger ─────────────────────────────────────────────────────
-builder.Services.AddControllers();
+builder.Services.AddControllers(opts =>
+{
+    opts.InputFormatters.Insert(0, new ProtobufInputFormatter());
+    opts.OutputFormatters.Insert(0, new ProtobufOutputFormatter());
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

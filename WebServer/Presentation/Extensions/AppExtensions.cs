@@ -173,9 +173,15 @@ namespace WebServer.Extensions
             s.AddScoped<ICurrencyRepository, EFCurrencyRepository>();
             s.AddScoped<ICurrencyService, CurrencyService>();
 
-            #region Contents  
+            #region Contents
             s.AddScoped<IUserPartyReader, EfUserPartyReader>();
             s.AddScoped<ICombatService, CombatService>();
+            s.AddHttpClient<CombatServerClient>((serviceProvider, client) =>
+            {
+                var config = serviceProvider.GetRequiredService<IConfiguration>();
+                var url = config["CombatServerUrl"] ?? "http://localhost:5001";
+                client.BaseAddress = new Uri(url.TrimEnd('/') + "/");
+            });
             s.AddScoped<ICombatRepository, EfCombatRepository>(); 
             s.AddScoped<IMasterDataProvider, MasterDataProvider>();
             s.AddScoped<IBattlesService, BattlesService>();

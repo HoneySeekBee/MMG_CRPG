@@ -22,6 +22,10 @@ namespace Client.Systems
 
         [SerializeField] private AudioListener audioListner;
         public ProtoHttpClient Http { get; private set; }
+
+        // Separate HTTP client pointing to CombatServer (Tick/Command/Speed)
+        public ProtoHttpClient CombatHttp { get; private set; }
+
         public ProtoAuthService AuthService { get; private set; }
         private bool _authRedirecting;
         void Awake()
@@ -40,6 +44,16 @@ namespace Client.Systems
 
             // Network setup
             Http = new ProtoHttpClient(ApiConfig);
+
+            // CombatServer client - uses same config but different BaseUrl
+            var combatConfig = ScriptableObject.CreateInstance<ApiConfig>();
+            combatConfig.BaseUrl = !string.IsNullOrEmpty(ApiConfig.CombatServerUrl)
+                ? ApiConfig.CombatServerUrl
+                : ApiConfig.BaseUrl; // Fallback to same server if not set
+            combatConfig.DefaultTimeoutSec = ApiConfig.DefaultTimeoutSec;
+            combatConfig.RetryCount = ApiConfig.RetryCount;
+            combatConfig.RetryBackoffSec = ApiConfig.RetryBackoffSec;
+            CombatHttp = new ProtoHttpClient(combatConfig);
             Http.OnUnauthorized += code =>
             {
                 if (_authRedirecting) return;

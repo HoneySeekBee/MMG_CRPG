@@ -94,4 +94,71 @@ namespace Application.Combat
             Actors = actors;
         }
     }
+
+    // ── WebServer → CombatServer init payload ────────────────────────────────
+
+    // JSON-serializable actor def (replaces CombatActorDef which has no parameterless ctor)
+    public sealed class ActorDefPayload
+    {
+        public int MasterId { get; init; }
+        public bool IsPlayer { get; init; }
+        public string ModelKey { get; init; } = "";
+        public int MaxHp { get; init; }
+        public int Atk { get; init; }
+        public int Def { get; init; }
+        public int Spd { get; init; }
+        public float Range { get; init; }
+        public int AttackIntervalMs { get; init; }
+        public double CritRate { get; init; }
+        public double CritDamage { get; init; }
+    }
+
+    public sealed class EnemySpawnPayload
+    {
+        public int Slot { get; init; }
+        public int MonsterId { get; init; }
+        public int Level { get; init; }
+    }
+
+    public sealed class WaveDefPayload
+    {
+        public int Index { get; init; }
+        public List<EnemySpawnPayload> Enemies { get; init; } = new();
+    }
+
+    public sealed class StageDefPayload
+    {
+        public int StageId { get; init; }
+        public List<WaveDefPayload> Waves { get; init; } = new();
+    }
+
+    public sealed class PlayerSlotPayload
+    {
+        public int SlotId { get; init; }
+        public long CharacterId { get; init; }
+        public int Hp { get; init; }
+    }
+
+    public sealed class InitCombatPayload
+    {
+        public long CombatId { get; init; }
+        public int StageId { get; init; }
+        public long UserId { get; init; }
+        public long Seed { get; init; }
+        public List<PlayerSlotPayload> Players { get; init; } = new();
+        public StageDefPayload Stage { get; init; } = null!;
+        public Dictionary<long, ActorDefPayload> ActorDefs { get; init; } = new();
+    }
+
+    // ── CombatServer → WebServer result ──────────────────────────────────────
+
+    public sealed record CombatResultPayload(
+        long CombatId,
+        int StageId,
+        long UserId,
+        bool BattleEnded,
+        CombatResult? Result,
+        int DeadPlayerCount,
+        int TotalPlayerCount
+    );
 }

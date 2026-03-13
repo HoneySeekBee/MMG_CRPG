@@ -30,70 +30,9 @@ namespace Presentation.Controllers.Game
             return CombatProtoMapper.ToPb(res);
         }
 
-        // COMMAND
-        [HttpPost("{combatId:long}/command")]
-        public async Task<IActionResult> Command(
-            long combatId,
-            [FromBody] CombatCommandPb req,
-            CancellationToken ct)
-        {
-            var domainCmd = CombatProtoMapper.ToDomain(req);
-            await _service.EnqueueCommandAsync(combatId, domainCmd, ct);
-            return Accepted();
-        }
+        // NOTE: Tick / Command / ToggleSpeed / Log / Summary endpoints have been moved to CombatServer.
+        // Unity client calls CombatServer directly for these high-frequency requests.
 
-        // LOG
-        [HttpGet("{combatId:long}/log")]
-        public async Task<CombatLogPagePb> GetLog(
-            long combatId,
-            string? cursor,
-            int size = 200,
-            CancellationToken ct = default)
-        {
-            var log = await _service.GetLogAsync(combatId, cursor, size, ct);
-            return CombatProtoMapper.ToPb(log);
-        }
-
-        //SUMMARY
-        [HttpGet("{combatId:long}/summary")]
-        public async Task<CombatLogSummaryPb> GetSummary(
-            long combatId,
-            CancellationToken ct)
-        {
-            var summary = await _service.GetSummaryAsync(combatId, ct);
-            return CombatProtoMapper.ToPb(summary);
-        }
-
-        [HttpPost("{combatId:long}/tick")]
-        public async Task<CombatTickResponsePb> Tick(long combatId, [FromBody] CombatTickRequestPb req, CancellationToken ct)
-        {
-            var res = await _service.TickAsync(combatId, req.Tick, ct);
-            return CombatProtoMapper.ToPb(res);
-        }
-        [HttpPost("{combatId:long}/speed/toggle")]
-        public async Task<ActionResult<ToggleSpeedResponsePb>> ToggleSpeed(
-            long combatId,
-            [FromBody] ToggleSpeedRequestPb req,
-            CancellationToken ct)
-        {
-            if (req.CombatId == 0) req.CombatId = combatId;
-            else if (req.CombatId != combatId)
-                return BadRequest("COMBAT_ID_MISMATCH");
-
-            var newSpeed = await _service.ToggleSpeedAsync(combatId, ct);
-
-            return Ok(new ToggleSpeedResponsePb
-            {
-                CombatId = combatId,
-                Speed = newSpeed switch
-                {
-                    CombatSpeed.X1 => CombatSpeedPb.CombatSpeedX1,
-                    CombatSpeed.X15 => CombatSpeedPb.CombatSpeedX15,
-                    CombatSpeed.X2 => CombatSpeedPb.CombatSpeedX2,
-                    _ => CombatSpeedPb.CombatSpeedUnspecified
-                }
-            });
-        }
         [HttpPost("{combatId:long}/finish")]
         public async Task<ActionResult<FinishCombatResponsePb>> Finish([FromRoute] long combatId, [FromBody] FinishCombatRequestPb req, CancellationToken ct)
         {

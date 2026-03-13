@@ -14,16 +14,23 @@ public class CombatNetwork
     public static float TimeScale { get; private set; } = 1f;
 
     private readonly int _userId;
+
+    // WebServer: Start / Finish
     public ProtoHttpClient Http;
+
+    // CombatServer: Tick / Command / Speed / Log / Summary (direct, high-frequency)
+    public ProtoHttpClient CombatHttp;
+
     private Popup _popup;
     public CombatNetwork(Popup popup = null)
     {
         _userId = GameState.Instance.CurrentUser.UserId;
         Http = AppBootstrap.Instance.Http;
+        CombatHttp = AppBootstrap.Instance.CombatHttp;
         _popup = popup;
     }
 
-    // [1] ÀüÅõ ÀÔÀå
+    // [1] ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public IEnumerator StartCombatAsync(
       int stageId,
       long battleId,
@@ -37,7 +44,7 @@ public class CombatNetwork
         };
 
         string url = ApiRoutes.CombatStart;
-        // ¿¹: public const string CombatStart = "/api/pb/combat/start";
+        // ï¿½ï¿½: public const string CombatStart = "/api/pb/combat/start";
 
         GameLogger.Info($"[CombatNetwork] StartCombat: {url}, stage={stageId}, formation={battleId}");
 
@@ -45,15 +52,15 @@ public class CombatNetwork
         {
             if (!res.Ok)
             {
-                GameLogger.Error($"[CombatNetwork] StartCombat ½ÇÆÐ: {res.Message}");
-                _popup?.Show($"ÀüÅõ ½ÃÀÛ ½ÇÆÐ: {res.Message}");
+                GameLogger.Error($"[CombatNetwork] StartCombat ï¿½ï¿½ï¿½ï¿½: {res.Message}");
+                _popup?.Show($"ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: {res.Message}");
             }
 
             onDone?.Invoke(res);
         });
     }
 
-    // [2] ÀüÅõ ¸í·É ( ½ºÅ³ »ç¿ë )
+    // [2] ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ( ï¿½ï¿½Å³ ï¿½ï¿½ï¿½ )
     public void SendCommand(
     long combatId,
     long actorId,
@@ -73,17 +80,17 @@ public class CombatNetwork
         }
 
         string url = ApiRoutes.CombatCommand(combatId);
-        // ¿¹: public static string CombatCommand(long combatId) => $"/api/pb/combat/{combatId}/command";
+        // ï¿½ï¿½: public static string CombatCommand(long combatId) => $"/api/pb/combat/{combatId}/command";
 
         GameLogger.Info($"[CombatNetwork] SendCommand: {url}, actor={actorId}, skill={skillId}, target={targetActorId}");
 
         AppBootstrap.Instance.StartCoroutine(
-            Http.Post(url, cmd, Empty.Parser, resp =>
+            CombatHttp.Post(url, cmd, Empty.Parser, resp =>
             {
                 if (!resp.Ok)
                 {
-                    GameLogger.Error($"[CombatNetwork] Command ½ÇÆÐ: {resp.Message}");
-                    _popup?.Show($"½ºÅ³ »ç¿ë ½ÇÆÐ: {resp.Message}");
+                    GameLogger.Error($"[CombatNetwork] Command ï¿½ï¿½ï¿½ï¿½: {resp.Message}");
+                    _popup?.Show($"ï¿½ï¿½Å³ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: {resp.Message}");
                     onDone?.Invoke(false);
                     return;
                 }
@@ -93,7 +100,7 @@ public class CombatNetwork
         );
     }
 
-    // [3] ·Î±× Á¶È¸
+    // [3] ï¿½Î±ï¿½ ï¿½ï¿½È¸
     public IEnumerator GetLogAsync(
       long combatId,
       string cursor,
@@ -101,40 +108,40 @@ public class CombatNetwork
       Action<ApiResult<CombatLogPagePb>> onDone)
     {
         string url = ApiRoutes.CombatLog(combatId, cursor, size);
-        // ¿¹: public static string CombatLog(long combatId, string cursor, int size)
+        // ï¿½ï¿½: public static string CombatLog(long combatId, string cursor, int size)
         //     => $"/api/pb/combat/{combatId}/log?cursor={cursor}&size={size}";
 
         GameLogger.Info($"[CombatNetwork] GetLog: {url}");
 
-        yield return Http.Get(url, CombatLogPagePb.Parser, (ApiResult<CombatLogPagePb> res) =>
+        yield return CombatHttp.Get(url, CombatLogPagePb.Parser, (ApiResult<CombatLogPagePb> res) =>
         {
             if (!res.Ok)
             {
-                GameLogger.Error($"[CombatNetwork] GetLog ½ÇÆÐ: {res.Message}");
-                // ·Î±× Æú¸µ ½ÇÆÐ´Â ÆË¾÷Àº ¼±ÅÃ »çÇ×
+                GameLogger.Error($"[CombatNetwork] GetLog ï¿½ï¿½ï¿½ï¿½: {res.Message}");
+                // ï¿½Î±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ð´ï¿½ ï¿½Ë¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             }
 
             onDone?.Invoke(res);
         });
     }
 
-    // [4] ¿ä¾à Á¶È¸ 
+    // [4] ï¿½ï¿½ï¿½ ï¿½ï¿½È¸ 
     public IEnumerator GetSummaryAsync(
       long combatId,
       Action<ApiResult<CombatLogSummaryPb>> onDone)
     {
         string url = ApiRoutes.CombatSummary(combatId);
-        // ¿¹: public static string CombatSummary(long combatId)
+        // ï¿½ï¿½: public static string CombatSummary(long combatId)
         //     => $"/api/pb/combat/{combatId}/summary";
 
         GameLogger.Info($"[CombatNetwork] GetSummary: {url}");
 
-        yield return Http.Get(url, CombatLogSummaryPb.Parser, (ApiResult<CombatLogSummaryPb> res) =>
+        yield return CombatHttp.Get(url, CombatLogSummaryPb.Parser, (ApiResult<CombatLogSummaryPb> res) =>
         {
             if (!res.Ok)
             {
-                GameLogger.Error($"[CombatNetwork] GetSummary ½ÇÆÐ: {res.Message}");
-                _popup?.Show($"ÀüÅõ °á°ú ºÒ·¯¿À±â ½ÇÆÐ: {res.Message}");
+                GameLogger.Error($"[CombatNetwork] GetSummary ï¿½ï¿½ï¿½ï¿½: {res.Message}");
+                _popup?.Show($"ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: {res.Message}");
             }
 
             onDone?.Invoke(res);
@@ -143,7 +150,7 @@ public class CombatNetwork
     public IEnumerator TickAsync(long combatId, int tick, Action<ApiResult<CombatTickResponsePb>> onDone)
     {
         string url = ApiRoutes.CombatTick(combatId);
-        // ¿¹: /api/pb/combat/{combatId}/tick
+        // ï¿½ï¿½: /api/pb/combat/{combatId}/tick
 
         var req = new CombatTickRequestPb
         {
@@ -152,10 +159,10 @@ public class CombatNetwork
         };
 
 
-        yield return Http.Post(url, req, CombatTickResponsePb.Parser, res =>
+        yield return CombatHttp.Post(url, req, CombatTickResponsePb.Parser, res =>
         {
             if (!res.Ok)
-                GameLogger.Error($"[CombatNetwork] Tick ½ÇÆÐ: {res.Message}");
+                GameLogger.Error($"[CombatNetwork] Tick failed: {res.Message}");
 
             onDone?.Invoke(res);
         });
@@ -167,7 +174,7 @@ public class CombatNetwork
             CombatId = combatId,
             UserId = _userId
         };
-        // ¿¹: /api/pb/combat/{combatId}/finish
+        // ï¿½ï¿½: /api/pb/combat/{combatId}/finish
         string url = ApiRoutes.CombatFinish(combatId);
 
         GameLogger.Info($"[CombatNetwork] FinishCombat: {url}, combatId={combatId}");
@@ -176,8 +183,8 @@ public class CombatNetwork
         {
             if (!res.Ok)
             {
-                GameLogger.Error($"[CombatNetwork] FinishCombat ½ÇÆÐ: {res.Message}");
-                _popup?.Show($"ÀüÅõ Á¾·á Ã³¸® ½ÇÆÐ: {res.Message}");
+                GameLogger.Error($"[CombatNetwork] FinishCombat ï¿½ï¿½ï¿½ï¿½: {res.Message}");
+                _popup?.Show($"ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: {res.Message}");
             }
 
             onDone?.Invoke(res);
@@ -198,14 +205,12 @@ public class CombatNetwork
         string url = ApiRoutes.CombatCommand(combatId);
         // => /api/pb/combat/{combatId}/command
 
-        GameLogger.Info($"[CombatNetwork] UseSkillAsync ¡æ {url} actor={actorId}, skill={skillId}");
+        GameLogger.Info($"[CombatNetwork] UseSkillAsync ï¿½ï¿½ {url} actor={actorId}, skill={skillId}");
 
-        yield return Http.Post(url, cmd, Empty.Parser, (ApiResult<Empty> res) =>
+        yield return CombatHttp.Post(url, cmd, Empty.Parser, (ApiResult<Empty> res) =>
         {
             if (!res.Ok)
-            {
-                GameLogger.Error($"[CombatNetwork] UseSkill ½ÇÆÐ: {res.Message}");
-            }
+                GameLogger.Error($"[CombatNetwork] UseSkill failed: {res.Message}");
 
             onDone?.Invoke(res);
         });
@@ -217,7 +222,7 @@ public class CombatNetwork
             CombatId = combatId
         };
 
-        yield return Http.Post(
+        yield return CombatHttp.Post(
             ApiRoutes.CombatToggleSpeed(combatId),
             req,
             ToggleSpeedResponsePb.Parser,
