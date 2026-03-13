@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Presentation", "Presentatio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protocol", "Protocol\Protocol.csproj", "{2CCC789C-AA77-4D6A-9768-03086776AC0A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CombatServer", "CombatServer\CombatServer.csproj", "{624C9CDB-65E7-4860-B53F-2AC639693864}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{2CCC789C-AA77-4D6A-9768-03086776AC0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CCC789C-AA77-4D6A-9768-03086776AC0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CCC789C-AA77-4D6A-9768-03086776AC0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{624C9CDB-65E7-4860-B53F-2AC639693864}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{624C9CDB-65E7-4860-B53F-2AC639693864}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{624C9CDB-65E7-4860-B53F-2AC639693864}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{624C9CDB-65E7-4860-B53F-2AC639693864}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
