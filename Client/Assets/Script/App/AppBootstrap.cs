@@ -123,20 +123,31 @@ namespace Client.Systems
 
         IEnumerator LoadEssentialCaches()
         {
-            bool done1 = false, done2 = false, done3 = false, done4 = false;
-            StartCoroutine(WrapTimed(MasterDataCache.Instance.CoLoadMasterData(Http, Popup), "MasterData", () => done1 = true));
-            StartCoroutine(WrapTimed(ItemCache.Instance.CoLoadItemData(Http, Popup), "Item", () => done2 = true));
-            StartCoroutine(WrapTimed(CharacterCache.Instance.CoLoadCharacterCache(Http, Popup), "Character", () => done3 = true));
-            StartCoroutine(WrapTimed(UIImageCache.Instance.PreloadAllUISprites(), "UIImage", () => done4 = true));
-            yield return new WaitUntil(() => done1 && done2 && done3 && done4);
+            var routines = new (IEnumerator routine, string label)[]
+            {
+                (MasterDataCache.Instance.CoLoadMasterData(Http, Popup), "MasterData"),
+                (ItemCache.Instance.CoLoadItemData(Http, Popup),         "Item"),
+                (CharacterCache.Instance.CoLoadCharacterCache(Http, Popup), "Character"),
+                (UIImageCache.Instance.PreloadAllUISprites(),             "UIImage"),
+            };
+            yield return RunParallel(routines);
         }
         IEnumerator LoadBattleCaches()
         {
-            bool done1 = false, done2 = false, done3 = false;
-            StartCoroutine(WrapTimed(SkillCache.Instance.CoLoadSkillData(Http, Popup), "Skill", () => done1 = true));
-            StartCoroutine(WrapTimed(BattleContentsCache.Instance.CoLoadContents(Http, Popup), "BattleContents", () => done2 = true));
-            StartCoroutine(WrapTimed(MonsterCache.Instance.CoLoadMonsterCache(Http, Popup), "Monster", () => done3 = true));
-            yield return new WaitUntil(() => done1 && done2 && done3);
+            var routines = new (IEnumerator routine, string label)[]
+            {
+                (SkillCache.Instance.CoLoadSkillData(Http, Popup),            "Skill"),
+                (BattleContentsCache.Instance.CoLoadContents(Http, Popup),    "BattleContents"),
+                (MonsterCache.Instance.CoLoadMonsterCache(Http, Popup),       "Monster"),
+            };
+            yield return RunParallel(routines);
+        }
+        IEnumerator RunParallel((IEnumerator routine, string label)[] routines)
+        {
+            int remaining = routines.Length;
+            foreach (var (routine, label) in routines)
+                StartCoroutine(WrapTimed(routine, label, () => remaining--));
+            yield return new WaitUntil(() => remaining <= 0);
         }
 
         IEnumerator Wrap(IEnumerator routine, Action onDone)
