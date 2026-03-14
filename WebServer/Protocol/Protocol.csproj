@@ -12,14 +12,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Protobuf Include="Proto\**\*.proto"
-				  ProtoRoot="Proto"
-				  GrpcServices="None"
-				  CompileOutputs="false"
-				  OutputDir="Generated" />
+		<Protobuf Include="Proto\**\*.proto" ProtoRoot="Proto" GrpcServices="None" CompileOutputs="false" OutputDir="Generated" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Remove="Proto\Service\combat_internal.proto" />
 		<None Remove="Proto\Service\inventory_service.proto" />
 		<None Remove="Proto\Service\wallet_service.proto" />
 	</ItemGroup>
@@ -34,8 +31,7 @@
 		</PropertyGroup>
 		<MakeDir Directories="$(UnityPluginsDir)" />
 		<Copy SourceFiles="$(TargetDir)Protocol.dll" DestinationFolder="$(UnityPluginsDir)" />
-		<Copy SourceFiles="$(TargetDir)Protocol.pdb" DestinationFolder="$(UnityPluginsDir)"
-			  Condition="Exists('$(TargetDir)Contracts.pdb')" />
+		<Copy SourceFiles="$(TargetDir)Protocol.pdb" DestinationFolder="$(UnityPluginsDir)" Condition="Exists('$(TargetDir)Contracts.pdb')" />
 	</Target>
 
 </Project>

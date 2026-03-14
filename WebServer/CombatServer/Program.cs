@@ -4,6 +4,7 @@ using Application.Repositories;
 using Application.Skills;
 using Application.UserCharacter;
 using CombatServer.Formatters;
+using CombatServer.Grpc;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,7 @@ builder.Services.AddScoped<ICombatRepository, EfCombatRepository>();
 builder.Services.AddScoped<ICombatTickEngine, CombatTickEngine>();
 builder.Services.AddScoped<ICombatService, CombatService>();
 builder.Services.AddScoped<IMasterDataProvider, MasterDataProvider>();
+builder.Services.AddGrpc(); 
 
 // ── Controllers / Swagger ─────────────────────────────────────────────────────
 builder.Services.AddControllers(opts =>
@@ -43,5 +45,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.MapControllers();
+app.MapGrpcService<CombatGrpcService>();
 
 app.Run();

@@ -49,6 +49,8 @@ using Application.Gacha.GachaDraw;
 using Application.Gacha;
 using ProtoBuf.Meta;
 using Application.Users.Caching;
+using CombatInternal;
+using Infrastructure.Services.Grpc;
 
 namespace WebServer.Extensions
 {
@@ -176,12 +178,13 @@ namespace WebServer.Extensions
             #region Contents
             s.AddScoped<IUserPartyReader, EfUserPartyReader>();
             s.AddScoped<ICombatService, CombatService>();
-            s.AddHttpClient<CombatServerClient>((serviceProvider, client) =>
+            s.AddGrpcClient<CombatInternalService.CombatInternalServiceClient>(o =>
             {
-                var config = serviceProvider.GetRequiredService<IConfiguration>();
-                var url = config["CombatServerUrl"] ?? "http://localhost:5001";
-                client.BaseAddress = new Uri(url.TrimEnd('/') + "/");
+                var config = s.BuildServiceProvider().GetRequiredService<IConfiguration>();
+                o.Address = new Uri(config["CombatServerUrl"] ?? "http://localhost:5001");
             });
+            s.AddScoped<ICombatServerClient, GrpcCombatServerClient>();
+
             s.AddScoped<ICombatRepository, EfCombatRepository>(); 
             s.AddScoped<IMasterDataProvider, MasterDataProvider>();
             s.AddScoped<IBattlesService, BattlesService>();

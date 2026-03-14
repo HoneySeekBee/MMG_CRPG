@@ -31,14 +31,14 @@ namespace Application.Combat
         private readonly IStagesService _stages;
         private readonly IClock _clock;
         private readonly ISkillCache _skillCache;
-        private readonly CombatServerClient _combatServerClient;
+        private readonly ICombatServerClient _combatServerClient;
 
         private const int MaxPageSize = 500;
 
         public CombatService(IMasterDataProvider master, ICombatRepository repo, ICombatEngine engine, IUserPartyReader partyReader,
        IUserCharacterReader userCharacterReader, IUserStageProgressService stageProgress,
        IStageRewardService stageReward, IWalletService wallet, IStagesService stages, IClock clock, ISkillCache skillCache,
-       CombatServerClient combatServerClient)
+       ICombatServerClient combatServerClient)
         {
             _master = master;
             _repo = repo;

@@ -14,40 +14,6 @@ namespace CombatServer.Controllers
             _combat = combat;
         }
 
-        // POST /combat/init  (called by WebServer)
-        [HttpPost("init")]
-        public async Task<IActionResult> Init([FromBody] InitCombatPayload payload, CancellationToken ct)
-        {
-            try
-            {
-                var snapshot = await _combat.InitCombatAsync(payload, ct);
-                return Ok(snapshot);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
-        }
-
-        // GET /combat/{combatId}/result  (called by WebServer on finish)
-        [HttpGet("{combatId:long}/result")]
-        public async Task<IActionResult> GetResult(long combatId, CancellationToken ct)
-        {
-            try
-            {
-                var result = await _combat.GetResultAsync(combatId, ct);
-                return Ok(result);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(new { error = ex.Message });
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
-        }
-
         // POST /combat/{combatId}/tick
         [HttpPost("{combatId:long}/tick")]
         public async Task<IActionResult> Tick(long combatId, [FromBody] TickRequest req, CancellationToken ct)
