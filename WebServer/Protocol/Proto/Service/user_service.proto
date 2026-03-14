@@ -3,9 +3,9 @@ syntax = "proto3";
 package Contracts.Protos;
 option csharp_namespace = "Contracts.Protos";
 
-import "user.proto";  
-import "user_inventory.proto";
-import "user_wallet.proto";
+import "User/user.proto";
+import "User/user_inventory.proto";
+import "User/user_wallet.proto";
 import "google/protobuf/empty.proto";
 
 service UserService {

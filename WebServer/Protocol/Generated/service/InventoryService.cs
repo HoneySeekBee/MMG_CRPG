@@ -24,18 +24,18 @@ namespace Contracts.Protos {
     static InventoryServiceReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "Ch9TZXJ2aWNlL2ludmVudG9yeV9zZXJ2aWNlLnByb3RvEghnYW1lLmludhoU",
-            "dXNlcl9pbnZlbnRvcnkucHJvdG8aG2dvb2dsZS9wcm90b2J1Zi9lbXB0eS5w",
-            "cm90bzL7AgoQSW52ZW50b3J5U2VydmljZRJPCgRMaXN0EiIuZ2FtZS5pbnYu",
-            "TGlzdFVzZXJJbnZlbnRvcnlSZXF1ZXN0GiMuZ2FtZS5pbnYuTGlzdFVzZXJJ",
-            "bnZlbnRvcnlSZXNwb25zZRJACgVHcmFudBIaLmdhbWUuaW52LkdyYW50SXRl",
-            "bVJlcXVlc3QaGy5nYW1lLmludi5HcmFudEl0ZW1SZXNwb25zZRJGCgdDb25z",
-            "dW1lEhwuZ2FtZS5pbnYuQ29uc3VtZUl0ZW1SZXF1ZXN0Gh0uZ2FtZS5pbnYu",
-            "Q29uc3VtZUl0ZW1SZXNwb25zZRJNCgxTZXRJdGVtQ291bnQSHS5nYW1lLmlu",
-            "di5TZXRJdGVtQ291bnRSZXF1ZXN0Gh4uZ2FtZS5pbnYuU2V0SXRlbUNvdW50",
-            "UmVzcG9uc2USPQoGRGVsZXRlEhsuZ2FtZS5pbnYuRGVsZXRlSXRlbVJlcXVl",
-            "c3QaFi5nb29nbGUucHJvdG9idWYuRW1wdHlCE6oCEENvbnRyYWN0cy5Qcm90",
-            "b3NiBnByb3RvMw=="));
+            "Ch9TZXJ2aWNlL2ludmVudG9yeV9zZXJ2aWNlLnByb3RvEghnYW1lLmludhoZ",
+            "VXNlci91c2VyX2ludmVudG9yeS5wcm90bxobZ29vZ2xlL3Byb3RvYnVmL2Vt",
+            "cHR5LnByb3RvMvsCChBJbnZlbnRvcnlTZXJ2aWNlEk8KBExpc3QSIi5nYW1l",
+            "Lmludi5MaXN0VXNlckludmVudG9yeVJlcXVlc3QaIy5nYW1lLmludi5MaXN0",
+            "VXNlckludmVudG9yeVJlc3BvbnNlEkAKBUdyYW50EhouZ2FtZS5pbnYuR3Jh",
+            "bnRJdGVtUmVxdWVzdBobLmdhbWUuaW52LkdyYW50SXRlbVJlc3BvbnNlEkYK",
+            "B0NvbnN1bWUSHC5nYW1lLmludi5Db25zdW1lSXRlbVJlcXVlc3QaHS5nYW1l",
+            "Lmludi5Db25zdW1lSXRlbVJlc3BvbnNlEk0KDFNldEl0ZW1Db3VudBIdLmdh",
+            "bWUuaW52LlNldEl0ZW1Db3VudFJlcXVlc3QaHi5nYW1lLmludi5TZXRJdGVt",
+            "Q291bnRSZXNwb25zZRI9CgZEZWxldGUSGy5nYW1lLmludi5EZWxldGVJdGVt",
+            "UmVxdWVzdBoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eUITqgIQQ29udHJhY3Rz",
+            "LlByb3Rvc2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Contracts.Protos.UserInventoryReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.EmptyReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, null));

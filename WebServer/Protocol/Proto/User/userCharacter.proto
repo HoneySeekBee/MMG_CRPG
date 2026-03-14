@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package Contracts.Protos;
+
+option csharp_namespace = "Contracts.Protos";
+
+import "google/protobuf/timestamp.proto";
+
+message UserCharacterListPb {
+  repeated UserCharacterSummaryPb characters = 1;
+}
+
+message UserCharacterSummaryPb {
+  int32 user_id = 1;
+  int32 character_id = 2;
+  int32 level = 3;
+  int32 exp = 4;
+  int32 breakThrough = 5;
+  google.protobuf.Timestamp updated_at = 6;
+  int32 user_character_id = 7;
+
+  repeated UserCharacterSkillPb skills = 10;
+  repeated UserCharacterEquipPb equips = 11;
+}
+
+message UserCharacterSkillPb {
+  int64 skill_id = 1;
+  uint32 level = 2;
+  google.protobuf.Timestamp updated_at = 3;
+}
+
+message UserCharacterEquipPb {
+  int32 equipId = 1;
+  int64 inventoryId = 2;
+}
+
+message SetEquipmentRequest {
+  int32 equip_id = 1;          // equipment slot ID
+  optional int64 inventory_id = 2; // inventory item ID, null if empty
+}
+
+message EquipmentSlotStatePb {
+  int32 equip_id = 1;
+  optional int64 inventory_id = 2;
+}
+
+message SetEquipmentResponse {
+  int32 user_id = 1;
+  int32 character_id = 2;
+  EquipmentSlotStatePb slot = 3;            // updated slot state
+  repeated UserCharacterEquipPb equips = 4; // all equipment slots of the character
+  uint64 revision = 5;                      // optimistic locking
+  google.protobuf.Timestamp updated_at = 6;
+}
+
+message SetEquipmentBatchRequest {
+  repeated EquipmentSlotStatePb slots = 1;  // current state of each slot
+  optional uint64 if_match_revision = 2;    // (optional) optimistic lock check
+}
+
+message SetEquipmentBatchResponse {
+  int32 user_id = 1;
+  int32 character_id = 2;
+  repeated UserCharacterEquipPb equips = 3; // full equipment list
+  uint64 revision = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+message GetCharacterEquipmentResponse {
+  int32 user_id = 1;
+  int32 character_id = 2;
+  repeated UserCharacterEquipPb equips = 3;
+  uint64 revision = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}

@@ -1,0 +1,97 @@
+syntax = "proto3";
+
+package game.inv;
+option csharp_namespace = "Contracts.Protos";
+import "google/protobuf/timestamp.proto";
+
+// User inventory record
+message UserInventory {
+  int32 user_id = 1;
+  int32 item_id = 2;
+  int32 count   = 3;
+  google.protobuf.Timestamp updated_at = 4;
+  int64 id = 5;
+}
+
+// Pagination info
+message PageInfo {
+  int32 page = 1;        // 1-based
+  int32 page_size = 2;   // requested size
+  int32 total_count = 3; // total record count
+}
+
+message ListUserInventoryRequest {
+  int32 user_id = 1;
+  int32 page = 2;
+  int32 page_size = 3;
+  int32 item_id = 4;
+  int64 updated_from_unix = 5;
+  int64 updated_to_unix = 6;
+}
+
+// GET: list items
+message ListUserInventoryResponse {
+  PageInfo page_info = 1;
+  repeated UserInventory items = 2;
+}
+
+// GET: get single item
+message GetUserInventoryResponse {
+  UserInventory item = 1;
+}
+
+// POST: grant item
+message GrantItemRequest {
+  int32 user_id = 1;
+  int32 item_id = 2;
+  int32 amount  = 3; // amount to grant
+}
+
+message GrantItemResponse {
+  UserInventory item = 1; // result after grant
+}
+
+// POST: consume item
+message ConsumeItemRequest {
+  int32 user_id = 1;
+  int32 item_id = 2;
+  int32 amount  = 3; // amount to consume (positive)
+}
+
+message ConsumeItemResponse {
+  bool success = 1;
+  int32 before_count = 2;
+  int32 after_count  = 3;
+  int32 consumed     = 4; // actual consumed amount
+  string failure_reason = 5;
+}
+
+// PUT: set item count
+message SetItemCountRequest {
+  int32 user_id = 1;
+  int32 item_id = 2;
+  int32 new_count = 3;
+}
+
+message SetItemCountResponse {
+  UserInventory item = 1;
+}
+
+// DELETE: remove item (admin use)
+message DeleteItemRequest {
+  int32 user_id = 1;
+  int32 item_id = 2;
+}
+
+// GET: list owners of a specific item (admin analytics)
+message ListOwnersRequest {
+  int32 item_id   = 1;
+  int32 page      = 2;
+  int32 page_size = 3;
+  int32 min_count = 4; // min count filter (0 = no filter)
+}
+
+message ListOwnersResponse {
+  PageInfo page_info = 1;
+  repeated UserInventory owners = 2;
+}

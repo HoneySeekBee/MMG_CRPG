@@ -25,18 +25,18 @@ namespace Contracts.Protos {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChpTZXJ2aWNlL3VzZXJfc2VydmljZS5wcm90bxIQQ29udHJhY3RzLlByb3Rv",
-            "cxoKdXNlci5wcm90bxoUdXNlcl9pbnZlbnRvcnkucHJvdG8aEXVzZXJfd2Fs",
-            "bGV0LnByb3RvGhtnb29nbGUvcHJvdG9idWYvZW1wdHkucHJvdG8yjgMKC1Vz",
-            "ZXJTZXJ2aWNlEkUKCkdldFN1bW1hcnkSFi5nb29nbGUucHJvdG9idWYuRW1w",
-            "dHkaHy5Db250cmFjdHMuUHJvdG9zLlVzZXJTdW1tYXJ5UGISRQoKR2V0UHJv",
-            "ZmlsZRIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRofLkNvbnRyYWN0cy5Qcm90",
-            "b3MuVXNlclByb2ZpbGVQYhJTCg1VcGRhdGVQcm9maWxlEiEuQ29udHJhY3Rz",
-            "LlByb3Rvcy5VcGRhdGVQcm9maWxlUGIaHy5Db250cmFjdHMuUHJvdG9zLlVz",
-            "ZXJQcm9maWxlUGISTgoLR2V0TXlTdGFnZXMSFi5nb29nbGUucHJvdG9idWYu",
-            "RW1wdHkaJy5Db250cmFjdHMuUHJvdG9zLk15U3RhZ2VQcm9ncmVzc0xpc3RQ",
-            "YhJMCg5DaGFuZ2VQYXNzd29yZBIiLkNvbnRyYWN0cy5Qcm90b3MuQ2hhbmdl",
-            "UGFzc3dvcmRQYhoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eUITqgIQQ29udHJh",
-            "Y3RzLlByb3Rvc2IGcHJvdG8z"));
+            "cxoPVXNlci91c2VyLnByb3RvGhlVc2VyL3VzZXJfaW52ZW50b3J5LnByb3Rv",
+            "GhZVc2VyL3VzZXJfd2FsbGV0LnByb3RvGhtnb29nbGUvcHJvdG9idWYvZW1w",
+            "dHkucHJvdG8yjgMKC1VzZXJTZXJ2aWNlEkUKCkdldFN1bW1hcnkSFi5nb29n",
+            "bGUucHJvdG9idWYuRW1wdHkaHy5Db250cmFjdHMuUHJvdG9zLlVzZXJTdW1t",
+            "YXJ5UGISRQoKR2V0UHJvZmlsZRIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRof",
+            "LkNvbnRyYWN0cy5Qcm90b3MuVXNlclByb2ZpbGVQYhJTCg1VcGRhdGVQcm9m",
+            "aWxlEiEuQ29udHJhY3RzLlByb3Rvcy5VcGRhdGVQcm9maWxlUGIaHy5Db250",
+            "cmFjdHMuUHJvdG9zLlVzZXJQcm9maWxlUGISTgoLR2V0TXlTdGFnZXMSFi5n",
+            "b29nbGUucHJvdG9idWYuRW1wdHkaJy5Db250cmFjdHMuUHJvdG9zLk15U3Rh",
+            "Z2VQcm9ncmVzc0xpc3RQYhJMCg5DaGFuZ2VQYXNzd29yZBIiLkNvbnRyYWN0",
+            "cy5Qcm90b3MuQ2hhbmdlUGFzc3dvcmRQYhoWLmdvb2dsZS5wcm90b2J1Zi5F",
+            "bXB0eUITqgIQQ29udHJhY3RzLlByb3Rvc2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Contracts.Protos.UserReflection.Descriptor, global::Contracts.Protos.UserInventoryReflection.Descriptor, global::Contracts.Protos.UserWalletReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.EmptyReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, null));

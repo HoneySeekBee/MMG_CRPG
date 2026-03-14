@@ -1,0 +1,74 @@
+syntax = "proto3";
+package Contracts.Protos;
+
+// User summary (for top bar display)
+message UserSummaryPb {
+  int32  userId   = 1;
+  string nickname = 2;
+  int32  level    = 3;
+  int32  gold     = 4;
+  int32  gem      = 5;
+  int32  token    = 6;
+  int32  iconId   = 7; // default 0
+}
+
+// User profile
+message UserProfilePb {
+  int32  id       = 1;
+  int32  userId   = 2;
+  string nickname = 3;
+  int32  level    = 4;
+  int32  exp      = 5;
+  int32  gold     = 6;
+  int32  gem      = 7;
+  int32  token    = 8;
+  int32  iconId   = 9;   // default 0
+  string iconKey  = 10;  // e.g. "hero_0001"
+  int32  iconVersion = 11;
+}
+
+message InventoryItemPb {
+  string refId  = 1;  // e.g. "mat_exp_1", "potion_small"
+  int64  amount = 2;
+}
+
+message HeroPb {
+  string heroId   = 1;  // e.g. "h001"
+  int32  rarity   = 2;
+  int32  level    = 3;
+  int32  tier     = 4;  // breakthrough stage
+  int32  baseAtk  = 5;
+  int32  baseHp   = 6;
+  // add skills/equipment/passives if needed
+}
+
+// Update profile request
+message UpdateProfilePb {
+  string nickname = 1;
+  int32  iconId   = 2; // 0 treated as null
+}
+
+message ChangePasswordPb {
+  string oldPassword = 1;
+  string newPassword = 2;
+}
+
+enum StageStarsPb {
+  STAGE_STARS_ZERO  = 0;
+  STAGE_STARS_ONE   = 1;
+  STAGE_STARS_TWO   = 2;
+  STAGE_STARS_THREE = 3;
+}
+
+// Stage progress snapshot for a single stage
+message UserStageProgressPb {
+  int32 stage_id = 1;
+  bool cleared = 2;
+  StageStarsPb stars = 3;
+  int64 cleared_at_utc = 4;
+}
+
+// All stage progress for the user
+message MyStageProgressListPb {
+  repeated UserStageProgressPb progresses = 1;
+}

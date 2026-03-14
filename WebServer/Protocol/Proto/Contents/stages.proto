@@ -19,14 +19,15 @@ message StagePb {
   repeated RequirementPb requirements = 13;
   repeated BatchPb batches = 14;
 }
-// 웨이브
+
+// Wave
 message WavePb {
   int32 index = 1;
   repeated EnemyPb enemies = 2;
-  int32 batch_num = 3; 
+  int32 batch_num = 3;
 }
 
-// 웨이브 안 적
+// Enemy in wave
 message EnemyPb {
   int32 enemy_character_id = 1;
   int32 level = 2;
@@ -34,35 +35,35 @@ message EnemyPb {
   string ai_profile = 4;
 }
 
-// 드랍
+// Drop
 message DropPb {
   int32 item_id = 1;
-  double rate = 2;      // decimal 대신 double
+  double rate = 2;      // decimal -> double
   int32 min_qty = 3;
   int32 max_qty = 4;
   bool first_clear_only = 5;
 }
 
-// 첫 클리어 보상
+// First clear reward
 message RewardPb {
   int32 item_id = 1;
   int32 qty = 2;
 }
 
-// 입장 조건
+// Stage requirement
 message RequirementPb {
-  int32 required_stage_id = 1;  // 0이면 없음
-  int32 min_account_level = 2;  // 0이면 없음
+  int32 required_stage_id = 1;  // 0 = no requirement
+  int32 min_account_level = 2;  // 0 = no requirement
 }
 
-// 배치(스폰 묶음)
+// Batch (stage background/scene)
 message BatchPb {
   int32 batch_num = 1;
   string unit_key = 2;
   string env_key = 3;
 }
 
-// 여러 개 한 번에 보낼 때
+// Response message containing stage list
 message StageListPb {
   repeated StagePb stages = 1;
 }

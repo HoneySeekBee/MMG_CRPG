@@ -25,10 +25,10 @@ namespace Contracts.Protos {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChxTZXJ2aWNlL3dhbGxldF9zZXJ2aWNlLnByb3RvEhBjb250cmFjdHMucHJv",
-            "dG9zGhF1c2VyX3dhbGxldC5wcm90bxobZ29vZ2xlL3Byb3RvYnVmL2VtcHR5",
-            "LnByb3RvMlIKDVdhbGxldFNlcnZpY2USQQoHU3VtbWFyeRIWLmdvb2dsZS5w",
-            "cm90b2J1Zi5FbXB0eRoeLmNvbnRyYWN0cy5wcm90b3MuVXNlcldhbGxldFBi",
-            "YgZwcm90bzM="));
+            "dG9zGhZVc2VyL3VzZXJfd2FsbGV0LnByb3RvGhtnb29nbGUvcHJvdG9idWYv",
+            "ZW1wdHkucHJvdG8yUgoNV2FsbGV0U2VydmljZRJBCgdTdW1tYXJ5EhYuZ29v",
+            "Z2xlLnByb3RvYnVmLkVtcHR5Gh4uY29udHJhY3RzLnByb3Rvcy5Vc2VyV2Fs",
+            "bGV0UGJiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Contracts.Protos.UserWalletReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.EmptyReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, null));

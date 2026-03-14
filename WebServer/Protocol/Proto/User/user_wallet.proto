@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package contracts.protos;
+
+// Single currency balance
+message CurrencyBalancePb {
+  string code      = 1; // currency code: "GOLD", "GEM", "TOKEN"
+  int64  amount    = 2; // current balance (int64 for large values)
+  int32  sort_order = 3; // (optional) sort order for client display
+}
+
+// Full wallet (all currencies)
+message UserWalletPb {
+  repeated CurrencyBalancePb balances = 1; // currency balances
+  int64 updated_unix_ms = 2;               // last updated timestamp (unix ms)
+  string version = 3;                      // (optional) version/etag for cache validation
+}

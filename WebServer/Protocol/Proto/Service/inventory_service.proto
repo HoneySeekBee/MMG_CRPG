@@ -3,7 +3,7 @@ syntax = "proto3";
 package game.inv;
 option csharp_namespace = "Contracts.Protos";
 
-import "user_inventory.proto"; 
+import "User/user_inventory.proto";
 import "google/protobuf/empty.proto";
 
 service InventoryService {

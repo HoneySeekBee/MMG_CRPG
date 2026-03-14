@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package game.characters;
+option csharp_namespace = "WebServer.Protos";
+
+message CharacterExpTableResponse {
+  repeated CharacterExpGroupPb groups = 1; // exp groups per rarity
+  int64 version = 2;                       // version for cache invalidation
+}
+
+// Exp levels for a single rarity
+message CharacterExpGroupPb {
+  int32 rarity_id = 1;                   // short -> int32
+  repeated CharacterExpLevelPb levels = 2; // sorted by level
+}
+
+// Required exp for a specific level
+message CharacterExpLevelPb {
+  int32 level = 1;        // short -> int32
+  int32 required_exp = 2;
+}
+
+message CharacterExpFlatResponse {
+  repeated CharacterExpRowPb rows = 1;
+  int64 version = 2;
+}
+
+message CharacterExpRowPb {
+  int32 rarity_id    = 1; // short -> int32
+  int32 level        = 2; // short -> int32
+  int32 required_exp = 3;
+}

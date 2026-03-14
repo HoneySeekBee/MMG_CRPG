@@ -1,0 +1,82 @@
+syntax = "proto3";
+package Contracts.Protos;
+import "User/user.proto";
+
+// Gacha banner
+message GachaBannerPb {
+  int32  id           = 1;
+  string key          = 2;
+  string title        = 3;
+  string subtitle     = 4;
+  int32  portraitId   = 5;
+  int32  gachaPoolId  = 6;
+  int64  startsAtUtc  = 7; // unix seconds
+  int64  endsAtUtc    = 8; // 0 = no expiry
+  int32  priority     = 9;
+  int32  status       = 10; // status enum -> int
+  bool   isActive     = 11;
+
+  int32  costCurrencyId = 12;
+  int32  cost            = 13;
+  int32  ticketItemId    = 14;
+}
+
+// Banner list
+message GachaBannerListPb {
+  repeated GachaBannerPb banners = 1;
+}
+
+// Pool entry (one row in probability table)
+message GachaEntryPb {
+  int32 characterId = 1;
+  int32 grade       = 2;
+  bool  rateUp      = 3;
+  int32 weight      = 4;
+}
+
+// Pool detail
+message GachaPoolDetailPb {
+  int32  poolId            = 1;
+  string name              = 2;
+  string tablesVersion     = 3;
+  string pityJson          = 4; // pity config as raw JSON
+  string configJson        = 5; // pool config as raw JSON
+  int64  scheduleStartUtc  = 6; // unix seconds
+  int64  scheduleEndUtc    = 7; // 0 = no expiry
+  repeated GachaEntryPb entries = 8;
+}
+
+// Catalog: active banners + current pools
+message GachaCatalogPb {
+  int64 version = 1; // cache/versioning (optional)
+  repeated GachaBannerPb banners = 2;
+  repeated GachaPoolDetailPb pools = 3;
+}
+
+message GachaDrawRequestPb {
+  string bannerKey = 1;
+  int32 count = 2;
+}
+
+message GachaDrawItemPb {
+  int32 characterId = 1;
+  int32 grade = 2;
+  bool rateUp = 3;
+  bool isNew = 4;
+  bool isShard = 5;
+  int32 shardAmount = 6;
+  bool isGuaranteed = 7;
+}
+
+message GachaDrawResultPb {
+  int64 timestampUtc = 1;
+  repeated GachaDrawItemPb items = 2;
+
+  int32 usedTickets = 3;
+  int64 usedCurrency = 4;
+
+  int32 totalCharacters = 5;
+  int32 totalShards = 6;
+
+  UserProfilePb afterProfile = 7;
+}
