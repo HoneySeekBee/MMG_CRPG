@@ -11,9 +11,15 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Allow HTTP/2 without TLS for internal Docker gRPC communication
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(80, o => o.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http2);
+});
+
 // ── Database ──────────────────────────────────────────────────────────────────
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' is not configured.");
+var connectionString = builder.Configuration.GetConnectionString("GameDb")
+    ?? throw new InvalidOperationException("Connection string 'GameDb' is not configured.");
 
 builder.Services.AddDbContext<CombatDbContext>(options =>
     options.UseNpgsql(connectionString, npgsql =>
@@ -43,7 +49,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
 app.MapControllers();
 app.MapGrpcService<CombatGrpcService>();
 
