@@ -191,7 +191,6 @@ namespace WebServer.Extensions
             s.AddScoped<IUserCharacterReader, EfUserCharacterReader>();
             s.AddScoped<ICharacterReader, EfCharacterReader>();
             s.AddScoped<ISkillReader, EfSkillReader>(); 
-            s.AddScoped<ICombatTickEngine, CombatTickEngine>();
             s.AddScoped<IStageRewardService, StageRewardService>();
             s.AddScoped<Application.Combat.Engine.IMonsterStatReader, MonsterStatReader>();
             #endregion

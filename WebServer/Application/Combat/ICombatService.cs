@@ -13,8 +13,6 @@ namespace Application.Combat
     {
         Task<StartCombatResponse> StartAsync(StartCombatRequest req, CancellationToken ct);
 
-        Task EnqueueCommandAsync(long combatId, CombatCommandDto cmd, CancellationToken ct);
-
         Task<SimulateCombatResponse> SimulateAsync(
             SimulateCombatRequest request, CancellationToken ct);
 
@@ -22,9 +20,7 @@ namespace Application.Combat
             long combatId, string? cursor, int size, CancellationToken ct);
 
         Task<CombatLogSummaryDto> GetSummaryAsync(long combatId, CancellationToken ct);
-        Task<CombatTickResponse> TickAsync(long combatId, int tick, CancellationToken ct);
         Task<FinishCombatResponse> FinishAsync(FinishCombatRequest req, CancellationToken ct);
-        Task<CombatSpeed> ToggleSpeedAsync(long combatId, CancellationToken ct);
     }
     public interface IStageReader { Task<StageDetailDto> GetAsync(long stageId, CancellationToken ct); }
     public interface ICharacterReader { Task<CharacterMasterDto> GetAsync(long characterId, CancellationToken ct); }

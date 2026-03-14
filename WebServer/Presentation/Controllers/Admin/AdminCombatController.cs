@@ -20,13 +20,6 @@ namespace Presentation.Controllers.Admin
             return Ok(res);
         }
 
-        [HttpPost("{combatId:long}/command")]
-        [ProducesResponseType(StatusCodes.Status202Accepted)]
-        public async Task<IActionResult> Command([FromRoute] long combatId, [FromBody] CombatCommandDto cmd, CancellationToken ct)
-        {
-            await _service.EnqueueCommandAsync(combatId, cmd, ct);
-            return Accepted();
-        }
         [HttpPost("simulate")]
         [ProducesResponseType(typeof(SimulateCombatResponse), StatusCodes.Status200OK)]
         public async Task<IActionResult> Simulate([FromBody] SimulateCombatRequest req, CancellationToken ct)
@@ -48,16 +41,6 @@ namespace Presentation.Controllers.Admin
         public async Task<IActionResult> GetSummary([FromRoute] long combatId, CancellationToken ct)
         {
             var res = await _service.GetSummaryAsync(combatId, ct);
-            return Ok(res);
-        }
-        [HttpPost("{combatId:long}/tick")]
-        [ProducesResponseType(typeof(CombatTickResponse), StatusCodes.Status200OK)]
-        public async Task<IActionResult> Tick(
-    [FromRoute] long combatId,
-    [FromBody] CombatTickRequest req,
-    CancellationToken ct)
-        {
-            var res = await _service.TickAsync(combatId, req.Tick, ct);
             return Ok(res);
         }
     }

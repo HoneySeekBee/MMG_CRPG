@@ -1,6 +1,4 @@
-﻿using Application.Combat.Engine;
-using Domain.Combat.Runtime;
-using Application.Contents.Stages;
+﻿using Application.Contents.Stages;
 using Application.Repositories;
 using Application.Skills;
 using Application.StageReward;
@@ -11,7 +9,6 @@ using Application.Users;
 using Domain.Entities.Contents;
 using Domain.Enum;
 using Domain.Services;
-using System.Collections.Concurrent;
 using Domain.Combat.Engine;
 using Domain.Entities.Combats;
 using CombatEntitiy = Domain.Entities.Combats.Combat;
@@ -26,9 +23,8 @@ namespace Application.Combat
         private readonly ICombatEngine _engine;
         private readonly IUserPartyReader _partyReader;
         private readonly IUserCharacterReader _userCharacterReader;
-        private readonly ICombatTickEngine _tickEngine;
 
-        // 전투 종료시 사용되는 서비스 
+        // 전투 종료시 사용되는 서비스
         private readonly IUserStageProgressService _stageProgress;
         private readonly IStageRewardService _stageReward;
         private readonly IWalletService _wallet;
@@ -38,10 +34,9 @@ namespace Application.Combat
         private readonly CombatServerClient _combatServerClient;
 
         private const int MaxPageSize = 500;
-        private static readonly ConcurrentDictionary<long, CombatRuntimeState> _runtimeStates = new();
 
         public CombatService(IMasterDataProvider master, ICombatRepository repo, ICombatEngine engine, IUserPartyReader partyReader,
-       IUserCharacterReader userCharacterReader, ICombatTickEngine tickEngine, IUserStageProgressService stageProgress,
+       IUserCharacterReader userCharacterReader, IUserStageProgressService stageProgress,
        IStageRewardService stageReward, IWalletService wallet, IStagesService stages, IClock clock, ISkillCache skillCache,
        CombatServerClient combatServerClient)
         {
@@ -50,7 +45,6 @@ namespace Application.Combat
             _engine = engine;
             _partyReader = partyReader;
             _userCharacterReader = userCharacterReader;
-            _tickEngine = tickEngine;
 
             _stageProgress = stageProgress;
             _stageReward = stageReward;
@@ -266,39 +260,6 @@ namespace Application.Combat
             if (deadPlayerCount < 3) return StageStars.Two;
             return StageStars.One;
         }
-        public async Task EnqueueCommandAsync(long combatId, CombatCommandDto cmd, CancellationToken ct)
-        {
-            if (!_runtimeStates.TryGetValue(combatId, out var state))
-            {
-                throw new KeyNotFoundException($"Combat runtime state not found for id {combatId}");
-            }
-
-            lock (state.SyncRoot)
-            {
-                state.PendingCommands.Enqueue(new CombatCommand(
-                    cmd.ActorId,
-                    cmd.TargetActorId,
-                    cmd.SkillId,
-                    cmd.SkillLevel
-                ));
-            }
-            var tMs = (int)(DateTimeOffset.UtcNow - state.StartedAt).TotalMilliseconds;
-
-            var ev = new Domain.Events.CombatLogEvent(
-          TMs: tMs,
-          Type: "skill_used",
-          Actor: cmd.ActorId.ToString(),              // 일단 string ActorId
-          Target: cmd.TargetActorId?.ToString(),      // 없으면 null
-          Damage: null,
-          Crit: null,
-          Extra: new Dictionary<string, object?>
-          {
-              ["skillId"] = cmd.SkillId
-          }
-      );
-
-            await _repo.AppendLogsAsync(combatId, new[] { ev }, ct);
-        }
         // Map 메서드는 딱 하나만 남긴다
         private static CombatLogEventDto Map(Domain.Events.CombatLogEvent e)
             => new(e.TMs, e.Type, e.Actor, e.Target, e.Damage, e.Crit, e.Extra);
@@ -313,67 +274,5 @@ namespace Application.Combat
         public Task<CombatLogSummaryDto> GetSummaryAsync(long combatId, CancellationToken ct)
             => _repo.GetSummaryAsync(combatId, ct);
 
-        public async Task<CombatTickResponse> TickAsync(long combatId, int tick, CancellationToken ct)
-        {
-            if (!_runtimeStates.TryGetValue(combatId, out var state))
-                throw new KeyNotFoundException($"Combat {combatId} not found");
-
-            List<Domain.Events.CombatLogEvent> domainEvs = new();
-            CombatSnapshotDto snapshot;
-
-            const int BaseTickMs = 100;
-            const int MaxCatchUpTicks = 5;
-            lock (state.SyncRoot)
-            {
-                if (tick <= state.Tick)
-                {
-                    snapshot = _tickEngine.BuildSnapshot(state);
-                    var dtoEvs0 = new List<CombatLogEventDto>();
-                    return new CombatTickResponse(combatId, state.Tick, snapshot, dtoEvs0);
-                }
-
-                int missing = tick - state.Tick;
-                int catchUp = Math.Min(missing, MaxCatchUpTicks);
-
-                int tickDeltaMs = (int)(BaseTickMs * state.TimeScale);
-
-                for (int i = 0; i < catchUp; i++)
-                {
-                    var step = _tickEngine.Process(state, tickDeltaMs);
-                    if (step.Count > 0) domainEvs.AddRange(step);
-                }
-
-                snapshot = _tickEngine.BuildSnapshot(state);
-            }
-
-            // 3) 이벤트 로그 영속화
-            if (domainEvs.Count > 0)
-            {
-                await _repo.AppendLogsAsync(combatId, domainEvs, ct);
-            }
-
-            var dtoEvs = domainEvs.Select(Map).ToList();
-            // 4) 스냅샷 + 이벤트를 함께 반환
-            var serverTick = state.Tick;
-            return new CombatTickResponse(combatId, serverTick, snapshot, dtoEvs);
-        }
-
-        public Task<CombatSpeed> ToggleSpeedAsync(long combatId, CancellationToken ct)
-        {
-            if (!_runtimeStates.TryGetValue(combatId, out var state))
-                throw new KeyNotFoundException($"Combat {combatId} not found");
-
-            lock (state.SyncRoot)
-            {
-                state.Speed = state.Speed switch
-                {
-                    CombatSpeed.X1 => CombatSpeed.X15,
-                    CombatSpeed.X15 => CombatSpeed.X2,
-                    _ => CombatSpeed.X1
-                };
-
-                return Task.FromResult(state.Speed);
-            }
-        }
     }
 }
