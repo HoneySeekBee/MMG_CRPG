@@ -1,0 +1,101 @@
+syntax = "proto3";
+
+package combat_internal;
+
+option csharp_namespace = "CombatInternal";
+
+// -- Init Combat Message ----
+message GrpcPlayerSlot
+{
+	int32 slot_id = 1;
+	int64 character_id = 2;
+	int32 hp = 3;
+}
+
+message GrpcEnemySpawn
+{
+	int32 slot = 1;
+	int32 monster_id = 2; 
+	int32 level = 3; 
+}
+
+message GrpcWaveDef
+{
+	int32 index = 1;
+	repeated GrpcEnemySpawn enemies = 2; 
+}
+
+message GrpcStageDef
+{
+	int32 stage_id = 1;
+	repeated GrpcWaveDef waves = 2; 
+}
+
+message GrpcActorDef 
+{
+    int32  master_id          = 1;
+    bool   is_player          = 2;
+    string model_key          = 3;
+    int32  max_hp             = 4;
+    int32  atk                = 5;
+    int32  def                = 6;
+    int32  spd                = 7;
+    float  range              = 8;
+    int32  attack_interval_ms = 9;
+    double crit_rate          = 10;
+    double crit_damage        = 11;
+  }
+
+  message InitCombatRequest 
+  {
+    int64  combat_id                    = 1;
+    int32  stage_id                     = 2;
+    int64  user_id                      = 3;
+    int64  seed                         = 4;
+    repeated GrpcPlayerSlot players     = 5;
+    GrpcStageDef stage                  = 6;
+    map<int64, GrpcActorDef> actor_defs = 7;
+  }
+
+// --- InitCombat response ---
+
+  message GrpcActorInit 
+  {
+    int64 actor_id   = 1;
+    int32 team       = 2;
+    float x          = 3;
+    float z          = 4;
+    int32 hp         = 5;
+    int32 wave_index = 6;
+    int64 master_id  = 7;
+  } 
+  
+  message InitCombatResponse 
+  {
+    repeated GrpcActorInit actors = 1;
+  }
+
+  // --- GetResult messages ---
+ message GetCombatResultRequest 
+ {
+    int64 combat_id = 1;
+  }
+
+  message GetCombatResultResponse 
+  {
+    int64 combat_id          = 1;
+    int32 stage_id           = 2;
+    int64 user_id            = 3;
+    bool  battle_ended       = 4;
+    int32 result             = 5; // 0=unknown 1=win 2=lose
+    int32 dead_player_count  = 6;
+    int32 total_player_count = 7;
+  }
+  
+  // --- Service ---
+
+  service CombatInternalService 
+  {
+    rpc InitCombat(InitCombatRequest) returns (InitCombatResponse);
+    rpc GetCombatResult(GetCombatResultRequest) returns (GetCombatResultResponse);
+  }
