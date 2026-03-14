@@ -20,13 +20,22 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and Push (latest)
+      - name: Build and Push WebServer (latest)
         uses: docker/build-push-action@v6
         with:
           context: ./WebServer
           file: ./WebServer/Dockerfile
           push: true
           tags: limmyeongsik/mmg-crpg-server:latest
+          no-cache: true
+
+      - name: Build and Push CombatServer (latest)
+        uses: docker/build-push-action@v6
+        with:
+          context: ./WebServer
+          file: ./WebServer/Dockerfile.CombatServer
+          push: true
+          tags: limmyeongsik/mmg-crpg-combatserver:latest
           no-cache: true
 
       - name: Configure AWS credentials
