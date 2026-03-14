@@ -11,10 +11,12 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Allow HTTP/2 without TLS for internal Docker gRPC communication
+// Port 80: HTTP/1.1 for REST (Unity client via nginx)
+// Port 5001: HTTP/2 for gRPC (WebServer internal call)
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.ListenAnyIP(80, o => o.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http2);
+    options.ListenAnyIP(80, o => o.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http1);
+    options.ListenAnyIP(5001, o => o.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http2);
 });
 
 // ── Database ──────────────────────────────────────────────────────────────────

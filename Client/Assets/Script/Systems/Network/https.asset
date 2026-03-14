@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: https
   m_EditorClassIdentifier: 
   BaseUrl: https://mmgcrpg-server.duckdns.org
-  CombatServerUrl: http://localhost:5001
+  CombatServerUrl: 
   DefaultTimeoutSec: 10
   RetryCount: 2
   RetryBackoffSec: 0.5
