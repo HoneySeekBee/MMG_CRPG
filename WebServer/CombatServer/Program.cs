@@ -5,11 +5,13 @@ using Application.Skills;
 using Application.UserCharacter;
 using CombatServer.Formatters;
 using CombatServer.Grpc;
+using CombatServer.HostedServices;
 using Infrastructure.Caching;
 using Infrastructure.Persistence;
 using Infrastructure.Reader;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +22,12 @@ builder.WebHost.ConfigureKestrel(options =>
     options.ListenAnyIP(80, o => o.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http1);
     options.ListenAnyIP(5001, o => o.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http2);
 });
+
+// ── Redis ─────────────────────────────────────────────────────────────────────
+var redisConn = builder.Configuration.GetValue<string>("Redis")
+    ?? throw new InvalidOperationException("Redis connection string is not configured.");
+builder.Services.AddSingleton<IConnectionMultiplexer>(_ => ConnectionMultiplexer.Connect(redisConn));
+builder.Services.AddHostedService<CombatServerRegistryService>();
 
 // ── Database ──────────────────────────────────────────────────────────────────
 var connectionString = builder.Configuration.GetConnectionString("GameDb")
