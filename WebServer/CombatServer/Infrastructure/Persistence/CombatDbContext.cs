@@ -10,16 +10,24 @@ namespace Infrastructure.Persistence
         public DbSet<CombatRecord> Combats => Set<CombatRecord>();
         public DbSet<CombatLogRecord> CombatLogs => Set<CombatLogRecord>();
 
-        // Read-only stage tables (owned by WebServer, queried by CombatServer)
+        // Read-only stage tables
         public DbSet<StageRow> StageRows => Set<StageRow>();
         public DbSet<StageWaveRow> StageWaveRows => Set<StageWaveRow>();
         public DbSet<StageWaveEnemyRow> StageWaveEnemyRows => Set<StageWaveEnemyRow>();
+
+        // Read-only master data tables
+        public DbSet<CharacterRow> CharacterRows => Set<CharacterRow>();
+        public DbSet<CharacterStatRow> CharacterStatRows => Set<CharacterStatRow>();
+        public DbSet<SkillRow> SkillRows => Set<SkillRow>();
+        public DbSet<UserCharacterRow> UserCharacterRows => Set<UserCharacterRow>();
+        public DbSet<MonsterStatRow> MonsterStatRows => Set<MonsterStatRow>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             ConfigureCombat(modelBuilder);
             ConfigureCombatLog(modelBuilder);
             ConfigureStageReadModels(modelBuilder);
+            ConfigureMasterDataReadModels(modelBuilder);
         }
 
         private static void ConfigureCombat(ModelBuilder modelBuilder)
@@ -97,6 +105,58 @@ namespace Infrastructure.Persistence
                 e.Property(x => x.Level).HasColumnName("level");
                 e.Property(x => x.Slot).HasColumnName("slot");
                 e.Property(x => x.AiProfile).HasColumnName("ai_profile");
+            });
+        }
+
+        private static void ConfigureMasterDataReadModels(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<CharacterRow>(e =>
+            {
+                e.HasNoKey().ToTable("Characters");
+                e.Property(x => x.Id).HasColumnName("CharacterId");
+            });
+
+            modelBuilder.Entity<CharacterStatRow>(e =>
+            {
+                e.HasNoKey().ToTable("CharacterStatProgression");
+                e.Property(x => x.CharacterId).HasColumnName("CharacterId");
+                e.Property(x => x.Level).HasColumnName("Level");
+                e.Property(x => x.HP).HasColumnName("HP");
+                e.Property(x => x.ATK).HasColumnName("ATK");
+                e.Property(x => x.DEF).HasColumnName("DEF");
+                e.Property(x => x.SPD).HasColumnName("SPD");
+                e.Property(x => x.CriRate).HasColumnName("CriRate");
+                e.Property(x => x.CriDamage).HasColumnName("CriDamage");
+                e.Property(x => x.Range).HasColumnName("Range");
+            });
+
+            modelBuilder.Entity<SkillRow>(e =>
+            {
+                e.HasNoKey().ToTable("Skills");
+                e.Property(x => x.SkillId).HasColumnName("SkillId");
+            });
+
+            modelBuilder.Entity<UserCharacterRow>(e =>
+            {
+                e.HasNoKey().ToTable("UserCharacters");
+                e.Property(x => x.UserCharacterId).HasColumnName("user_character_id");
+                e.Property(x => x.UserId).HasColumnName("UserId");
+                e.Property(x => x.CharacterId).HasColumnName("CharacterId");
+                e.Property(x => x.Level).HasColumnName("Level");
+            });
+
+            modelBuilder.Entity<MonsterStatRow>(e =>
+            {
+                e.HasNoKey().ToTable("MonsterStatProgression");
+                e.Property(x => x.MonsterId).HasColumnName("monster_id");
+                e.Property(x => x.Level).HasColumnName("level");
+                e.Property(x => x.HP).HasColumnName("hp");
+                e.Property(x => x.ATK).HasColumnName("atk");
+                e.Property(x => x.DEF).HasColumnName("def");
+                e.Property(x => x.SPD).HasColumnName("spd");
+                e.Property(x => x.CritRate).HasColumnName("cri_rate");
+                e.Property(x => x.CritDamage).HasColumnName("cri_damage");
+                e.Property(x => x.Range).HasColumnName("range");
             });
         }
 

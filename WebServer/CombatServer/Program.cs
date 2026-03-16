@@ -34,6 +34,10 @@ builder.Services.AddScoped<ICombatTickEngine, CombatTickEngine>();
 builder.Services.AddScoped<ICombatService, CombatService>();
 builder.Services.AddScoped<IMasterDataProvider, MasterDataProvider>();
 builder.Services.AddScoped<IStageReader, EfStageReader>();
+builder.Services.AddScoped<ICharacterReader, EfCharacterReader>();
+builder.Services.AddScoped<ISkillReader, EfSkillReader>();
+builder.Services.AddScoped<IUserCharacterReader, EfUserCharacterReader>();
+builder.Services.AddScoped<IMonsterStatReader, EfMonsterStatReader>();
 builder.Services.AddGrpc(); 
 
 // ── Controllers / Swagger ─────────────────────────────────────────────────────
