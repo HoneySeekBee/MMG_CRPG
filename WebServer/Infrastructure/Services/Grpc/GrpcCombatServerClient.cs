@@ -1,24 +1,30 @@
-﻿using Application.Combat;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CombatInternal;
+using Application.Combat;
 using Application.Combat.Dto;
+using CombatInternal;
+using Grpc.Net.Client;
+using Infrastructure.Services.Combat;
 
 namespace Infrastructure.Services.Grpc;
 
 public sealed class GrpcCombatServerClient : ICombatServerClient
 {
-    private readonly CombatInternalService.CombatInternalServiceClient _grpc;
+    private readonly CombatServerSelector _selector;
+    private readonly CombatRouteStore _routeStore;
 
-    public GrpcCombatServerClient(CombatInternalService.CombatInternalServiceClient grpc)
+    public GrpcCombatServerClient(CombatServerSelector selector, CombatRouteStore routeStore)
     {
-        _grpc = grpc;
+        _selector = selector;
+        _routeStore = routeStore;
     }
+
     public async Task<CombatInitialSnapshotPayload> InitCombatAsync(InitCombatPayload payload, CancellationToken ct)
     {
+        // Select a live CombatServer and persist the route so finish can find it later
+        var serverUrl = _selector.SelectServer();
+        await _routeStore.SaveAsync(payload.CombatId, serverUrl, ct);
+
+        var client = CreateClient(serverUrl);
+
         var request = new InitCombatRequest
         {
             CombatId = payload.CombatId,
@@ -65,7 +71,7 @@ public sealed class GrpcCombatServerClient : ICombatServerClient
                 CritDamage = kvp.Value.CritDamage
             }));
 
-        var response = await _grpc.InitCombatAsync(request, cancellationToken: ct);
+        var response = await client.InitCombatAsync(request, cancellationToken: ct);
 
         return new CombatInitialSnapshotPayload
         {
@@ -84,7 +90,12 @@ public sealed class GrpcCombatServerClient : ICombatServerClient
 
     public async Task<CombatResultPayload> GetResultAsync(long combatId, CancellationToken ct)
     {
-        var response = await _grpc.GetCombatResultAsync(
+        var serverUrl = await _routeStore.GetAsync(combatId, ct)
+            ?? throw new InvalidOperationException($"No route found for combat {combatId}.");
+
+        var client = CreateClient(serverUrl);
+
+        var response = await client.GetCombatResultAsync(
             new GetCombatResultRequest { CombatId = combatId },
             cancellationToken: ct);
 
@@ -97,5 +108,15 @@ public sealed class GrpcCombatServerClient : ICombatServerClient
             DeadPlayerCount: response.DeadPlayerCount,
             TotalPlayerCount: response.TotalPlayerCount
         );
+    }
+
+    private static CombatInternalService.CombatInternalServiceClient CreateClient(string serverUrl)
+    {
+        // Use GrpcChannel with HTTP/2 clear-text (h2c) for internal Docker network calls
+        var channel = GrpcChannel.ForAddress(serverUrl, new GrpcChannelOptions
+        {
+            HttpHandler = new HttpClientHandler()
+        });
+        return new CombatInternalService.CombatInternalServiceClient(channel);
     }
 }

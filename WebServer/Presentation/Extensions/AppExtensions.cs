@@ -178,11 +178,8 @@ namespace WebServer.Extensions
             #region Contents
             s.AddScoped<IUserPartyReader, EfUserPartyReader>();
             s.AddScoped<ICombatService, CombatService>();
-            s.AddGrpcClient<CombatInternalService.CombatInternalServiceClient>(o =>
-            {
-                var config = s.BuildServiceProvider().GetRequiredService<IConfiguration>();
-                o.Address = new Uri(config["CombatServerUrl"] ?? "http://localhost:5001");
-            });
+            s.AddSingleton<Infrastructure.Services.Combat.CombatServerSelector>();
+            s.AddSingleton<Infrastructure.Services.Combat.CombatRouteStore>();
             s.AddScoped<ICombatServerClient, GrpcCombatServerClient>();
 
             s.AddScoped<ICombatRepository, EfCombatRepository>(); 

@@ -2,14 +2,6 @@ using StackExchange.Redis;
 
 namespace CombatServer.HostedServices
 {
-    /// <summary>
-    /// Registers this CombatServer instance in Redis on startup and refreshes the TTL periodically.
-    /// WebServer reads combat:server:* keys to discover available CombatServer instances.
-    ///
-    /// Key: combat:server:{instanceId}
-    /// Value: "http://combatserver-1:80"
-    /// TTL: 30s (refreshed every 15s)
-    /// </summary>
     public sealed class CombatServerRegistryService : BackgroundService
     {
         private static readonly TimeSpan HeartbeatInterval = TimeSpan.FromSeconds(15);
