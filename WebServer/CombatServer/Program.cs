@@ -5,6 +5,7 @@ using Application.Skills;
 using Application.UserCharacter;
 using CombatServer.Formatters;
 using CombatServer.Grpc;
+using Infrastructure.Caching;
 using Infrastructure.Persistence;
 using Infrastructure.Reader;
 using Infrastructure.Repositories;
@@ -27,6 +28,9 @@ var connectionString = builder.Configuration.GetConnectionString("GameDb")
 builder.Services.AddDbContext<CombatDbContext>(options =>
     options.UseNpgsql(connectionString, npgsql =>
         npgsql.EnableRetryOnFailure(maxRetryCount: 3)));
+builder.Services.AddDbContextFactory<CombatDbContext>(options =>
+    options.UseNpgsql(connectionString, npgsql =>
+        npgsql.EnableRetryOnFailure(maxRetryCount: 3)));
 
 // ── Application Services ──────────────────────────────────────────────────────
 builder.Services.AddScoped<ICombatRepository, EfCombatRepository>();
@@ -38,6 +42,7 @@ builder.Services.AddScoped<ICharacterReader, EfCharacterReader>();
 builder.Services.AddScoped<ISkillReader, EfSkillReader>();
 builder.Services.AddScoped<IUserCharacterReader, EfUserCharacterReader>();
 builder.Services.AddScoped<IMonsterStatReader, EfMonsterStatReader>();
+builder.Services.AddSingleton<ISkillCache, EfSkillCache>();
 builder.Services.AddGrpc(); 
 
 // ── Controllers / Swagger ─────────────────────────────────────────────────────
@@ -59,5 +64,8 @@ if (app.Environment.IsDevelopment())
 
 app.MapControllers();
 app.MapGrpcService<CombatGrpcService>();
+
+// Warm up skill cache before accepting traffic
+await app.Services.GetRequiredService<ISkillCache>().ReloadAsync();
 
 app.Run();

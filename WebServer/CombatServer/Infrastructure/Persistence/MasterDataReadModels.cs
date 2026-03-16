@@ -22,7 +22,12 @@ namespace Infrastructure.Persistence
 
     public sealed class SkillRow
     {
-        public long SkillId { get; set; }
+        public int SkillId { get; set; }
+        public short Type { get; set; }
+        public short TargetingType { get; set; }
+        public short AoeShape { get; set; }
+        public short TargetSide { get; set; }
+        public string? BaseInfo { get; set; }
     }
 
     public sealed class UserCharacterRow
