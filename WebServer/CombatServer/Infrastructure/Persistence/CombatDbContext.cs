@@ -138,7 +138,7 @@ namespace Infrastructure.Persistence
                 e.Property(x => x.TargetingType).HasColumnName("TargetingType");
                 e.Property(x => x.AoeShape).HasColumnName("AoeShape");
                 e.Property(x => x.TargetSide).HasColumnName("TargetSide");
-                e.Property(x => x.BaseInfo).HasColumnName("Meta").HasColumnType("jsonb");
+                e.Property(x => x.BaseInfo).HasColumnName("BaseInfo").HasColumnType("jsonb");
             });
 
             modelBuilder.Entity<UserCharacterRow>(e =>
