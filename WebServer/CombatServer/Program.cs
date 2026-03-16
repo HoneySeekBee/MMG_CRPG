@@ -6,6 +6,7 @@ using Application.UserCharacter;
 using CombatServer.Formatters;
 using CombatServer.Grpc;
 using CombatServer.HostedServices;
+using Infrastructure.Cache;
 using Infrastructure.Caching;
 using Infrastructure.Persistence;
 using Infrastructure.Reader;
@@ -51,6 +52,7 @@ builder.Services.AddScoped<ISkillReader, EfSkillReader>();
 builder.Services.AddScoped<IUserCharacterReader, EfUserCharacterReader>();
 builder.Services.AddScoped<IMonsterStatReader, EfMonsterStatReader>();
 builder.Services.AddSingleton<ISkillCache, EfSkillCache>();
+builder.Services.AddSingleton<ICombatStateCache, CombatStateCache>();
 builder.Services.AddGrpc(); 
 
 // ── Controllers / Swagger ─────────────────────────────────────────────────────

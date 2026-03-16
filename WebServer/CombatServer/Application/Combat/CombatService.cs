@@ -1,4 +1,5 @@
 using Application.Combat.Engine;
+using Application.Combat.Snapshot;
 using Domain.Combat.Runtime;
 using Domain.Entities.Combats;
 using Application.Repositories;
@@ -18,8 +19,10 @@ namespace Application.Combat
         private readonly ICombatTickEngine _tickEngine;
         private readonly ISkillCache _skillCache;
         private readonly IUserCharacterReader _userCharacterReader;
+        private readonly ICombatStateCache _stateCache;
 
         private const int MaxPageSize = 500;
+        private const int StateSaveIntervalTicks = 10;
         private static readonly ConcurrentDictionary<long, CombatRuntimeState> _runtimeStates = new();
 
         public CombatService(
@@ -27,13 +30,15 @@ namespace Application.Combat
             ICombatRepository repo,
             ICombatTickEngine tickEngine,
             ISkillCache skillCache,
-            IUserCharacterReader userCharacterReader)
+            IUserCharacterReader userCharacterReader,
+            ICombatStateCache stateCache)
         {
             _master = master;
             _repo = repo;
             _tickEngine = tickEngine;
             _skillCache = skillCache;
             _userCharacterReader = userCharacterReader;
+            _stateCache = stateCache;
         }
 
         public async Task<CombatInitialSnapshotDto> InitCombatAsync(InitCombatPayload payload, CancellationToken ct)
@@ -160,8 +165,9 @@ namespace Application.Combat
                 DeadPlayerCount: deadCount,
                 TotalPlayerCount: players.Count);
 
-            // Remove from memory after result is retrieved
+            // Remove from memory and Redis after result is retrieved
             _runtimeStates.TryRemove(combatId, out _);
+            _ = _stateCache.DeleteAsync(combatId);
 
             return Task.FromResult(result);
         }
@@ -350,6 +356,7 @@ namespace Application.Combat
 
             List<Domain.Events.CombatLogEvent> domainEvs = new();
             CombatSnapshotDto snapshot;
+            CombatStateSnapshot? redisSnapshot = null;
 
             const int BaseTickMs = 100;
             const int MaxCatchUpTicks = 5;
@@ -373,10 +380,16 @@ namespace Application.Combat
                 }
 
                 snapshot = _tickEngine.BuildSnapshot(state);
+
+                if (state.Tick % StateSaveIntervalTicks == 0)
+                    redisSnapshot = CombatStateSerializer.ToSnapshot(state);
             }
 
             if (domainEvs.Count > 0)
                 await _repo.AppendLogsAsync(combatId, domainEvs, ct);
+
+            if (redisSnapshot != null)
+                await _stateCache.SaveAsync(redisSnapshot, ct);
 
             var dtoEvs = domainEvs.Select(Map).ToList();
             return new CombatTickResponse(combatId, state.Tick, snapshot, dtoEvs);
