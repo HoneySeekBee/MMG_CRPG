@@ -33,7 +33,7 @@ builder.Services.AddScoped<ICombatRepository, EfCombatRepository>();
 builder.Services.AddScoped<ICombatTickEngine, CombatTickEngine>();
 builder.Services.AddScoped<ICombatService, CombatService>();
 builder.Services.AddScoped<IMasterDataProvider, MasterDataProvider>();
-builder.Services.AddScoped<IStageReader, StageCacheReader>();
+builder.Services.AddScoped<IStageReader, EfStageReader>();
 builder.Services.AddGrpc(); 
 
 // ── Controllers / Swagger ─────────────────────────────────────────────────────
