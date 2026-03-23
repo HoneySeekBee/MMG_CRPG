@@ -30,7 +30,7 @@ public class CombatNetwork
         _popup = popup;
     }
 
-    // [1] ���� ����
+    // [1] Start combat
     public IEnumerator StartCombatAsync(
       int stageId,
       long battleId,
@@ -44,7 +44,6 @@ public class CombatNetwork
         };
 
         string url = ApiRoutes.CombatStart;
-        // ��: public const string CombatStart = "/api/pb/combat/start";
 
         GameLogger.Info($"[CombatNetwork] StartCombat: {url}, stage={stageId}, formation={battleId}");
 
@@ -52,15 +51,15 @@ public class CombatNetwork
         {
             if (!res.Ok)
             {
-                GameLogger.Error($"[CombatNetwork] StartCombat ����: {res.Message}");
-                _popup?.Show($"���� ���� ����: {res.Message}");
+                GameLogger.Error($"[CombatNetwork] StartCombat failed: {res.Message}");
+                _popup?.Show($"Start combat failed: {res.Message}");
             }
 
             onDone?.Invoke(res);
         });
     }
 
-    // [2] ���� ���� ( ��ų ��� )
+    // [2] Send command (skill use)
     public void SendCommand(
     long combatId,
     long actorId,
@@ -80,7 +79,6 @@ public class CombatNetwork
         }
 
         string url = ApiRoutes.CombatCommand(combatId);
-        // ��: public static string CombatCommand(long combatId) => $"/api/pb/combat/{combatId}/command";
 
         GameLogger.Info($"[CombatNetwork] SendCommand: {url}, actor={actorId}, skill={skillId}, target={targetActorId}");
 
@@ -89,8 +87,8 @@ public class CombatNetwork
             {
                 if (!resp.Ok)
                 {
-                    GameLogger.Error($"[CombatNetwork] Command ����: {resp.Message}");
-                    _popup?.Show($"��ų ��� ����: {resp.Message}");
+                    GameLogger.Error($"[CombatNetwork] Command failed: {resp.Message}");
+                    _popup?.Show($"Skill command failed: {resp.Message}");
                     onDone?.Invoke(false);
                     return;
                 }
@@ -100,7 +98,7 @@ public class CombatNetwork
         );
     }
 
-    // [3] �α� ��ȸ
+    // [3] Get combat log
     public IEnumerator GetLogAsync(
       long combatId,
       string cursor,
@@ -108,8 +106,6 @@ public class CombatNetwork
       Action<ApiResult<CombatLogPagePb>> onDone)
     {
         string url = ApiRoutes.CombatLog(combatId, cursor, size);
-        // ��: public static string CombatLog(long combatId, string cursor, int size)
-        //     => $"/api/pb/combat/{combatId}/log?cursor={cursor}&size={size}";
 
         GameLogger.Info($"[CombatNetwork] GetLog: {url}");
 
@@ -117,22 +113,20 @@ public class CombatNetwork
         {
             if (!res.Ok)
             {
-                GameLogger.Error($"[CombatNetwork] GetLog ����: {res.Message}");
-                // �α� ���� ���д� �˾��� ���� ����
+                GameLogger.Error($"[CombatNetwork] GetLog failed: {res.Message}");
+                // Log failure does not need a popup
             }
 
             onDone?.Invoke(res);
         });
     }
 
-    // [4] ��� ��ȸ 
+    // [4] Get summary
     public IEnumerator GetSummaryAsync(
       long combatId,
       Action<ApiResult<CombatLogSummaryPb>> onDone)
     {
         string url = ApiRoutes.CombatSummary(combatId);
-        // ��: public static string CombatSummary(long combatId)
-        //     => $"/api/pb/combat/{combatId}/summary";
 
         GameLogger.Info($"[CombatNetwork] GetSummary: {url}");
 
@@ -140,8 +134,8 @@ public class CombatNetwork
         {
             if (!res.Ok)
             {
-                GameLogger.Error($"[CombatNetwork] GetSummary ����: {res.Message}");
-                _popup?.Show($"���� ��� �ҷ����� ����: {res.Message}");
+                GameLogger.Error($"[CombatNetwork] GetSummary failed: {res.Message}");
+                _popup?.Show($"Failed to load combat summary: {res.Message}");
             }
 
             onDone?.Invoke(res);
@@ -150,14 +144,12 @@ public class CombatNetwork
     public IEnumerator TickAsync(long combatId, int tick, Action<ApiResult<CombatTickResponsePb>> onDone)
     {
         string url = ApiRoutes.CombatTick(combatId);
-        // ��: /api/pb/combat/{combatId}/tick
 
         var req = new CombatTickRequestPb
         {
             CombatId = combatId,
             Tick = tick
         };
-
 
         yield return CombatHttp.Post(url, req, CombatTickResponsePb.Parser, res =>
         {
@@ -174,7 +166,6 @@ public class CombatNetwork
             CombatId = combatId,
             UserId = _userId
         };
-        // ��: /api/pb/combat/{combatId}/finish
         string url = ApiRoutes.CombatFinish(combatId);
 
         GameLogger.Info($"[CombatNetwork] FinishCombat: {url}, combatId={combatId}");
@@ -183,8 +174,8 @@ public class CombatNetwork
         {
             if (!res.Ok)
             {
-                GameLogger.Error($"[CombatNetwork] FinishCombat ����: {res.Message}");
-                _popup?.Show($"���� ���� ó�� ����: {res.Message}");
+                GameLogger.Error($"[CombatNetwork] FinishCombat failed: {res.Message}");
+                _popup?.Show($"Combat finish processing failed: {res.Message}");
             }
 
             onDone?.Invoke(res);
@@ -203,9 +194,8 @@ public class CombatNetwork
             cmd.TargetActorId = targetActorId.Value;
 
         string url = ApiRoutes.CombatCommand(combatId);
-        // => /api/pb/combat/{combatId}/command
 
-        GameLogger.Info($"[CombatNetwork] UseSkillAsync �� {url} actor={actorId}, skill={skillId}");
+        GameLogger.Info($"[CombatNetwork] UseSkillAsync url={url} actor={actorId}, skill={skillId}");
 
         yield return CombatHttp.Post(url, cmd, Empty.Parser, (ApiResult<Empty> res) =>
         {
